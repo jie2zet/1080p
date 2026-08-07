@@ -1,0 +1,226 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.MainPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:CMP.Views.Tabs.OperationTab"
+             xmlns:localConverters="clr-namespace:CMP.Views.Tabs.OperationTab.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="600"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             prism:ViewModelLocator.AutoWireViewModel="False"
+             d:DataContext="{d:DesignInstance viewModels:MainPageViewModel}"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+
+    <UserControl.Resources>
+        <converters:SlotIdConverter x:Key="SlotIdConverter"/>
+        <localConverters:FoupDockStatusToIsEnabledConverter x:Key="FoupDockStatusToIsEnabledConverter"/>
+
+        <!-- LPort TabItem 数据模板 -->
+        <DataTemplate x:Key="LoadPortTabItemTemplate">
+            <Border BorderBrush="LightGray" BorderThickness="1">
+                <Grid extensions:GridHelpers.RowDefinitions="128,250">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" Background="White" Grid.Row="0" Margin="2" CornerRadius="3">
+                        <Grid extensions:GridHelpers.RowDefinitions="15,*" extensions:GridHelpers.ColumnDefinitions="100,Auto">
+                            <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+                                <TextBlock Text="Load Port Control Status" HorizontalAlignment="Left" Foreground="Black"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
+                                <ItemsControl ItemsSource="{Binding DataContext.StatusList, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" MaxWidth="80" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Image Source="{Binding ImgPath}" Width="10" Height="10" 
+                                                       HorizontalAlignment="Center" Margin="0,3,5,3"/>
+                                                <TextBlock Text="{Binding Status}" Foreground="Black"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Load" Margin="0,0,3,0" 
+                                            IsEnabled="{Binding LoadPortStatus.FoupDockStatus, Converter={StaticResource FoupDockStatusToIsEnabledConverter}}"
+                                            Command="{Binding MOVCommand}" 
+                                            CommandParameter="CLDMP"/>
+                                    <Button Content="Unload" Width="85" 
+                                            Command="{Binding MOVCommand}" 
+                                            CommandParameter="CULOD"/>
+                                </StackPanel>
+                                <Border BorderBrush="DarkGray" BorderThickness="1" Width="150" Background="White" 
+                                        Margin="1" CornerRadius="3">
+                                    <StackPanel>
+                                        <TextBlock Text="Carrier Verification"/>
+                                        <TextBlock Text=" no verification needed" Foreground="LightGray" Padding="5,0,0,0"/>
+                                        <TextBlock Text=" LP10000001" Padding="10,0,0,0"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Load" Margin="0,0,5,0" 
+                                                    IsEnabled="{Binding LoadPortStatus.FoupDockStatus, Converter={StaticResource FoupDockStatusToIsEnabledConverter}}"
+                                                    Command="{Binding MOVCommand}" 
+                                                    CommandParameter="CLDMP"/>
+                                            <Button Content="Unload" 
+                                                    Command="{Binding MOVCommand}" 
+                                                    CommandParameter="CULOD"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <Border BorderBrush="DarkGray" BorderThickness="1" Background="White" Grid.Row="1" Margin="2" 
+                            CornerRadius="3" Height="246">
+                        <Grid extensions:GridHelpers.RowDefinitions="30,Auto,Auto,Auto" 
+                              extensions:GridHelpers.ColumnDefinitions="Auto,Auto,Auto,Auto">
+                            <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4">
+                                <TextBlock Text="Job" HorizontalAlignment="Left" Foreground="Black"/>
+                            </StackPanel>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Job ID:" Foreground="LightGray"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="LocalJob_LP1" Foreground="Black"/>
+                            <Button Grid.Row="1" Grid.Column="2" Content="Assign" 
+                                    IsEnabled="{Binding IsConnected}" 
+                                    Command="{Binding AssignCommand}"/>
+                            <Button Grid.Row="1" Grid.Column="3" Content="Reject" 
+                                    IsEnabled="{Binding IsConnected}" 
+                                    Command="{Binding RejectCommand}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="State:" Foreground="LightGray"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="Executing" HorizontalAlignment="Left" Foreground="Black"/>
+                            <CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding IsCycle}" HorizontalAlignment="Left">Cycle</CheckBox>
+                            <!--<CheckBox Grid.Row="2" Grid.Column="3" IsChecked="True" HorizontalAlignment="Left">Auto Start</CheckBox>-->
+                            <hc:NumericUpDown Value="{Binding CycleNum}" Width="50" Foreground="Black" Height="3" Grid.Row="2" 
+                               Grid.Column="3" Minimum="0" Maximum="9999" Increment="1" DecimalPlaces="0"></hc:NumericUpDown>
+
+                            <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" Height="200">
+                                <Grid extensions:GridHelpers.ColumnDefinitions="*,5,*">
+                                    <Border Grid.Column="0" CornerRadius="3" BorderThickness="1" BorderBrush="LightGray">
+                                        <StackPanel>
+                                            <TextBlock Text="Recipe Selection" Foreground="LightGray"/>
+                                            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" 
+                                                          HorizontalScrollBarVisibility="Disabled" Height="130">
+                                                <TreeView Margin="5" Foreground="Black">
+                                                    <TreeViewItem Header="Group 1" IsExpanded="True">
+                                                        <TreeViewItem.Items>
+                                                            <TreeViewItem Header="Item 1.1"/>
+                                                            <TreeViewItem Header="Item 1.2"/>
+                                                        </TreeViewItem.Items>
+                                                    </TreeViewItem>
+                                                    <TreeViewItem Header="Group 2">
+                                                        <TreeViewItem.Items>
+                                                            <TreeViewItem Header="Item 2.1"/>
+                                                            <TreeViewItem Header="Item 2.2"/>
+                                                        </TreeViewItem.Items>
+                                                    </TreeViewItem>
+                                                </TreeView>
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="2" CornerRadius="3" BorderThickness="1" 
+                                            BorderBrush="LightGray" Width="150">
+                                        <Grid extensions:GridHelpers.RowDefinitions="*,*,*" 
+                                              extensions:GridHelpers.ColumnDefinitions="Auto,Auto">
+                                            <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <TextBlock Text="Recipe Variables" Foreground="Black"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" 
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="Align Wafers" Foreground="Black"/>
+                                            </StackPanel>
+                                            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" 
+                                                      HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                                            <TextBlock Text="Alignment Angle" Foreground="Black" 
+                                                       Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                            <TextBox Text="" Width="40" Foreground="Black" Height="5" 
+                                                     Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Grid.Column="0" extensions:GridHelpers.RowDefinitions="Auto, *">
+        <GroupBox Margin="5" Grid.Row="0"
+                  Padding="7" Background="Transparent" hc:TitleElement.Background="LightGray"
+                  Style="{StaticResource GroupBoxTab}"
+                  HorizontalContentAlignment="Left">
+            <GroupBox.Header>
+                <TextBlock Margin="3 0 0 0" Text="{lex:Loc SlotMaps}" />
+            </GroupBox.Header>
+            <Border Margin="0,5,0,0" VerticalAlignment="Top">
+                <ItemsControl ItemsSource="{Binding AllLoadPorts}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="5" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding WaferList}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="50" Height="9" Margin="0,0,3,3" BorderThickness="1"
+                                                BorderBrush="Gray" CornerRadius="3" Background="{Binding WaferColor}">
+                                            <Border.ToolTip>
+                                                <ToolTip>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{Binding WaferStatus, StringFormat='status: {0}'}" FontWeight="Bold" />
+                                                        <TextBlock Text="{Binding SequenceRecipe, StringFormat='Sequence: {0}'}" />
+                                                    </StackPanel>
+                                                </ToolTip>
+                                            </Border.ToolTip>
+                                            <TextBlock Text="{Binding SlotID,Converter={StaticResource SlotIdConverter}}"
+                                                       FontSize="7" Foreground="White" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </GroupBox>
+
+        <!-- 修改后的 TabControl，确保默认选中第一个 Tab -->
+        <TabControl Grid.Row="1" Margin="5" Style="{StaticResource SecondaryTabControlStyle}"
+                    ItemContainerStyle="{StaticResource SecondaryTabItemStyle}"
+                    ItemsSource="{Binding AllLoadPorts}"
+                    SelectedIndex="0">
+
+            <TabControl.ItemTemplate>
+                <!-- TabItem Header 模板 -->
+                <DataTemplate>
+                    <TextBlock Text="{Binding TabName}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+
+            <TabControl.ContentTemplate>
+                <!-- TabItem Content 模板 -->
+                <DataTemplate>
+                    <ContentControl Content="{Binding}" 
+                                    ContentTemplate="{StaticResource LoadPortTabItemTemplate}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,694 @@
+<UserControl x:Class="CMP.Views.Tabs.RecipeTab.Content.SequenceRecipeEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:content="clr-namespace:CMP.ViewModels.Tabs.RecipeTab.Content"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance content:SequenceRecipeEditorViewModel}"
+             d:DesignHeight="1060" Width="1976"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+    <UserControl.Resources>
+        <!-- Converter for String Formatting -->
+        <converters:StringFormatConverter x:Key="StringFormatConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <!-- Left panel: sequence list -->
+        <StackPanel Grid.Column="0" Margin="5">
+            <TextBlock Text="Sequence Plans" FontWeight="Bold" Margin="0,0,0,5" />
+            <TextBlock Text="{Binding Sequences.Count, StringFormat='Count: {0}'}" Foreground="Red" />
+            <!-- search -->
+            <TextBox Margin="0,5,0,5" Width="290" Height="28"                 
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+            <!-- ListBox -->
+            <ListBox x:Name="SequenceListBox" ItemsSource="{Binding FilteredSequences}"
+                 SelectedItem="{Binding SelectedSequence}"
+                 DisplayMemberPath="Name"
+                 Height="730"
+                 BorderBrush="Gray"
+                 BorderThickness="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding RenameCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+                <Button Content="New" Command="{Binding NewCommand}" Margin="2" Name="NewButton" />
+                <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="2" Name="DeleteButton" />
+            </StackPanel>
+        </StackPanel>
+        <!-- Right panel: original editor content -->
+        <Grid Grid.Column="1"
+              extensions:GridHelpers.RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto ,Auto, Auto, *, *"
+              extensions:GridHelpers.ColumnDefinitions="Auto, Auto, *">
+
+            <Grid extensions:GridHelpers.RowDefinitions="Auto, Auto, Auto, Auto"
+                  extensions:GridHelpers.ColumnDefinitions="Auto, Auto">
+                <Grid Margin="0 30 0 0" Grid.Row="1" RowSpan="2" Grid.Column="0"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <GroupBox Margin="20 0 0 0" Background="Transparent"
+                              hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                              Height="100" MinWidth="250" Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                        <GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishSideMode}" />
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Border Padding="10">
+                            <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                <CheckBox x:Name="PolishMainASideCheckBox" Content="{lex:Loc ASide}"
+                                          IsChecked="{Binding PolishMainASideChecked}" />
+                                <ComboBox SelectedValue="{Binding PolishMainType}" DisplayMemberPath="Name"
+                                          SelectedValuePath="Value" Height="20" MinWidth="50"
+                                          ItemsSource="{Binding TypeItems}" />
+                                <CheckBox x:Name="PolishMainBSideCheckBox" Content="{lex:Loc BSide}"
+                                          IsChecked="{Binding PolishMainBSideChecked}" />
+                            </StackPanel>
+                        </Border>
+                    </GroupBox>
+                </Grid>
+
+                <Grid Margin="5 50 0 0" Grid.Row="0" RowSpan="2" Grid.Column="1"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                              Height="100" MinWidth="400" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                              IsEnabled="{Binding PolishMainASideChecked}">
+                        <GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishASideMode}" />
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Border Padding="10" HorizontalAlignment="Center">
+                            <StackPanel extensions:StackPanelHelpers.Spacing="15" Orientation="Horizontal">
+                                <CheckBox x:Name="PolishASideOperationA"
+                                          IsChecked="{Binding PolishASideOperationAChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="A" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                                <ComboBox SelectedValue="{Binding PolishASideOperationAType}" DisplayMemberPath="Name"
+                                          SelectedValuePath="Value" Height="20" MinWidth="50"
+                                          ItemsSource="{Binding TypeItems}"
+                                          IsEnabled="{Binding PolishASideOperationAChecked}" />
+                                <CheckBox x:Name="PolishASideOperationB"
+                                          IsChecked="{Binding PolishASideOperationBChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="B" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                            </StackPanel>
+                        </Border>
+                    </GroupBox>
+                </Grid>
+                <Grid Margin="5 -10 0 0" Grid.Row="2" RowSpan="2" Grid.Column="1"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                              Height="100" MinWidth="400" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                              IsEnabled="{Binding PolishMainBSideChecked}">
+                        <GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishBSideMode}" />
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Border Padding="10" HorizontalAlignment="Center">
+                            <StackPanel extensions:StackPanelHelpers.Spacing="15" Orientation="Horizontal">
+                                <CheckBox x:Name="PolishBSideOperationC"
+                                          IsChecked="{Binding PolishBSideOperationCChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="C" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                                <ComboBox SelectedValue="{Binding PolishBSideOperationCType}" DisplayMemberPath="Name"
+                                          SelectedValuePath="Value" Height="20" MinWidth="50"
+                                          ItemsSource="{Binding TypeItems}"
+                                          IsEnabled="{Binding PolishBSideOperationCChecked}" />
+                                <CheckBox x:Name="PolishBSideOperationD"
+                                          IsChecked="{Binding PolishBSideOperationDChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="D" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                            </StackPanel>
+                        </Border>
+                    </GroupBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="3" Grid.Column="0" extensions:GridHelpers.RowDefinitions="Auto, Auto, Auto, Auto"
+                  extensions:GridHelpers.ColumnDefinitions="Auto, Auto">
+                <Grid Margin="0 30 0 0" Grid.Row="1" RowSpan="2" Grid.Column="0"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <GroupBox Margin="20 0 0 0" Background="Transparent"
+                              hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                              Height="100" MinWidth="250" Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                        <GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanSideMode}" />
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Border Padding="10">
+                            <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                <CheckBox x:Name="CleanMainASideCheckBox" IsChecked="{Binding CleanMainASideChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc CleanFormat}" />
+                                            <Binding Source="A" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                                <ComboBox SelectedValue="{Binding CleanMainType}" DisplayMemberPath="Name"
+                                          SelectedValuePath="Value" Height="20" MinWidth="50"
+                                          ItemsSource="{Binding TypeItems}" />
+                                <CheckBox x:Name="CleanMainBSideCheckBox" IsChecked="{Binding CleanMainBSideChecked}">
+                                    <CheckBox.Content>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc CleanFormat}" />
+                                            <Binding Source="B" />
+                                        </MultiBinding>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                            </StackPanel>
+                        </Border>
+                    </GroupBox>
+                </Grid>
+
+                <Grid Grid.Row="0" RowSpan="2" Grid.Column="1" Margin="5 28 0 0"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <StackPanel Orientation="Horizontal">
+                        <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  Height="100" MinWidth="400" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainASideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanASideRollerMode}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanASideRollerOp1"
+                                              IsChecked="{Binding CleanASideRollerOp1Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="1" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanASideRollerOp1Type}"
+                                              DisplayMemberPath="Name" SelectedValuePath="Value" Height="20"
+                                              MinWidth="50" ItemsSource="{Binding TypeItems}"
+                                              IsEnabled="{Binding CleanASideRollerOp1Checked}" />
+                                    <CheckBox x:Name="CleanASideRollerOp2"
+                                              IsChecked="{Binding CleanASideRollerOp2Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="2" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanASideRollerOp2Type}"
+                                              DisplayMemberPath="Name" SelectedValuePath="Value" Height="20"
+                                              MinWidth="50" ItemsSource="{Binding TypeItems}"
+                                              IsEnabled="{Binding CleanASideRollerOp2Checked}" />
+                                    <CheckBox x:Name="CleanASideRollerOp3"
+                                              IsChecked="{Binding CleanASideRollerOp3Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="3" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                        <GroupBox Margin="5 0 0 0" Background="Transparent"
+                                  hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  MinWidth="250" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainASideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanASidePenMode}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanASidePenOp1" IsChecked="{Binding CleanASidePenOp1Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc PenFormat}" />
+                                                <Binding Source="1" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanASidePenOp1Type}" DisplayMemberPath="Name"
+                                              SelectedValuePath="Value" Height="20" MinWidth="50"
+                                              ItemsSource="{Binding TypeItems}" />
+                                    <CheckBox x:Name="CleanASidePenOp2" IsChecked="{Binding CleanASidePenOp2Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc PenFormat}" />
+                                                <Binding Source="2" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                        <GroupBox Margin="5 0 0 0" Background="Transparent"
+                                  hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  MinWidth="100" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainASideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanASideDry}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="15" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanASideDryOp" Content="{lex:Loc Dry}"
+                                              IsChecked="{Binding CleanASideDryOpChecked}" />
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="5 -10 0 0" Grid.Row="2" RowSpan="2" Grid.Column="1"
+                      extensions:GridHelpers.RowDefinitions="*"
+                      extensions:GridHelpers.ColumnDefinitions="*">
+                    <StackPanel Orientation="Horizontal">
+                        <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  Height="100" MinWidth="400" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainBSideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBSideRollerMode}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanBSideRollerOp1"
+                                              IsChecked="{Binding CleanBSideRollerOp1Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="1" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanBSideRollerOp1Type}"
+                                              DisplayMemberPath="Name" SelectedValuePath="Value" Height="20"
+                                              MinWidth="50" ItemsSource="{Binding TypeItems}" />
+                                    <CheckBox x:Name="CleanBSideRollerOp2"
+                                              IsChecked="{Binding CleanBSideRollerOp2Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="2" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanBSideRollerOp2Type}"
+                                              DisplayMemberPath="Name" SelectedValuePath="Value" Height="20"
+                                              MinWidth="50" ItemsSource="{Binding TypeItems}" />
+                                    <CheckBox x:Name="CleanBSideRollerOp3"
+                                              IsChecked="{Binding CleanBSideRollerOp3Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc RollerFormat}" />
+                                                <Binding Source="3" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                        <GroupBox Margin="5 0 0 0" Background="Transparent"
+                                  hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  Height="100" MinWidth="250" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainBSideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBSidePenMode}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="5" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanBSidePenOp1" IsChecked="{Binding CleanBSidePenOp1Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc PenFormat}" />
+                                                <Binding Source="1" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                    <ComboBox SelectedValue="{Binding CleanBSidePenOp1Type}" DisplayMemberPath="Name"
+                                              SelectedValuePath="Value" Height="20" MinWidth="50"
+                                              ItemsSource="{Binding TypeItems}" />
+                                    <CheckBox x:Name="CleanBSidePenOp2" IsChecked="{Binding CleanBSidePenOp2Checked}">
+                                        <CheckBox.Content>
+                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                                <Binding Source="{lex:Loc PenFormat}" />
+                                                <Binding Source="2" />
+                                            </MultiBinding>
+                                        </CheckBox.Content>
+                                    </CheckBox>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                        <GroupBox Margin="5 0 0 0" Background="Transparent"
+                                  hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                                  Height="100" MinWidth="100" Padding="10" Style="{StaticResource GroupBoxTab.Small}"
+                                  IsEnabled="{Binding CleanMainBSideChecked}">
+                            <GroupBox.Header>
+                                <StackPanel>
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBSideDry}" />
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border Padding="10" HorizontalAlignment="Center">
+                                <StackPanel extensions:StackPanelHelpers.Spacing="15" Orientation="Horizontal">
+                                    <CheckBox x:Name="CleanBSideDryOp" Content="{lex:Loc Dry}"
+                                              IsChecked="{Binding CleanBSideDryOpChecked}" />
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Grid Margin="20 20 0 10" Grid.Row="0" Grid.RowSpan="10" Grid.Column="1">
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc Recipe}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10" HorizontalAlignment="Center">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="10" Orientation="Vertical">
+                            <!-- Polish A -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="A" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" Width="250" SelectedValue="{Binding PolishARecipe}"
+                                          IsEnabled="{Binding PolishASideOperationAChecked}" ItemsSource="{Binding PolishRecipeItems}" />
+                            </StackPanel>
+                            <!-- Polish A Exsitu -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishExsituFormat}" />
+                                            <Binding Source="A" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" Width="250" SelectedValue="{Binding PolishAExsituRecipe}"
+                                          IsEnabled="{Binding PolishASideOperationAChecked}" ItemsSource="{Binding ConditionRecipeItems}" />
+                            </StackPanel>
+                            <!-- Polish B -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="B" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishBRecipe}"
+                                          IsEnabled="{Binding PolishASideOperationBChecked}" ItemsSource="{Binding PolishRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Polish B Exsitu-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishExsituFormat}" />
+                                            <Binding Source="B" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishBExsituRecipe}"
+                                          IsEnabled="{Binding PolishASideOperationBChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Polish C -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="C" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishCRecipe}"
+                                          IsEnabled="{Binding PolishBSideOperationCChecked}" ItemsSource="{Binding PolishRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Polish C Exsitu-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishExsituFormat}" />
+                                            <Binding Source="C" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishCExsituRecipe}"
+                                          IsEnabled="{Binding PolishBSideOperationCChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Polish D -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishFormat}" />
+                                            <Binding Source="D" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishDRecipe}"
+                                          IsEnabled="{Binding PolishBSideOperationDChecked}" ItemsSource="{Binding PolishRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Polish D Exsitu-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PolishExsituFormat}" />
+                                            <Binding Source="D" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishDExsituRecipe}"
+                                          IsEnabled="{Binding PolishBSideOperationDChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller A1 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="A1" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanARoller1Recipe}"
+                                          IsEnabled="{Binding CleanASideRollerOp1Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller A2 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="A2" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanARoller2Recipe}"
+                                          IsEnabled="{Binding CleanASideRollerOp2Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller A3 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="A3" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250"  SelectedValue="{Binding CleanARoller3Recipe}"
+                                          IsEnabled="{Binding CleanASideRollerOp3Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller B1 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="B1" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250"  SelectedValue="{Binding CleanBRoller1Recipe}"
+                                          IsEnabled="{Binding CleanBSideRollerOp1Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller B2 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="B2" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBRoller2Recipe}"
+                                          IsEnabled="{Binding CleanBSideRollerOp2Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Roller B3 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc RollerFormat}" />
+                                            <Binding Source="B3" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBRoller3Recipe}"
+                                          IsEnabled="{Binding CleanBSideRollerOp3Checked}" ItemsSource="{Binding RollerRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Pen A1 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PenFormat}" />
+                                            <Binding Source="A1" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanAPen1Recipe}"
+                                          IsEnabled="{Binding CleanASidePenOp1Checked}" ItemsSource="{Binding PenRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Pen A2 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PenFormat}" />
+                                            <Binding Source="A2" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanAPen2Recipe}"
+                                          IsEnabled="{Binding CleanASidePenOp2Checked}" ItemsSource="{Binding PenRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Pen B1 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PenFormat}" />
+                                            <Binding Source="B1" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBPen1Recipe}"
+                                          IsEnabled="{Binding CleanBSidePenOp1Checked}" ItemsSource="{Binding PenRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Pen B2 -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc PenFormat}" />
+                                            <Binding Source="B2" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBPen2Recipe}"
+                                          IsEnabled="{Binding CleanBSidePenOp2Checked}" ItemsSource="{Binding PenRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Dry A -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc DryFormat}" />
+                                            <Binding Source="A" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanADryRecipe}"
+                                          IsEnabled="{Binding CleanASideDryOpChecked}" ItemsSource="{Binding DryRecipeItems}"/>
+                            </StackPanel>
+                            <!-- Dry B -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Padding="5">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                            <Binding Source="{lex:Loc DryFormat}" />
+                                            <Binding Source="B" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBDryRecipe}"
+                                          IsEnabled="{Binding CleanBSideDryOpChecked}" ItemsSource="{Binding DryRecipeItems}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+            </Grid>
+
+            <!-- Save buttons -->
+            <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,7,0,0">
+                <StackPanel Orientation="Horizontal" >
+                    <Button Content="Save As" Command="{Binding SaveAsCommand}" Margin="3" Name="SaveAsButton" />
+                    <Button Content="Save" Command="{Binding SaveCommand}" Margin="3" Name="SaveButton"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

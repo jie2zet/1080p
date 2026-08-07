@@ -1,0 +1,130 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.RobotControlTab.FeedingRobot.CacheBodyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:controls="clr-namespace:CMP.Controls"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab"
+             d:DataContext="{d:DesignInstance viewModel:FeedingRobotControlViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d"
+             d:DesignHeight="500" d:DesignWidth="800">
+    
+    <Grid Background="#E8E8E8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title Bar -->
+        <Grid Grid.Row="0">
+            <Button Style="{StaticResource ButtonSuccess}" 
+                    Width="80" Height="32" HorizontalAlignment="Left" Margin="20,0,0,0"
+                    Command="{Binding BackFromCacheBodyCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="M6,0 L0,5 L6,10 M0,5 L10,5" Stroke="White" StrokeThickness="1.5" 
+                          VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBlock Text="{lex:Loc Back}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <TextBlock Text="{lex:Loc CacheBody}" FontSize="20" FontWeight="Bold" 
+                       Foreground="#006666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+        
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="20,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- A缓存腔体 -->
+            <GroupBox Grid.Column="0" Header="{lex:Loc CacheBodyA}" Margin="0,0,10,0"
+                      Background="White" BorderBrush="#CCCCCC">
+                <Grid Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- 缓存门开 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc CacheDoorOpen}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="0" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheADoorOpenStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 缓存门关 -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc CacheDoorClose}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheADoorCloseStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 光纤1 -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc Fiber1}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="2" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheAFiber1Status}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 液位 -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc LiquidLevel}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="3" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheALiquidLevelStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 门开关 -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc DoorSwitch}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="4" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheADoorSwitchStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </Grid>
+            </GroupBox>
+            
+            <!-- B缓存腔体 -->
+            <GroupBox Grid.Column="1" Header="{lex:Loc CacheBodyB}" Margin="10,0,0,0"
+                      Background="White" BorderBrush="#CCCCCC">
+                <Grid Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- 缓存门开 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc CacheDoorOpen}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="0" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheBDoorOpenStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 缓存门关 -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc CacheDoorClose}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheBDoorCloseStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 光纤1 -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc Fiber1}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="2" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheBFiber1Status}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 液位 -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc LiquidLevel}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="3" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheBLiquidLevelStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    
+                    <!-- 门开关 -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc DoorSwitch}" VerticalAlignment="Center" FontSize="14"/>
+                    <controls:SignalLight Grid.Row="4" Grid.Column="1" Width="24" Height="24" LightColor="Red" 
+                                          IsOn="{Binding CacheBDoorSwitchStatus}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

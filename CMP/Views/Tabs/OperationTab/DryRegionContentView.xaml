@@ -1,0 +1,31 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.DryRegionContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CMP.Views.Tabs.OperationTab"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:vm="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance vm:DryRegionContentViewModel}"
+             mc:Ignorable="d">
+    <Grid Margin="10">
+        <TabControl ItemsSource="{Binding DryTabItems}" 
+                    SelectedIndex="{Binding SelectedIndex}"
+                    ItemContainerStyle="{StaticResource SecondaryTabItemStyle}"
+                    Style="{StaticResource SecondaryTabControlStyle}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TabTitle}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:DryTabContentViewModel}">
+            <local:DryTabContentView DataContext="{Binding}" />
+        </DataTemplate>
+    </UserControl.Resources>
+</UserControl>
+
+

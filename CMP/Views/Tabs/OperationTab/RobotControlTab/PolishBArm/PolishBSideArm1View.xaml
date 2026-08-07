@@ -1,0 +1,466 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.RobotControlTab.PolishBArm.PolishBSideArm1View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishBArm"
+             mc:Ignorable="d" 
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm"
+             xmlns:extension="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:controls="clr-namespace:CMP.Controls"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModel:PolishBSideArm1ViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             d:DesignHeight="600" d:DesignWidth="1100">
+    <UserControl.Resources>
+        <Style x:Key="HiddenTabControlStyle" TargetType="TabControl">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <ContentPresenter ContentSource="SelectedContent"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ToggleButton 样式：未选中时为 Primary，选中时为 Danger -->
+        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#DC3545"/>
+                    <Setter Property="BorderBrush" Value="#DC3545"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#C82333"/>
+                    <Setter Property="BorderBrush" Value="#BD2130"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 绿色 ToggleButton 样式 (Start/Success) -->
+        <Style x:Key="ToggleButtonSuccess" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
+            <Setter Property="Background" Value="#28A745"/>
+            <Setter Property="BorderBrush" Value="#28A745"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#1E7E34"/>
+                    <Setter Property="BorderBrush" Value="#1C7430"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#218838"/>
+                    <Setter Property="BorderBrush" Value="#1E7E34"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 黄色 ToggleButton 样式 (Pause/Warning) -->
+        <Style x:Key="ToggleButtonWarning" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
+            <Setter Property="Background" Value="#FFC107"/>
+            <Setter Property="BorderBrush" Value="#FFC107"/>
+            <Setter Property="Foreground" Value="#212529"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#D39E00"/>
+                    <Setter Property="BorderBrush" Value="#C69500"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E0A800"/>
+                    <Setter Property="BorderBrush" Value="#D39E00"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 红色 ToggleButton 样式 (Stop/Danger) -->
+        <Style x:Key="ToggleButtonDanger" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
+            <Setter Property="Background" Value="#DC3545"/>
+            <Setter Property="BorderBrush" Value="#DC3545"/>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#BD2130"/>
+                    <Setter Property="BorderBrush" Value="#B21F2D"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#C82333"/>
+                    <Setter Property="BorderBrush" Value="#BD2130"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <TabControl Style="{StaticResource HiddenTabControlStyle}"
+            SelectedIndex="{Binding CurrentViewIndex}">
+        
+        <TabItem>
+            <Grid extension:GridHelpers.RowDefinitions="auto,auto,auto" Background="#E8E8E8">
+                <Grid  Grid.Row="0" Margin="10,10">
+                    <TextBlock Text="{lex:Loc PolishBSideArm1}" FontSize="16" FontWeight="Bold" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Content="{lex:Loc StationOperation}" Style="{StaticResource ButtonSuccess}"
+                    MinWidth="80" Height="30"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Command="{Binding StationOperationCommand}"/>
+                </Grid>
+
+                <Grid Grid.Row="1" extension:GridHelpers.ColumnDefinitions="*,*" extension:GridHelpers.RowDefinitions="9*,*">
+                    <GroupBox Grid.Column="0" Header="{lex:Loc AxisPositionOfSideBArm-x1}" Background="White" Margin="10" BorderBrush="#CCCCCC">
+                        <Grid extension:GridHelpers.ColumnDefinitions="auto,100,auto,auto,*" extension:GridHelpers.RowDefinitions="32,32,32,32,32,32,32,auto,auto">
+                            <!-- Standby position -->
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc StandbyPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="0" Grid.Column="1"
+                                Value="{Binding StandbyPosition_1x}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsStandbyPosition_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding StandbyPosition_1xSetCommand}"
+                                CancelCommand="{Binding StandbyPosition_1xCancelCommand}"/>
+                            <ToggleButton Grid.Row="0" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+                     Width="55" Height="28" Margin="5,0" IsChecked="{Binding StandbyPosMoveToggle_1x}" Command="{Binding StandbyMoveX1Command}"/>
+                            <!-- JOG Speed -->
+                            <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc JogSpeed}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <controls:EditableNumericWithActions Width="100"
+                                    Value="{Binding JogSpeed_1x}"
+                                    DecimalPlaces="3"
+                                    Increment="0.001"
+                                    IsDirty="{Binding IsJogSpeed_1xDirty, Mode=OneWay}"
+                                    SetCommand="{Binding JogSpeed_1xSetCommand}"
+                                    CancelCommand="{Binding JogSpeed_1xCancelCommand}"/>
+                            </StackPanel>
+
+                            <!-- Transfer Arm Position -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc TransferArmPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="1" Grid.Column="1"
+                                Value="{Binding TransferArmPosition_1x}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsTransferArmPosition_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding TransferArmPosition_1xSetCommand}"
+                                CancelCommand="{Binding TransferArmPosition_1xCancelCommand}"/>
+                            <ToggleButton Grid.Row="1" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+                                  Width="55" Height="28" Margin="5,0" IsChecked="{Binding TransferArmMoveToggle_1x}" Command="{Binding TransferMoveX1Command}"/>
+                            <!-- Auto Speed -->
+                            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc AutoSpeed}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <controls:EditableNumericWithActions Width="100"
+                                    Value="{Binding AutoSpeed_1x}"
+                                    DecimalPlaces="3"
+                                    Increment="0.001"
+                                    IsDirty="{Binding IsAutoSpeed_1xDirty, Mode=OneWay}"
+                                    SetCommand="{Binding AutoSpeed_1xSetCommand}"
+                                    CancelCommand="{Binding AutoSpeed_1xCancelCommand}"/>
+                            </StackPanel>
+
+                            <!-- Polish C Position -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc PolishCPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="2" Grid.Column="1"
+                                Value="{Binding PolishCPosition_1x}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsPolishCPosition_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding PolishCPosition_1xSetCommand}"
+                                CancelCommand="{Binding PolishCPosition_1xCancelCommand}"/>
+                            <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+              Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishCPosMoveToggle_1x}" Command="{Binding PolishCMoveX1Command}"/>
+                            <!-- Current Coordinate -->
+                            <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc CurrentCoordinate}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <Border BorderBrush="#CCCCCC" BorderThickness="1" Height="30">
+                                    <TextBlock Text="{Binding CurrentCoordinate_1x, StringFormat=F3}" 
+                                       Width="98" VerticalAlignment="Center" Padding="6,0,0,0"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Polish D Position -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc PolishDPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="3" Grid.Column="1"
+                                Value="{Binding PolishDPosition_1x}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsPolishDPosition_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding PolishDPosition_1xSetCommand}"
+                                CancelCommand="{Binding PolishDPosition_1xCancelCommand}"/>
+                            <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_1x}" Command="{Binding PolishDMoveX1Command}"/>
+
+                            <!-- Alarm Code -->
+                            <Border BorderBrush="#CCCCCC" BorderThickness="1" Grid.Row="7" Grid.Column="0" Margin="5,0,0,5" Height="30">
+                                <TextBlock  Text="{Binding AlarmCode_1x}" VerticalAlignment="Center" Padding="6,0,0,0"/>
+                            </Border>
+
+                            <!--Alarm Status-->
+                            <Grid Grid.Row="8" Grid.Column="0" Margin="5,0,0,0"
+                          extension:GridHelpers.RowDefinitions="24,24"
+                          extension:GridHelpers.ColumnDefinitions="auto,24">
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc DriverAlarm}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <controls:SignalLight Grid.Row="0" Grid.Column="1" Width="16" Height="16" LightColor="Red" 
+                      IsOn="{Binding DriverAlarm_1x}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc LimitAlarm}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="16" Height="16" LightColor="Red" 
+                      IsOn="{Binding LimitAlarm_1x}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                            </Grid>
+
+                            <!-- Enable and Jog Up/Down Buttons with Signal Lights -->
+                            <StackPanel Grid.Row="3" Grid.Column="4" Grid.RowSpan="5" 
+                                Orientation="Vertical" HorizontalAlignment="Right" Margin="0,10,10,0">
+                                <!-- Enable -->
+                                <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal" 
+                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Margin="0,0,10,10">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding IsEnabled_1x}" Margin="0,0,5,0"/>
+                                    <ToggleButton Content="{lex:Loc Enable}" Style="{StaticResource MoveToggleButtonStyle}" 
+                                         Width="80" Height="36" IsChecked="{Binding IsEnabled_1x, Mode=OneWay}" Command="{Binding EnableCommandX1Command}"/>
+                                </StackPanel>
+
+                                <!-- Up Button with Signal Light -->
+                                <StackPanel Orientation="Horizontal">
+                                    <controls:SignalLight Width="20" Height="20" IsOn="{Binding JogUpActive_1x}" LightColor="Blue" Margin="0,0,5,0"/>
+                                    <Button Style="{StaticResource ButtonPrimary}" Width="80" Height="36">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                <b:InvokeCommandAction Command="{Binding PressJogUpX1Command}"/>
+                                            </b:EventTrigger>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                <b:InvokeCommandAction Command="{Binding ReleaseJogUpX1Command}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                        <Path Data="M30,10 L15,35 L45,35 Z" Fill="White" Stretch="Uniform" Width="20" Height="16"/>
+                                    </Button>
+
+                                </StackPanel>
+
+                                <!-- Middle Signal Light -->
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,5">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Blue" 
+                          IsOn="{Binding JogMiddleActive_1x}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                </StackPanel>
+
+                                <!-- Down Button with Signal Light -->
+                                <StackPanel Orientation="Horizontal">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Blue" 
+                          IsOn="{Binding JogDownActive_1x}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                    <Button Style="{StaticResource ButtonPrimary}" Width="80" Height="36">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                <b:InvokeCommandAction Command="{Binding PressJogDownX1Command}"/>
+                                            </b:EventTrigger>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                <b:InvokeCommandAction Command="{Binding ReleaseJogDownX1Command}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                        <Path Data="M30,35 L15,10 L45,10 Z" Fill="White" Stretch="Uniform" Width="20" Height="16"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="1" Header="{lex:Loc AxisPositionOfSideBArm-z1}" Background="White" Margin="10" BorderBrush="#CCCCCC">
+                        <Grid extension:GridHelpers.ColumnDefinitions="auto,100,auto,auto,*" extension:GridHelpers.RowDefinitions="32,32,32,32,32,32,32,auto,auto">
+                            <!-- Standby position -->
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc StandbyPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="0" Grid.Column="1"
+                                Value="{Binding StandbyPosition_1z}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsStandbyPosition_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding StandbyPosition_1zSetCommand}"
+                                CancelCommand="{Binding StandbyPosition_1zCancelCommand}"/>
+                            <ToggleButton Grid.Row="0" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+                     Width="55" Height="28" Margin="5,0" IsChecked="{Binding StandbyPosMoveToggle_1z}" Command="{Binding StandbyMoveZ1Command}"/>
+                            <!-- JOG Speed -->
+                            <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc JogSpeed}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <controls:EditableNumericWithActions Width="100"
+                                    Value="{Binding JogSpeed_1z}"
+                                    DecimalPlaces="3"
+                                    Increment="0.001"
+                                    IsDirty="{Binding IsJogSpeed_1zDirty, Mode=OneWay}"
+                                    SetCommand="{Binding JogSpeed_1zSetCommand}"
+                                    CancelCommand="{Binding JogSpeed_1zCancelCommand}"/>
+                            </StackPanel>
+
+                            <!-- Transfer Arm Position -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc TransferArmPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="1" Grid.Column="1"
+                                Value="{Binding TransferArmPosition_1z}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsTransferArmPosition_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding TransferArmPosition_1zSetCommand}"
+                                CancelCommand="{Binding TransferArmPosition_1zCancelCommand}"/>
+                            <ToggleButton Grid.Row="1" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+                                  Width="55" Height="28" Margin="5,0" IsChecked="{Binding TransferArmMoveToggle_1z}" Command="{Binding TransferMoveZ1Command}"/>
+                            <!-- Auto Speed -->
+                            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc AutoSpeed}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <controls:EditableNumericWithActions Width="100"
+                                    Value="{Binding AutoSpeed_1z}"
+                                    DecimalPlaces="3"
+                                    Increment="0.001"
+                                    IsDirty="{Binding IsAutoSpeed_1zDirty, Mode=OneWay}"
+                                    SetCommand="{Binding AutoSpeed_1zSetCommand}"
+                                    CancelCommand="{Binding AutoSpeed_1zCancelCommand}"/>
+                            </StackPanel>
+
+                            <!-- Polish C Position -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc PolishCPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="2" Grid.Column="1"
+                                Value="{Binding PolishCPosition_1z}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsPolishCPosition_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding PolishCPosition_1zSetCommand}"
+                                CancelCommand="{Binding PolishCPosition_1zCancelCommand}"/>
+                            <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+              Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishCPosMoveToggle_1z}" Command="{Binding PolishCMoveZ1Command}"/>
+                            <!-- Current Coordinate -->
+                            <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{lex:Loc CurrentCoordinate}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <Border BorderBrush="#CCCCCC" BorderThickness="1" Height="30">
+                                    <TextBlock Text="{Binding CurrentCoordinate_1z, StringFormat=F3}" 
+                                       Width="98" VerticalAlignment="Center" Padding="6,0,0,0"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Polish D Position -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="{lex:Loc PolishDPosition}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="3" Grid.Column="1"
+                                Value="{Binding PolishDPosition_1z}"
+                                Minimum="{Binding PositionMinimum}"
+                                Maximum="{Binding PositionMaximum}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsPolishDPosition_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding PolishDPosition_1zSetCommand}"
+                                CancelCommand="{Binding PolishDPosition_1zCancelCommand}"/>
+                            <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
+Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_1z}" Command="{Binding PolishDMoveZ1Command}"/>
+
+                            <!-- Alarm Code -->
+                            <Border BorderBrush="#CCCCCC" BorderThickness="1" Grid.Row="7" Grid.Column="0" Margin="5,0,0,5" Height="30">
+                                <TextBlock  Text="{Binding AlarmCode_1z}" VerticalAlignment="Center" Padding="6,0,0,0"/>
+                            </Border>
+
+                            <!--Alarm Status-->
+                            <Grid Grid.Row="8" Grid.Column="0" Margin="5,0,0,0"
+                          extension:GridHelpers.RowDefinitions="24,24"
+                          extension:GridHelpers.ColumnDefinitions="auto,24">
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc DriverAlarm}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <controls:SignalLight Grid.Row="0" Grid.Column="1" Width="16" Height="16" LightColor="Red" 
+                      IsOn="{Binding DriverAlarm_1z}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc LimitAlarm}" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                                <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="16" Height="16" LightColor="Red" 
+                      IsOn="{Binding LimitAlarm_1z}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                            </Grid>
+
+                            <!-- Enable and Jog Up/Down Buttons with Signal Lights -->
+                            <StackPanel Grid.Row="3" Grid.Column="4" Grid.RowSpan="5" 
+                                Orientation="Vertical" HorizontalAlignment="Right" Margin="0,10,10,0">
+                                <!-- Enable -->
+                                <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal" 
+                                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    Margin="0,0,10,10">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding IsEnabled_1z}" Margin="0,0,5,0"/>
+                                    <ToggleButton Content="{lex:Loc Enable}" Style="{StaticResource MoveToggleButtonStyle}" 
+                                         Width="80" Height="36" IsChecked="{Binding IsEnabled_1z, Mode=OneWay}" Command="{Binding EnableCommandZ1Command}"/>
+                                </StackPanel>
+
+                                <!-- Up Button with Signal Light -->
+                                <StackPanel Orientation="Horizontal">
+                                    <controls:SignalLight Width="20" Height="20" IsOn="{Binding JogUpActive_1z}" LightColor="Blue" Margin="0,0,5,0"/>
+                                    <Button Style="{StaticResource ButtonPrimary}" Width="80" Height="36">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                <b:InvokeCommandAction Command="{Binding PressJogUpZ1Command}"/>
+                                            </b:EventTrigger>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                <b:InvokeCommandAction Command="{Binding ReleaseJogUpZ1Command}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                        <Path Data="M30,10 L15,35 L45,35 Z" Fill="White" Stretch="Uniform" Width="20" Height="16"/>
+                                    </Button>
+
+                                </StackPanel>
+
+                                <!-- Middle Signal Light -->
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,5">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Blue" 
+                          IsOn="{Binding JogMiddleActive_1z}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                </StackPanel>
+
+                                <!-- Down Button with Signal Light -->
+                                <StackPanel Orientation="Horizontal">
+                                    <controls:SignalLight Width="20" Height="20" LightColor="Blue" 
+                          IsOn="{Binding JogDownActive_1z}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                    <Button Style="{StaticResource ButtonPrimary}" Width="80" Height="36">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                                <b:InvokeCommandAction Command="{Binding PressJogDownZ1Command}"/>
+                                            </b:EventTrigger>
+                                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                <b:InvokeCommandAction Command="{Binding ReleaseJogDownZ1Command}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                        <Path Data="M30,35 L15,10 L45,10 Z" Fill="White" Stretch="Uniform" Width="20" Height="16"/>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
+                        <ToggleButton Content="{lex:Loc Origin}" FontSize="17" Margin="0,0,10,0" Height="43"
+                              Style="{StaticResource MoveToggleButtonStyle}"  IsChecked="{Binding OriginToggle_1x, Mode=TwoWay}" Command="{Binding OrignX1Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding IsAtOrigin_1x}" Margin="0,0,5,0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
+                        <ToggleButton Content="{lex:Loc Origin}" FontSize="17" Margin="0,0,10,0" Height="43"
+                 Style="{StaticResource MoveToggleButtonStyle}"  IsChecked="{Binding OriginToggle_1z, Mode=TwoWay}" Command="{Binding OrignZ1Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding IsAtOrigin_1z}" Margin="0,0,5,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,10,5" VerticalAlignment="Center">
+                    <ToggleButton Content="{lex:Loc EmergencyStop}" Style="{StaticResource ToggleButtonDanger}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding EmergencyStopToggle, Mode=OneWay}" Command="{Binding EmergencyCommand}"/>
+                    <ToggleButton Content="{lex:Loc Alarm}" Style="{StaticResource ToggleButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding AlarmResetToggle, Mode=OneWay}" Command="{Binding AlarmResetCommand}"/>
+                    <ToggleButton Content="{lex:Loc Save}" Style="{StaticResource ToggleButtonSuccess}" MinWidth="70" Height="28" IsChecked="{Binding SaveToggle,Mode=OneWay}" Command="{Binding SaveCommand}"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+
+        <TabItem>
+            <local:PolishBSideArm1StationView DataContext="{Binding}"/>
+        </TabItem>
+    </TabControl>
+    
+</UserControl>
+

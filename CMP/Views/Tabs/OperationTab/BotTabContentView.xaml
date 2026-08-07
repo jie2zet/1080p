@@ -1,0 +1,116 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.BotTabContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             xmlns:model="clr-namespace:CMP.Models.Operation.Bot"
+             d:DataContext="{d:DesignData viewModel:BotTabContentViewModel}"            
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP" 
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+    <UserControl.Resources>
+        <!-- Converter for Bot Server State -->
+        <converters:OnOffStateConverter x:Key="BotServerStateConverter"/>
+        
+        <!-- DataTemplate for BotAxis Items -->
+        <DataTemplate x:Key="BotAxisTemplate" DataType="model:AxisData">
+            <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                      Padding="10" Margin="10" Style="{StaticResource GroupBoxTab.Small}">
+                <GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock Padding="5" Foreground="White" Text="{Binding ModuleName}" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *" extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                               Text="Server" Foreground="Black" VerticalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding DataContext.ServerOnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}">
+                        <Button.Content>
+                            <TextBlock Text="{Binding ServerState, Converter={StaticResource BotServerStateConverter}}"/>
+                        </Button.Content>
+                    </Button>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                               Text="Set Jog Vel" Foreground="Black"/>
+                    <TextBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                             Text="{Binding Velocity}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                               Text="To Pos" Foreground="Black"/>
+                    <hc:NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="15"
+                                     Value="{Binding Position}" Width="100" Height="20"
+                                     Margin="0 0 10 0"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Margin="0 0 10 0"
+                              Text="{Binding SelectedStationPosition}" Foreground="Black"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                        Text="Act Pos" Foreground="Black"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                        Text="{Binding CurrentPosition}" Foreground="Black"/>
+                    <Button Grid.Row="3" Grid.Column="2" Content="{lex:Loc SetPos}" Style="{StaticResource ButtonPrimary}"
+                        Command="{Binding DataContext.SetPosCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding}"/>
+
+                    <Button Grid.Row="4" Grid.Column="1" Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding DataContext.RunCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}"/>
+                    <Button Grid.Row="4" Grid.Column="2" Content="{lex:Loc Home}" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding DataContext.HomeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}"/>
+
+                    <Button Grid.Row="5" Grid.Column="0" Content="{lex:Loc JogPlus}" Style="{StaticResource ButtonPrimary}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <b:InvokeCommandAction
+                                    Command="{Binding DataContext.PressJogPlusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <b:InvokeCommandAction
+                                    Command="{Binding DataContext.ReleaseJogPlusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </Button>
+                    <Button Grid.Row="5" Grid.Column="1" Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
+                            Command="{Binding DataContext.StopCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            CommandParameter="{Binding}"/>
+                    <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc JogMinus}" Style="{StaticResource ButtonPrimary}">
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                <b:InvokeCommandAction
+                                    Command="{Binding DataContext.PressJogMinusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <b:InvokeCommandAction
+                                    Command="{Binding DataContext.ReleaseJogMinusCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
+                    </Button>
+                </Grid>
+            </GroupBox>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Border BorderThickness="1" Margin="5" Padding="0" CornerRadius="4">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding BotAxis}" ItemTemplate="{StaticResource BotAxisTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate> 
+                        <UniformGrid Columns="5" extensions:StackPanelHelpers.Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Border>
+</UserControl>

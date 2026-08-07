@@ -1,0 +1,1800 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.MainContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             mc:Ignorable="d"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             xmlns:operationTab="clr-namespace:CMP.Views.Tabs.OperationTab"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             d:DataContext="{d:DesignInstance viewModel:MainContentViewModel}"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             d:DesignHeight="800" d:DesignWidth="1770">
+    <UserControl.Resources>
+        <!-- AddBooleanToVisibilityConverter -->
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:StringToBrushConverter x:Key="StringToBrushConverter"/>
+
+    </UserControl.Resources>
+    <Grid extensions:GridHelpers.ColumnDefinitions="380,1400">
+        <operationTab:MainPageView Grid.Column="0"
+                                   DataContext="{Binding MainPage}" />
+        <!-- Center Content -->
+        <Border BorderBrush="Gray"
+                BorderThickness="1"
+                CornerRadius="3"
+                Margin="5"
+                Background="White" Grid.Column="1">
+            <Grid x:Name="CenterContent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0">
+                    <Button Content="{lex:Loc Initialize}" Width="140" Margin="10" Style="{StaticResource ButtonPrimary}" Command="{Binding InitCommand}"></Button>
+                    <Button Content="{lex:Loc AutoMode}" Width="140" Margin="10" Style="{StaticResource ButtonPrimary}" Command="{Binding AutoModeCommand}"></Button>
+                    <Button Content="{lex:Loc ManualMode}" Width="140" Margin="10" Style="{StaticResource ButtonPrimary}" Command="{Binding ManualModeCommand}"></Button>
+                    <Button Content="{lex:Loc ResetAlarm}" Width="140" Margin="10" Style="{StaticResource ButtonPrimary}" Command="{Binding ResetAlarmCommand}"></Button>
+                    <Button Content="{lex:Loc Stop}" Width="140" Margin="10" Style="{StaticResource ButtonDanger}" Command="{Binding StopCommand}" ></Button>
+                    <Button Content="{lex:Loc AutoRun}" Width="160" Margin="10" Style="{StaticResource ButtonPrimary}" Command="{Binding AutoRunCommand}"></Button>
+                    <Button Content="{lex:Loc Abort}" Width="160" Style="{StaticResource ButtonDanger}"/>
+                </WrapPanel>
+                <Grid Grid.Row="1" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel  Grid.Column="0">
+                        <Button  Content="{lex:Loc StopLoad}"  Margin="10,0" Width="80" Style="{StaticResource ButtonDanger}" Command="{Binding AutoReturnCommand}"  >
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            CornerRadius="5">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                  VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+
+                    </WrapPanel>
+                    <Canvas Margin="0,189,0,189" Height="360" Width="150" Grid.Column="0"    HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                        <Image Source="/Assets/Images/lp2.png" VerticalAlignment="Center" Stretch="None" Width="120"/>
+                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[0].DockValue}" Canvas.Top="10" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[0].IsVisibility}"/>
+                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[1].DockValue}" Canvas.Top="86" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[1].IsVisibility}"/>
+                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[2].DockValue}" Canvas.Top="163" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[2].IsVisibility}"/>
+                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[3].DockValue}" Canvas.Top="238" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[3].IsVisibility}"/>
+                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[4].DockValue}" Canvas.Top="313" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[4].IsVisibility}"/>
+                    </Canvas>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+                        <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding EFEMRobot.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                                Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="100">
+                            <GroupBox.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc EFEMRobot}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="EFEMRobot"/>
+                                                <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="EFEMRobot"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                    <TextBlock Padding="5" Foreground="White" Text="{Binding EFEMRobot.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="EFEMRobot"/>
+
+                                                <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="EFEMRobot"/>
+
+                                            
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border>
+                                <StackPanel Orientation="Horizontal">
+                                    <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                        <Image Source="/Assets/Images/Robot.png"  Width="80" Stretch="Fill" Grid.Column="0" Height="80" />
+                                        <Image Source="/Assets/Images/wafer.png" 
+                                            Width="60" Height="60"
+                                               Canvas.Left="44" Canvas.Top="5"
+                                              Panel.ZIndex="1" 
+                                            Visibility="{Binding EFEMRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding EFEMRobot.WaferInfo}" 
+                                             Canvas.Top="15" Panel.ZIndex="2" Canvas.Left="60"
+                                            Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                            Visibility="{Binding EFEMRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                    </StackPanel>
+                    <Grid Grid.Row="0" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="0" Grid.Column="0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding DryB.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc DryB}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="DryB"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding DryB.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="DryB"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="DryB"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center"  VerticalAlignment="Top" Canvas.Top="10" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="36" Canvas.Top="35" 
+                           Visibility="{Binding DryB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding DryB.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding DryB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenB1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenB1}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PenB1"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PenB1.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PenB1"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PenB1"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="5" />
+                                        <Image Source="/Assets/Images/clean_pen_1.png" Width="130" Height="90" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-23" Canvas.Left="36" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="36" Canvas.Top="30" 
+                           Visibility="{Binding PenB1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PenB1.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding PenB1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerB1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerB1}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+
+                                                    <MenuItem  Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerB1"></MenuItem>
+                                                    <MenuItem  Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerB1"></MenuItem>
+                                                </ContextMenu>
+
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerB1.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerB1"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerB1"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center"  VerticalAlignment="Top" Canvas.Top="5" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-50"/>
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                            Width="80" Height="80" 
+                            Canvas.Left="36" Canvas.Top="30" 
+                           Visibility="{Binding RollerB1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerB1.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerB1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="1" Grid.Column="0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenB2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenB2}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PenB2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PenB2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PenB2.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PenB2"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PenB2"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" Canvas.Top="10" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/clean_pen_1.png" Width="130" Height="90" HorizontalAlignment="Left" Canvas.Top="-17" VerticalAlignment="Top" Canvas.Left="50" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="36" Canvas.Top="35" 
+                           Visibility="{Binding PenB2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PenB2.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding PenB2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerB3.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerB3}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerB3"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerB3"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerB3.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerB3"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerB3"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" Canvas.Top="5" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Left" Canvas.Top="-50" VerticalAlignment="Top" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                            Width="80" Height="80" 
+                            Canvas.Left="36" Canvas.Top="30" 
+                           Visibility="{Binding RollerB3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerB3.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerB3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerB2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerB2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerB2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerB2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerB2.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerB2"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="5" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-50"/>
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                            Width="80" Height="80" 
+                            Canvas.Left="36" Canvas.Top="30" 
+                           Visibility="{Binding RollerB2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerB2.WaferInfo}" Canvas.Left="60" Canvas.Top="80"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerB2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding CleanBRobot2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBRobot2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="CleanBRobot2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="CleanBRobot2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding CleanBRobot2.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="CleanBRobot2"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <!--<TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBRobot1}" />
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerB2.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    -->
+                                        <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                        <!--
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerB2"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerB2"/>
+                                                    -->
+                                        <!--</MenuItem>-->
+                                        <!--
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>-->
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
+                                            <Image Source="/Assets/Images/wafer.png" 
+                                                Width="60" Height="60"
+                                                   Canvas.Left="54" Canvas.Top="20"
+                                                  Panel.ZIndex="1" 
+                                                Visibility="{Binding CleanBRobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding CleanBRobot2.WaferInfo}" 
+                                                 Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
+                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                Visibility="{Binding CleanBRobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+
+
+
+                                        <!--<Image Source="/Assets/Images/Robot.png" VerticalAlignment="Center" Stretch="Fill" Width="80"
+                        HorizontalAlignment="Center"  Grid.Column="0" Height="80" />-->
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding CleanBRobot1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBRobot1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="CleanBRobot1"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="CleanBRobot1"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding CleanBRobot1.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="CleanBRobot1"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <!--<TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanBRobot1}" />
+                            <TextBlock Padding="5" Foreground="White" Text="{Binding RollerB2.ChamberStatus}" >
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        -->
+                                        <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                        <!--
+                                        <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerB2"/>
+                                        <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerB2"/>
+                                        -->
+                                        <!--</MenuItem>-->
+                                        <!--
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>-->
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
+                                            <Image Source="/Assets/Images/wafer.png" 
+                                                Width="60" Height="60"
+                                                   Canvas.Left="54" Canvas.Top="20"
+                                                  Panel.ZIndex="1" 
+                                                Visibility="{Binding CleanBRobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding CleanBRobot1.WaferInfo}" 
+                                                 Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
+                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                Visibility="{Binding CleanBRobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding TransBuffer.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="460">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc TransferBuffer}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="TransBuffer"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="TransBuffer"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding TransBuffer.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="TransBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="TransBuffer"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/�м�.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                HorizontalAlignment="Center"  Grid.Column="0" Height="60" />
+                                            <Image Source="/Assets/Images/wafer.png" 
+                                                Width="60" Height="60"
+                                                   Canvas.Top="4"
+                                                  Panel.ZIndex="1" 
+                                                Visibility="{Binding TransBuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding TransBuffer.WaferInfo}" 
+                                                 Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="20"
+                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                Visibility="{Binding TransBuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+
+
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Orientation="Horizontal">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding CleanARobot2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanARobot2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="CleanARobot2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="CleanARobot2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding CleanARobot2.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="CleanARobot2"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="CleanARobot2"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
+                                            <Image Source="/Assets/Images/wafer.png" 
+                                                    Width="60" Height="60"
+                                                       Canvas.Left="54" Canvas.Top="20"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding CleanARobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding CleanARobot2.WaferInfo}" 
+                                                     Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding CleanARobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding CleanARobot1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CleanARobot1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="CleanARobot1"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="CleanARobot1"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding CleanARobot1.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="CleanARobot1"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="CleanARobot1"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
+                                            <Image Source="/Assets/Images/wafer.png" 
+                                                    Width="60" Height="60"
+                                                       Canvas.Left="54" Canvas.Top="20"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding CleanARobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding CleanARobot1.WaferInfo}" 
+                                                        Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding CleanARobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="5" Grid.Column="0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding DryA.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc DryA}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="DryA"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding DryA.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="DryA"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="DryA"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Left" Canvas.Left="0" Canvas.Top="5" VerticalAlignment="Center" />
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                            Width="80" Height="80" 
+                            Canvas.Left="36" Canvas.Top="30" 
+                           Visibility="{Binding DryA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding DryA.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding DryA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenA1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenA1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PenA1"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PenA1"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PenA1.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PenA1"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PenA1"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="5"/>
+                                        <Image Source="/Assets/Images/clean_pen_1.png" Width="130" Height="90" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-23" Canvas.Left="36"/>
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="35" Canvas.Top="30"
+                           Visibility="{Binding PenA1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PenA1.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding PenA1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerA1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerA1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerA1"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerA1"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerA1.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerA1"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerA1"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" Canvas.Top="5" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-50"/>
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="35" Canvas.Top="30"
+                           Visibility="{Binding RollerA1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerA1.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerA1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="6" Grid.Column="0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenA2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150" Height="140">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenA2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PenA2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PenA2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PenA2.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PenA2"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PenA2"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/clean_pen_1.png" Width="130" Height="90" HorizontalAlignment="Left" Canvas.Top="-23" VerticalAlignment="Top" Canvas.Left="50" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="35" Canvas.Top="25"
+                           Visibility="{Binding PenA2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PenA2.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding PenA2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerA3.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150" Height="140">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerA3}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerA3"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerA3"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerA3.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerA3"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerA3"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Left" Canvas.Top="-50" VerticalAlignment="Top" />
+
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="35" Canvas.Top="25"
+                           Visibility="{Binding RollerA3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerA3.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerA3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding RollerA2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150" Height="140">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc RollerA2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="RollerA2"></MenuItem>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="RollerA2"></MenuItem>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding RollerA2.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="RollerA2"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="RollerA2"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="100" Width="150">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/clean_pen_2.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/brush.png" Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Top" Canvas.Top="-50"/>
+                                        <Image Source="/Assets/Images/wafer2.png" 
+                           Width="80" Height="80" 
+                           Canvas.Left="35" Canvas.Top="25"
+                           Visibility="{Binding RollerA2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding RollerA2.WaferInfo}" Canvas.Left="60" Canvas.Top="70"
+                               Foreground="Blue" FontWeight="Bold" FontSize="8"
+                               Visibility="{Binding RollerA2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                        <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding TransRobot.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="100">
+                            <GroupBox.Header>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Padding="5" Foreground="White" Text="{lex:Loc TransRobot}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="TransRobot"/>
+                                                <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="TransRobot"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                    <TextBlock Padding="5" Foreground="White" Text="{Binding TransRobot.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="TransRobot"/>
+
+                                                <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="TransRobot"/>
+
+                                            
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                </StackPanel>
+                            </GroupBox.Header>
+                            <Border>
+                                <StackPanel Orientation="Horizontal">
+                                    <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
+                                        <Image Source="/Assets/Images/Robot.png"  Width="80" Stretch="Fill" Grid.Column="0" Height="80" />
+                                        <Image Source="/Assets/Images/wafer.png" 
+                                                Width="60" Height="60"
+                                                   Canvas.Left="44" Canvas.Top="5"
+                                                  Panel.ZIndex="1" 
+                                                Visibility="{Binding TransRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding TransRobot.WaferInfo}" 
+                                                 Canvas.Top="10" Panel.ZIndex="2" Canvas.Left="40"
+                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                Visibility="{Binding TransRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </StackPanel>
+                            </Border>
+                        </GroupBox>
+                    </StackPanel>
+                    <Grid Grid.Row="0" Grid.Column="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"/>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="20" Grid.Row="0" Grid.Column="0" >
+                            <!--<GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"-->
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PolishC.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Height="280" Width="300" Margin="0" VerticalAlignment="Top" >
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishC}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PolishC"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PolishC.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PolishC"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PolishC"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="250" Width="300">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/platen.png" Width="260" Height="250" HorizontalAlignment="Left" Canvas.Left="20" VerticalAlignment="Center" />
+                                        <!-- �ϲ�ͼƬ��ͨ�� Canvas.Left/Top ��λ�� -->
+                                        <Image Source="/Assets/Images/Head.png" Width="106" Height="102"
+                                            Canvas.Right="260" Canvas.Top="85"
+                                            Panel.ZIndex="1" Canvas.Left="164" />
+                                        <Image Source="/Assets/Images/Slurry-Arm.png" Width="167" Height="46"
+                                            Canvas.Left="10" Canvas.Top="214"
+                                            Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/ConditionArm.png" Width="146" Height="50"
+                                            Canvas.Left="21" Canvas.Bottom="30"
+                                            Panel.ZIndex="1" Canvas.Top="-15">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="42.887"/>
+                                                    <TranslateTransform X="-0.04088320528055174" Y="0.11232568334324387"/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+
+
+                                        <Image Source="/Assets/Images/wafer.png" 
+                           Width="106" Height="102"
+                           Canvas.Right="260" Canvas.Top="85"
+                           Panel.ZIndex="1" Canvas.Left="164"
+                           Visibility="{Binding PolishC.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PolishC.WaferInfo}" 
+                            Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
+                           Foreground="Blue" FontWeight="Bold" FontSize="12"
+                           Visibility="{Binding PolishC.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PolishD.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Height="280" Width="300" VerticalAlignment="Top">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishD}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PolishD"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PolishD.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PolishD"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PolishD"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="250" Width="300">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/platen.png" Width="260" Height="250" HorizontalAlignment="Left" Canvas.Left="20" VerticalAlignment="Center" />
+                                        <!-- �ϲ�ͼƬ��ͨ�� Canvas.Left/Top ��λ�� -->
+                                        <Image Source="/Assets/Images/Head.png" Width="106" Height="102"
+                                                Canvas.Right="260" Canvas.Top="85"
+                                                Panel.ZIndex="1" Canvas.Left="164" />
+                                        <Image Source="/Assets/Images/Slurry-Arm.png" Width="167" Height="46"
+                                                Canvas.Left="10" Canvas.Top="214"
+                                                Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/ConditionArm.png" Width="146" Height="50"
+                                                Canvas.Left="21" Canvas.Bottom="30"
+                                                Panel.ZIndex="1" Canvas.Top="-15">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform Angle="42.887"/>
+                                                    <TranslateTransform X="-0.04088320528055174" Y="0.11232568334324387"/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+
+                                        <Image Source="/Assets/Images/wafer.png" 
+                                            Width="106" Height="102"
+                                            Canvas.Right="260" Canvas.Top="85"
+                                            Panel.ZIndex="1" Canvas.Left="164" 
+                                           Visibility="{Binding PolishD.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PolishD.WaferInfo}" 
+                                            Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
+                                           Foreground="Blue" FontWeight="Bold" FontSize="12"
+                                           Visibility="{Binding PolishD.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixBBuffer.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="170">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc FixBufferB}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixBBuffer"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixBBuffer"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixBBuffer.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixBBuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixBBuffer"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/托架.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Grid.Column="0" Height="60" Margin="50,0" />
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixBBuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixBBuffer.WaferInfo}" 
+                                                  Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                 Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                 Visibility="{Binding FixBBuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixBLTP1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                                        Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTB1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixBLTP1"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixBLTP1"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixBLTP1.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixBLTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixBLTP1"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixBLTP1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixBLTP1.WaferInfo}" 
+                                                      Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                     Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                     Visibility="{Binding FixBLTP1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixBLTP2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTB2}"  >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixBLTP2"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixBLTP2"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixBLTP2.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixBLTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixBLTP2"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                     HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixBLTP2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixBLTP2.WaferInfo}" 
+                                                  Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                Visibility="{Binding FixBLTP2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixBLTP3.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTB3}"  >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixBLTP3"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixBLTP3"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixBLTP3.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixBLTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixBLTP3"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                     HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixBLTP3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixBLTP3.WaferInfo}" 
+                                                     Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding FixBLTP3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixABuffer.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="170">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc FixBufferA}"  >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixABuffer"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixABuffer"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixABuffer.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixABuffer"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixABuffer"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/托架.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Grid.Column="0" Height="60" Margin="50,0" />
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixABuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixABuffer.WaferInfo}" 
+                                                     Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding FixABuffer.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixALTP1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                                        Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTA1}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixALTP1"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixALTP1"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixALTP1.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixALTP1"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixALTP1"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper-Down.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixALTP1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixALTP1.WaferInfo}" 
+                                                      Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding FixALTP1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixALTP2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTA2}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixALTP2"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixALTP2"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixALTP2.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixALTP2"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixALTP2"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper-Down.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixALTP2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixALTP2.WaferInfo}" 
+                                                     Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding FixALTP2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding FixALTP3.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc LPTA3}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="FixALTP3"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="FixALTP3"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding FixALTP3.RobotStatus}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+<MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="FixALTP3"/>
+
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="FixALTP3"/>
+
+                                                
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Canvas>
+                                            <Image Source="/Assets/Images/Clamper-Down.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                                    HorizontalAlignment="Center"  Height="60" Margin="50,0"/>
+                                            <Image Source="/Assets/Images/wafer.png" Margin="50,0"
+                                                    Width="60" Height="60"
+                                                       Canvas.Top="4"
+                                                      Panel.ZIndex="1" 
+                                                    Visibility="{Binding FixALTP3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding FixALTP3.WaferInfo}" 
+                                                     Canvas.Top="25" Panel.ZIndex="2" Canvas.Left="65"
+                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
+                                                    Visibility="{Binding FixALTP3.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                        <!--<Image Source="/Assets/Images/Clamper.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+        HorizontalAlignment="Left"  Grid.Row="1" Height="60"/>
+    <Image Source="/Assets/Images/Clamper - Copy.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+        HorizontalAlignment="Center"  Grid.Row="2" Height="60"/>-->
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="20" Grid.Row="3" Grid.Column="0">
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PolishA.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Height="280" Width="300" VerticalAlignment="Bottom">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishA}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PolishA"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PolishA.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PolishA"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PolishA"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <StackPanel>
+                                        <!--<StackPanel Height="20" Orientation="Horizontal" Background="AliceBlue">
+                        <TextBlock Width="50" TextAlignment="Center" Text="{Binding PolishA.WaferId}">C1W1</TextBlock>
+                        <TextBlock Width="120" TextAlignment="Center">PolishAuto</TextBlock>
+                        <TextBlock Width="10" TextAlignment="Center">3</TextBlock>
+                        <TextBlock Width="10" TextAlignment="Center">/</TextBlock>
+                        <TextBlock Width="10" TextAlignment="Center">3</TextBlock>
+                        <TextBlock Width="10" TextAlignment="Center"></TextBlock>
+                        <TextBlock Width="40" TextAlignment="Right">10.2</TextBlock>
+                        <TextBlock Width="10" TextAlignment="Center">/</TextBlock>
+                        <TextBlock Width="40" TextAlignment="Left">30.0</TextBlock>
+                    </StackPanel>-->
+                                        <Canvas Margin="0,0,0,0" Height="250" Width="300">
+                                            <!-- �ײ�ͼƬ -->
+                                            <Image Source="/Assets/Images/platen.png" Width="260" Height="250" HorizontalAlignment="Left" Canvas.Left="20" VerticalAlignment="Center" />
+                                            <!-- �ϲ�ͼƬ��ͨ�� Canvas.Left/Top ��λ�� -->
+                                            <Image Source="/Assets/Images/Head.png" Width="106" Height="102"
+                            Canvas.Right="260" Canvas.Top="85"
+                            Panel.ZIndex="1" Canvas.Left="164" />
+                                            <Image Source="/Assets/Images/Slurry-Arm.png" Width="167" Height="46"
+                            Canvas.Left="10" Canvas.Top="10"
+                            Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                            <Image Source="/Assets/Images/ConditionArm.png" Width="143" Height="50"
+                            Canvas.Left="-11" Canvas.Bottom="30"
+                            Panel.ZIndex="1" Canvas.Top="234">
+                                                <Image.RenderTransform>
+                                                    <RotateTransform Angle="-50" CenterX="0.1" CenterY="0.1" />
+                                                </Image.RenderTransform>
+                                            </Image>
+
+                                            <!-- ֱ�Ӱ� Chamber �� Wafer ��ʾ���� -->
+                                            <Image Source="/Assets/Images/wafer.png" 
+                          Width="106" Height="102"
+                            Canvas.Right="260" Canvas.Top="85"
+                            Panel.ZIndex="1" Canvas.Left="164"
+                          Visibility="{Binding PolishA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <TextBlock Text="{Binding PolishA.WaferInfo}" 
+                          Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
+                          Foreground="Blue" FontWeight="Bold" FontSize="12"
+                          Visibility="{Binding PolishA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        </Canvas>
+                                    </StackPanel>
+                                </Border>
+                            </GroupBox>
+                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PolishB.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+            Padding="0" Style="{StaticResource GroupBoxTab.Small}" Height="280" Width="300" VerticalAlignment="Bottom">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PolishB}">
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Add Wafer" Command="{Binding AddWaferCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="Delete Wafer" Command="{Binding DeleteWaferCommand}" CommandParameter="PolishB"/>
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                        <TextBlock Padding="5" Foreground="White" Text="{Binding PolishB.ChamberStatus}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu>
+                                                    <!--<MenuItem Header="��ʽ��ѡ��">-->
+                                                    <MenuItem Header="{lex:Loc Online}" Command="{Binding SingleChamberOnlineCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc Offline}" Command="{Binding SingleChamberOfflineCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc Connect}" Command="{Binding SingleChamberConnectCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc Initialize}" Command="{Binding SingleChamberInitializeCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc ResetAlarm}" Command="{Binding SingleChamberResetAlarmCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc AutoMode}" Command="{Binding SingleChamberAutoModeCommand}" CommandParameter="PolishB"/>
+                                                    <MenuItem Header="{lex:Loc ManualMode}" Command="{Binding SingleChamberManualModeCommand}" CommandParameter="PolishB"/>
+                                                    <!--</MenuItem>-->
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <Border>
+                                    <Canvas Margin="0,0,0,0" Height="250" Width="300">
+                                        <!-- �ײ�ͼƬ -->
+                                        <Image Source="/Assets/Images/platen.png" Width="260" Height="250" HorizontalAlignment="Left" Canvas.Left="20" VerticalAlignment="Center" />
+                                        <!-- �ϲ�ͼƬ��ͨ�� Canvas.Left/Top ��λ�� -->
+                                        <Image Source="/Assets/Images/Head.png" Width="106" Height="102"
+                        Canvas.Right="260" Canvas.Top="85"
+                        Panel.ZIndex="1" Canvas.Left="164" />
+                                        <Image Source="/Assets/Images/Slurry-Arm.png" Width="167" Height="46"
+                        Canvas.Left="10" Canvas.Top="10"
+                        Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                        <Image Source="/Assets/Images/ConditionArm.png" Width="143" Height="50"
+                        Canvas.Left="-11" Canvas.Bottom="30"
+                        Panel.ZIndex="1" Canvas.Top="234">
+                                            <Image.RenderTransform>
+                                                <RotateTransform Angle="-50" CenterX="0.1" CenterY="0.1" />
+                                            </Image.RenderTransform>
+                                        </Image>
+
+                                        <!-- ֱ�Ӱ� Chamber �� Wafer ��ʾ���� -->
+                                        <Image Source="/Assets/Images/wafer.png" 
+                       Width="106" Height="102"
+                       Canvas.Right="260" Canvas.Top="85"
+                       Panel.ZIndex="1" Canvas.Left="164" 
+                       Visibility="{Binding PolishB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <TextBlock Text="{Binding PolishB.WaferInfo}" 
+                           Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
+                           Foreground="Blue" FontWeight="Bold" FontSize="12" 
+                           Visibility="{Binding PolishB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </Canvas>
+                                </Border>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

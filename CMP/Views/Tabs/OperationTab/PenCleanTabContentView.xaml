@@ -1,0 +1,407 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.PenCleanTabContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             d:DataContext="{d:DesignInstance viewModel:PenCleanTabContentViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+    <Border BorderThickness="1" Margin="5" Padding="0" CornerRadius="4">
+        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+            <!-- 第一行：主控制 + 3个电机 -->
+            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                <!-- 主控制 -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{Binding TabTitle}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border CornerRadius="4">
+                        <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="20">
+                            <StackPanel>
+                                <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
+                                            extensions:StackPanelHelpers.Spacing="20" HorizontalAlignment="Center">
+                                    <Button Content="{lex:Loc Initialize}" Style="{StaticResource ButtonPrimary}" Width="95"
+                                            Command="{Binding InitializeCommand}" CommandParameter="" />
+                                    <Button Content="{lex:Loc AutoMode}" Style="{StaticResource ButtonPrimary}" Width="95"
+                                            Command="{Binding AutoModeCommand}" CommandParameter="" />
+                                    <Button Content="{lex:Loc ManualMode}" Style="{StaticResource ButtonPrimary}" Width="105"
+                                            Command="{Binding ManualModeCommand}" CommandParameter="" />
+                                </StackPanel>
+                                <Image Source="/Assets/Images/clean_pen_1.png" Margin="60 -50 0 0" Width="150" Height="250" Stretch="Fill" Panel.ZIndex="-1" />
+                                <Image Source="/Assets/Images/clean_pen_2.png" Margin="0 -120 0 0" Width="250" Height="180" Stretch="UniformToFill" Panel.ZIndex="-1" />
+                            </StackPanel>
+                            <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="30" HorizontalAlignment="Right">
+                                    <Button Content="{lex:Loc AutoRun}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding AutoRunCommand}"
+                                        CommandParameter="Chamber" Width="100"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="30">
+                                    <TextBlock Text="{lex:Loc State}" />
+                                    <TextBlock Text="Ready" />
+                                    <TextBlock Text="{lex:Loc Step}" />
+                                    <TextBlock Text="0/0" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock VerticalAlignment="Center" Text="{lex:Loc Recipe}" Width="80" TextTrimming="CharacterEllipsis" />
+                                    <hc:ComboBox ItemsSource="{Binding PenRecipes}" 
+                                                 SelectedItem="{Binding SelectedPenRecipe}" 
+                                                 Width="150" />
+                                    <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding ExecuteRecipeCommand}" CommandParameter="" Width="65"/>
+                                </StackPanel>
+                                <StackPanel Margin="0 40 0 0" Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="70"
+                                            HorizontalAlignment="Center">
+                                    <Button Content="{lex:Loc Start}" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding StartCommand}" CommandParameter="" Visibility="Hidden"/>
+                                    <Button Content="{lex:Loc Abort}" Style="{StaticResource ButtonDanger}"
+                                            Command="{Binding StopCommand}" CommandParameter="" Width="150"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+
+                <!-- Chuck Rotation Motor -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc ChuckRotationMotor}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="5">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Servo}" Width="65" VerticalAlignment="Center" />
+                                <Button Content="{Binding ChuckRotationMotorServoText}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding ServoCommand}" CommandParameter="ChuckRotationMotor" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBox Width="65" Text="{Binding PenClean.ChuckRotationMotor.SetVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.ChuckRotationMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="ChuckRotation_Run" Width="65" />
+                                <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
+                                        Command="{Binding MotorCommand}" CommandParameter="ChuckRotation_Stop" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Home}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="ChuckRotation_Home" Width="135" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+
+                <!-- Pen Arm Sweep Motor -->
+                <GroupBox MinWidth="150" Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenArmSweepMotor}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="5">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Servo}" Width="65" VerticalAlignment="Center" />
+                                <Button Content="{Binding PenArmSweepMotorServoText}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding ServoCommand}" CommandParameter="PenArmSweepMotor" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBox Width="65" Text="{Binding PenClean.PenArmSweepMotor.SetVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc SetPos}" Width="65" VerticalAlignment="Center" />
+                                <TextBox Width="65" Text="{Binding PenClean.PenArmSweepMotor.SetPosition}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.PenArmSweepMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc ActPos}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.PenArmSweepMotor.ActPosition}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc AnyPos}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_AnyPosition" Width="65" />
+                                <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Stop" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Home}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Home" Width="65" />
+                                <Button Content="{lex:Loc Edge1}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Edge1" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Edge2}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Edge2" Width="65" />
+                                <Button Content="{lex:Loc Trim}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Trim" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Center}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenArmSweep_Center" Width="135" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+
+                <!-- Pen Rotation Motor -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PenRotationMotor}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="5">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Servo}" Width="65" VerticalAlignment="Center" />
+                                <Button Content="{Binding PenRotationMotorServoText}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding ServoCommand}" CommandParameter="PenRotationMotor" Width="65" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBox Width="65" Text="{Binding PenClean.PenRotationMotor.SetVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.PenRotationMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenRotation_Run" Width="65" />
+                                <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
+                                        Command="{Binding MotorCommand}" CommandParameter="PenRotation_Stop" Width="65" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+            </StackPanel>
+
+            <!-- 第二行：Cylinder Controls + Pressure Controls + Liquid Controls -->
+            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                <!-- Cylinder Control -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc CylinderControl}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="5">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Pen Up/Down" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Up}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="PenUpDownCylinder_Up" />
+                                <Button Content="{lex:Loc Down}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="PenUpDownCylinder_Down" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Pen Arm Cyl" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Up}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="PenArmCylinder_Up" />
+                                <Button Content="{lex:Loc Down}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="PenArmCylinder_Down" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="WF Clamp" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Clamp}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WFClampCylinder_Clamp" />
+                                <Button Content="{lex:Loc Release}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WFClampCylinder_Release" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Nozzle" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Up}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="NozzleCylinder_Up" />
+                                <Button Content="{lex:Loc Down}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="NozzleCylinder_Down" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Wafer Inlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WaferInletDoor_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WaferInletDoor_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Wafer Outlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WaferOutletDoor_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="65"
+                                        Command="{Binding CylinderCommand}" CommandParameter="WaferOutletDoor_Close" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+
+                <!-- Pressure Control -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PressureControl}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Pen Press" Width="70" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.PenPressure.SetPress}" />
+                                <Button Content="{lex:Loc Press}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="PenPressure_Pressure" />
+                                <Button Content="{lex:Loc Reset}" Style="{StaticResource ButtonWarning}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="PenPressure_Reset" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="N2 Flow" Width="70" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.N2Flow.SetFlowrate}" />
+                                <Button Content="{lex:Loc Flow}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="N2Flow_Flowrate" />
+                                <Button Content="{lex:Loc Reset}" Style="{StaticResource ButtonWarning}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="N2Flow_Reset" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="CO2 Press" Width="70" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.CO2Pressure.SetPress}" />
+                                <Button Content="{lex:Loc Press}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="CO2Pressure_Pressure" />
+                                <Button Content="{lex:Loc Reset}" Style="{StaticResource ButtonWarning}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="CO2Pressure_Reset" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="DIW Press" Width="70" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.DIWPressure.SetPress}" />
+                                <Button Content="{lex:Loc Press}" Style="{StaticResource ButtonPrimary}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="DIWPressure_Pressure" />
+                                <Button Content="{lex:Loc Reset}" Style="{StaticResource ButtonWarning}" Width="65"
+                                        Command="{Binding PressureCommand}" CommandParameter="DIWPressure_Reset" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+
+                <!-- Gas Control -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc GasControl}" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="WF Upper N2" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="WFUpperN2OutletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="WFUpperN2OutletValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="CO2 Supply" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="CO2SupplyValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="CO2SupplyValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="CUP Purge" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="CUPPurgeValves_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="CUPPurgeValves_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="WF Lower N2" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="WFLowerFaceN2OutletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding GasCommand}" CommandParameter="WFLowerFaceN2OutletValve_Close" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+                
+                <!-- Liquid - Chemical & DIW -->
+                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White" Text="Chemical &amp; DIW" />
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Border Padding="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Chem Flow" Width="100" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.ChemicalFlow.SetFlowrate}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Chem Inlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="ChemicalInletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="ChemicalInletValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Chem Outlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="ChemicalOutletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="ChemicalOutletValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="DIW Flow" Width="100" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.DIWFlow.SetFlowrate}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="DIW Inlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="DIWInletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="DIWInletValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="DIW Outlet" Width="100" VerticalAlignment="Center" />
+                                <Button Content="{lex:Loc Open}" Style="{StaticResource ButtonPrimary}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="DIWOutletValve_Open" />
+                                <Button Content="{lex:Loc Close}" Style="{StaticResource ButtonDanger}" Width="60"
+                                        Command="{Binding LiquidCommand}" CommandParameter="DIWOutletValve_Close" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="WF Up DIW" Width="100" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.WFUpperDIWFlow.SetFlowrate}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="WF Low DIW" Width="100" VerticalAlignment="Center" />
+                                <TextBox Width="60" Text="{Binding PenClean.WFLowerDIWFlow.SetFlowrate}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

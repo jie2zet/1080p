@@ -1,0 +1,1806 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EquipmentStates" xml:space="preserve">
+    <value>Equipment States</value>
+  </data>
+  <data name="ProcessingState" xml:space="preserve">
+    <value>Processing State</value>
+  </data>
+  <data name="CommState" xml:space="preserve">
+    <value>Comm State</value>
+  </data>
+  <data name="ControlState" xml:space="preserve">
+    <value>Control State</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="Executing" xml:space="preserve">
+    <value>Executing</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Connecting</value>
+  </data>
+  <data name="HostOffline" xml:space="preserve">
+    <value>Host Offline</value>
+  </data>
+  <data name="CurrentScreen" xml:space="preserve">
+    <value>Current Screen</value>
+  </data>
+  <data name="OperationsMain" xml:space="preserve">
+    <value>Operations Main</value>
+  </data>
+  <data name="PolishBSideTransfer" xml:space="preserve">
+    <value>Polish B Transfer</value>
+  </data>
+  <data name="PolishBDoorOpen" xml:space="preserve">
+    <value>Polish B Door Open</value>
+  </data>
+  <data name="PolishBDoorClose" xml:space="preserve">
+    <value>Polish B Door Close</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Old Password</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="Session" xml:space="preserve">
+    <value>Session</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>Control</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Exclusive" xml:space="preserve">
+    <value>Exclusive</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
+  <data name="SlotMaps" xml:space="preserve">
+    <value>Slot Maps</value>
+  </data>
+  <data name="Recipes" xml:space="preserve">
+    <value>Recipes</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="Warn" xml:space="preserve">
+    <value>Warn</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archive</value>
+  </data>
+  <data name="SequenceRecipeEditor" xml:space="preserve">
+    <value>Sequence Recipe Editor</value>
+  </data>
+  <data name="ProcessRecipeEditor" xml:space="preserve">
+    <value>ProcessRecipeEditor</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="RecipeEditor" xml:space="preserve">
+    <value>Recipe Editor</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="UnitRecipes" xml:space="preserve">
+    <value>Unit Recipes</value>
+  </data>
+  <data name="TotalRecipes" xml:space="preserve">
+    <value>Total Recipes</value>
+  </data>
+  <data name="NewStepSuccessInfo" xml:space="preserve">
+    <value>New step added with copied data.</value>
+  </data>
+  <data name="SaveRecipeSuccessInfo" xml:space="preserve">
+    <value>Recipe saved successfully</value>
+  </data>
+  <data name="PasteStepSuccessInfo" xml:space="preserve">
+    <value>Pasted</value>
+  </data>
+  <data name="PleaseInput" xml:space="preserve">
+    <value>Please Input</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddSuccessfully" xml:space="preserve">
+    <value>Added</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Are you sure to delete?</value>
+  </data>
+  <data name="PolishUnit" xml:space="preserve">
+    <value>Polish Unit</value>
+  </data>
+  <data name="AChamber" xml:space="preserve">
+    <value>A Chamber</value>
+  </data>
+  <data name="Slurry1" xml:space="preserve">
+    <value>Slurry 1</value>
+  </data>
+  <data name="Slurry2" xml:space="preserve">
+    <value>Slurry 2</value>
+  </data>
+  <data name="Slurry3" xml:space="preserve">
+    <value>Slurry 3</value>
+  </data>
+  <data name="Slurry4" xml:space="preserve">
+    <value>Slurry 4</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>Polish</value>
+  </data>
+  <data name="Step" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="Condition" xml:space="preserve">
+    <value>Condition</value>
+  </data>
+  <data name="Unload" xml:space="preserve">
+    <value>Unload</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Abort" xml:space="preserve">
+    <value>Abort</value>
+  </data>
+  <data name="PlatenMotor" xml:space="preserve">
+    <value>Platen Motor</value>
+  </data>
+  <data name="SetVel" xml:space="preserve">
+    <value>Set Vel</value>
+  </data>
+  <data name="SetAcc" xml:space="preserve">
+    <value>Set Acc</value>
+  </data>
+  <data name="HeadRotateMotor" xml:space="preserve">
+    <value>Head Rotate Motor</value>
+  </data>
+  <data name="Slurry" xml:space="preserve">
+    <value>Slurry</value>
+  </data>
+  <data name="Liquid" xml:space="preserve">
+    <value>Liquid</value>
+  </data>
+  <data name="HPR" xml:space="preserve">
+    <value>HPR</value>
+  </data>
+  <data name="SlurryPurge" xml:space="preserve">
+    <value>Slurry Purge</value>
+  </data>
+  <data name="CoolingWater" xml:space="preserve">
+    <value>Cooling Water</value>
+  </data>
+  <data name="SlurrySweepMotor" xml:space="preserve">
+    <value>SlurrySweepMotor</value>
+  </data>
+  <data name="SetPos" xml:space="preserve">
+    <value>Set Pos</value>
+  </data>
+  <data name="HeadSweepMotor" xml:space="preserve">
+    <value>Head Sweep Motor</value>
+  </data>
+  <data name="ConditionSweepMotor" xml:space="preserve">
+    <value>Condition Sweep Motor</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="TerminalServices" xml:space="preserve">
+    <value>Terminal Services</value>
+  </data>
+  <data name="LocalJobs" xml:space="preserve">
+    <value>Local Jobs</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="Pen" xml:space="preserve">
+    <value>Pen</value>
+  </data>
+  <data name="PenHeadMotor" xml:space="preserve">
+    <value>Pen Head Motor</value>
+  </data>
+  <data name="WaferRotateMotor" xml:space="preserve">
+    <value>Wafer Rotate Motor</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>Resource</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Chemical" xml:space="preserve">
+    <value>Chemical</value>
+  </data>
+  <data name="PenClean" xml:space="preserve">
+    <value>Pen Clean</value>
+  </data>
+  <data name="Brush" xml:space="preserve">
+    <value>Brush</value>
+  </data>
+  <data name="BrushChamber" xml:space="preserve">
+    <value>Brush Chamber</value>
+  </data>
+  <data name="AboveRollerMotor" xml:space="preserve">
+    <value>Above Roller Motor</value>
+  </data>
+  <data name="BeneathRollerMotor" xml:space="preserve">
+    <value>Beneath Roller Motor</value>
+  </data>
+  <data name="Clamp" xml:space="preserve">
+    <value>Clamp</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>Release</value>
+  </data>
+  <data name="Alarm" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="RoboticArm" xml:space="preserve">
+    <value>Robotic Arm {0}</value>
+  </data>
+  <data name="AutoMode" xml:space="preserve">
+    <value>Auto Mode</value>
+  </data>
+  <data name="Arm" xml:space="preserve">
+    <value>Arm</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>Slot</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="JogPlus" xml:space="preserve">
+    <value>Jog+</value>
+  </data>
+  <data name="JogMinus" xml:space="preserve">
+    <value>Jog-</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="InvalidIpAddressFormat" xml:space="preserve">
+    <value>Invalid IP address format.</value>
+  </data>
+  <data name="InvalidPortNumber" xml:space="preserve">
+    <value>Invalid port number.</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
+  <data name="ConnectionSuccessful" xml:space="preserve">
+    <value>Connection Successful</value>
+  </data>
+  <data name="ConnectionFailed" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="DisconnectionSuccessful" xml:space="preserve">
+    <value>Disconnection Successful</value>
+  </data>
+  <data name="PolishSideMode" xml:space="preserve">
+    <value>Polish Side Mode</value>
+  </data>
+  <data name="PolishBSideMode" xml:space="preserve">
+    <value>Polish B Side Mode</value>
+  </data>
+  <data name="PolishASideMode" xml:space="preserve">
+    <value>Polish A Side Mode</value>
+  </data>
+  <data name="ASide" xml:space="preserve">
+    <value>A Side</value>
+  </data>
+  <data name="BSide" xml:space="preserve">
+    <value>B Side</value>
+  </data>
+  <data name="PolishFormat" xml:space="preserve">
+    <value>Polish {0}</value>
+  </data>
+  <data name="Recipe" xml:space="preserve">
+    <value>Recipe</value>
+  </data>
+  <data name="RollerFormat" xml:space="preserve">
+    <value>Roller {0}</value>
+  </data>
+  <data name="PenFormat" xml:space="preserve">
+    <value>Pen {0}</value>
+  </data>
+  <data name="DryFormat" xml:space="preserve">
+    <value>Dry {0}</value>
+  </data>
+  <data name="CleanASideRollerMode" xml:space="preserve">
+    <value>Clean A Side Roller Mode</value>
+  </data>
+  <data name="CleanBSideRollerMode" xml:space="preserve">
+    <value>Clean B Side Roller Mode</value>
+  </data>
+  <data name="CleanSideMode" xml:space="preserve">
+    <value>Clean Side Mode</value>
+  </data>
+  <data name="CleanASidePenMode" xml:space="preserve">
+    <value>Clean A Side Pen Mode</value>
+  </data>
+  <data name="CleanBSidePenMode" xml:space="preserve">
+    <value>Clean B Side Pen Mode</value>
+  </data>
+  <data name="CleanASideDry" xml:space="preserve">
+    <value>Clean A Side Dry</value>
+  </data>
+  <data name="CleanBSideDry" xml:space="preserve">
+    <value>Clean B Side Dry</value>
+  </data>
+  <data name="Dry" xml:space="preserve">
+    <value>Dry</value>
+  </data>
+  <data name="CleanFormat" xml:space="preserve">
+    <value>Clean {0}</value>
+  </data>
+  <data name="SerialPort" xml:space="preserve">
+    <value>Serial Port</value>
+  </data>
+  <data name="TypeNewPlanName" xml:space="preserve">
+    <value>Input the name</value>
+  </data>
+  <data name="SaveSuccessful" xml:space="preserve">
+    <value>Save Successful</value>
+  </data>
+  <data name="NameExists" xml:space="preserve">
+    <value>The name already exists. Please use a different name.</value>
+  </data>
+  <data name="Renamed" xml:space="preserve">
+    <value>Renamed</value>
+  </data>
+  <data name="UserManage" xml:space="preserve">
+    <value>UserManage</value>
+  </data>
+  <data name="UserData" xml:space="preserve">
+    <value>UserData</value>
+  </data>
+  <data name="LoadPort" xml:space="preserve">
+    <value>Load Port {0}</value>
+  </data>
+  <data name="Dock" xml:space="preserve">
+    <value>Dock</value>
+  </data>
+  <data name="UnDock" xml:space="preserve">
+    <value>UnDock</value>
+  </data>
+  <data name="Latch" xml:space="preserve">
+    <value>Latch</value>
+  </data>
+  <data name="UnLatch" xml:space="preserve">
+    <value>UnLatch</value>
+  </data>
+  <data name="Mapping" xml:space="preserve">
+    <value>Mapping</value>
+  </data>
+  <data name="UnClamp" xml:space="preserve">
+    <value>UnClamp</value>
+  </data>
+  <data name="Vacc" xml:space="preserve">
+    <value>Vacc</value>
+  </data>
+  <data name="UnVacc" xml:space="preserve">
+    <value>UnVacc</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="LoadPortUnit" xml:space="preserve">
+    <value>Load Port Unit</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="DeleteRootNodeTip" xml:space="preserve">
+    <value>Cannot delete the root node.</value>
+  </data>
+  <data name="FolderRenameFailedTip" xml:space="preserve">
+    <value>The document already exists, and the renaming failed!</value>
+  </data>
+  <data name="FileRenameFailedTip" xml:space="preserve">
+    <value>The File already exists, and the renaming failed!</value>
+  </data>
+  <data name="Initialize" xml:space="preserve">
+    <value>Initialize</value>
+  </data>
+  <data name="Press" xml:space="preserve">
+    <value>Press</value>
+  </data>
+  <data name="ManualMode" xml:space="preserve">
+    <value>Manual Mode</value>
+  </data>
+  <data name="Vent" xml:space="preserve">
+    <value>Vent</value>
+  </data>
+  <data name="Servo" xml:space="preserve">
+    <value>Servo</value>
+  </data>
+  <data name="TurnOn" xml:space="preserve">
+    <value>TurnOn</value>
+  </data>
+  <data name="TurnOff" xml:space="preserve">
+    <value>TurnOff</value>
+  </data>
+  <data name="ActVel" xml:space="preserve">
+    <value>Act Vel</value>
+  </data>
+  <data name="ActPos" xml:space="preserve">
+    <value>Act Pos</value>
+  </data>
+  <data name="Pre_Cond" xml:space="preserve">
+    <value>Pre_Cond</value>
+  </data>
+  <data name="BreakIn" xml:space="preserve">
+    <value>BreakIn</value>
+  </data>
+  <data name="PolishA" xml:space="preserve">
+    <value>Polish A</value>
+  </data>
+  <data name="Roller1" xml:space="preserve">
+    <value>Roller1</value>
+  </data>
+  <data name="Roller2" xml:space="preserve">
+    <value>Roller2</value>
+  </data>
+  <data name="Roller3" xml:space="preserve">
+    <value>Roller3</value>
+  </data>
+  <data name="Pen1" xml:space="preserve">
+    <value>Pen1</value>
+  </data>
+  <data name="Pen2" xml:space="preserve">
+    <value>Pen2</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ORG" xml:space="preserve">
+    <value>ORG</value>
+  </data>
+  <data name="Save as" xml:space="preserve">
+    <value>Save as</value>
+  </data>
+  <data name="Cal" xml:space="preserve">
+    <value>Cal</value>
+  </data>
+  <data name="Up" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="Down" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="AnyPos" xml:space="preserve">
+    <value>Any Pos</value>
+  </data>
+  <data name="Edge1" xml:space="preserve">
+    <value>Edge 1</value>
+  </data>
+  <data name="Edge2" xml:space="preserve">
+    <value>Edge 2</value>
+  </data>
+  <data name="Trim" xml:space="preserve">
+    <value>Trim</value>
+  </data>
+  <data name="Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Flow" xml:space="preserve">
+    <value>Flow</value>
+  </data>
+  <data name="TestRecipe" xml:space="preserve">
+    <value>Test Recipe</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="ChuckRotationMotor" xml:space="preserve">
+    <value>Chuck Rotation Motor</value>
+  </data>
+  <data name="PenArmSweepMotor" xml:space="preserve">
+    <value>Pen Arm Sweep Motor</value>
+  </data>
+  <data name="PenRotationMotor" xml:space="preserve">
+    <value>Pen Rotation Motor</value>
+  </data>
+  <data name="CylinderControl" xml:space="preserve">
+    <value>Cylinder Control</value>
+  </data>
+  <data name="PressureControl" xml:space="preserve">
+    <value>Pressure Control</value>
+  </data>
+  <data name="GasControl" xml:space="preserve">
+    <value>Gas Control</value>
+  </data>
+  <data name="AutoRun" xml:space="preserve">
+    <value>Auto Run</value>
+  </data>
+  <data name="AutoReturn" xml:space="preserve">
+    <value>Auto Return</value>
+  </data>
+  <data name="Roller" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="ArmSwingMotor" xml:space="preserve">
+    <value>Arm Swing Motor</value>
+  </data>
+  <data name="GasControl1" xml:space="preserve">
+    <value>Gas Control 1</value>
+  </data>
+  <data name="GasControl2" xml:space="preserve">
+    <value>Gas Control 2</value>
+  </data>
+  <data name="LiquidControl1" xml:space="preserve">
+    <value>Liquid Control 1</value>
+  </data>
+  <data name="LiquidControl2" xml:space="preserve">
+    <value>Liquid Control 2</value>
+  </data>
+  <data name="N2MixOutlet" xml:space="preserve">
+    <value>N2 Mix Outlet</value>
+  </data>
+  <data name="N2Flow" xml:space="preserve">
+    <value>N2 Flow</value>
+  </data>
+  <data name="WFUpperN2" xml:space="preserve">
+    <value>WF Upper N2</value>
+  </data>
+  <data name="N2FlowWafer" xml:space="preserve">
+    <value>N2 Flow Wafer</value>
+  </data>
+  <data name="WFLowerN21" xml:space="preserve">
+    <value>WF Lower N2 1</value>
+  </data>
+  <data name="N2FlowLower" xml:space="preserve">
+    <value>N2 Flow Lower</value>
+  </data>
+  <data name="N2Release" xml:space="preserve">
+    <value>N2 Release</value>
+  </data>
+  <data name="WFUpperIPA" xml:space="preserve">
+    <value>WF Upper IPA</value>
+  </data>
+  <data name="WFLowerN22" xml:space="preserve">
+    <value>WF Lower N2 2</value>
+  </data>
+  <data name="DIWInlet2" xml:space="preserve">
+    <value>DIW Inlet 2</value>
+  </data>
+  <data name="DIWOutlet2" xml:space="preserve">
+    <value>DIW Outlet 2</value>
+  </data>
+  <data name="DIWFlow2" xml:space="preserve">
+    <value>DIW Flow 2</value>
+  </data>
+  <data name="IPASupply" xml:space="preserve">
+    <value>IPA Supply</value>
+  </data>
+  <data name="DIWInlet1" xml:space="preserve">
+    <value>DIW Inlet 1</value>
+  </data>
+  <data name="DIWOutlet1" xml:space="preserve">
+    <value>DIW Outlet 1</value>
+  </data>
+  <data name="LowerDIW" xml:space="preserve">
+    <value>Lower DIW</value>
+  </data>
+  <data name="WFClamp" xml:space="preserve">
+    <value>WF Clamp</value>
+  </data>
+  <data name="WaferInlet" xml:space="preserve">
+    <value>Wafer Inlet</value>
+  </data>
+  <data name="WaferOutlet" xml:space="preserve">
+    <value>Wafer Outlet</value>
+  </data>
+  <data name="ChuckRotationMotorDesc" xml:space="preserve">
+    <value>Wafer Rotation Motor</value>
+  </data>
+  <data name="ArmSwingMotorDesc" xml:space="preserve">
+    <value>Arm Swing Motor</value>
+  </data>
+  <data name="WFClampDesc" xml:space="preserve">
+    <value>Wafer Clamp Cylinder</value>
+  </data>
+  <data name="WaferInletDesc" xml:space="preserve">
+    <value>Inlet Wafer Door</value>
+  </data>
+  <data name="WaferOutletDesc" xml:space="preserve">
+    <value>Outlet Wafer Door</value>
+  </data>
+  <data name="N2MixOutletDesc" xml:space="preserve">
+    <value>N2 Inlet Valve (Before Tank)</value>
+  </data>
+  <data name="N2FlowDesc" xml:space="preserve">
+    <value>N2 Flow Control (Before Tank)</value>
+  </data>
+  <data name="WFUpperN2Desc" xml:space="preserve">
+    <value>N2 Supply Valve (Wafer Upper Surface)</value>
+  </data>
+  <data name="N2FlowWaferDesc" xml:space="preserve">
+    <value>N2 Flow Control (Wafer Blowing)</value>
+  </data>
+  <data name="WFLowerN21Desc" xml:space="preserve">
+    <value>N2 Valve 1 (Wafer Lower Surface)</value>
+  </data>
+  <data name="N2FlowLowerDesc" xml:space="preserve">
+    <value>N2 Flow Control (Lower Surface)</value>
+  </data>
+  <data name="N2ReleaseDesc" xml:space="preserve">
+    <value>N2 Release Valve (Tank Pressure Release)</value>
+  </data>
+  <data name="WFUpperIPADesc" xml:space="preserve">
+    <value>IPA Supply Valve (From Tank, Upper Surface)</value>
+  </data>
+  <data name="WFLowerN22Desc" xml:space="preserve">
+    <value>N2 Valve 2 (Wafer Lower Surface)</value>
+  </data>
+  <data name="DIWInlet2Desc" xml:space="preserve">
+    <value>DIW Line 2 Inlet Valve (Before FC)</value>
+  </data>
+  <data name="DIWOutlet2Desc" xml:space="preserve">
+    <value>DIW Line 2 Outlet Valve (After FC)</value>
+  </data>
+  <data name="DIWFlow2Desc" xml:space="preserve">
+    <value>DIW Flow Control (Upper Surface Wash)</value>
+  </data>
+  <data name="IPASupplyDesc" xml:space="preserve">
+    <value>IPA Supply Valve (Before Tank)</value>
+  </data>
+  <data name="DIWInlet1Desc" xml:space="preserve">
+    <value>DIW Line 1 Inlet Valve (Before FC)</value>
+  </data>
+  <data name="DIWOutlet1Desc" xml:space="preserve">
+    <value>DIW Line 1 Outlet Valve (After FC)</value>
+  </data>
+  <data name="LowerDIWDesc" xml:space="preserve">
+    <value>DIW Line 3 Valve (Lower Surface Wash)</value>
+  </data>
+  <data name="Cylinder" xml:space="preserve">
+    <value>Cylinder</value>
+  </data>
+  <data name="Condition Head" xml:space="preserve">
+    <value>Condition Head</value>
+  </data>
+  <data name="Platen Breakwater" xml:space="preserve">
+    <value>Platen Breakwater</value>
+  </data>
+  <data name="Disk Pressure" xml:space="preserve">
+    <value>Disk Pressure</value>
+  </data>
+  <data name="ResetAlarm" xml:space="preserve">
+    <value>Reset Alarm</value>
+  </data>
+  <data name="Robotic1" xml:space="preserve">
+    <value>EFEMRobot</value>
+  </data>
+  <data name="Robotic15" xml:space="preserve">
+    <value>Clean Side B Robot2</value>
+  </data>
+  <data name="Robotic14" xml:space="preserve">
+    <value>Clean Side B Robot1</value>
+  </data>
+  <data name="Robotic13" xml:space="preserve">
+    <value>Clean Side A Robot2</value>
+  </data>
+  <data name="Robotic12" xml:space="preserve">
+    <value>Clean Side A Robot1</value>
+  </data>
+  <data name="Robotic11" xml:space="preserve">
+    <value>Polish Side B LTP3</value>
+  </data>
+  <data name="Robotic10" xml:space="preserve">
+    <value>Polish Side B LTP2</value>
+  </data>
+  <data name="Robotic9" xml:space="preserve">
+    <value>Polish Side B LTP1</value>
+  </data>
+  <data name="Robotic8" xml:space="preserve">
+    <value>FixBBuffer</value>
+  </data>
+  <data name="Robotic7" xml:space="preserve">
+    <value>Polish Side A LTP3</value>
+  </data>
+  <data name="Robotic6" xml:space="preserve">
+    <value>Polish Side A LTP2</value>
+  </data>
+  <data name="Robotic5" xml:space="preserve">
+    <value>Polish Side A LTP1</value>
+  </data>
+  <data name="Robotic4" xml:space="preserve">
+    <value>FixABuffer</value>
+  </data>
+  <data name="Robotic3" xml:space="preserve">
+    <value>Transfer Robot</value>
+  </data>
+  <data name="Robotic2" xml:space="preserve">
+    <value>Transfer Buffer</value>
+  </data>
+  <data name="PolishB" xml:space="preserve">
+    <value>Polish B</value>
+  </data>
+  <data name="PolishC" xml:space="preserve">
+    <value>Polish C</value>
+  </data>
+  <data name="PolishD" xml:space="preserve">
+    <value>Polish D</value>
+  </data>
+  <data name="RollerA1" xml:space="preserve">
+    <value>RollerA1</value>
+  </data>
+  <data name="RollerA2" xml:space="preserve">
+    <value>RollerA2</value>
+  </data>
+  <data name="RollerA3" xml:space="preserve">
+    <value>RollerA3</value>
+  </data>
+  <data name="RollerB2" xml:space="preserve">
+    <value>RollerB2</value>
+  </data>
+  <data name="RollerB1" xml:space="preserve">
+    <value>RollerB1</value>
+  </data>
+  <data name="RollerB3" xml:space="preserve">
+    <value>RollerB3</value>
+  </data>
+  <data name="PenA2" xml:space="preserve">
+    <value>PenA2</value>
+  </data>
+  <data name="PenA1" xml:space="preserve">
+    <value>PenA1</value>
+  </data>
+  <data name="PenB2" xml:space="preserve">
+    <value>PenB2</value>
+  </data>
+  <data name="PenB1" xml:space="preserve">
+    <value>PenB1</value>
+  </data>
+  <data name="DryA" xml:space="preserve">
+    <value>DryA</value>
+  </data>
+  <data name="DryB" xml:space="preserve">
+    <value>DryB</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="WaferCount" xml:space="preserve">
+    <value>Wafer Count</value>
+  </data>
+  <data name="UsedTime" xml:space="preserve">
+    <value>Used Time</value>
+  </data>
+  <data name="UpdateTime" xml:space="preserve">
+    <value>Update Time</value>
+  </data>
+  <data name="RatainerRing" xml:space="preserve">
+    <value>Ratainer Ring</value>
+  </data>
+  <data name="Membrance" xml:space="preserve">
+    <value>Membrance</value>
+  </data>
+  <data name="Pad" xml:space="preserve">
+    <value>Pad</value>
+  </data>
+  <data name="Disk" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpperRoller" xml:space="preserve">
+    <value>Upper Roller</value>
+  </data>
+  <data name="LowerRoller" xml:space="preserve">
+    <value>Lower Roller</value>
+  </data>
+  <data name="Sponge" xml:space="preserve">
+    <value>Sponge</value>
+  </data>
+  <data name="Consumable" xml:space="preserve">
+    <value>Consumable</value>
+  </data>
+  <data name="DIWOulet" xml:space="preserve">
+    <value>DIW Oulet</value>
+  </data>
+  <data name="PlatenWash" xml:space="preserve">
+    <value>Platen Wash</value>
+  </data>
+  <data name="MovingHeadDIWWash" xml:space="preserve">
+    <value>Moving Head DIW Wash</value>
+  </data>
+  <data name="MovingHeadExternalDIWWash" xml:space="preserve">
+    <value>Moving Head External DIW Wash</value>
+  </data>
+  <data name="HeadChemicalWash" xml:space="preserve">
+    <value>Head Chemical Wash</value>
+  </data>
+  <data name="ConditionerDIWWash" xml:space="preserve">
+    <value>Conditioner DIW Wash</value>
+  </data>
+  <data name="ConditionerArmDIWWash" xml:space="preserve">
+    <value>Conditioner Arm DIW Wash</value>
+  </data>
+  <data name="SlurryArmDIWWash" xml:space="preserve">
+    <value>Slurry Arm DIW Wash</value>
+  </data>
+  <data name="HeadMiddleWash" xml:space="preserve">
+    <value>Head Middle Wash</value>
+  </data>
+  <data name="HeadExternalWash" xml:space="preserve">
+    <value>Head External Wash</value>
+  </data>
+  <data name="WFUpperChemicalWash" xml:space="preserve">
+    <value>WF Upper Chemical Wash</value>
+  </data>
+  <data name="WFUpperDIWWash" xml:space="preserve">
+    <value>WF Upper DIW Wash</value>
+  </data>
+  <data name="WFLowerChemicalWash" xml:space="preserve">
+    <value>WF Lower Chemical Wash</value>
+  </data>
+  <data name="WFLowerDIWWash" xml:space="preserve">
+    <value>WF Lower DIW Wash</value>
+  </data>
+  <data name="PlatenCool" xml:space="preserve">
+    <value>Platen Cool</value>
+  </data>
+  <data name="PlatenMotorCool" xml:space="preserve">
+    <value>Platen Motor Cool</value>
+  </data>
+  <data name="EquipmentConstants" xml:space="preserve">
+    <value>Equipment Constants</value>
+  </data>
+  <data name="ZoneCalibration" xml:space="preserve">
+    <value>Zone Calibration</value>
+  </data>
+  <data name="StopLoad" xml:space="preserve">
+    <value>Stop Load </value>
+  </data>
+  <data name="EFEMRobot" xml:space="preserve">
+    <value>EFEM Robot</value>
+  </data>
+  <data name="CleanBRobot1" xml:space="preserve">
+    <value>CleanB Robot1</value>
+  </data>
+  <data name="TransferBuffer" xml:space="preserve">
+    <value>Transfer Buffer</value>
+  </data>
+  <data name="CleanBRobot2" xml:space="preserve">
+    <value>CleanB Robot2</value>
+  </data>
+  <data name="CleanARobot2" xml:space="preserve">
+    <value>CleanA Robot2</value>
+  </data>
+  <data name="CleanARobot1" xml:space="preserve">
+    <value>CleanA Robot1</value>
+  </data>
+  <data name="TransRobot" xml:space="preserve">
+    <value>Trans Robot</value>
+  </data>
+  <data name="FixBufferB" xml:space="preserve">
+    <value>Fix BufferB</value>
+  </data>
+  <data name="LPTB1" xml:space="preserve">
+    <value>LTPB1</value>
+  </data>
+  <data name="LPTB3" xml:space="preserve">
+    <value>LTPB3</value>
+  </data>
+  <data name="LPTB2" xml:space="preserve">
+    <value>LTPB2</value>
+  </data>
+  <data name="LPTA1" xml:space="preserve">
+    <value>LTPA1</value>
+  </data>
+  <data name="LPTA3" xml:space="preserve">
+    <value>LTPA3</value>
+  </data>
+  <data name="LPTA2" xml:space="preserve">
+    <value>LTPA2</value>
+  </data>
+  <data name="FixBufferA" xml:space="preserve">
+    <value>Fix BufferA</value>
+  </data>
+  <data name="PolishExsituFormat" xml:space="preserve">
+    <value>Polish {0} Exsitu</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Are you sure you want to exit the application?</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Comfirmation</value>
+  </data>
+  <data name="ApplicationAlreadyRunning" xml:space="preserve">
+    <value>Application Already Running</value>
+  </data>
+  <data name="AppAlreadyRunningTips" xml:space="preserve">
+    <value>This application is already running. Please do not open another instance.</value>
+  </data>
+  <data name="HomePos" xml:space="preserve">
+    <value>Home Pos</value>
+  </data>
+  <data name="PolishNearPos" xml:space="preserve">
+    <value>Polish Near Pos</value>
+  </data>
+  <data name="PolishFarPos" xml:space="preserve">
+    <value>Polish Far Pos</value>
+  </data>
+  <data name="DechuckPos" xml:space="preserve">
+    <value>Dechuck Pos</value>
+  </data>
+  <data name="HighPos" xml:space="preserve">
+    <value>High Pos</value>
+  </data>
+  <data name="LoadCupPos" xml:space="preserve">
+    <value>Load Cup Pos</value>
+  </data>
+  <data name="PolishPos" xml:space="preserve">
+    <value>Polish Pos</value>
+  </data>
+  <data name="CleanPos" xml:space="preserve">
+    <value>Clean Pos</value>
+  </data>
+  <data name="StartPos" xml:space="preserve">
+    <value>Start Pos</value>
+  </data>
+  <data name="EndPos" xml:space="preserve">
+    <value>End Pos</value>
+  </data>
+  <data name="SlurryPos" xml:space="preserve">
+    <value>Slurry Pos</value>
+  </data>
+  <data name="RobotControl" xml:space="preserve">
+    <value>Robot Control</value>
+  </data>
+  <data name="FeedingRobotAndPosition" xml:space="preserve">
+    <value>Feeding Robot and Position</value>
+  </data>
+  <data name="StationOperation" xml:space="preserve">
+    <value>Station Operation</value>
+  </data>
+  <data name="AxisPositionAdjustment" xml:space="preserve">
+    <value>Axis Position Adjustment</value>
+  </data>
+  <data name="JogSpeed" xml:space="preserve">
+    <value>JOG Speed</value>
+  </data>
+  <data name="AutoSpeed" xml:space="preserve">
+    <value>Auto Speed</value>
+  </data>
+  <data name="CurrentCoordinate" xml:space="preserve">
+    <value>Current Coord</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="MiddleModule" xml:space="preserve">
+    <value>Middle Module</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="DriverAlarm" xml:space="preserve">
+    <value>Driver Alarm</value>
+  </data>
+  <data name="LimitAlarm" xml:space="preserve">
+    <value>Limit Alarm</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>Origin</value>
+  </data>
+  <data name="ProgramNumber" xml:space="preserve">
+    <value>Program No.</value>
+  </data>
+  <data name="WorkAreaNumber" xml:space="preserve">
+    <value>Work Area No.</value>
+  </data>
+  <data name="ModulePosition" xml:space="preserve">
+    <value>Module Pos</value>
+  </data>
+  <data name="WorkAreaPickup" xml:space="preserve">
+    <value>Work Area Pickup</value>
+  </data>
+  <data name="WorkAreaPlace" xml:space="preserve">
+    <value>Work Area Place</value>
+  </data>
+  <data name="WaitConfirm" xml:space="preserve">
+    <value>Wait Confirm</value>
+  </data>
+  <data name="UseUpperArm" xml:space="preserve">
+    <value>Use Upper Arm</value>
+  </data>
+  <data name="UseLowerArm" xml:space="preserve">
+    <value>Use Lower Arm</value>
+  </data>
+  <data name="ConfirmSwitch" xml:space="preserve">
+    <value>Confirm Switch</value>
+  </data>
+  <data name="BoxNumber" xml:space="preserve">
+    <value>Box No.</value>
+  </data>
+  <data name="LayerCount" xml:space="preserve">
+    <value>Layer Count</value>
+  </data>
+  <data name="BoxPickup" xml:space="preserve">
+    <value>Box Pickup</value>
+  </data>
+  <data name="BoxPlace" xml:space="preserve">
+    <value>Box Place</value>
+  </data>
+  <data name="FlipTo0" xml:space="preserve">
+    <value>Flip to 0��</value>
+  </data>
+  <data name="FlipTo180" xml:space="preserve">
+    <value>Flip to 180��</value>
+  </data>
+  <data name="UpperArmSensor" xml:space="preserve">
+    <value>Upper Arm Sensor</value>
+  </data>
+  <data name="LowerArmSensor" xml:space="preserve">
+    <value>Lower Arm Sensor</value>
+  </data>
+  <data name="CommandAccepted" xml:space="preserve">
+    <value>Cmd Accepted</value>
+  </data>
+  <data name="RobotSafePosition" xml:space="preserve">
+    <value>Robot Safe Pos</value>
+  </data>
+  <data name="CacheBody" xml:space="preserve">
+    <value>Cache Body</value>
+  </data>
+  <data name="CacheBodyA" xml:space="preserve">
+    <value>Cache Body A</value>
+  </data>
+  <data name="CacheBodyB" xml:space="preserve">
+    <value>Cache Body B</value>
+  </data>
+  <data name="CacheDoorOpen" xml:space="preserve">
+    <value>Door Open</value>
+  </data>
+  <data name="CacheDoorClose" xml:space="preserve">
+    <value>Door Close</value>
+  </data>
+  <data name="Fiber1" xml:space="preserve">
+    <value>Fiber 1</value>
+  </data>
+  <data name="LiquidLevel" xml:space="preserve">
+    <value>Liquid Level</value>
+  </data>
+  <data name="DoorSwitch" xml:space="preserve">
+    <value>Door Switch</value>
+  </data>
+  <data name="EmergencyStop" xml:space="preserve">
+    <value>E-Stop</value>
+  </data>
+  <data name="MainScreen" xml:space="preserve">
+    <value>Main Screen</value>
+  </data>
+  <data name="TransferModule" xml:space="preserve">
+    <value>Transfer Module</value>
+  </data>
+  <data name="TransferRobot" xml:space="preserve">
+    <value>Transfer Robot</value>
+  </data>
+  <data name="PolishASideTransfer" xml:space="preserve">
+    <value>Polish A Transfer</value>
+  </data>
+  <data name="PolishASideArm1" xml:space="preserve">
+    <value>Polish A Side Arm 1</value>
+  </data>
+  <data name="PolishASideArm2" xml:space="preserve">
+    <value>Polish A Side Arm 2</value>
+  </data>
+  <data name="PolishASideArm3" xml:space="preserve">
+    <value>Polish A Side Arm 3</value>
+  </data>
+  <data name="PolishBSideArm1" xml:space="preserve">
+    <value>Polish B Arm1</value>
+  </data>
+  <data name="PolishBSideArm2" xml:space="preserve">
+    <value>Polish B Arm2</value>
+  </data>
+  <data name="PolishBSideArm3" xml:space="preserve">
+    <value>Polish B Arm3</value>
+  </data>
+  <data name="CleanASideRobot1" xml:space="preserve">
+    <value>Clean A Robot1</value>
+  </data>
+  <data name="CleanASideRobot2" xml:space="preserve">
+    <value>Clean A Robot2</value>
+  </data>
+  <data name="CleanBSideRobot1" xml:space="preserve">
+    <value>Clean B Robot1</value>
+  </data>
+  <data name="CleanBSideRobot2" xml:space="preserve">
+    <value>Clean B Robot2</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
+  <data name="FeedingRobot" xml:space="preserve">
+    <value>Feeding Robot</value>
+  </data>
+  <data name="BoxOpener" xml:space="preserve">
+    <value>Box Opener</value>
+  </data>
+  <data name="ModuleAlarm" xml:space="preserve">
+    <value>Module Alarm</value>
+  </data>
+  <data name="GlobalAlarm" xml:space="preserve">
+    <value>Global Alarm</value>
+  </data>
+  <data name="AlarmReset" xml:space="preserve">
+    <value>Alarm Reset</value>
+  </data>
+  <data name="PickFromBox" xml:space="preserve">
+    <value>Pick From Box</value>
+  </data>
+  <data name="PlaceToModule" xml:space="preserve">
+    <value>Place To Module</value>
+  </data>
+  <data name="PickFromDryA" xml:space="preserve">
+    <value>Pick From DryA</value>
+  </data>
+  <data name="PickFromDryB" xml:space="preserve">
+    <value>Pick From DryB</value>
+  </data>
+  <data name="PlaceToBox" xml:space="preserve">
+    <value>Place To Box</value>
+  </data>
+  <data name="SourceBox" xml:space="preserve">
+    <value>Source Box</value>
+  </data>
+  <data name="TargetBox" xml:space="preserve">
+    <value>Target Box</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Transfer</value>
+  </data>
+  <data name="Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Layer" xml:space="preserve">
+    <value>Layer</value>
+  </data>
+  <data name="BoxNo" xml:space="preserve">
+    <value>Box No</value>
+  </data>
+  <data name="BoxOpenerTitle" xml:space="preserve">
+    <value>Wafer Box Opener</value>
+  </data>
+  <data name="Robot" xml:space="preserve">
+    <value>Robot</value>
+  </data>
+  <data name="Box1" xml:space="preserve">
+    <value>Box 1</value>
+  </data>
+  <data name="Box2" xml:space="preserve">
+    <value>Box 2</value>
+  </data>
+  <data name="Box3" xml:space="preserve">
+    <value>Box 3</value>
+  </data>
+  <data name="Box4" xml:space="preserve">
+    <value>Box 4</value>
+  </data>
+  <data name="Box5" xml:space="preserve">
+    <value>Box 5</value>
+  </data>
+  <data name="RobotSafePosition1" xml:space="preserve">
+    <value>Robot Safe Pos1</value>
+  </data>
+  <data name="RollerA1orA2" xml:space="preserve">
+    <value>RollerA1/A2</value>
+  </data>
+  <data name="StandbyPosition" xml:space="preserve">
+    <value>Standby Position</value>
+  </data>
+  <data name="TransferArmPosition" xml:space="preserve">
+    <value>Transfer Arm Position</value>
+  </data>
+  <data name="PolishCPosition" xml:space="preserve">
+    <value>PolishC Position</value>
+  </data>
+  <data name="PolishDPosition" xml:space="preserve">
+    <value>PolishD Position</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x1" xml:space="preserve">
+    <value>1x Axis Position Of Side B Arm</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z1" xml:space="preserve">
+    <value>1z Axis Position Of Side B Arm</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x2" xml:space="preserve">
+    <value>2x Axis Position Of Side B Arm</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x3" xml:space="preserve">
+    <value>3x Axis Position Of Side B Arm</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z2" xml:space="preserve">
+    <value>2z Axis Position Of Side B Arm</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z3" xml:space="preserve">
+    <value>3z Axis Position Of Side B Arm</value>
+  </data>
+  <data name="TransferModuleAndPosition" xml:space="preserve">
+    <value>Transfer Module and Position</value>
+  </data>
+  <data name="LoadPosition" xml:space="preserve">
+    <value>Load Position</value>
+  </data>
+  <data name="UnloadPosition" xml:space="preserve">
+    <value>Unload Position</value>
+  </data>
+  <data name="SparePosition" xml:space="preserve">
+    <value>Spare Position</value>
+  </data>
+  <data name="LoadOperation" xml:space="preserve">
+    <value>Load Operation</value>
+  </data>
+  <data name="UnloadOperation" xml:space="preserve">
+    <value>Unload Operation</value>
+  </data>
+  <data name="ModuleLoading" xml:space="preserve">
+    <value>Module Loading</value>
+  </data>
+  <data name="ModuleUnloading" xml:space="preserve">
+    <value>Module Unloading</value>
+  </data>
+  <data name="LoadDoorOpen" xml:space="preserve">
+    <value>Load Door Open</value>
+  </data>
+  <data name="LoadDoorClose" xml:space="preserve">
+    <value>Load Door Close</value>
+  </data>
+  <data name="SideDoorOpen" xml:space="preserve">
+    <value>Side Door Open</value>
+  </data>
+  <data name="SideDoorClose" xml:space="preserve">
+    <value>Side Door Close</value>
+  </data>
+  <data name="UnloadDoorOpen" xml:space="preserve">
+    <value>Unload Door Open</value>
+  </data>
+  <data name="UnloadDoorClose" xml:space="preserve">
+    <value>Unload Door Close</value>
+  </data>
+  <data name="ModulePickPosition" xml:space="preserve">
+    <value>Module Pick Position</value>
+  </data>
+  <data name="TransferAPosition" xml:space="preserve">
+    <value>Transfer A Position</value>
+  </data>
+  <data name="TransferBPosition" xml:space="preserve">
+    <value>Transfer B Position</value>
+  </data>
+  <data name="RollerA1Position" xml:space="preserve">
+    <value>Roller A1 Position</value>
+  </data>
+  <data name="RollerA2Position" xml:space="preserve">
+    <value>Roller A2 Position</value>
+  </data>
+  <data name="RollerB1Position" xml:space="preserve">
+    <value>Roller B1 Position</value>
+  </data>
+  <data name="RollerB2Position" xml:space="preserve">
+    <value>Roller B2 Position</value>
+  </data>
+  <data name="ModulePick" xml:space="preserve">
+    <value>Module Pick</value>
+  </data>
+  <data name="WorkAreaPick" xml:space="preserve">
+    <value>Work Area Pick</value>
+  </data>
+  <data name="TurnTo0" xml:space="preserve">
+    <value>Turn To 0</value>
+  </data>
+  <data name="TurnTo180" xml:space="preserve">
+    <value>Turn To 180</value>
+  </data>
+  <data name="CommandReceived" xml:space="preserve">
+    <value>Command Received</value>
+  </data>
+  <data name="PickFromModule" xml:space="preserve">
+    <value>Pick From Module</value>
+  </data>
+  <data name="PlaceToTransferA" xml:space="preserve">
+    <value>Place To Transfer A</value>
+  </data>
+  <data name="PickFromTransferA" xml:space="preserve">
+    <value>Pick From Transfer A</value>
+  </data>
+  <data name="PlaceToTransferB" xml:space="preserve">
+    <value>Place To Transfer B</value>
+  </data>
+  <data name="PickFromTransferB" xml:space="preserve">
+    <value>Pick From Transfer B</value>
+  </data>
+  <data name="PlaceToRollerA1" xml:space="preserve">
+    <value>Place To Roller A1</value>
+  </data>
+  <data name="PlaceToRollerA2" xml:space="preserve">
+    <value>Place To Roller A2</value>
+  </data>
+  <data name="PlaceToRollerB1" xml:space="preserve">
+    <value>Place To Roller B1</value>
+  </data>
+  <data name="PlaceToRollerB2" xml:space="preserve">
+    <value>Place To Roller B2</value>
+  </data>
+  <data name="RobotUpperArm" xml:space="preserve">
+    <value>Robot Upper Arm</value>
+  </data>
+  <data name="LtpPickPosition" xml:space="preserve">
+    <value>LTP Pick Position</value>
+  </data>
+  <data name="RobotLowerArm" xml:space="preserve">
+    <value>Robot Lower Arm</value>
+  </data>
+  <data name="LtpPlacePosition" xml:space="preserve">
+    <value>LTP Place Position</value>
+  </data>
+  <data name="PickFromRobot2" xml:space="preserve">
+    <value>Pick From Robot 2</value>
+  </data>
+  <data name="PlaceToArm1" xml:space="preserve">
+    <value>Place To Arm 1</value>
+  </data>
+  <data name="PlaceToArm2" xml:space="preserve">
+    <value>Place To Arm 2</value>
+  </data>
+  <data name="PickFromArm3" xml:space="preserve">
+    <value>Pick From Arm 3</value>
+  </data>
+  <data name="PlaceToRobot" xml:space="preserve">
+    <value>Place To Robot</value>
+  </data>
+  <data name="PickFromArm2" xml:space="preserve">
+    <value>Pick From Arm 2</value>
+  </data>
+  <data name="ClampClose" xml:space="preserve">
+    <value>Clamp Close</value>
+  </data>
+  <data name="ClampOpen" xml:space="preserve">
+    <value>Clamp Open</value>
+  </data>
+  <data name="WaferDetection" xml:space="preserve">
+    <value>Wafer Detection</value>
+  </data>
+  <data name="PolishADoorOpen" xml:space="preserve">
+    <value>Polish A Door Open</value>
+  </data>
+  <data name="PolishADoorClose" xml:space="preserve">
+    <value>Polish A Door Close</value>
+  </data>
+  <data name="PolishAPosition" xml:space="preserve">
+    <value>Polish A Position</value>
+  </data>
+  <data name="PolishBPosition" xml:space="preserve">
+    <value>Polish B Position</value>
+  </data>
+  <data name="PolishASideArm1XAxisPositionAdjustment" xml:space="preserve">
+    <value>Arm 1 X-Axis Position Setting</value>
+  </data>
+  <data name="PolishASideArm1ZAxisPositionAdjustment" xml:space="preserve">
+    <value>Side Arm 1 Z-Axis Position Setting</value>
+  </data>
+  <data name="PickFromPolishA" xml:space="preserve">
+    <value>Pick From PolishA</value>
+  </data>
+  <data name="PickFromPolishB" xml:space="preserve">
+    <value>Pick From PolishB</value>
+  </data>
+  <data name="PlaceToTransferArm" xml:space="preserve">
+    <value>Place To Transfer Arm</value>
+  </data>
+  <data name="PickFromPolishBMaterial" xml:space="preserve">
+    <value>Pick From PolishB Material</value>
+  </data>
+  <data name="PolishBLoadUnload" xml:space="preserve">
+    <value>PolishB Load Unload</value>
+  </data>
+  <data name="PickFromTransfer" xml:space="preserve">
+    <value>Pick From Transfer</value>
+  </data>
+  <data name="PlaceToPolishA" xml:space="preserve">
+    <value>Place To Polish A</value>
+  </data>
+  <data name="PlaceToPolishB" xml:space="preserve">
+    <value>Place To Polish B</value>
+  </data>
+  <data name="Arm1Fiber1" xml:space="preserve">
+    <value>Arm 1 Fiber 1</value>
+  </data>
+  <data name="Arm1Fiber2" xml:space="preserve">
+    <value>Arm 1 Fiber 2</value>
+  </data>
+  <data name="Arm1Fiber3" xml:space="preserve">
+    <value>Arm 1 Fiber 3</value>
+  </data>
+  <data name="FoupSlot" xml:space="preserve">
+    <value>Foup/Slot</value>
+  </data>
+  <data name="WaferIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Spare" xml:space="preserve">
+    <value>Spare</value>
+  </data>
+  <data name="PlaceToPolishC" xml:space="preserve">
+    <value>Place To Polish C</value>
+  </data>
+  <data name="PlaceToPolishD" xml:space="preserve">
+    <value>Place To Polish D</value>
+  </data>
+  <data name="PolishCDownPiece" xml:space="preserve">
+    <value>PolishC DownPiece</value>
+  </data>
+  <data name="PolishCUpPiece" xml:space="preserve">
+    <value>PolishC UpPiece</value>
+  </data>
+  <data name="PolishDUpPiece" xml:space="preserve">
+    <value>PolishD UpPiece</value>
+  </data>
+  <data name="PolishDDownPiece" xml:space="preserve">
+    <value>PolishD DownPiece</value>
+  </data>
+  <data name="PolishASideArm2XAxisPositionAdjustment" xml:space="preserve">
+    <value>Arm 2 X-Axis Position Setting</value>
+  </data>
+  <data name="PolishASideArm2ZAxisPositionAdjustment" xml:space="preserve">
+    <value>Side Arm 2 Z-Axis Position Setting</value>
+  </data>
+  <data name="PolishAUnloadPosition" xml:space="preserve">
+    <value>Polish A Unload</value>
+  </data>
+  <data name="PolishBLoadPosition" xml:space="preserve">
+    <value>Polish B Load</value>
+  </data>
+  <data name="PolishALoadPosition" xml:space="preserve">
+    <value>Polish A Load</value>
+  </data>
+  <data name="PolishBUnloadPosition" xml:space="preserve">
+    <value>Polish B Unload</value>
+  </data>
+  <data name="PolishASideArm3XAxisPositionAdjustment" xml:space="preserve">
+    <value>Arm 3 X-Axis Position Setting</value>
+  </data>
+  <data name="PolishASideArm3ZAxisPositionAdjustment" xml:space="preserve">
+    <value>Side Arm 3 Z-Axis Position Setting</value>
+  </data>
+  <data name="Arm3Fiber1" xml:space="preserve">
+    <value>Arm 3 Fiber 1</value>
+  </data>
+  <data name="PickFromPolishA2" xml:space="preserve">
+    <value>Pick From Polish A 2</value>
+  </data>
+  <data name="Arm3Fiber2" xml:space="preserve">
+    <value>Arm 3 Fiber 2</value>
+  </data>
+  <data name="Arm3Fiber3" xml:space="preserve">
+    <value>Arm 3 Fiber 3</value>
+  </data>
+  <data name="PickFromPolishC" xml:space="preserve">
+    <value>Pick From PolishC</value>
+  </data>
+  <data name="PlaceToTransfer" xml:space="preserve">
+    <value>Place To Transfer</value>
+  </data>
+  <data name="Arm2Fiber1" xml:space="preserve">
+    <value>Arm 2 Fiber 1</value>
+  </data>
+  <data name="Arm2Fiber2" xml:space="preserve">
+    <value>Arm 2 Fiber 2</value>
+  </data>
+  <data name="Arm2Fiber3" xml:space="preserve">
+    <value>Arm 2 Fiber 3</value>
+  </data>
+  <data name="PickFromPolishD" xml:space="preserve">
+    <value>Pick From PolishD</value>
+  </data>
+  <data name="PickFromRoller1" xml:space="preserve">
+    <value>Pick From Roller1</value>
+  </data>
+  <data name="PickFromRoller2" xml:space="preserve">
+    <value>Pick From Roller2</value>
+  </data>
+  <data name="PickFromRoller3" xml:space="preserve">
+    <value>Pick From Roller3</value>
+  </data>
+  <data name="PlaceToRoller2" xml:space="preserve">
+    <value>Place To Roller2</value>
+  </data>
+  <data name="PlaceToRoller3" xml:space="preserve">
+    <value>Place To Roller3</value>
+  </data>
+  <data name="PlaceToPen1" xml:space="preserve">
+    <value>Place To Pen1</value>
+  </data>
+  <data name="PlaceToPen2" xml:space="preserve">
+    <value>Place To Pen2</value>
+  </data>
+  <data name="PickFromPen1" xml:space="preserve">
+    <value>Pick From Pen1</value>
+  </data>
+  <data name="PickFromPen2" xml:space="preserve">
+    <value>Pick From Pen2</value>
+  </data>
+  <data name="PlaceToDry" xml:space="preserve">
+    <value>Place To Dry</value>
+  </data>
+  <data name="WaferTransferInformationMap" xml:space="preserve">
+    <value>Wafer TF Map</value>
+  </data>
+  <data name="ConfirmActionTips" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ConfirmActionContent" xml:space="preserve">
+    <value>Are you sure?</value>
+  </data>
+  <data name="ExportCsvFile" xml:space="preserve">
+    <value>Export Csv File</value>
+  </data>
+  <data name="FileDirectory" xml:space="preserve">
+    <value>File directory</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>Select Folder</value>
+  </data>
+  <data name="ExportWay" xml:space="preserve">
+    <value>Export Way</value>
+  </data>
+  <data name="Calibration" xml:space="preserve">
+    <value>Calibration</value>
+  </data>
+  <data name="ConsumableName" xml:space="preserve">
+    <value>ConsumableName</value>
+  </data>
+  <data name="WaferCountSet" xml:space="preserve">
+    <value>Wafer Count Set</value>
+  </data>
+  <data name="UsedTimeSet" xml:space="preserve">
+    <value>Used Time Set</value>
+  </data>
+</root>

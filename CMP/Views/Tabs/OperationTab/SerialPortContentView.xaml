@@ -1,0 +1,221 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.SerialPortContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ mc:Ignorable="d"
+ xmlns:lex="http://wpflocalizeextension.codeplex.com"
+ xmlns:prism="http://prismlibrary.com/"
+ xmlns:hc="https://handyorg.github.io/handycontrol" 
+ xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+ xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+ xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+ xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+ prism:ViewModelLocator.AutoWireViewModel="True"
+ d:DataContext="{d:DesignInstance viewModels:SerialPortContentViewModel}"
+ lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+ lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             d:DesignHeight="450" d:DesignWidth="800"
+            >
+    <UserControl.Resources>
+        <converters:LoadPortStatusConverter x:Key="StatusToColorConverter"/>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 连接区域 -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10" >
+            <Label Content="Select Port:" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding AvailablePorts}" 
+                  SelectedItem="{Binding SelectedPort}"
+                  Width="100"/>
+            <Button Command="{Binding RefreshPortsCommand}" Content="Refresh"/>
+            <Button Command="{Binding ConnectCommand}" Content="Connect"/>
+            <Button Command="{Binding DisconnectCommand}" Content="Disconnect"/>
+            <TextBlock Text="{Binding StatusMessage}" Margin="10 0 0 0" Foreground="Blue"/>
+        </StackPanel>
+
+        <!-- 主内容区域 -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 命令发送区域 -->
+            <ScrollViewer Grid.Column="0" Margin="0 0 10 0">
+                <StackPanel  Margin="5">
+                    <StackPanel>
+                        <!-- MOV 命令 -->
+                        <StackPanel>
+                            <Label Content="Move Command" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                <ComboBox ItemsSource="{Binding AvailableMoveActions}" 
+                      SelectedItem="{Binding SelectedMoveAction}"
+                      Width="150" 
+                      ToolTip="Example: ORGSH, HOME, etc."/>
+                                <Button Command="{Binding  LoadPortData.MOVCommand}" CommandParameter="{Binding SelectedMoveAction}" 
+                    Content="Send MOV Command" 
+                    Margin="5 0 0 0"/>
+                            </StackPanel>
+                            <TextBlock Text="Example: Sends movement commands like origin return, homing, etc." 
+                   FontSize="10" Foreground="Gray"/>
+                        </StackPanel>
+
+                        <!-- SET 命令 -->
+                        <StackPanel>
+                            <Label Content="Set Command" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                <ComboBox ItemsSource="{Binding AvailableSetParameters}" 
+                      SelectedItem="{Binding LoadPortData.SelectedCommand}"
+                      Width="100" 
+                      ToolTip="Example: SPEED, MODE, etc."/>
+                                <TextBlock Text="=" VerticalAlignment="Center" Margin="5 0"/>
+                                <TextBox Text="{Binding LoadPortData.CommandParameter}" 
+                     Width="100" 
+                     ToolTip="Example: 500, AUTO, etc."/>
+                                <Button Command="{Binding LoadPortData.SETCommand}" 
+                    Content="Send SET Command" 
+                    Margin="5 0 0 0"/>
+                            </StackPanel>
+                            <TextBlock Text="Example: Sets parameters like speed, mode, etc." 
+                   FontSize="10" Foreground="Gray"/>
+                        </StackPanel>
+
+                        <!-- GET 命令 -->
+                        <StackPanel>
+                            <Label Content="Get Command" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                <ComboBox ItemsSource="{Binding AvailableGetParameters}" 
+                      SelectedItem="{Binding LoadPortData.SelectedGetCommand}"
+                      Width="150" 
+                      ToolTip="Example: STATE, POSITION, etc."/>
+                                <Button Command="{Binding LoadPortData.GETCommand}" 
+                    Content="Send GET Command" 
+                    Margin="5 0 0 0"/>
+                            </StackPanel>
+                            <TextBlock Text="Result:" FontSize="10" Margin="5 0 0 0"/>
+                            <TextBlock Text="{Binding GetResult}" Margin="5 0 0 0" Foreground="Green"/>
+                            <TextBlock Text="Example: Retrieves current state, position, etc." 
+                   FontSize="10" Foreground="Gray"/>
+                        </StackPanel>
+
+                        <!-- Query 命令 -->
+                        <StackPanel>
+                            <Label Content="Query Command" FontWeight="Bold" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                                <ComboBox ItemsSource="{Binding AvailableQueryCommands}" 
+                      SelectedItem="{Binding SelectedQueryCommand}"
+                      Width="150" 
+                      ToolTip="Example: SYSTEM_INFO, VERSION, etc."/>
+                                <Button Command="{Binding SendQueryCommand}" 
+                    Content="Send Query" 
+                    Margin="5 0 0 0"/>
+                            </StackPanel>
+                            <TextBlock Text="Result:" FontSize="10" Margin="5 0 0 0"/>
+                            <TextBlock Text="{Binding QueryResult}" Margin="5 0 0 0" Foreground="Green"/>
+                            <TextBlock Text="Example: Queries system information, version, etc." 
+                   FontSize="10" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- 右侧状态和日志区域 -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- LoadPort 状态显示区域 -->
+                <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1" Margin="0 0 0 10">
+                    <StackPanel>
+                        <Label Content="LoadPort Status" FontWeight="Bold"/>
+
+                        <!-- 状态指示器 -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                            <Ellipse Width="20" Height="20"  Fill="{Binding LoadPortData.LoadPortStatus.EquipmentStatus, Converter={StaticResource StatusToColorConverter}}"  Margin="0 0 10 0"/>
+                            <TextBlock Text="{Binding LoadPortData.LoadPortStatus.EquipmentStatus}" VerticalAlignment="Center" Foreground="Black" FontWeight="Bold"/>
+                        </StackPanel>
+
+                        <!-- 详细状态信息 -->
+                        <StackPanel Margin="10">
+                            <TextBlock Foreground="Gray">
+                                <Run Text="Mode:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.Mode}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Foreground="Gray">
+                                <Run Text="Operation Status:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.operationStatus}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Foreground="Gray">
+                                <Run Text="FOUP Placement:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.foupPlacementStatus}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Foreground="Gray">
+                                <Run Text="FOUP Clamp:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.FoupClampStatus}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Foreground="Gray">
+                                <Run Text="Door Latch:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.DoorLatchStatus}" FontWeight="Bold"/>
+                            </TextBlock>
+                            <TextBlock Foreground="Gray">
+                                <Run Text="Error Code:"/>
+                                <Run Text="{Binding LoadPortData.LoadPortStatus.ErrorCode}" FontWeight="Bold"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <TextBlock Foreground="Gray">
+                         <Run Text="wafer:"/>
+                         <Run Text="{Binding LoadPortData.WaferList[0].WaferStatus}" FontWeight="Bold"/>
+                        </TextBlock>
+                        <!-- 状态摘要 -->
+                        <TextBlock Foreground="Gray" Text="{Binding DetailedStatus}" Margin="10" TextWrapping="Wrap" FontStyle="Italic"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 通信日志区域 -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Content="Communication Log" FontWeight="Bold"/>
+                        <Button Grid.Column="1" 
+                Command="{Binding ClearLogCommand}" 
+                Content="Clear Log" 
+                HorizontalAlignment="Right"
+                Padding="10,2"
+                Margin="0,0,10,0"/>
+                    </Grid>
+
+                    <ListBox Grid.Row="1"
+             ItemsSource="{Binding LoadPortData.LogMessages}" Height="300" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" 
+                           FontFamily="Consolas" 
+                           FontSize="12"
+                           TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
+
+

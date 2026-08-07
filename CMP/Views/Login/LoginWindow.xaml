@@ -1,0 +1,64 @@
+<Window x:Class="CMP.Views.Login.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Title="CMP 登录"
+        Width="420"
+        Height="320"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        ShowInTaskbar="True"
+        WindowStyle="SingleBorderWindow">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="CMP 用户登录"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="1" Margin="0,0,0,12">
+            <TextBlock Text="用户名" Margin="0,0,0,4"/>
+            <TextBox Height="36"
+                     Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Margin="0,0,0,8">
+            <TextBlock Text="密码" Margin="0,0,0,4"/>
+            <PasswordBox x:Name="PasswordBox"
+                         Height="36"
+                         PasswordChanged="PasswordBox_OnPasswordChanged"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="3"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   TextWrapping="Wrap"
+                   MinHeight="20"/>
+
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button Content="登录"
+                    Width="120"
+                    Height="36"
+                    Margin="0,0,12,0"
+                    Style="{StaticResource ButtonPrimary}"
+                    Command="{Binding LoginCommand}"/>
+            <Button Content="退出"
+                    Width="120"
+                    Height="36"
+                    Style="{StaticResource ButtonDefault}"
+                    Click="CancelButton_OnClick"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,107 @@
+﻿using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using CMP.Adapters;
+using CMP.Extensions;
+using CMP.Modules;
+using CMP.Services.Auth;
+using CMP.Services.LoadPort;
+using CMP.Services.Log;
+using CMP.Services.Plc;
+using CMP.Services.Tracking;
+using CMP.Utils;
+using CMP.ViewModels.Common.Dialog;
+using CMP.ViewModels.Login;
+using CMP.ViewModels.Tabs.OperationTab;
+using CMP.Views;
+using CMP.Views.Tabs.OperationTab;
+using CMP.Views.Common.Dialog;
+using CMP.Views.Common.Message;
+using CMP.Views.Tabs.WarnTab;
+using MessageBox = HandyControl.Controls.MessageBox;
+
+namespace CMP;
+
+/// <summary>
+///     Interaction logic for App.xaml
+/// </summary>
+public partial class App
+{
+    protected override void RegisterTypes(IContainerRegistry containerRegistry)
+    {
+        containerRegistry.RegisterForNavigation<HeaderView>();
+        containerRegistry.RegisterForNavigation<ContentView>();
+        containerRegistry.RegisterDialog<FormDialog>();
+        containerRegistry.RegisterForNavigation<MessageGrowl>();
+        containerRegistry.RegisterForNavigation<AlarmEditFormView>();
+        containerRegistry.RegisterDialog<UserManageDialogView, UserManageDialogViewModel>();
+        containerRegistry.RegisterDialog<ChangePasswordDialogView, ChangePasswordDialogViewModel>();
+        containerRegistry.RegisterDialog<CopyColumnDialogView, CopyColumnDialogViewModel>();
+        containerRegistry.RegisterSingleton<ISessionIdleService, SessionIdleService>();
+        containerRegistry.RegisterSingleton<IAuthService, AuthService>();
+        containerRegistry.RegisterSingleton<IPermissionService, PermissionService>();
+        containerRegistry.RegisterSingleton<NavigationGate>();
+        containerRegistry.Register<LoginViewModel>();
+        containerRegistry.Register<MainView>();
+        containerRegistry.RegisterForNavigation<MainContentView, MainContentViewModel>();
+        containerRegistry.RegisterForNavigation<MainPageView, MainPageViewModel>();
+        // register region manager
+        containerRegistry.RegisterSingleton<IRegionManager, RegionManager>();
+        // 在模块的 RegisterTypes 方法中
+        containerRegistry.RegisterSingleton<ILoadPortService, LoadPortService>();
+    }
+
+    protected override void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)
+    {
+        base.ConfigureRegionAdapterMappings(regionAdapterMappings);
+
+        regionAdapterMappings.RegisterMapping(typeof(TabControl),
+            Container.Resolve<TabControlRegionAdapter>());
+    }
+
+    protected override Window CreateShell()
+    {
+        return Container.Resolve<MainView>();
+    }
+
+    protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+    {
+        base.ConfigureModuleCatalog(moduleCatalog);
+        moduleCatalog.AddModule<MainModule>();
+    }
+
+    private Stopwatch? _startupStopwatch;
+    private Mutex? _singleInstanceMutex;
+
+    public Stopwatch StartupStopwatch { get => _startupStopwatch!; set => _startupStopwatch = value; }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        ViewLifecycleEventRouter.Initialize();
+
+        _singleInstanceMutex = new Mutex(true, "CMP_App_Singleton", out var createdNew);
+        if (!createdNew)
+        {
+            MessageBox.Show(Lang.Resources.AppAlreadyRunningTips, Lang.Resources.ApplicationAlreadyRunning, MessageBoxButton.OK, MessageBoxImage.Information);
+            Shutdown();
+            return;
+        }
+        // 初始化数据库（首次访问时会自动创建）
+        var db = SqlSugarHelper.Db;
+        // 应用启动时自动连接三菱PLC（统一入口）
+        MitsubishiPlcService.EnsureMainConnected();
+        WaferActionDescriptionProvider.Initialize();
+        StartupStopwatch = Stopwatch.StartNew();
+        Logger.Info("应用程序启动开始", "startup.txt", 0);
+
+        base.OnStartup(e);
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+        _singleInstanceMutex?.ReleaseMutex();
+        _singleInstanceMutex?.Dispose();
+    }
+
+}

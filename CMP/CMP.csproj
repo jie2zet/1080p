@@ -1,0 +1,253 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+        <ApplicationIcon>Assets\Icons\file-icons--assembly-att.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Models\ReadSV\**" />
+      <Compile Remove="Services\RefreshData\**" />
+      <EmbeddedResource Remove="Models\ReadSV\**" />
+      <EmbeddedResource Remove="Services\RefreshData\**" />
+      <None Remove="Models\ReadSV\**" />
+      <None Remove="Services\RefreshData\**" />
+      <Page Remove="Models\ReadSV\**" />
+      <Page Remove="Services\RefreshData\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Models\Operation\Polish\PolishTokenEnum.cs" />
+      <Compile Remove="Views\Tabs\MainTab\ServiceTabView.xaml.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ClosedXML" Version="0.105.0" />
+        <PackageReference Include="CsvHelper" Version="33.1.0" />
+        <PackageReference Include="HandyControl" Version="3.5.1" />
+        <PackageReference Include="HslCommunication" Version="12.8.3" />
+        <PackageReference Include="log4net" Version="3.1.0" />
+        <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="nini-core" Version="0.9.2.16" />
+        <PackageReference Include="Prism.Core" Version="9.0.537" />
+        <PackageReference Include="Prism.DryIoc" Version="9.0.537" />
+        <PackageReference Include="Prism.Unity" Version="9.0.537" />
+        <PackageReference Include="Prism.Wpf" Version="9.0.537" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.199" />
+        <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+        <PackageReference Include="System.IO.Ports" Version="9.0.7" />
+        <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Assets\config.ini" />
+        <None Remove="Assets\Images\blue.png" />
+        <None Remove="Assets\Images\Clamper - Copy.png" />
+        <None Remove="Assets\Images\Clamper-Down.png" />
+        <None Remove="Assets\Images\Clamper.png" />
+        <None Remove="Assets\Images\ConditionArm.png" />
+        <None Remove="Assets\Images\foup.png" />
+        <None Remove="Assets\Images\gray.png" />
+        <None Remove="Assets\Images\Head.png" />
+        <None Remove="Assets\Images\logo.png" />
+        <None Remove="Assets\Images\lp.png" />
+        <None Remove="Assets\Images\lp1.png" />
+        <None Remove="Assets\Images\lp2.png" />
+        <None Remove="Assets\Images\lp3.png" />
+        <None Remove="Assets\Images\lp4.png" />
+        <None Remove="Assets\Images\OnlyFoup.png" />
+        <None Remove="Assets\Images\platen.png" />
+        <None Remove="Assets\Images\Robot-R.png" />
+        <None Remove="Assets\Images\Robot.png" />
+        <None Remove="Assets\Images\Slurry-Arm.png" />
+        <None Remove="Assets\Images\wafer.png" />
+        <None Remove="Assets\Images\wafer2.png" />
+        <None Remove="Assets\Images\托架.png" />
+        <Resource Include="Assets\Images\blue.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Clamper-Down.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\ConditionArm.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\foup.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\gray.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Head.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\logo.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\lights\green.png" />
+        <Resource Include="Assets\Images\lights\green.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\lights\purple.png" />
+        <Resource Include="Assets\Images\lights\purple.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\lights\red.png" />
+        <Resource Include="Assets\Images\lights\red.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\lights\yellow.png" />
+        <Resource Include="Assets\Images\lights\yellow.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\lp1.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\lp2.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\lp3.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\lp4.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\OnlyFoup.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\platen.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Robot-R.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Robot.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Slurry-Arm.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\polish_device.png" />
+        <Resource Include="Assets\Images\polish_device.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\clean_pen_1.png" />
+        <Resource Include="Assets\Images\clean_pen_1.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <None Remove="Assets\Images\clean_pen_2.png" />
+        <Page Remove="Views\Tabs\MainTab\ServiceTabView.xaml" />
+        <Content Include="Assets\config.ini">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Resource Include="Assets\Icons\file-icons--assembly-att.ico">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Clamper - Copy.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\Clamper.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <ProjectReference Include="..\Core\Core.csproj" />
+        <Resource Include="Assets\Images\clean_pen_2.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\brush.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\wafer.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\wafer2.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Assets\Images\托架.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Assets\Images\lp.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="Views\Tabs\MainTab\ConfigurationTabView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\OperationTabView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\RecipesTabView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\SettingTabView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\WarnTabView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\ConfigurationContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\OperationContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\RecipesContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\ServiceContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\SettingContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Views\Tabs\MainTab\Content\WarnContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+        </Page>
+        <Page Update="Controls\Basic\InteractiveDialog\InteractiveDialog.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\OperationTab\PenCleanTabContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\OperationTab\BotTabContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+        <Page Update="Views\Tabs\OperationTab\RoboticArmTabContentView.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+        </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net8.0-windows\" />
+      <Folder Include="Lang\" />
+    </ItemGroup>
+
+</Project>

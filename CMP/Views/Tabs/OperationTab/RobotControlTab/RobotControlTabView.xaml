@@ -1,0 +1,97 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.RobotControlTab.RobotControlTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab"
+             xmlns:vmPolishBArm="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm"
+             xmlns:vmCleanRobot="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot"
+             xmlns:feedingRobot="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.FeedingRobot"
+             xmlns:transferModule="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.TransferModule"
+             xmlns:transferRobot="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.TransferRobot"
+             xmlns:polishASideTransfer="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishASideTransfer"
+             xmlns:polishASideArm1="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishASideArm1"
+             xmlns:wf="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.WFTransferInformation"
+             xmlns:polishASideArm2="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishASideArm2"
+             xmlns:polishASideArm3="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishASideArm3"
+             xmlns:polishBSideTransfer="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishBSideTransfer"
+             xmlns:polishBArmView="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.PolishBArm"
+             xmlns:cleanRobotView="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.CleanRobot"
+             xmlns:cacheBody="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.CacheBody"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModel:RobotControlTabViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1400">
+    
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewModel:FeedingRobotControlViewModel}">
+            <feedingRobot:FeedingRobotControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:TransferModuleControlViewModel}">
+            <transferModule:TransferModuleControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CacheBodyViewModel}">
+            <cacheBody:CacheBodyView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:TransferRobotControlViewModel}">
+            <transferRobot:TransferRobotControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PolishASideTransferControlViewModel}">
+            <polishASideTransfer:PolishASideTransferControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PolishASideArm1ControlViewModel}">
+            <polishASideArm1:PolishASideArm1ControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PolishASideArm2ControlViewModel}">
+            <polishASideArm2:PolishASideArm2ControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PolishASideArm3ControlViewModel}">
+            <polishASideArm3:PolishASideArm3ControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PolishBSideTransferControlViewModel}">
+            <polishBSideTransfer:PolishBSideTransferControlView DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmPolishBArm:PolishBSideArm1ViewModel}">
+            <polishBArmView:PolishBSideArm1View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmPolishBArm:PolishBSideArm2ViewModel}">
+            <polishBArmView:PolishBSideArm2View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmPolishBArm:PolishBSideArm3ViewModel}">
+            <polishBArmView:PolishBSideArm3View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCleanRobot:CleanASideRobot1ViewModel}">
+            <cleanRobotView:CleanASideRobot1View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCleanRobot:CleanASideRobot2ViewModel}">
+            <cleanRobotView:CleanASideRobot2View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCleanRobot:CleanBSideRobot1ViewModel}">
+            <cleanRobotView:CleanBSideRobot1View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vmCleanRobot:CleanBSideRobot2ViewModel}">
+            <cleanRobotView:CleanBSideRobot2View DataContext="{Binding}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:WaferTransferInformationViewModel}">
+            <wf:WFTransferInformationView DataContext="{Binding}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid Margin="10">
+        <TabControl ItemsSource="{Binding RobotTabs}" 
+                    SelectedIndex="{Binding SelectedTabIndex}"
+                    ItemContainerStyle="{StaticResource SecondaryTabItemStyle}"
+                    Style="{StaticResource SecondaryTabControlStyle}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding TabTitle}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
+</UserControl>

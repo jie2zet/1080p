@@ -1,0 +1,346 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.RobotControlTab.WFTransferInformation.WFTransferInformationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CMP.Views.Tabs.OperationTab.RobotControlTab.WFTransferInformation"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1400" Background="#E6F0FA">
+    <!-- Background Light Blue matching the image -->
+    <UserControl.Resources>
+        <!-- Simple Box Style: White background, border, centered text -->
+        <Style x:Key="ValueBoxStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#707070"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="5,0,0,0"/>
+        </Style>
+
+        <Style x:Key="ValueTextStyle" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style x:Key="ModuleLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="#404040"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+            <Setter Property="FontFamily" Value="Microsoft YaHei"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Canvas Height="900" Width="1400" Margin="0,0,0,50">
+            <TextBlock Text="WF信息传输示意图" Canvas.Left="600" Canvas.Top="10" FontSize="22" FontWeight="Bold" Foreground="#404040"/>
+
+            <!-- ================= ROW 1 ================= -->
+            
+            <!-- ROBOT1 Lower -->
+            <StackPanel Canvas.Left="40" Canvas.Top="60" Orientation="Horizontal">
+                <TextBlock Text="ROBOT1下臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot1LowerArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot1LowerArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow Right -->
+            <Path Data="M 330,77 L 420,77 M 415,72 L 420,77 L 415,82" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Transfer Module -->
+            <StackPanel Canvas.Left="430" Canvas.Top="60" Orientation="Horizontal">
+                <TextBlock Text="传输模组" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding TransferModule_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding TransferModule_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow Right -->
+            <Path Data="M 700,77 L 790,77 M 785,72 L 790,77 L 785,82" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Robot2 Upper -->
+            <StackPanel Canvas.Left="800" Canvas.Top="60" Orientation="Horizontal">
+                <TextBlock Text="robot2上臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot2UpperArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot2UpperArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+
+            <!-- ================= ROW 2 ================= -->
+            
+            <!-- A Side Transfer -->
+            <StackPanel Canvas.Left="60" Canvas.Top="160" Orientation="Horizontal">
+                <TextBlock Text="A侧中转" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding ASideTransfer_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding ASideTransfer_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow from R2 Upper to A Side (Long Diagonal Left-Down) -->
+            <Path Data="M 800,90 L 320,165 M 325,160 L 320,165 L 328,168" Stroke="Black" StrokeThickness="3"/>
+            
+            <!-- Arrow from A Side to R2 Lower (Long Horizontal) -->
+            <Path Data="M 330,177 L 790,195 M 785,190 L 790,195 L 785,200" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Robot2 Lower -->
+            <StackPanel Canvas.Left="800" Canvas.Top="180" Orientation="Horizontal">
+                <TextBlock Text="robot2下臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot2LowerArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot2LowerArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            
+            <!-- ================= ROW 3 (Split Columns) ================= -->
+            
+            <!-- LEFT COLUMN FLOW -->
+            
+            <!-- Arrow A Side -> LTP1 (Down) -->
+            <Path Data="M 130,200 L 130,240 M 125,235 L 130,240 L 135,235" Stroke="Black" StrokeThickness="3"/>
+            
+            <!-- LTP1 -->
+            <StackPanel Canvas.Left="80" Canvas.Top="250" Orientation="Horizontal">
+                <TextBlock Text="LTP1" Style="{StaticResource ModuleLabelStyle}" Width="60" TextAlignment="Right"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP1_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP1_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+            
+            <!-- Arrow LTP1 -> PolishA (Diag) -->
+            <Path Data="M 320,270 L 370,300 M 365,290 L 370,300 L 360,300" Stroke="Black" StrokeThickness="3"/>
+            
+            <!-- PolishA -->
+            <StackPanel Canvas.Left="380" Canvas.Top="300" Orientation="Horizontal">
+                <TextBlock Text="PolishA" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PolishA_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PolishA_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow PolishA -> LTP3 (Long Diag Left Down) -->
+            <Path Data="M 380,317 L 320,460 M 325,455 L 320,460 L 320,450" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- LTP2 -->
+            <StackPanel Canvas.Left="80" Canvas.Top="350" Orientation="Horizontal">
+                <TextBlock Text="LTP2" Style="{StaticResource ModuleLabelStyle}" Width="60" TextAlignment="Right"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP2_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP2_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+
+            <!-- PolishB -->
+            <StackPanel Canvas.Left="380" Canvas.Top="400" Orientation="Horizontal">
+                <TextBlock Text="PolishB" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PolishB_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PolishB_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow PolishB -> LTP2 (Diag Left Up) -->
+            <Path Data="M 380,417 L 320,360 M 330,360 L 320,360 L 320,370" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- LTP3 -->
+            <StackPanel Canvas.Left="80" Canvas.Top="450" Orientation="Horizontal">
+                <TextBlock Text="LTP3" Style="{StaticResource ModuleLabelStyle}" Width="60" TextAlignment="Right"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP3_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding LTP3_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+            
+            <!-- ROBOT1 Upper (Below LTP3 area) -->
+            <!-- Arrow DryA -> Robot1 Upper (Up) -->
+            <Path Data="M 200,690 L 200,640 M 195,645 L 200,640 L 205,645" Stroke="Black" StrokeThickness="3"/>
+
+            <StackPanel Canvas.Left="40" Canvas.Top="580" Orientation="Horizontal">
+                <TextBlock Text="ROBOT1上臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot1UpperArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot1UpperArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+
+            <!-- RIGHT COLUMN FLOW -->
+            
+            <!-- Arrow Splitter from A Side/Robot2 input to Roll1A1 -->
+            <Path Data="M 770,195 L 820,290 M 815,285 L 820,290 L 825,285" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Roll1A1 -->
+            <StackPanel Canvas.Left="830" Canvas.Top="280" Orientation="Horizontal">
+                <TextBlock Text="Roll1A1" Style="{StaticResource ModuleLabelStyle}" Width="80"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A1_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A1_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow Splitter from A Side/Robot2 input to Roll1A2 -->
+            <Path Data="M 760,195 L 820,390 M 815,385 L 820,390 L 825,385" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Roll1A2 -->
+            <StackPanel Canvas.Left="830" Canvas.Top="380" Orientation="Horizontal">
+                <TextBlock Text="Roll1A2" Style="{StaticResource ModuleLabelStyle}" Width="80"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A2_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A2_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow Roll1A2 -> robot3 Upper (Down) -->
+            <Path Data="M 860,420 L 880,500 M 875,495 L 880,500 L 885,495" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- robot3 Upper -->
+            <StackPanel Canvas.Left="800" Canvas.Top="510" Orientation="Horizontal">
+                <TextBlock Text="robot3上臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot3UpperArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot3UpperArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- robot3 Lower -->
+            <StackPanel Canvas.Left="800" Canvas.Top="590" Orientation="Horizontal">
+                <TextBlock Text="robot3下臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot3LowerArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot3LowerArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow robot3 Lower -> PenA1 (Down) -->
+            <Path Data="M 880,630 L 880,710 M 875,705 L 880,710 L 885,705" Stroke="Black" StrokeThickness="3"/>
+
+
+            <!-- ================= ROW BOTTOM (Loop) ================= -->
+            
+            <!-- PenA1 -->
+            <StackPanel Canvas.Left="830" Canvas.Top="730" Orientation="Horizontal">
+                <TextBlock Text="PenA1" Style="{StaticResource ModuleLabelStyle}" Width="60"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PenA1_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PenA1_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow PenA1 -> Robot4 Upper (Left) -->
+            <Path Data="M 820,750 L 730,750 M 735,745 L 730,750 L 735,755" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Robot4 Upper -->
+            <StackPanel Canvas.Left="430" Canvas.Top="730" Orientation="Horizontal">
+                <TextBlock Text="Robot4上臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot4UpperArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot4UpperArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+            
+            <!-- Arrow Robot4 Upper -> DryA (Left) -->
+            <Path Data="M 420,750 L 330,750 M 335,745 L 330,750 L 335,755" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- DryA -->
+            <StackPanel Canvas.Left="40" Canvas.Top="720" Orientation="Horizontal">
+                <TextBlock Text="DryA" Style="{StaticResource ModuleLabelStyle}" Width="80" TextAlignment="Center"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding DryA_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding DryA_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+
+            <!-- SECOND LINE OF BOTTOM LOOP -->
+
+            
+            <!-- Roll1A3 -->
+            <StackPanel Canvas.Left="830" Canvas.Top="820" Orientation="Horizontal">
+                <TextBlock Text="Roll1A3" Style="{StaticResource ModuleLabelStyle}" Width="60"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A3_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Roll1A3_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+            
+            <!-- Arrow Roll1A3 -> Robot4 Lower (Left) -->
+            <Path Data="M 820,840 L 730,840 M 735,835 L 730,840 L 735,845" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- Robot4 Lower -->
+            <StackPanel Canvas.Left="430" Canvas.Top="820" Orientation="Horizontal">
+                <TextBlock Text="Robot4下臂" Style="{StaticResource ModuleLabelStyle}"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot4LowerArm_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding Robot4LowerArm_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Arrow Robot4 Lower -> PenA2 (Left) -->
+            <Path Data="M 420,840 L 330,840 M 335,835 L 330,840 L 335,845" Stroke="Black" StrokeThickness="3"/>
+
+            <!-- PenA2 -->
+            <StackPanel Canvas.Left="40" Canvas.Top="820" Orientation="Horizontal">
+                <TextBlock Text="PenA2" Style="{StaticResource ModuleLabelStyle}" Width="80" TextAlignment="Center"/>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PenA2_Val1}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+                <Border Style="{StaticResource ValueBoxStyle}">
+                    <TextBlock Text="{Binding PenA2_Val2}" Style="{StaticResource ValueTextStyle}"/>
+                </Border>
+            </StackPanel>
+
+        </Canvas>
+    </ScrollViewer>
+</UserControl>

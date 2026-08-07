@@ -1,0 +1,401 @@
+Step,Description
+1,Efem Robot get wafer from loadport start
+2,Efem Robot get wafer from loadport end
+3,HMI interaction completed
+4,EFEM Robot move to transfer module signal
+5,Efem Robot move to transfer Module position start
+6,Efem Robot move to transfer Module position end
+7,Efem Robot arm flip 180¡ãstart
+8,Efem Robot arm flip 180¡ãend
+9,Efem Robot put wafer to transfer Module start
+10,Efem Robot put wafer to transfer Module end
+11,
+12,Transfer Module move to Transfer robot start
+13,Transfer Module move to Transfer robot end
+14,Transfer Module request transfer Robot to get wafer
+15,Transfer robot move to Transfer Module position start
+16,Transfer robot move to Transfer Module position end
+17,Transfer robot get wafer from transfer module start
+18,Transfer robot get wafer from transfer module end
+19,Transfer robot receives the signal from bufferA
+20,Transfer robot upper arm put wafer to bufferA start
+21,Transfer robot move to put wafer position start
+22,Transfer robot move to put wafer position end
+23,Transfer robot put wafer to bufferA start
+24,Transfer robot upper arm extend to put wafer position
+25,BufferA clamp wafer completed
+26,Transfer robot exit completed
+27,
+28,BufferA request LTP1 to get wafer
+29,BufferA move to get wafer position
+30,LTP1 get wafer start
+31,LTP1 X-axis move to bufferA position start
+32,LTP1 X-axis move to bufferA position end
+33,LTP1 Z-axis up start
+34,LTP1 Z-axis up end
+35,bufferA release completed
+36,LTP1 Z-axis down start
+37,LTP1 Z-axis down end
+38,LTP1 X-axis move start
+39,LTP1 X-axis move home position end
+40,LTP1 receives the signal
+41,LTP1 X-axis move to polishB position start
+42,LTP1 X-axis move to polishB position end
+43,LTP1 Z-axis up start
+44,LTP1 Z-axis up end
+45,Topring load start
+46,Topring load end
+47,LTP1 Z-axis down end
+48,PolishB request LTP2 to get wafer
+49,LTP2 X-axis move to polishB start
+50,LTP3 X-axis move to polishB end
+51,LTP2 Z-axis move to polishB start
+52,LTP3 Z-axis move to polishB end
+53,PoloshB unload start
+54,PoloshB unload end
+55,LTP2 Z-axis down start
+56,LTP2 Z-axis down end
+57,LTP2 X-axis move to home position
+58,
+59,PolishA request LTP put wafer
+60,LTP2 X-axis move to polishA start
+61,LTP2 X-axis move to polishA end
+62,LTP2 Z-axis up start
+63,LTP2 Z-axis up end
+64,PolishA load start
+65,PolishA load end
+66,LTP2 Z-axis down end
+67,
+68,PolishA request LTP get wafer
+69,LTP3 X-axis move to polishA start
+70,LTP3 X-axis move to polishA end
+71,LTP3 Z-axis move to polishA start
+72,LTP3 Z-axis move to polishA end
+73,polishA unload start
+74,polishA unload end
+75,LTP3 Z-axis down start
+76,LTP3 Z-axis down end
+77,BufferA move to get wafer position
+78,
+79,LTP3 X-axis move to bufferA start
+80,LTP3 X-axis move to bufferA end
+81,LTP3 Z-axis up start
+82,LTP3 Z-axis up to clamp position
+83,BufferA clamp wafer completed
+84,LTP3 Z-axis down start
+85,LTP3 Z-axis down end
+86,
+87,BufferA request transfer robot get wafer
+88,Transfer robot get wafer from bufferA start
+89,Transfer robot move to bufferA position start
+90,Transfer robot move to bufferA position end
+91,Transfer robot Arm extend to bufferA position
+92,bufferA release completed
+93,Transfer robot arm exit
+94,Transfer robot receives signal from RollA1
+95,Transfer robot flip 180¡ãstart for RollA1
+96,Transfer robot flip 180¡ã end for RollA1
+97,Transfer robot move to RollA1 position start
+98,Transfer robot move to RollA1 position end
+99,Transfer robot low arm extend to RollA1
+100,RollAl clamp
+101,Transfer robot low arm exit RollAl
+102,
+103,Transfer robot receives signal from RollA2
+104,Transfer robot flip 180¡ãstart for RollA2
+105,Transfer robot flip 180¡ãend for RollA2
+106,Transfer robot move to RollA2 position start
+107,Transfer robot move to RollA2 position end
+108,Transfer robot low arm extend to RollA2
+109,RollA2 clamp
+110,Transfer robot low arm exit RollA2
+111,
+112,RollA1 request clean1A Robot to get wafer
+113,Clean1A robot move to RollA1 position start
+114,Clean1A robot move to RollA1 position end
+115,Clean1A robot arm extend to RollA1 start
+116,Clean1A robot arm extend position completed
+117,RollAl chuck send Release signal to Clean1A Robot
+118,Clean1A robot arm exit from RollAl
+119,
+120,RollA2 request from clean1A robot put wafer
+121,Clean1A robot move to RollA2 position start
+122,Clean1A robot move to RollA2 position end
+123,Clean1A robot arm extend to rollA2 start
+124,Clean1A robot arm extend to rollA2 end
+125,RollA2 chuck send clamp signal to Clean1A Robot
+126,Clean1A robot arm exit from rollA2
+127,
+128,RollA2 request clean1A robot to get wafer
+129,Clean1A robot move to RollA2 position start
+130,Clean1A robot move to RollA2 position end
+131,Clean1A robot arm extend to RollA2 start
+132,Clean1A robot arm extend to RollA2
+133,RollA2 chuck send release signal to the Clean1A Robot
+134,Clean1A robot arm exit from rollA2
+135,
+136,RollA3 request clean1A robot to put wafer
+137,Clean1A robot move to RollA3 position start
+138,Clean1A robot move to RollA3 position end
+139,Clean1A robot arm extend to RollA3 start
+140,Clean1A robot arm extend to RollA3 end
+141,RollA3 chuck send clamp signal to the Clean1A Robot
+142,Clean1A robot arm exit RollA3
+143,PenA1 request clean1A robot to put wafer
+144,Clean1A robot start put wafer from PenA1
+145,Clean1A robot move to penA1 position start
+146,Clean1A robot move to penA1 position end
+147,Clean1A robot put wafer to penA1 start
+148,Clean1A robot put wafer to penA1 end
+149,
+150,RollA3 request clean2A robot to get wafer
+151,Clean2A robot move to RollA3 position start
+152,Clean2A robot move to RollA3 position end
+153,Clean2A robot arm extend to RollA3 start
+154,Clean2A robot arm extend to RollA3 end
+155,RollA3 chuck send release signal to the Clean2A Robot
+156,Clean2A robot arm exit from RollA3
+157,
+158,PenA1 request clean2A robot to put wafer
+159,Clean2A robot start put wafer from PenA1
+160,Clean2A robot move to penA1 position start
+161,Clean2A robot move to penA1 position end
+162,Clean2A robot put wafer to penA1 start
+163,Clean2A robot put wafer to penA1 end
+164,
+165,PenA1 request clean2A robot to get wafer
+166,Clean2A robot get wafer from PenA1 start
+167,Clean2A robot move to penA1 position start
+168,Clean2A robot move to penA1 position end
+169,Clean2A robot get wafer from penA1 start
+170,Clean2A robot get wafer from penA1 end
+171,
+172,PenA2 request clean2A robot to put wafer
+173,Clean2A robot put wafer to PenA2 start
+174,Clean2A robot move to penA2 position start
+175,Clean2A robot move to penA2 position end
+176,Clean2A robot put wafer to penA2 start
+177,Clean2A robot put wafer to penA2 end
+178,
+179,PenA2 request clean2A robot to get wafer
+180,Clean2A robot get wafer from PenA2 start
+181,Clean2A robot move to penA2 position start
+182,Clean2A robot move to penA2 position end
+183,Clean2A robot get wafer from penA2 start
+184,Clean2A robot get wafer from penA2 end
+185,
+186,DryA request clean2A robot to put wafer
+187,Clean2A robot put wafer from DryA start
+188,Clean2A robot move to DryA position start
+189,Clean2A robot move to DryA position end
+190,Clean2A robot put wafer from DryA start
+191,Clean2A Robot put wafer from DryA end
+192,
+193,Efem robot receive get wafer signal from DryA
+194,Efem robot get wafer from DryA start
+195,Efem robot axis move to get position start
+196,Efem robot axis move to get position end
+197,Efem robot request get wafer from DryA
+198,DryA send allow get wafer from efem robot
+199,Efem robot get wafer start
+200,Efem robot get wafer end
+201,
+202,Efem robot request HMI put wafer
+203,HMI put wafer allow
+204,Efem robot axis move start
+205,Efem robot axis move end
+206,Efem robot put wafer to loadport start
+207,Efem robot put wafer to loadport end
+208,
+209,
+210,
+211,Transfer robot upper arm receives the signal from bufferB
+212,Transfer robot upper arm put wafer to bufferB start
+213,Transfer robot move to put wafer position start
+214,Transfer robot move to put wafer position end
+215,Transfer robot put wafer to bufferB start
+216,Transfer robot upper arm extend to put wafer position
+217,bufferB clamp wafer completed
+218,Transfer robot exit completed
+219,
+220,bufferB request LTP4 to get wafer
+221,bufferB move to get wafer position
+222,LTP4 get wafer start
+223,LTP4 X-axis move to bufferB position start
+224,LTP4 X-axis move to bufferB position end
+225,LTP4 Z-axis up start
+226,LTP4 Z-axis up end
+227,BufferB release completed
+228,LTP4 Z-axis down start
+229,LTP4 Z-axis down end
+230,LTP4 X-axis move start
+231,LTP4 X-axis move home position end
+232,LTP4 receives the signal
+233,LTP4 X-axis move to polishD position start
+234,LTP4 X-axis move to polishD position end
+235,LTP4 Z-axis up start
+236,LTP4 Z-axis up end
+237,Topring load start
+238,Topring load end
+239,LTP4 Z-axis down end
+240,polishD request LTP5 to get wafer
+241,LTP5 X-axis move to polishD start
+242,LTP6 X-axis move to polishD end
+243,LTP5 Z-axis move to polishD start
+244,LTP6 Z-axis move to polishD end
+245,PoloshB unload start
+246,PoloshB unload end
+247,LTP5 Z-axis down start
+248,LTP5 Z-axis down end
+249,LTP5 X-axis move to home position
+250,
+251,polishC request LTP put wafer
+252,LTP5 X-axis move to polishC start
+253,LTP5 X-axis move to polishC end
+254,LTP5 Z-axis up start
+255,LTP5 Z-axis up end
+256,polishC load start
+257,polishC load end
+258,LTP5 Z-axis down end
+259,
+260,polishC request LTP get wafer
+261,LTP6 X-axis move to polishC start
+262,LTP6 X-axis move to polishC end
+263,LTP6 Z-axis move to polishC start
+264,LTP6 Z-axis move to polishC end
+265,polishC unload start
+266,polishC unload end
+267,LTP6 Z-axis down start
+268,LTP6 Z-axis down end
+269,bufferB move to get wafer position
+270,
+271,LTP6 X-axis move to bufferB start
+272,LTP6 X-axis move to bufferB end
+273,LTP6 Z-axis up start
+274,LTP6 Z-axis up to clamp position
+275,bufferB clamp wafer completed
+276,LTP6 Z-axis down start
+277,LTP6 Z-axis down end
+278,
+279,bufferB request transfer robot get wafer
+280,Transfer robot get wafer from bufferB start
+281,Transfer robot move to bufferB position start
+282,Transfer robot move to bufferB position end
+283,Transfer robot Arm extend to bufferB position
+284,bufferB release completed
+285,Transfer robot arm exit
+286,Transfer robot receives signal from RollB1
+287,Transfer robot flip 180¡ãstart for RollB1
+288,Transfer robot flip 180¡ã end for RollB1
+289,Transfer robot move to RollB1 position start
+290,Transfer robot move to RollB1 position end
+291,Transfer robot low arm extend to RollB1
+292,RollBl clamp
+293,Transfer robot low arm exit RollBl
+294,
+295,Transfer robot receives signal from RollB2
+296,Transfer robot flip 180¡ãstart for RollB2
+297,Transfer robot flip 180¡ãend for RollB2
+298,Transfer robot move to RollB2 position start
+299,Transfer robot move to RollB2 position end
+300,Transfer robot low arm extend to RollB2
+301,RollB2 clamp
+302,Transfer robot low arm exit RollB2
+303,
+304,RollB1 request Clean1B Robot to get wafer
+305,Clean1B robot move to RollB1 position start
+306,Clean1B robot move to RollB1 position end
+307,Clean1B robot arm extend to RollB1 start
+308,Clean1B robot arm extend position completed
+309,RollBl chuck send Release signal to Clean1B Robot
+310,Clean1B robot arm exit from RollBl
+311,
+312,RollB2 request from Clean1B robot put wafer
+313,Clean1B robot move to RollB2 position start
+314,Clean1B robot move to RollB2 position end
+315,Clean1B robot arm extend to RollB2 start
+316,Clean1B robot arm extend to RollB2 end
+317,RollB2 chuck send clamp signal to Clean1B Robot
+318,Clean1B robot arm exit from RollB2
+319,
+320,RollB2 request Clean1B robot to get wafer
+321,Clean1B robot move to RollB2 position start
+322,Clean1B robot move to RollB2 position end
+323,Clean1B robot arm extend to RollB2 start
+324,Clean1B robot arm extend to RollB2
+325,RollB2 chuck send release signal to the Clean1B Robot
+326,Clean1B robot arm exit from RollB2
+327,
+328,RollB3 request Clean1B robot to put wafer
+329,Clean1B robot move to RollB3 position start
+330,Clean1B robot move to RollB3 position end
+331,Clean1B robot arm extend to RollB3 start
+332,Clean1B robot arm extend to RollB3 end
+333,RollB3 chuck send clamp signal to the Clean1B Robot
+334,Clean1B robot arm exit RollB3
+335,penB1 request Clean1B robot to put wafer
+336,Clean1B robot start put wafer from penB1
+337,Clean1B robot move to penB1 position start
+338,Clean1B robot move to penB1 position end
+339,Clean1B robot put wafer to penB1 start
+340,Clean1B robot put wafer to penB1 end
+341,
+342,RollB3 request Clean2B robot to get wafer
+343,Clean2B robot move to RollB3 position start
+344,Clean2B robot move to RollB3 position end
+345,Clean2B robot arm extend to RollB3 start
+346,Clean2B robot arm extend to RollB3 end
+347,RollB3 chuck send release signal to the Clean2B Robot
+348,Clean2B robot arm exit from RollB3
+349,
+350,penB1 request Clean2B robot to put wafer
+351,Clean2B robot start put wafer from penB1
+352,Clean2B robot move to penB1 position start
+353,Clean2B robot move to penB1 position end
+354,Clean2B robot put wafer to penB1 start
+355,Clean2B robot put wafer to penB1 end
+356,
+357,penB1 request Clean2B robot to get wafer
+358,Clean2B robot get wafer from penB1 start
+359,Clean2B robot move to penB1 position start
+360,Clean2B robot move to penB1 position end
+361,Clean2B robot get wafer from penB1 start
+362,Clean2B robot get wafer from penB1 end
+363,
+364,penB2 request Clean2B robot to put wafer
+365,Clean2B robot put wafer to penB2 start
+366,Clean2B robot move to penB2 position start
+367,Clean2B robot move to penB2 position end
+368,Clean2B robot put wafer to penB2 start
+369,Clean2B robot put wafer to penB2 end
+370,
+371,penB2 request Clean2B robot to get wafer
+372,Clean2B robot get wafer from penB2 start
+373,Clean2B robot move to penB2 position start
+374,Clean2B robot move to penB2 position end
+375,Clean2B robot get wafer from penB2 start
+376,Clean2B robot get wafer from penB2 end
+377,
+378,Dry request Clean2B robot to put wafer
+379,Clean2B robot put wafer from DryB start
+380,Clean2B robot move to DryB position start
+381,Clean2B robot move to DryB position end
+382,Clean2B robot put wafer from DryB start
+383,Clean2B Robot put wafer from DryB end
+384,
+385,Efem robot receive get wafer signal from DryB
+386,Efem robot get wafer from DryB start
+387,Efem robot axis move to get position start
+388,Efem robot axis move to get position end
+389,Efem robot request get wafer from DryB
+390,DryB send allow get wafer from efem robot
+391,Efem robot get wafer start
+392,Efem robot get wafer end
+393,
+394,
+395,
+396,
+397,
+398,
+399,
+400,

@@ -1,0 +1,193 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.RobotControlTab.PolishASideTransfer.PolishASideTransferStationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:controls="clr-namespace:CMP.Controls"
+             xmlns:robotControlTab="clr-namespace:CMP.ViewModels.Tabs.OperationTab.RobotControlTab"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance robotControlTab:PolishASideTransferControlViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             d:DesignHeight="600" d:DesignWidth="900">
+    
+    <UserControl.Resources>
+        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="#DC3545"/>
+                    <Setter Property="BorderBrush" Value="#DC3545"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsChecked" Value="True"/>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="#C82333"/>
+                    <Setter Property="BorderBrush" Value="#BD2130"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid Background="#C8E6E6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Title Bar -->
+        <Grid Grid.Row="0">
+            <Button Style="{StaticResource ButtonSuccess}" 
+                    Width="80" Height="32" HorizontalAlignment="Left" Margin="20,0,0,0"
+                    Command="{Binding BackCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Path Data="M6,0 L0,5 L6,10 M0,5 L10,5" Stroke="White" StrokeThickness="1.5" 
+                          VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <TextBlock Text="{lex:Loc Back}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <TextBlock Text="{lex:Loc PolishASideTransfer}" FontSize="20" FontWeight="Bold" 
+                       Foreground="#006666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+        
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="20,10,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Row 1: Reset/Start/Stop + Alarm Area -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                <!-- Reset -->
+                <Button Content="{lex:Loc Reset}" Style="{StaticResource ButtonPrimary}" Width="60" Height="28" Command="{Binding StationResetCommand}"/>
+                <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationIsReset}" VerticalAlignment="Center" Margin="5,0,15,0"/>
+                <!-- Start -->
+                <Button Content="{lex:Loc Start}" Style="{StaticResource ButtonSuccess}" Width="60" Height="28" Command="{Binding StationStartCommand}"/>
+                <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding StationIsRunning}" VerticalAlignment="Center" Margin="5,0,15,0"/>
+                <!-- Stop -->
+                <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}" Width="60" Height="28" Command="{Binding StationStopCommand}"/>
+                <controls:SignalLight Width="20" Height="20" LightColor="Red" IsOn="{Binding StationIsStopped}" VerticalAlignment="Center" Margin="5,0,30,0"/>
+                
+                <!-- Alarm Area -->
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{lex:Loc ModuleAlarm}" VerticalAlignment="Center" FontSize="13" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="0" Grid.Column="1" Width="16" Height="16" LightColor="Red" IsOn="{Binding ModuleAlarm}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc GlobalAlarm}" VerticalAlignment="Center" FontSize="13" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="16" Height="16" LightColor="Red" IsOn="{Binding GlobalAlarm}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Content="{lex:Loc AlarmReset}" Style="{StaticResource ButtonWarning}" 
+                            Width="100" Height="40" FontSize="12" Command="{Binding StationAlarmResetCommand}" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+            
+            <!-- Row 2: Operation Buttons + Status + Manual/Auto -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Left: New Operation Buttons (6 items) -->
+                <StackPanel Grid.Column="0">
+                    <!-- 1. Pick From Robot 2 -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromRobot2Active}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PickFromRobot2}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PickFromRobot2Toggle, Mode=OneWay}" Command="{Binding PickFromRobot2Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromRobot2Done}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 2. Place To Arm 1 -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToArm1Active}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PlaceToArm1}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PlaceToArm1Toggle, Mode=OneWay}" Command="{Binding PlaceToArm1Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToArm1Done}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 3. Place To Arm 2 -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToArm2Active}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PlaceToArm2}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PlaceToArm2Toggle, Mode=OneWay}" Command="{Binding PlaceToArm2Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToArm2Done}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 4. Pick From Arm 3 -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromArm3Active}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PickFromArm3}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PickFromArm3Toggle, Mode=OneWay}" Command="{Binding PickFromArm3Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromArm3Done}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 5. Place To Robot -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToRobotActive}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PlaceToRobot}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PlaceToRobotToggle, Mode=OneWay}" Command="{Binding PlaceToRobotCommand}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToRobotDone}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 6. Pick From Arm 2 -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromArm2Active}" VerticalAlignment="Center"/>
+                        <ToggleButton Content="{lex:Loc PickFromArm2}" Style="{StaticResource MoveToggleButtonStyle}" Width="150" Height="28" Margin="8,0" IsChecked="{Binding PickFromArm2Toggle, Mode=OneWay}" Command="{Binding PickFromArm2Command}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromArm2Done}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!-- Right: Manual/Auto Buttons + New Right Side Controls -->
+                <StackPanel Grid.Column="2" VerticalAlignment="Top">
+                    <!-- Manual/Auto -->
+                    <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10" Margin="0,0,0,20">
+                        <ToggleButton Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding ManualModeToggle, Mode=OneWay}" Command="{Binding ManualModeCommand}"/>
+                        <ToggleButton Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding AutoModeToggle, Mode=OneWay}" Command="{Binding AutoModeCommand}"/>
+                    </StackPanel>
+                    
+                    <!-- New Right Side Controls (5 items) -->
+                    <!-- 1. Clamp Close -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Right">
+                        <ToggleButton Content="{lex:Loc ClampClose}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="0,0,8,0" IsChecked="{Binding ClampCloseToggle, Mode=OneWay}" Command="{Binding ClampCloseCommand}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding ClampCloseStatus}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 2. Clamp Open -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Right">
+                        <ToggleButton Content="{lex:Loc ClampOpen}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="0,0,8,0" IsChecked="{Binding ClampOpenToggle, Mode=OneWay}" Command="{Binding ClampOpenCommand}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding ClampOpenStatus}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 3. Wafer Detection -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Right">
+                        <Border Width="120" Height="28" Margin="0,0,8,0" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="3" Background="#F0F0F0">
+                             <TextBlock Text="{lex:Loc WaferDetection}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding WaferDetectionStatus}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 4. Polish A Door Open -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Right">
+                        <ToggleButton Content="{lex:Loc PolishADoorOpen}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="0,0,8,0" IsChecked="{Binding PolishADoorOpenToggle, Mode=OneWay}" Command="{Binding PolishADoorOpenCommand}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PolishADoorOpenStatus}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- 5. Polish A Door Close -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Right">
+                        <ToggleButton Content="{lex:Loc PolishADoorClose}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="0,0,8,0" IsChecked="{Binding PolishADoorCloseToggle, Mode=OneWay}" Command="{Binding PolishADoorCloseCommand}"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PolishADoorCloseStatus}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

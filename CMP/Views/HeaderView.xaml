@@ -1,0 +1,652 @@
+<UserControl x:Class="CMP.Views.HeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             mc:Ignorable="d"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             xmlns:viewModels="clr-namespace:CMP.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:HeaderViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+    <UserControl.Resources>
+        <converters:DictionaryToItemsSourceConverter x:Key="DictionaryConverter" />
+    </UserControl.Resources>
+    <Grid extensions:GridHelpers.RowDefinitions="*"
+          extensions:GridHelpers.ColumnDefinitions="Auto, Auto, Auto, Auto">
+        <Image Grid.Column="0" Source="/Assets/Images/logo.png" Width="150" Height="150" />
+        <!-- Left Content -->
+        <GroupBox Margin="5" Grid.Row="0" Grid.Column="1"
+                  Padding="7" Background="Transparent" hc:TitleElement.Background="Transparent"
+                  Style="{StaticResource GroupBoxTab}"
+                  HorizontalContentAlignment="Left">
+            <GroupBox.Header>
+                <TextBlock Margin="3 0 0 0" Text="{lex:Loc EquipmentStates}"/>
+            </GroupBox.Header>
+            <Grid extensions:GridHelpers.ColumnDefinitions="*, *"
+                  extensions:GridHelpers.RowDefinitions="*, *, *, *">
+                <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                           Grid.Row="0" Text="{lex:Loc ProcessingState}" MinWidth="90" />
+                <TextBlock Margin="5 0 0 0" Grid.Row="0" Grid.Column="1" Text="{lex:Loc Executing}"
+                           HorizontalAlignment="Left" MinWidth="90"
+                           Style="{StaticResource TextBlockDefaultBold}" />
+
+                <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                           Grid.Row="1" Text="{lex:Loc CommState}" MinWidth="90" />
+                <TextBlock Margin="5 0 0 0" Grid.Row="1" Grid.Column="1" Text="{lex:Loc Connecting}"
+                           HorizontalAlignment="Left" MinWidth="90"
+                           Style="{StaticResource TextBlockDefaultBold}" />
+
+                <TextBlock Foreground="{StaticResource SecondaryTextBrush}" MinWidth="90"
+                           Grid.Row="2" Text="{lex:Loc ControlState}" />
+                <TextBlock Margin="5 0 0 0" Grid.Row="2" Grid.Column="1" Text="{lex:Loc HostOffline}"
+                           HorizontalAlignment="Left" MinWidth="90"
+                           Style="{StaticResource TextBlockDefaultBold}" />
+                <hc:ComboBox Margin="0 5 0 0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                             SelectedItem="{Binding SelectedLanguage}"
+                             ItemsSource="{Binding LanguageList, Converter={StaticResource DictionaryConverter}}" />
+            </Grid>
+        </GroupBox>
+        <!-- Center Content -->
+        <Grid Margin="5" Grid.Column="2" extensions:GridHelpers.RowDefinitions="1*, 5*"
+              extensions:GridHelpers.ColumnDefinitions="*, *, *, *, *, Auto">
+            <!-- Time -->
+            <Border Style="{StaticResource BorderRegion}" Padding="10" Background="{DynamicResource BorderBrush}">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentDate}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{DynamicResource TextBlockDefaultBold}" />
+                    <TextBlock Text="{Binding CurrentTime}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{DynamicResource TextBlockDefaultBold}" />
+                </StackPanel>
+
+            </Border>
+
+            <!--<Border Grid.Column="3" Padding="10" Style="{StaticResource BorderRegion}"
+                    Background="{DynamicResource BorderBrush}">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{lex:Loc CurrentScreen}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{DynamicResource TextBlockDefaultBold}" />
+                    <TextBlock Text="{lex:Loc OperationsMain}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{DynamicResource TextBlockDefaultBold}" />
+                </StackPanel>
+
+            </Border>-->
+            <!-- User Actions -->
+            <StackPanel Grid.Row="0"
+                        Grid.Column="4"
+                        Grid.ColumnSpan="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center">
+                <Button Height="40"
+                        Style="{StaticResource ButtonDefault}"
+                        Command="{Binding ChangePasswordCommand}"
+                        ToolTip="{lex:Loc ChangePassword}">
+                    <Border Background="#F0F0F0" Style="{StaticResource BorderRegion}" Padding="5" Height="30"
+                            Width="30">
+                        <iconPacks:PackIconMaterial HorizontalAlignment="Center" Foreground="Gray"
+                                                    Kind="KeyVariant" />
+                    </Border>
+                </Button>
+                <Button Height="40"
+                        Margin="4,0,0,0"
+                        Style="{StaticResource ButtonDefault}"
+                        Command="{Binding LogoutCommand}"
+                        ToolTip="{lex:Loc Logout}">
+                    <Border Background="#F0F0F0" Style="{StaticResource BorderRegion}" Padding="5" Height="30"
+                            Width="30">
+                        <iconPacks:PackIconUnicons HorizontalAlignment="Center" Foreground="Gray"
+                                                   Kind="SignOutAltLine" />
+                    </Border>
+                </Button>
+            </StackPanel>
+            <!-- Exit Button -->
+            <!--<Button Grid.Row="0" Grid.Column="5" Height="60"
+                    Margin="5 0 0 0"
+                    Style="{StaticResource ButtonDefault}"
+                    Command="{Binding ExitCommand}">
+                <Border>
+                    <StackPanel HorizontalAlignment="Center">
+                        <Border Background="Red" Style="{StaticResource BorderRegion}" Padding="5" Height="30"
+                                Width="30">
+                            <iconPacks:PackIconMicrons HorizontalAlignment="Center" Foreground="White"
+                                                       Kind="Cancel" />
+                        </Border>
+                        <TextBlock HorizontalAlignment="Center" Text="{lex:Loc Exit}" />
+                    </StackPanel>
+                </Border>
+            </Button>-->
+            <!-- Logs -->
+            <DataGrid
+                Width="1250"
+                Height="100"
+                Background="Transparent"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1"
+                RowBackground="Transparent"
+                AlternatingRowBackground="Transparent"
+                HorizontalGridLinesBrush="#DDDDDD"
+                VerticalGridLinesBrush="#DDDDDD"
+                GridLinesVisibility="All"
+                RowHeight="30"
+                HeadersVisibility="None"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserResizeRows="False"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding ListAlarm}"
+                IsReadOnly="True"
+                RowHeaderWidth="0"
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6"
+                Margin="0 5 0 0">
+
+                <DataGrid.Resources>
+                    <!-- 取消系统高亮和选中效果 -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
+
+                    <!-- DataGrid整体模板，加入圆角 -->
+                    <Style TargetType="{x:Type DataGrid}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGrid}">
+                                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            Background="{TemplateBinding Background}"
+                                            Padding="0"
+                                            CornerRadius="5"
+                                            SnapsToDevicePixels="True">
+                                        <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                                            <ScrollViewer.Template>
+                                                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <!-- 列标题 - 增加ClipToBounds以适应圆角 -->
+                                                        <Border Grid.Column="1" ClipToBounds="True">
+                                                            <DataGridColumnHeadersPresenter
+                                                                x:Name="PART_ColumnHeadersPresenter"
+                                                                Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" />
+                                                        </Border>
+
+                                                        <!-- 主体内容 - 增加ClipToBounds以适应圆角 -->
+                                                        <Border Grid.Row="1" Grid.Column="1" ClipToBounds="True">
+                                                            <ScrollContentPresenter
+                                                                x:Name="PART_ScrollContentPresenter"
+                                                                CanContentScroll="{TemplateBinding CanContentScroll}" />
+                                                        </Border>
+
+                                                        <!-- 滚动条 -->
+                                                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                                   Grid.Row="1"
+                                                                   Grid.Column="2"
+                                                                   Orientation="Vertical"
+                                                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                                                   Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+
+                                                        <ScrollBar x:Name="PART_HorizontalScrollBar"
+                                                                   Grid.Row="2"
+                                                                   Grid.Column="1"
+                                                                   Orientation="Horizontal"
+                                                                   Maximum="{TemplateBinding ScrollableWidth}"
+                                                                   ViewportSize="{TemplateBinding ViewportWidth}"
+                                                                   Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </ScrollViewer.Template>
+                                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        </ScrollViewer>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <!-- DataGridRow 样式 -->
+                    <Style x:Key="ExcelRowStyle" TargetType="{x:Type DataGridRow}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="MinHeight" Value="0" />
+                        <Setter Property="Height" Value="30" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridRow}">
+                                    <Border x:Name="DGR_Border"
+                                            Background="{ TemplateBinding Background }"
+                                            BorderThickness="0"
+                                            SnapsToDevicePixels="True">
+                                        <SelectiveScrollingGrid>
+                                            <SelectiveScrollingGrid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </SelectiveScrollingGrid.ColumnDefinitions>
+                                            <SelectiveScrollingGrid.RowDefinitions>
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </SelectiveScrollingGrid.RowDefinitions>
+                                            <DataGridCellsPresenter Grid.Column="1"
+                                                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                            <DataGridRowHeader Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                                               SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
+                                                               Visibility="Collapsed" />
+                                        </SelectiveScrollingGrid>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#11000000" TargetName="DGR_Border" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#22000000" TargetName="DGR_Border" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+                    <!-- DataGridCell 样式 - 简化版本 -->
+                    <Style x:Key="ExcelCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="#DDDDDD" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="Padding" Value="4,0" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                    <!-- <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Margin="0"
+                                            Padding="0"
+                                            SnapsToDevicePixels="True">
+                                        
+                                    </Border> -->
+                                    <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                            <!-- 处理最左侧单元格 -->
+                            <Trigger Property="{x:Static DataGridColumnHeader.DisplayIndexProperty}" Value="0">
+                                <Setter Property="BorderThickness" Value="1,1,1,1" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- DataGridColumnHeader 样式 -->
+                    <Style x:Key="ExcelHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="Black" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="BorderBrush" Value="#DDDDDD" />
+                        <Setter Property="BorderThickness" Value="0,1,1,1" />
+                        <Setter Property="Padding" Value="4,0" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Height" Value="35" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                    <Border x:Name="HeaderBorder"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Padding="0"
+                                            Margin="0"
+                                            SnapsToDevicePixels="True">
+                                        <ContentPresenter
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            Margin="{TemplateBinding Padding}" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <!-- 处理最左侧列头 -->
+                            <Trigger Property="DisplayIndex" Value="0">
+                                <Setter Property="BorderThickness" Value="1,1,1,1" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <!-- 设置TextBlock的样式，让内容居中显示 -->
+                    <Style x:Key="CellTextBlockStyle" TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Padding" Value="4,0" />
+                    </Style>
+                    <!-- 红色字体样式 -->
+                    <Style x:Key="RedTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource CellTextBlockStyle}">
+                        <Setter Property="Foreground" Value="Red" />
+                    </Style>
+                </DataGrid.Resources>
+
+                <!-- 应用样式 -->
+                <!-- 替换现有的 DataGrid.RowStyle 和 DataGrid.CellStyle 部分 -->
+                <!-- 替换 DataGrid.RowStyle 部分 -->
+                <!-- 替换现有的 DataGrid.RowStyle 和 DataGrid.CellStyle 部分 -->
+                <!-- 替换 DataGrid.RowStyle 部分 -->
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource ExcelRowStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="warning">
+                                <Setter Property="Foreground" Value="DarkOrange" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="Warning">
+                                <Setter Property="Foreground" Value="DarkOrange" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <!-- 替换 DataGrid.CellStyle 部分 -->
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell" BasedOn="{StaticResource ExcelCellStyle}">
+                        <Style.Triggers>
+                            <!-- 使用正确的相对源绑定 -->
+                            <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                <Setter Property="Foreground" Value="DarkOrange" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                <Setter Property="Foreground" Value="DarkOrange" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+
+                <DataGrid.ColumnHeaderStyle>
+                    <StaticResource ResourceKey="ExcelHeaderStyle" />
+                </DataGrid.ColumnHeaderStyle>
+
+                <!-- 修改 DataGrid.Columns 部分 -->
+                <!-- 替换 DataGrid.Columns 部分 -->
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time" Binding="{Binding AlarmTime}" Width="Auto">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Field1" Binding="{Binding AlarmName}" Width="Auto">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Field2" Binding="{Binding Type}" Width="Auto">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Field3" Binding="{Binding Description}" Width="Auto">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Field4" Binding="{Binding AlarmId}" Width="Auto">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding DataContext.Type, RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}}" Value="Warning">
+                                        <Setter Property="Foreground" Value="DarkOrange" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <!-- Right Content -->
+        <Grid Grid.Column="3" Grid.Row="0" extensions:GridHelpers.RowDefinitions="*"
+              extensions:GridHelpers.ColumnDefinitions="*, *, *, *">
+            <GroupBox Margin="5" Grid.Row="0" Grid.Column="0" MinWidth="140"
+                      Padding="7" Background="Transparent" hc:TitleElement.Background="Transparent"
+                      Style="{StaticResource GroupBoxTab}"
+                      HorizontalContentAlignment="Left">
+                <GroupBox.Header>
+                    <TextBlock Margin="3 0 0 0" Text="{lex:Loc Session}" />
+                </GroupBox.Header>
+                <Grid extensions:GridHelpers.ColumnDefinitions="*, *"
+                      extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *">
+                    <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                               Grid.Row="0" Text="{lex:Loc System}" />
+                    <TextBlock Margin="5 0 0 0" Grid.Row="0" Grid.Column="1" Text="localhost"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockDefaultBold}" />
+
+                    <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                               Grid.Row="1" Text="{lex:Loc User}" />
+                    <TextBlock Margin="5 0 0 0" Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUserName}"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockDefaultBold}" />
+
+                    <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                               Grid.Row="2" Text="{lex:Loc Group}" />
+                    <TextBlock Margin="5 0 0 0" Grid.Row="2" Grid.Column="1" Text="{Binding CurrentGroup}"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockDefaultBold}" />
+
+                    <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                               Grid.Row="3" Text="{lex:Loc State}" />
+                    <TextBlock Margin="5 0 0 0" Grid.Row="3" Grid.Column="1" Text="{lex:Loc Connected}"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockDefaultBold}" />
+
+                    <TextBlock Foreground="{StaticResource SecondaryTextBrush}"
+                               Grid.Row="4" Text="{lex:Loc Mode}" />
+                    <TextBlock Margin="5 0 0 0" Grid.Row="4" Grid.Column="1" Text="{lex:Loc Control}"
+                               HorizontalAlignment="Left"
+                               Style="{StaticResource TextBlockDefaultBold}" />
+                </Grid>
+            </GroupBox>
+            <!--<GroupBox Margin="5" Grid.Row="0" Grid.Column="1"
+                      Padding="7" Background="Transparent" hc:TitleElement.Background="Transparent"
+                      Style="{StaticResource GroupBoxTab}"
+                      HorizontalContentAlignment="Left" Visibility="Hidden">
+                <GroupBox.Header>
+                    <TextBlock Margin="3 0 0 0" Text="{lex:Loc Mode}" />
+                </GroupBox.Header>
+                <StackPanel>
+                    <ToggleButton Margin="0 5 0 0" Style="{StaticResource DefaultToggleButtonStyle}" Height="30"
+                                  Width="70" Content="{lex:Loc View}" />
+                    <ToggleButton IsChecked="True" Margin="0 5 0 0" Style="{StaticResource DefaultToggleButtonStyle}"
+                                  Height="30"
+                                  Width="70" Content="{lex:Loc Control}" />
+                    <ToggleButton Margin="0 5 0 0" Style="{StaticResource DefaultToggleButtonStyle}" Height="30"
+                                  Width="70" Content="{lex:Loc Exclusive}" />
+                </StackPanel>
+            </GroupBox>-->
+            <Grid Margin="5" Grid.Row="0" Grid.Column="2" extensions:GridHelpers.RowDefinitions="Auto, *"
+                     Background="Transparent" hc:TitleElement.Background="Transparent">
+                <ToggleButton x:Name="OffToggleButton" Width="60" Height="60" Style="{StaticResource DefaultToggleButtonStyle}"
+                  IsChecked="{Binding IsSoundOffChecked}">
+                    <ToggleButton.Content>
+                        <StackPanel>
+                            <Border CornerRadius="5" Padding="5" HorizontalAlignment="Center">
+                                <iconPacks:PackIconPhosphorIcons Kind="SpeakerSlashFill">
+                                    <iconPacks:PackIconPhosphorIcons.Style>
+                                        <Style TargetType="iconPacks:PackIconPhosphorIcons">
+                                            <Setter Property="Foreground" Value="Gray" />
+                                            <Setter Property="Background" Value="Transparent"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </iconPacks:PackIconPhosphorIcons.Style>
+                                </iconPacks:PackIconPhosphorIcons>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#eeeeee"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <TextBlock HorizontalAlignment="Center" Text="{lex:Loc Off}" />
+                        </StackPanel>
+                    </ToggleButton.Content>
+                </ToggleButton>
+                <ToggleButton x:Name="OnToggleButton" Grid.Row="1" Width="60" Height="60" Style="{StaticResource DefaultToggleButtonStyle}"
+                  IsChecked="{Binding IsSoundOnChecked}">
+                    <ToggleButton.Content>
+                        <StackPanel>
+                            <Border CornerRadius="5" Padding="5" HorizontalAlignment="Center">
+                                <iconPacks:PackIconFontAwesome Kind="VolumeHighSolid">
+                                    <iconPacks:PackIconFontAwesome.Style>
+                                        <Style TargetType="iconPacks:PackIconFontAwesome">
+                                            <Setter Property="Foreground" Value="Gray" />
+                                            <Setter Property="Background" Value="Transparent"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                    <Setter Property="Foreground" Value="White" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </iconPacks:PackIconFontAwesome.Style>
+                                </iconPacks:PackIconFontAwesome>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#eeeeee"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            <TextBlock HorizontalAlignment="Center" Text="{lex:Loc On}" />
+                        </StackPanel>
+                    </ToggleButton.Content>
+                </ToggleButton>
+            </Grid>
+            <Grid Grid.Column="3">
+                <Border Margin="5" Style="{StaticResource BorderRegion}">
+                    <Grid extensions:GridHelpers.RowDefinitions="*, *, *, *">
+                        <!--<Image Source="/Assets/Images/lights/red.png" Width="30" Height="30" />-->
+                        <!-- 红色指示灯 (报警时闪烁) -->
+                        <Image x:Name="RedLight" Width="30" Height="30">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/Assets/Images/lights/red.png" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasAlarm}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                       From="1.0" To="0.3" Duration="0:0:0.5"
+                                                       AutoReverse="True" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                       To="1.0" Duration="0:0:0.1" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <Image Margin="0 5 0 0" Grid.Row="1" Source="/Assets/Images/lights/yellow.png" Width="30"
+                               Height="30" />
+                        <Image Margin="0 5 0 0" Grid.Row="2" Source="/Assets/Images/lights/green.png" Width="30"
+                               Height="30" />                       
+                        <Image Margin="0 5 0 0" Grid.Row="3" Source="/Assets/Images/lights/purple.png" Width="30"
+                               Height="30" />
+                    </Grid>
+                </Border>
+            </Grid>
+            <ContentControl mvvm:RegionManager.RegionName="RegionMessage" VerticalAlignment="Top" MinHeight="60" />
+        </Grid>
+
+    </Grid>
+</UserControl>

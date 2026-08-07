@@ -1,0 +1,1938 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.RoboticArmTabContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             xmlns:model="clr-namespace:CMP.Models.Operation.RoboticArm"             
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             d:DataContext="{d:DesignInstance viewModel:RoboticArmTabContentViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
+    <UserControl.Resources>
+        <!-- Converter for Bot Server State -->
+        <converters:OnOffStateConverter x:Key="OnOffStateConverter" />
+        <!-- Converter for String Formatting -->
+        <converters:StringFormatConverter x:Key="StringFormatConverter" />
+        <converters:ObjectTrueToVisibilityConverter x:Key="ObjectTrueToVisibilityConverter" />
+        <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
+    </UserControl.Resources>
+    <Border BorderThickness="1"
+            Margin="5" Padding="0" CornerRadius="4">
+        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+            <!-- 第一行：RoboticArm 1, 2, 3, 4, 5, 6-->
+            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                <!-- RoboticArm 1 -->
+                <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[0].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic1}" />
+                                        <Binding Source="1" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="1">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[0].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[0]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[0]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[0]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[0]}" />
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                    Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                    Text="{Binding EquipRobots[0].RobotStatus}" Foreground="Black" />
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="1" PLCAddress="M1835"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="1" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="1" PLCAddress="M1837"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="1" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[0].ArmStatus}" Foreground="Black" />
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="1" PLCAddress="M1832"  />
+                            </Button.CommandParameter>
+                        </Button>                               
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[0].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--RoboticArm 2--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[1].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic2}" />
+                                        <Binding Source="2" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="2">
+                            <Button.Content>
+                                <TextBlock
+                                    Text="{Binding RoboticArm[1].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[1]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[1]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[1]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[1]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[1].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="2" PLCAddress="M1883"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="2" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                 Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="2" PLCAddress="M1885"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="2" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[1].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="2" PLCAddress="M1880"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[1].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--RoboticArm 3--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[2].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic3}" />
+                                        <Binding Source="3" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="3">
+                            <Button.Content>
+                                <TextBlock
+                                    Text="{Binding RoboticArm[2].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[2]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[2]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[2]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[2]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[2].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="3" PLCAddress="M1931"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="3" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="3" PLCAddress="M1933"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="3" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[2].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="3" PLCAddress="M1928"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[2].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+           
+                 <!--RoboticArm 4--> 
+                <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[3].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic4}" />
+                                        <Binding Source="4" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="4">
+                            <Button.Content>
+                                <TextBlock
+                                    Text="{Binding RoboticArm[3].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[3]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[3]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[3]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[3]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[3].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="4" PLCAddress="M1979"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="4" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="4" PLCAddress="M1981"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="4" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[3].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="4" PLCAddress="M1976"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[3].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--RoboticArm 5--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[4].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic5}" />
+                                        <Binding Source="5" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="5">
+                            <Button.Content>
+                                <TextBlock
+                                    Text="{Binding RoboticArm[4].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[4]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[4]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[4]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[4]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[4].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="5" PLCAddress="M2027"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="5" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="5" PLCAddress="M2029"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="5" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[4].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="5" PLCAddress="M2024"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[4].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--RoboticArm 6--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[5].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic6}" />
+                                        <Binding Source="6" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                   Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="6">
+                            <Button.Content>
+                                <TextBlock
+                                    Text="{Binding RoboticArm[5].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[5]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[5]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[5]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[5]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[5].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="6" PLCAddress="M2075"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="6" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="6" PLCAddress="M2077"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="6" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[5].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="6" PLCAddress="M2072"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[5].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+                 <!--RoboticArm 7--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[6].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic7}" />
+                                        <Binding Source="7" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                            extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="7">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[6].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding ArmSource}"
+                                SelectedItem="{Binding SelectedArms[6]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding ActionSource}"
+                                SelectedItem="{Binding SelectedActions[6]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding PositionSource}"
+                                SelectedItem="{Binding SelectedPositions[6]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[6]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[6].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="7" PLCAddress="M2123"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="7" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="7" PLCAddress="M2125"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="7" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[6].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="7" PLCAddress="M2120"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[6].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+                 <!--RoboticArm 8--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                      hc:TitleElement.Background="{Binding EquipRobots[7].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic8}" />
+                                        <Binding Source="8" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                        extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="8">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[7].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding ArmSource}"
+                                SelectedItem="{Binding SelectedArms[7]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding ActionSource}"
+                                SelectedItem="{Binding SelectedActions[7]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding PositionSource}"
+                                SelectedItem="{Binding SelectedPositions[7]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[7]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[7].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="8" PLCAddress="M2171"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="8" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="8" PLCAddress="M2173"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="8" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[7].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="8" PLCAddress="M2168"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[7].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        
+
+              
+            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                 <!--ModuleArm 9--> 
+                <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[8].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic9}" />
+                                        <Binding Source="9" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"     CommandParameter="9">
+                            <Button.Content>
+                                <TextBlock   Text="{Binding RoboticArm[8].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[8]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding ActionSource}"
+                                  SelectedItem="{Binding SelectedActions[8]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding PositionSource}"
+                                  SelectedItem="{Binding SelectedPositions[8]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                  ItemsSource="{Binding SlotSource}"
+                                  SelectedItem="{Binding SelectedSlot[8]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[8].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="9" PLCAddress="M2219"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="9" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="9" PLCAddress="M2221"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="9" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+                        
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[8].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="9" PLCAddress="M2216"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[8].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--ModuleArm 10--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                          hc:TitleElement.Background="{Binding EquipRobots[9].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                          Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic10}" />
+                                        <Binding Source="10" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="10">
+                            <Button.Content>
+                                <TextBlock    Text="{Binding RoboticArm[9].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                              Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                              ItemsSource="{Binding ArmSource}"
+                              SelectedItem="{Binding SelectedArms[9]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                              Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                              ItemsSource="{Binding ActionSource}"
+                              SelectedItem="{Binding SelectedActions[9]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                              Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                              ItemsSource="{Binding PositionSource}"
+                              SelectedItem="{Binding SelectedPositions[9]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                              Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                              ItemsSource="{Binding SlotSource}"
+                              SelectedItem="{Binding SelectedSlot[9]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[9].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="10" PLCAddress="M2267"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="10" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="10" PLCAddress="M2269"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                            Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="10" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[9].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="10" PLCAddress="M2264"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[9].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--ModuleArm 11--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                      hc:TitleElement.Background="{Binding EquipRobots[10].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic11}" />
+                                        <Binding Source="11" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                          extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="11">
+                            <Button.Content>
+                                <TextBlock   Text="{Binding RoboticArm[10].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding ArmSource}"
+                                SelectedItem="{Binding SelectedArms[10]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding ActionSource}"
+                                SelectedItem="{Binding SelectedActions[10]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding PositionSource}"
+                                SelectedItem="{Binding SelectedPositions[10]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[10]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[10].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="11" PLCAddress="M2315"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="11" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="11" PLCAddress="M2317"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="11" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[10].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="11" PLCAddress="M2312"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[10].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--ModuleArm 12--> 
+                <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
+                      hc:TitleElement.Background="{Binding EquipRobots[11].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic12}" />
+                                        <Binding Source="12" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                        extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="12">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[11].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                  ItemsSource="{Binding ArmSource}"
+                                  SelectedItem="{Binding SelectedArms[11]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding ActionSource}"
+                                SelectedItem="{Binding SelectedActions[11]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding PositionSource}"
+                                SelectedItem="{Binding SelectedPositions[11]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[11]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[11].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="12" PLCAddress="M2363"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="12" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                            Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="12" PLCAddress="M2365"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="12" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[11].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="12" PLCAddress="M2360"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[11].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--ModuleArm 13--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                      hc:TitleElement.Background="{Binding EquipRobots[12].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic13}" />
+                                        <Binding Source="13" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                        extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="13">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[12].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                            Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                            ItemsSource="{Binding ArmSource}"
+                            SelectedItem="{Binding SelectedArms[12]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                            Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                            ItemsSource="{Binding ActionSource}"
+                            SelectedItem="{Binding SelectedActions[12]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                            Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                            ItemsSource="{Binding PositionSource}"
+                            SelectedItem="{Binding SelectedPositions[12]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                            Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                            ItemsSource="{Binding SlotSource}"
+                            SelectedItem="{Binding SelectedSlot[12]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[12].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                            Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="13" PLCAddress="M2411"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="13" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="13" PLCAddress="M2413"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="13" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[12].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="13" PLCAddress="M2408"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[12].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+
+                 <!--ModuleArm 14-->  
+                <GroupBox MinWidth="200" Background="Transparent"
+                      hc:TitleElement.Background="{Binding EquipRobots[13].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic14}" />
+                                        <Binding Source="14" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                        extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                            Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                            Command="{Binding AutoModeOnCommand}"
+                            CommandParameter="14">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[13].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding ArmSource}"
+                                SelectedItem="{Binding SelectedArms[13]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding ActionSource}"
+                                SelectedItem="{Binding SelectedActions[13]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding PositionSource}"
+                                SelectedItem="{Binding SelectedPositions[13]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[13]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[13].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="14" PLCAddress="M2459"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="14" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="14" PLCAddress="M2461"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="14" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[13].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="14" PLCAddress="M2456"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[13].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+                
+                 <!--ModuleArm 15--> 
+                <GroupBox MinWidth="200" Background="Transparent"
+                    hc:TitleElement.Background="{Binding EquipRobots[14].HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                    Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                    <GroupBox.Header>
+                        <StackPanel>
+                            <TextBlock Padding="5" Foreground="White">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                                        <Binding Source="{lex:Loc Robotic15}" />
+                                        <Binding Source="15" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <Grid extensions:GridHelpers.ColumnDefinitions="*, *, *"
+                        extensions:GridHelpers.RowDefinitions="*, *, *, *, *, *, *, *, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 0 10 0"
+                                Text="{lex:Loc AutoMode}" Foreground="Black" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonPrimary}"
+                                Command="{Binding AutoModeOnCommand}"
+                                CommandParameter="15">
+                            <Button.Content>
+                                <TextBlock Text="{Binding RoboticArm[14].AutoMode, Converter={StaticResource OnOffStateConverter}}" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Arm}" Foreground="Black" />
+                        <ComboBox MinWidth="100" Height="20" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                ItemsSource="{Binding ArmSource}"
+                                SelectedItem="{Binding SelectedArms[14]}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Action}" Foreground="Black" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                 ItemsSource="{Binding ActionSource}"
+                                 SelectedItem="{Binding SelectedActions[14]}" />
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Position}" Foreground="Black" />
+                        <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                 ItemsSource="{Binding PositionSource}"
+                                 SelectedItem="{Binding SelectedPositions[14]}" />
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{lex:Loc Slot}" Foreground="Black" />
+                        <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Height="20" MinWidth="100"
+                                ItemsSource="{Binding SlotSource}"
+                                SelectedItem="{Binding SelectedSlot[14]}" />
+
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="设备状态" Foreground="Black" />
+                        <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                   Text="{Binding EquipRobots[14].RobotStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc Run}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="RunCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="15" PLCAddress="M2507"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="0" Content="{lex:Loc Pause}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="PauseCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="15" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="1" Content="{lex:Loc Stop}"
+                                Style="{StaticResource ButtonDanger}">
+                            <Button.Command>
+                                <Binding Path="StopCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="15" PLCAddress="M2509"  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc Abort}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="AbortCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="15" PLCAddress=""  />
+                            </Button.CommandParameter>
+                        </Button>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="扫描状态" Foreground="Black" />
+                        <TextBlock Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0 0 10 0"
+                                Text="{Binding RoboticArm[14].ArmStatus}" Foreground="Black" />
+
+                        <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc Reset}"
+                                Style="{StaticResource ButtonPrimary}">
+                            <Button.Command>
+                                <Binding Path="ResetCommand" />
+                            </Button.Command>
+                            <Button.CommandParameter>
+                                <model:RoboticArm ArmId="15" PLCAddress="M2504"  />
+                            </Button.CommandParameter>
+                        </Button>
+                    
+                        <ScrollViewer Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3" MaxHeight="120" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding EquipRobots[14].StCtrlStatusPoints}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontSize="10" TextWrapping="Wrap" Foreground="Black" Margin="0,1,0,0"
+                                                   Visibility="{Binding Value, Mode=OneWay, Converter={StaticResource ObjectTrueToVisibilityConverter}}">
+                                            <Run Text="{Binding Name, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>

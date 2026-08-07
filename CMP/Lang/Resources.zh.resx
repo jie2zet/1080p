@@ -1,0 +1,1806 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EquipmentStates" xml:space="preserve">
+    <value>设备状态</value>
+  </data>
+  <data name="ProcessingState" xml:space="preserve">
+    <value>进度状态</value>
+  </data>
+  <data name="CommState" xml:space="preserve">
+    <value>CommState</value>
+  </data>
+  <data name="ControlState" xml:space="preserve">
+    <value>连接状态</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>英文</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="Executing" xml:space="preserve">
+    <value>执行中</value>
+  </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>连接中</value>
+  </data>
+  <data name="HostOffline" xml:space="preserve">
+    <value>主机离线</value>
+  </data>
+  <data name="CurrentScreen" xml:space="preserve">
+    <value>当前界面</value>
+  </data>
+  <data name="OperationsMain" xml:space="preserve">
+    <value>操作-主界面</value>
+  </data>
+  <data name="PolishBSideTransfer" xml:space="preserve">
+    <value>研磨B侧中转</value>
+  </data>
+  <data name="PolishBDoorOpen" xml:space="preserve">
+    <value>研磨B门开</value>
+  </data>
+  <data name="PolishBDoorClose" xml:space="preserve">
+    <value>研磨B门关</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>注销</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>修改密码</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>原密码</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>新密码</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>确认新密码</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Session" xml:space="preserve">
+    <value>会话</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>用户</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Mode" xml:space="preserve">
+    <value>模式</value>
+  </data>
+  <data name="Control" xml:space="preserve">
+    <value>控制</value>
+  </data>
+  <data name="Connected" xml:space="preserve">
+    <value>已连接</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>观察</value>
+  </data>
+  <data name="Exclusive" xml:space="preserve">
+    <value>专业</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>开启</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="SlotMaps" xml:space="preserve">
+    <value>扫片图</value>
+  </data>
+  <data name="Recipes" xml:space="preserve">
+    <value>配方</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>服务</value>
+  </data>
+  <data name="Configuration" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="Warn" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Management" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="SequenceRecipeEditor" xml:space="preserve">
+    <value>流程配方编辑</value>
+  </data>
+  <data name="ProcessRecipeEditor" xml:space="preserve">
+    <value>工艺配方编辑</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>主机</value>
+  </data>
+  <data name="RecipeEditor" xml:space="preserve">
+    <value>配方编辑</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Insert" xml:space="preserve">
+    <value>插入</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="UnitRecipes" xml:space="preserve">
+    <value>模块配方</value>
+  </data>
+  <data name="TotalRecipes" xml:space="preserve">
+    <value>总体配方</value>
+  </data>
+  <data name="NewStepSuccessInfo" xml:space="preserve">
+    <value>已粘贴新步骤至末尾</value>
+  </data>
+  <data name="SaveRecipeSuccessInfo" xml:space="preserve">
+    <value>方案已成功保存</value>
+  </data>
+  <data name="PasteStepSuccessInfo" xml:space="preserve">
+    <value>粘贴成功</value>
+  </data>
+  <data name="PleaseInput" xml:space="preserve">
+    <value>请输入</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="AddSuccessfully" xml:space="preserve">
+    <value>添加成功</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>确定是否要删除？</value>
+  </data>
+  <data name="PolishUnit" xml:space="preserve">
+    <value>研磨单元</value>
+  </data>
+  <data name="AChamber" xml:space="preserve">
+    <value>腔室</value>
+  </data>
+  <data name="Slurry1" xml:space="preserve">
+    <value>研磨液1</value>
+  </data>
+  <data name="Slurry2" xml:space="preserve">
+    <value>研磨液2</value>
+  </data>
+  <data name="Slurry3" xml:space="preserve">
+    <value>研磨液3</value>
+  </data>
+  <data name="Slurry4" xml:space="preserve">
+    <value>研磨液4</value>
+  </data>
+  <data name="Polish" xml:space="preserve">
+    <value>抛光</value>
+  </data>
+  <data name="Step" xml:space="preserve">
+    <value>步骤</value>
+  </data>
+  <data name="Load" xml:space="preserve">
+    <value>装载</value>
+  </data>
+  <data name="Condition" xml:space="preserve">
+    <value>条件</value>
+  </data>
+  <data name="Unload" xml:space="preserve">
+    <value>卸载</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="Abort" xml:space="preserve">
+    <value>急停</value>
+  </data>
+  <data name="PlatenMotor" xml:space="preserve">
+    <value>平面电机</value>
+  </data>
+  <data name="SetVel" xml:space="preserve">
+    <value>设置速度</value>
+  </data>
+  <data name="SetAcc" xml:space="preserve">
+    <value>设置加速度</value>
+  </data>
+  <data name="HeadRotateMotor" xml:space="preserve">
+    <value>抛光头电机</value>
+  </data>
+  <data name="Slurry" xml:space="preserve">
+    <value>研磨液</value>
+  </data>
+  <data name="Liquid" xml:space="preserve">
+    <value>液体</value>
+  </data>
+  <data name="HPR" xml:space="preserve">
+    <value>高压冲洗</value>
+  </data>
+  <data name="SlurryPurge" xml:space="preserve">
+    <value>浆料清洗</value>
+  </data>
+  <data name="CoolingWater" xml:space="preserve">
+    <value>冷却液</value>
+  </data>
+  <data name="SlurrySweepMotor" xml:space="preserve">
+    <value>浆料清扫电机</value>
+  </data>
+  <data name="SetPos" xml:space="preserve">
+    <value>设置位置</value>
+  </data>
+  <data name="HeadSweepMotor" xml:space="preserve">
+    <value>抛光头扫动电机</value>
+  </data>
+  <data name="ConditionSweepMotor" xml:space="preserve">
+    <value>工况清扫电机</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="TerminalServices" xml:space="preserve">
+    <value>终端服务</value>
+  </data>
+  <data name="LocalJobs" xml:space="preserve">
+    <value>本地计划</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>主要</value>
+  </data>
+  <data name="Pen" xml:space="preserve">
+    <value>笔</value>
+  </data>
+  <data name="PenHeadMotor" xml:space="preserve">
+    <value>Pen Head Motor</value>
+  </data>
+  <data name="WaferRotateMotor" xml:space="preserve">
+    <value>晶圆旋转电机</value>
+  </data>
+  <data name="Resource" xml:space="preserve">
+    <value>资源</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="Chemical" xml:space="preserve">
+    <value>化学物</value>
+  </data>
+  <data name="PenClean" xml:space="preserve">
+    <value>笔清洗</value>
+  </data>
+  <data name="Brush" xml:space="preserve">
+    <value>Brush</value>
+  </data>
+  <data name="BrushChamber" xml:space="preserve">
+    <value>Brush Chamber</value>
+  </data>
+  <data name="AboveRollerMotor" xml:space="preserve">
+    <value>Above Roller Motor</value>
+  </data>
+  <data name="BeneathRollerMotor" xml:space="preserve">
+    <value>修正器头</value>
+  </data>
+  <data name="Clamp" xml:space="preserve">
+    <value>夹紧</value>
+  </data>
+  <data name="Release" xml:space="preserve">
+    <value>释放</value>
+  </data>
+  <data name="Alarm" xml:space="preserve">
+    <value>报警</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="RoboticArm" xml:space="preserve">
+    <value>机械手 {0}</value>
+  </data>
+  <data name="AutoMode" xml:space="preserve">
+    <value>自动模式</value>
+  </data>
+  <data name="Arm" xml:space="preserve">
+    <value>机械臂</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>动作</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>运行</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>槽位</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>原点</value>
+  </data>
+  <data name="JogPlus" xml:space="preserve">
+    <value>正向微动</value>
+  </data>
+  <data name="JogMinus" xml:space="preserve">
+    <value>负向微动</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>端口</value>
+  </data>
+  <data name="Connect" xml:space="preserve">
+    <value>连接</value>
+  </data>
+  <data name="InvalidIpAddressFormat" xml:space="preserve">
+    <value>无效的IP地址</value>
+  </data>
+  <data name="InvalidPortNumber" xml:space="preserve">
+    <value>无效的端口</value>
+  </data>
+  <data name="Disconnect" xml:space="preserve">
+    <value>断开连接</value>
+  </data>
+  <data name="ConnectionSuccessful" xml:space="preserve">
+    <value>连接成功</value>
+  </data>
+  <data name="ConnectionFailed" xml:space="preserve">
+    <value>连接失败</value>
+  </data>
+  <data name="DisconnectionSuccessful" xml:space="preserve">
+    <value>断开成功</value>
+  </data>
+  <data name="PolishSideMode" xml:space="preserve">
+    <value>抛光侧模式</value>
+  </data>
+  <data name="PolishBSideMode" xml:space="preserve">
+    <value>抛光B侧模式</value>
+  </data>
+  <data name="PolishASideMode" xml:space="preserve">
+    <value>抛光A侧模式</value>
+  </data>
+  <data name="ASide" xml:space="preserve">
+    <value>A测</value>
+  </data>
+  <data name="BSide" xml:space="preserve">
+    <value>B Side</value>
+  </data>
+  <data name="PolishFormat" xml:space="preserve">
+    <value>抛光 {0}</value>
+  </data>
+  <data name="Recipe" xml:space="preserve">
+    <value>配方</value>
+  </data>
+  <data name="RollerFormat" xml:space="preserve">
+    <value>Roller {0}</value>
+  </data>
+  <data name="PenFormat" xml:space="preserve">
+    <value>Pen {0}</value>
+  </data>
+  <data name="DryFormat" xml:space="preserve">
+    <value>Dry {0}</value>
+  </data>
+  <data name="CleanASideRollerMode" xml:space="preserve">
+    <value>Clean A Side Roller Mode</value>
+  </data>
+  <data name="CleanBSideRollerMode" xml:space="preserve">
+    <value>Clean B Side Roller Mode</value>
+  </data>
+  <data name="CleanSideMode" xml:space="preserve">
+    <value>Clean Side Mode</value>
+  </data>
+  <data name="CleanASidePenMode" xml:space="preserve">
+    <value>Clean A Side Pen Mode</value>
+  </data>
+  <data name="CleanBSidePenMode" xml:space="preserve">
+    <value>Clean B Side Pen Mode</value>
+  </data>
+  <data name="CleanASideDry" xml:space="preserve">
+    <value>Clean A Side Dry</value>
+  </data>
+  <data name="CleanBSideDry" xml:space="preserve">
+    <value>Clean B Side Dry</value>
+  </data>
+  <data name="Dry" xml:space="preserve">
+    <value>Dry</value>
+  </data>
+  <data name="CleanFormat" xml:space="preserve">
+    <value>Clean {0}</value>
+  </data>
+  <data name="SerialPort" xml:space="preserve">
+    <value>串口</value>
+  </data>
+  <data name="TypeNewPlanName" xml:space="preserve">
+    <value>请输入新方案名称</value>
+  </data>
+  <data name="SaveSuccessful" xml:space="preserve">
+    <value>保存成功</value>
+  </data>
+  <data name="NameExists" xml:space="preserve">
+    <value>名称已存在，请使用其他名称。</value>
+  </data>
+  <data name="Renamed" xml:space="preserve">
+    <value>已重命名</value>
+  </data>
+  <data name="UserManage" xml:space="preserve">
+    <value>用户管理</value>
+  </data>
+  <data name="UserData" xml:space="preserve">
+    <value>用户数据</value>
+  </data>
+  <data name="LoadPort" xml:space="preserve">
+    <value>晶圆装载口 {0}</value>
+  </data>
+  <data name="Dock" xml:space="preserve">
+    <value>对接</value>
+  </data>
+  <data name="UnDock" xml:space="preserve">
+    <value>取消对接</value>
+  </data>
+  <data name="Latch" xml:space="preserve">
+    <value>锁定</value>
+  </data>
+  <data name="UnLatch" xml:space="preserve">
+    <value>解除锁定</value>
+  </data>
+  <data name="Mapping" xml:space="preserve">
+    <value>扫片</value>
+  </data>
+  <data name="UnClamp" xml:space="preserve">
+    <value>解除夹紧</value>
+  </data>
+  <data name="Vacc" xml:space="preserve">
+    <value>真空</value>
+  </data>
+  <data name="UnVacc" xml:space="preserve">
+    <value>卸载真空</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="LoadPortUnit" xml:space="preserve">
+    <value>晶圆装载单元</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="DeleteRootNodeTip" xml:space="preserve">
+    <value>不能删除根节点</value>
+  </data>
+  <data name="FolderRenameFailedTip" xml:space="preserve">
+    <value>此文档已存在，重命名失败！</value>
+  </data>
+  <data name="FileRenameFailedTip" xml:space="preserve">
+    <value>此文件已存在，重命名失败！</value>
+  </data>
+  <data name="Initialize" xml:space="preserve">
+    <value>初始化</value>
+  </data>
+  <data name="Press" xml:space="preserve">
+    <value>加压</value>
+  </data>
+  <data name="ManualMode" xml:space="preserve">
+    <value>手动模式</value>
+  </data>
+  <data name="Vent" xml:space="preserve">
+    <value>排气</value>
+  </data>
+  <data name="Servo" xml:space="preserve">
+    <value>伺服</value>
+  </data>
+  <data name="TurnOn" xml:space="preserve">
+    <value>开启</value>
+  </data>
+  <data name="TurnOff" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ActVel" xml:space="preserve">
+    <value>实际速度</value>
+  </data>
+  <data name="ActPos" xml:space="preserve">
+    <value>实际位置</value>
+  </data>
+  <data name="Pre_Cond" xml:space="preserve">
+    <value>前修正</value>
+  </data>
+  <data name="BreakIn" xml:space="preserve">
+    <value>修正</value>
+  </data>
+  <data name="PolishA" xml:space="preserve">
+    <value>抛光单元A</value>
+  </data>
+  <data name="Roller1" xml:space="preserve">
+    <value>辊清洗1</value>
+  </data>
+  <data name="Roller2" xml:space="preserve">
+    <value>辊清洗2</value>
+  </data>
+  <data name="Roller3" xml:space="preserve">
+    <value>辊清洗3</value>
+  </data>
+  <data name="Pen1" xml:space="preserve">
+    <value>笔清洗1</value>
+  </data>
+  <data name="Pen2" xml:space="preserve">
+    <value>笔清洗2</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>清错</value>
+  </data>
+  <data name="ORG" xml:space="preserve">
+    <value>初始位</value>
+  </data>
+  <data name="Save as" xml:space="preserve">
+    <value>另存为</value>
+  </data>
+  <data name="Cal" xml:space="preserve">
+    <value>校准</value>
+  </data>
+  <data name="Up" xml:space="preserve">
+    <value>上升</value>
+  </data>
+  <data name="Down" xml:space="preserve">
+    <value>下降</value>
+  </data>
+  <data name="AnyPos" xml:space="preserve">
+    <value>任意位置</value>
+  </data>
+  <data name="Edge1" xml:space="preserve">
+    <value>边缘1</value>
+  </data>
+  <data name="Edge2" xml:space="preserve">
+    <value>边缘2</value>
+  </data>
+  <data name="Trim" xml:space="preserve">
+    <value>修整</value>
+  </data>
+  <data name="Center" xml:space="preserve">
+    <value>中心</value>
+  </data>
+  <data name="Flow" xml:space="preserve">
+    <value>流量</value>
+  </data>
+  <data name="TestRecipe" xml:space="preserve">
+    <value>测试配方</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="ChuckRotationMotor" xml:space="preserve">
+    <value>晶圆旋转电机</value>
+  </data>
+  <data name="PenArmSweepMotor" xml:space="preserve">
+    <value>清洗手臂摆动电机</value>
+  </data>
+  <data name="PenRotationMotor" xml:space="preserve">
+    <value>笔头旋转电机</value>
+  </data>
+  <data name="CylinderControl" xml:space="preserve">
+    <value>气缸控制</value>
+  </data>
+  <data name="PressureControl" xml:space="preserve">
+    <value>压力控制</value>
+  </data>
+  <data name="GasControl" xml:space="preserve">
+    <value>气体控制</value>
+  </data>
+  <data name="AutoRun" xml:space="preserve">
+    <value>自动运行</value>
+  </data>
+  <data name="AutoReturn" xml:space="preserve">
+    <value>自动返回</value>
+  </data>
+  <data name="Roller" xml:space="preserve">
+    <value>辊清洗</value>
+  </data>
+  <data name="ArmSwingMotor" xml:space="preserve">
+    <value>手臂摆动电机</value>
+  </data>
+  <data name="GasControl1" xml:space="preserve">
+    <value>气体控制 1</value>
+  </data>
+  <data name="GasControl2" xml:space="preserve">
+    <value>气体控制 2</value>
+  </data>
+  <data name="LiquidControl1" xml:space="preserve">
+    <value>液体控制 1</value>
+  </data>
+  <data name="LiquidControl2" xml:space="preserve">
+    <value>液体控制 2</value>
+  </data>
+  <data name="N2MixOutlet" xml:space="preserve">
+    <value>氮气混合出口</value>
+  </data>
+  <data name="N2Flow" xml:space="preserve">
+    <value>氮气流量</value>
+  </data>
+  <data name="WFUpperN2" xml:space="preserve">
+    <value>晶圆上表面氮气</value>
+  </data>
+  <data name="N2FlowWafer" xml:space="preserve">
+    <value>吹晶圆氮气流量</value>
+  </data>
+  <data name="WFLowerN21" xml:space="preserve">
+    <value>晶圆下表面氮气 1</value>
+  </data>
+  <data name="N2FlowLower" xml:space="preserve">
+    <value>下表面氮气流量</value>
+  </data>
+  <data name="N2Release" xml:space="preserve">
+    <value>氮气释放</value>
+  </data>
+  <data name="WFUpperIPA" xml:space="preserve">
+    <value>晶圆上表面IPA</value>
+  </data>
+  <data name="WFLowerN22" xml:space="preserve">
+    <value>晶圆下表面氮气 2</value>
+  </data>
+  <data name="DIWInlet2" xml:space="preserve">
+    <value>纯水入口 2</value>
+  </data>
+  <data name="DIWOutlet2" xml:space="preserve">
+    <value>纯水出口 2</value>
+  </data>
+  <data name="DIWFlow2" xml:space="preserve">
+    <value>纯水流量 2</value>
+  </data>
+  <data name="IPASupply" xml:space="preserve">
+    <value>IPA供应</value>
+  </data>
+  <data name="DIWInlet1" xml:space="preserve">
+    <value>纯水入口 1</value>
+  </data>
+  <data name="DIWOutlet1" xml:space="preserve">
+    <value>纯水出口 1</value>
+  </data>
+  <data name="LowerDIW" xml:space="preserve">
+    <value>下表面纯水</value>
+  </data>
+  <data name="WFClamp" xml:space="preserve">
+    <value>晶圆夹紧</value>
+  </data>
+  <data name="WaferInlet" xml:space="preserve">
+    <value>晶圆入口</value>
+  </data>
+  <data name="WaferOutlet" xml:space="preserve">
+    <value>晶圆出口</value>
+  </data>
+  <data name="ChuckRotationMotorDesc" xml:space="preserve">
+    <value>晶圆旋转电机</value>
+  </data>
+  <data name="ArmSwingMotorDesc" xml:space="preserve">
+    <value>手臂摆动电机</value>
+  </data>
+  <data name="WFClampDesc" xml:space="preserve">
+    <value>晶圆夹子气缸</value>
+  </data>
+  <data name="WaferInletDesc" xml:space="preserve">
+    <value>入晶圆门</value>
+  </data>
+  <data name="WaferOutletDesc" xml:space="preserve">
+    <value>出晶圆门</value>
+  </data>
+  <data name="N2MixOutletDesc" xml:space="preserve">
+    <value>氮气感应(入罐前阀)</value>
+  </data>
+  <data name="N2FlowDesc" xml:space="preserve">
+    <value>氮气流量控制(入罐前)</value>
+  </data>
+  <data name="WFUpperN2Desc" xml:space="preserve">
+    <value>氮气供应吹晶圆上表面阀</value>
+  </data>
+  <data name="N2FlowWaferDesc" xml:space="preserve">
+    <value>氮气流量控制吹晶圆</value>
+  </data>
+  <data name="WFLowerN21Desc" xml:space="preserve">
+    <value>氮气1路晶圆下表面吹氮气阀</value>
+  </data>
+  <data name="N2FlowLowerDesc" xml:space="preserve">
+    <value>晶圆下表面吹氮气流量控制</value>
+  </data>
+  <data name="N2ReleaseDesc" xml:space="preserve">
+    <value>罐内充氮气排压阀</value>
+  </data>
+  <data name="WFUpperIPADesc" xml:space="preserve">
+    <value>IPA气体供应阀(出罐)吹晶圆上表面</value>
+  </data>
+  <data name="WFLowerN22Desc" xml:space="preserve">
+    <value>氮气2路晶圆下表面吹氮气阀</value>
+  </data>
+  <data name="DIWInlet2Desc" xml:space="preserve">
+    <value>纯水2路晶圆上表面冲洗阀流量控制器前</value>
+  </data>
+  <data name="DIWOutlet2Desc" xml:space="preserve">
+    <value>纯水2路晶圆上表面冲洗阀流量控制器后</value>
+  </data>
+  <data name="DIWFlow2Desc" xml:space="preserve">
+    <value>晶圆上表面冲洗流量控制</value>
+  </data>
+  <data name="IPASupplyDesc" xml:space="preserve">
+    <value>IPA供应(入罐前)阀</value>
+  </data>
+  <data name="DIWInlet1Desc" xml:space="preserve">
+    <value>纯水1路晶圆上表面冲洗阀流量控制器前</value>
+  </data>
+  <data name="DIWOutlet1Desc" xml:space="preserve">
+    <value>纯水1路晶圆上表面冲洗阀流量控制器后</value>
+  </data>
+  <data name="LowerDIWDesc" xml:space="preserve">
+    <value>纯水3路晶圆下表面冲洗阀</value>
+  </data>
+  <data name="Cylinder" xml:space="preserve">
+    <value>气缸</value>
+  </data>
+  <data name="Condition Head" xml:space="preserve">
+    <value>条件头</value>
+  </data>
+  <data name="Platen Breakwater" xml:space="preserve">
+    <value>当水圈</value>
+  </data>
+  <data name="Disk Pressure" xml:space="preserve">
+    <value>修整头压力</value>
+  </data>
+  <data name="ResetAlarm" xml:space="preserve">
+    <value>报警恢复</value>
+  </data>
+  <data name="Robotic1" xml:space="preserve">
+    <value>上/下料机器人</value>
+  </data>
+  <data name="Robotic15" xml:space="preserve">
+    <value>清洗B侧机器人2</value>
+  </data>
+  <data name="Robotic14" xml:space="preserve">
+    <value>清洗B侧机器人1</value>
+  </data>
+  <data name="Robotic13" xml:space="preserve">
+    <value>清洗A侧机器人2</value>
+  </data>
+  <data name="Robotic12" xml:space="preserve">
+    <value>清洗A侧机器人1</value>
+  </data>
+  <data name="Robotic11" xml:space="preserve">
+    <value>研磨B侧 LTP6</value>
+  </data>
+  <data name="Robotic10" xml:space="preserve">
+    <value>研磨B侧 LTP5</value>
+  </data>
+  <data name="Robotic9" xml:space="preserve">
+    <value>研磨B侧 LTP4</value>
+  </data>
+  <data name="Robotic8" xml:space="preserve">
+    <value>研磨B侧中转模组</value>
+  </data>
+  <data name="Robotic7" xml:space="preserve">
+    <value>研磨A侧 LTP3</value>
+  </data>
+  <data name="Robotic6" xml:space="preserve">
+    <value>研磨A侧 LTP2</value>
+  </data>
+  <data name="Robotic5" xml:space="preserve">
+    <value>研磨A侧 LTP1</value>
+  </data>
+  <data name="Robotic4" xml:space="preserve">
+    <value>研磨A侧中转模组</value>
+  </data>
+  <data name="Robotic3" xml:space="preserve">
+    <value>中转机器人</value>
+  </data>
+  <data name="Robotic2" xml:space="preserve">
+    <value>中转模组</value>
+  </data>
+  <data name="PolishB" xml:space="preserve">
+    <value>抛光单元B</value>
+  </data>
+  <data name="PolishC" xml:space="preserve">
+    <value>抛光单元C</value>
+  </data>
+  <data name="PolishD" xml:space="preserve">
+    <value>抛光单元D</value>
+  </data>
+  <data name="RollerA1" xml:space="preserve">
+    <value>辊清洗A1</value>
+  </data>
+  <data name="RollerA2" xml:space="preserve">
+    <value>辊清洗A2</value>
+  </data>
+  <data name="RollerA3" xml:space="preserve">
+    <value>辊清洗A3</value>
+  </data>
+  <data name="RollerB2" xml:space="preserve">
+    <value>辊清洗B2</value>
+  </data>
+  <data name="RollerB1" xml:space="preserve">
+    <value>辊清洗B1</value>
+  </data>
+  <data name="RollerB3" xml:space="preserve">
+    <value>辊清洗B3</value>
+  </data>
+  <data name="PenA2" xml:space="preserve">
+    <value>笔清洗A2</value>
+  </data>
+  <data name="PenA1" xml:space="preserve">
+    <value>笔清洗A1</value>
+  </data>
+  <data name="PenB2" xml:space="preserve">
+    <value>笔清洗B2</value>
+  </data>
+  <data name="PenB1" xml:space="preserve">
+    <value>笔清洗B1</value>
+  </data>
+  <data name="DryA" xml:space="preserve">
+    <value>干燥A</value>
+  </data>
+  <data name="DryB" xml:space="preserve">
+    <value>干燥B</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>离线</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>上线</value>
+  </data>
+  <data name="WaferCount" xml:space="preserve">
+    <value>晶圆片数</value>
+  </data>
+  <data name="UsedTime" xml:space="preserve">
+    <value>使用时间</value>
+  </data>
+  <data name="UpdateTime" xml:space="preserve">
+    <value>更新时间</value>
+  </data>
+  <data name="RatainerRing" xml:space="preserve">
+    <value>保持环</value>
+  </data>
+  <data name="Membrance" xml:space="preserve">
+    <value>气膜</value>
+  </data>
+  <data name="Pad" xml:space="preserve">
+    <value>抛光垫</value>
+  </data>
+  <data name="Disk" xml:space="preserve">
+    <value>修整器盘</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="UpperRoller" xml:space="preserve">
+    <value>上辊轮</value>
+  </data>
+  <data name="LowerRoller" xml:space="preserve">
+    <value>下辊轮</value>
+  </data>
+  <data name="Sponge" xml:space="preserve">
+    <value>笔海绵</value>
+  </data>
+  <data name="Consumable" xml:space="preserve">
+    <value>耗材</value>
+  </data>
+  <data name="DIWOulet" xml:space="preserve">
+    <value>去离子水出口</value>
+  </data>
+  <data name="PlatenWash" xml:space="preserve">
+    <value>大盘清洗</value>
+  </data>
+  <data name="MovingHeadDIWWash" xml:space="preserve">
+    <value>移动头水洗</value>
+  </data>
+  <data name="MovingHeadExternalDIWWash" xml:space="preserve">
+    <value>移动头外部水洗</value>
+  </data>
+  <data name="HeadChemicalWash" xml:space="preserve">
+    <value>抛光头化学洗</value>
+  </data>
+  <data name="ConditionerDIWWash" xml:space="preserve">
+    <value>修整器水洗</value>
+  </data>
+  <data name="ConditionerArmDIWWash" xml:space="preserve">
+    <value>修整器臂水洗</value>
+  </data>
+  <data name="SlurryArmDIWWash" xml:space="preserve">
+    <value>研磨液臂清洗</value>
+  </data>
+  <data name="HeadMiddleWash" xml:space="preserve">
+    <value>抛光头中部清洗</value>
+  </data>
+  <data name="HeadExternalWash" xml:space="preserve">
+    <value>抛光头外部清洗</value>
+  </data>
+  <data name="WFUpperChemicalWash" xml:space="preserve">
+    <value>晶圆上表面化学洗</value>
+  </data>
+  <data name="WFUpperDIWWash" xml:space="preserve">
+    <value>晶圆上表面水洗</value>
+  </data>
+  <data name="WFLowerChemicalWash" xml:space="preserve">
+    <value>晶圆下表面化学洗</value>
+  </data>
+  <data name="WFLowerDIWWash" xml:space="preserve">
+    <value>晶圆下表面水洗</value>
+  </data>
+  <data name="PlatenCool" xml:space="preserve">
+    <value>大盘冷却水</value>
+  </data>
+  <data name="PlatenMotorCool" xml:space="preserve">
+    <value>盘电机冷却水</value>
+  </data>
+  <data name="EquipmentConstants" xml:space="preserve">
+    <value>设备常量</value>
+  </data>
+  <data name="ZoneCalibration" xml:space="preserve">
+    <value>气压校准</value>
+  </data>
+  <data name="StopLoad" xml:space="preserve">
+    <value>停止入料</value>
+  </data>
+  <data name="EFEMRobot" xml:space="preserve">
+    <value>EFEM机械手</value>
+  </data>
+  <data name="CleanBRobot1" xml:space="preserve">
+    <value>清洗B机械手1</value>
+  </data>
+  <data name="TransferBuffer" xml:space="preserve">
+    <value>移动暂存位</value>
+  </data>
+  <data name="CleanBRobot2" xml:space="preserve">
+    <value>清洗B机械手2</value>
+  </data>
+  <data name="CleanARobot2" xml:space="preserve">
+    <value>清洗A机械手2</value>
+  </data>
+  <data name="CleanARobot1" xml:space="preserve">
+    <value>清洗A机械手1</value>
+  </data>
+  <data name="TransRobot" xml:space="preserve">
+    <value>中转机械手</value>
+  </data>
+  <data name="FixBufferB" xml:space="preserve">
+    <value>固定暂存位B</value>
+  </data>
+  <data name="LPTB1" xml:space="preserve">
+    <value>传送位B1</value>
+  </data>
+  <data name="LPTB3" xml:space="preserve">
+    <value>传送位B3</value>
+  </data>
+  <data name="LPTB2" xml:space="preserve">
+    <value>传送位B2</value>
+  </data>
+  <data name="LPTA1" xml:space="preserve">
+    <value>传送位A1</value>
+  </data>
+  <data name="LPTA3" xml:space="preserve">
+    <value>传送位A3</value>
+  </data>
+  <data name="LPTA2" xml:space="preserve">
+    <value>传送位A2</value>
+  </data>
+  <data name="FixBufferA" xml:space="preserve">
+    <value>固定暂存位A</value>
+  </data>
+  <data name="PolishExsituFormat" xml:space="preserve">
+    <value>Polish {0} Exsitu</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>确认要退出程序吗？</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>二次确认</value>
+  </data>
+  <data name="ApplicationAlreadyRunning" xml:space="preserve">
+    <value>应用程序已经运行</value>
+  </data>
+  <data name="AppAlreadyRunningTips" xml:space="preserve">
+    <value>应用程序正在运行，请勿重复打开！</value>
+  </data>
+  <data name="HomePos" xml:space="preserve">
+    <value>原点</value>
+  </data>
+  <data name="PolishNearPos" xml:space="preserve">
+    <value>抛光近</value>
+  </data>
+  <data name="PolishFarPos" xml:space="preserve">
+    <value>抛光远</value>
+  </data>
+  <data name="DechuckPos" xml:space="preserve">
+    <value>卸片</value>
+  </data>
+  <data name="HighPos" xml:space="preserve">
+    <value>高位置</value>
+  </data>
+  <data name="LoadCupPos" xml:space="preserve">
+    <value>装杯</value>
+  </data>
+  <data name="PolishPos" xml:space="preserve">
+    <value>抛光</value>
+  </data>
+  <data name="CleanPos" xml:space="preserve">
+    <value>清洁</value>
+  </data>
+  <data name="StartPos" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="EndPos" xml:space="preserve">
+    <value>结束</value>
+  </data>
+  <data name="SlurryPos" xml:space="preserve">
+    <value>研磨液</value>
+  </data>
+  <data name="RobotControl" xml:space="preserve">
+    <value>机器人控制</value>
+  </data>
+  <data name="FeedingRobotAndPosition" xml:space="preserve">
+    <value>上料机器人和位置</value>
+  </data>
+  <data name="StationOperation" xml:space="preserve">
+    <value>工位操作</value>
+  </data>
+  <data name="AxisPositionAdjustment" xml:space="preserve">
+    <value>轴位置调整和设定</value>
+  </data>
+  <data name="JogSpeed" xml:space="preserve">
+    <value>JOG速度</value>
+  </data>
+  <data name="AutoSpeed" xml:space="preserve">
+    <value>自动速度</value>
+  </data>
+  <data name="CurrentCoordinate" xml:space="preserve">
+    <value>当前坐标</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="MiddleModule" xml:space="preserve">
+    <value>中间模组</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>使能</value>
+  </data>
+  <data name="DriverAlarm" xml:space="preserve">
+    <value>驱动器报警</value>
+  </data>
+  <data name="LimitAlarm" xml:space="preserve">
+    <value>限位报警</value>
+  </data>
+  <data name="Origin" xml:space="preserve">
+    <value>原点</value>
+  </data>
+  <data name="ProgramNumber" xml:space="preserve">
+    <value>程序编号</value>
+  </data>
+  <data name="WorkAreaNumber" xml:space="preserve">
+    <value>工作区编号</value>
+  </data>
+  <data name="ModulePosition" xml:space="preserve">
+    <value>模组位置</value>
+  </data>
+  <data name="WorkAreaPickup" xml:space="preserve">
+    <value>工作区取料</value>
+  </data>
+  <data name="WorkAreaPlace" xml:space="preserve">
+    <value>工作区放料</value>
+  </data>
+  <data name="WaitConfirm" xml:space="preserve">
+    <value>等待确认</value>
+  </data>
+  <data name="UseUpperArm" xml:space="preserve">
+    <value>使用上臂</value>
+  </data>
+  <data name="UseLowerArm" xml:space="preserve">
+    <value>使用下臂</value>
+  </data>
+  <data name="ConfirmSwitch" xml:space="preserve">
+    <value>确认开关</value>
+  </data>
+  <data name="BoxNumber" xml:space="preserve">
+    <value>料盒号</value>
+  </data>
+  <data name="LayerCount" xml:space="preserve">
+    <value>层数</value>
+  </data>
+  <data name="BoxPickup" xml:space="preserve">
+    <value>料盒取料</value>
+  </data>
+  <data name="BoxPlace" xml:space="preserve">
+    <value>料盒放料</value>
+  </data>
+  <data name="FlipTo0" xml:space="preserve">
+    <value>翻转到0度</value>
+  </data>
+  <data name="FlipTo180" xml:space="preserve">
+    <value>翻转到180</value>
+  </data>
+  <data name="UpperArmSensor" xml:space="preserve">
+    <value>上臂感应</value>
+  </data>
+  <data name="LowerArmSensor" xml:space="preserve">
+    <value>下臂感应</value>
+  </data>
+  <data name="CommandAccepted" xml:space="preserve">
+    <value>命令接受</value>
+  </data>
+  <data name="RobotSafePosition" xml:space="preserve">
+    <value>机器人安全位</value>
+  </data>
+  <data name="CacheBody" xml:space="preserve">
+    <value>缓存腔体</value>
+  </data>
+  <data name="CacheBodyA" xml:space="preserve">
+    <value>A缓存腔体</value>
+  </data>
+  <data name="CacheBodyB" xml:space="preserve">
+    <value>B缓存腔体</value>
+  </data>
+  <data name="CacheDoorOpen" xml:space="preserve">
+    <value>缓存门开</value>
+  </data>
+  <data name="CacheDoorClose" xml:space="preserve">
+    <value>缓存门关</value>
+  </data>
+  <data name="Fiber1" xml:space="preserve">
+    <value>光纤1</value>
+  </data>
+  <data name="LiquidLevel" xml:space="preserve">
+    <value>液位</value>
+  </data>
+  <data name="DoorSwitch" xml:space="preserve">
+    <value>门开关</value>
+  </data>
+  <data name="EmergencyStop" xml:space="preserve">
+    <value>急停按下</value>
+  </data>
+  <data name="MainScreen" xml:space="preserve">
+    <value>主画面</value>
+  </data>
+  <data name="TransferModule" xml:space="preserve">
+    <value>传送模组</value>
+  </data>
+  <data name="TransferRobot" xml:space="preserve">
+    <value>中转机器人</value>
+  </data>
+  <data name="PolishASideTransfer" xml:space="preserve">
+    <value>研磨A侧中转</value>
+  </data>
+  <data name="PolishASideArm1" xml:space="preserve">
+    <value>研磨A侧手臂1</value>
+  </data>
+  <data name="PolishASideArm2" xml:space="preserve">
+    <value>研磨A侧手臂2</value>
+  </data>
+  <data name="PolishASideArm3" xml:space="preserve">
+    <value>研磨A侧手臂3</value>
+  </data>
+  <data name="PolishBSideArm1" xml:space="preserve">
+    <value>研磨B侧手臂1</value>
+  </data>
+  <data name="PolishBSideArm2" xml:space="preserve">
+    <value>研磨B侧手臂2</value>
+  </data>
+  <data name="PolishBSideArm3" xml:space="preserve">
+    <value>研磨B侧手臂3</value>
+  </data>
+  <data name="CleanASideRobot1" xml:space="preserve">
+    <value>清洗A侧机器人1</value>
+  </data>
+  <data name="CleanASideRobot2" xml:space="preserve">
+    <value>清洗A侧机器人2</value>
+  </data>
+  <data name="CleanBSideRobot1" xml:space="preserve">
+    <value>清洗B侧机器人1</value>
+  </data>
+  <data name="CleanBSideRobot2" xml:space="preserve">
+    <value>清洗B侧机器人2</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="FeedingRobot" xml:space="preserve">
+    <value>上料机器人</value>
+  </data>
+  <data name="BoxOpener" xml:space="preserve">
+    <value>开盒机</value>
+  </data>
+  <data name="ModuleAlarm" xml:space="preserve">
+    <value>模块报警</value>
+  </data>
+  <data name="GlobalAlarm" xml:space="preserve">
+    <value>全局报警</value>
+  </data>
+  <data name="AlarmReset" xml:space="preserve">
+    <value>报警复位</value>
+  </data>
+  <data name="PickFromBox" xml:space="preserve">
+    <value>从料盒取料</value>
+  </data>
+  <data name="PlaceToModule" xml:space="preserve">
+    <value>放料到模组</value>
+  </data>
+  <data name="PickFromDryA" xml:space="preserve">
+    <value>从DryA取料</value>
+  </data>
+  <data name="PickFromDryB" xml:space="preserve">
+    <value>从DryB取料</value>
+  </data>
+  <data name="PlaceToBox" xml:space="preserve">
+    <value>放料到料盒</value>
+  </data>
+  <data name="SourceBox" xml:space="preserve">
+    <value>源料盒</value>
+  </data>
+  <data name="TargetBox" xml:space="preserve">
+    <value>目标料盒</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>传输</value>
+  </data>
+  <data name="Manual" xml:space="preserve">
+    <value>手动</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="Layer" xml:space="preserve">
+    <value>层数</value>
+  </data>
+  <data name="BoxNo" xml:space="preserve">
+    <value>料盒号</value>
+  </data>
+  <data name="BoxOpenerTitle" xml:space="preserve">
+    <value>晶圆开盒机</value>
+  </data>
+  <data name="Robot" xml:space="preserve">
+    <value>机器人</value>
+  </data>
+  <data name="Box1" xml:space="preserve">
+    <value>料盒1</value>
+  </data>
+  <data name="Box2" xml:space="preserve">
+    <value>料盒2</value>
+  </data>
+  <data name="Box3" xml:space="preserve">
+    <value>料盒3</value>
+  </data>
+  <data name="Box4" xml:space="preserve">
+    <value>料盒4</value>
+  </data>
+  <data name="Box5" xml:space="preserve">
+    <value>料盒5</value>
+  </data>
+  <data name="RobotSafePosition1" xml:space="preserve">
+    <value>机器人安全位1</value>
+  </data>
+  <data name="RollerA1orA2" xml:space="preserve">
+    <value>辊A1或辊A2</value>
+  </data>
+  <data name="StandbyPosition" xml:space="preserve">
+    <value>待机位</value>
+  </data>
+  <data name="TransferArmPosition" xml:space="preserve">
+    <value>中转手臂位</value>
+  </data>
+  <data name="PolishCPosition" xml:space="preserve">
+    <value>研磨C位</value>
+  </data>
+  <data name="PolishDPosition" xml:space="preserve">
+    <value>研磨D位</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x1" xml:space="preserve">
+    <value>B侧手臂1x轴位置设定</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z1" xml:space="preserve">
+    <value>B侧手臂1z轴位置设定</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x2" xml:space="preserve">
+    <value>B侧手臂2x轴位置设定</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-x3" xml:space="preserve">
+    <value>B侧手臂3x轴位置设定</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z2" xml:space="preserve">
+    <value>B侧手臂2z轴位置设定</value>
+  </data>
+  <data name="AxisPositionOfSideBArm-z3" xml:space="preserve">
+    <value>B侧手臂3z轴位置设定</value>
+  </data>
+  <data name="TransferModuleAndPosition" xml:space="preserve">
+    <value>传送模组及位置调整</value>
+  </data>
+  <data name="LoadPosition" xml:space="preserve">
+    <value>上料位</value>
+  </data>
+  <data name="UnloadPosition" xml:space="preserve">
+    <value>下料位</value>
+  </data>
+  <data name="SparePosition" xml:space="preserve">
+    <value>备用</value>
+  </data>
+  <data name="LoadOperation" xml:space="preserve">
+    <value>上料操作</value>
+  </data>
+  <data name="UnloadOperation" xml:space="preserve">
+    <value>下料操作</value>
+  </data>
+  <data name="ModuleLoading" xml:space="preserve">
+    <value>模组上料</value>
+  </data>
+  <data name="ModuleUnloading" xml:space="preserve">
+    <value>模组下料</value>
+  </data>
+  <data name="LoadDoorOpen" xml:space="preserve">
+    <value>入料门开</value>
+  </data>
+  <data name="LoadDoorClose" xml:space="preserve">
+    <value>入料门关</value>
+  </data>
+  <data name="SideDoorOpen" xml:space="preserve">
+    <value>侧门开</value>
+  </data>
+  <data name="SideDoorClose" xml:space="preserve">
+    <value>侧门关</value>
+  </data>
+  <data name="UnloadDoorOpen" xml:space="preserve">
+    <value>出料门开</value>
+  </data>
+  <data name="UnloadDoorClose" xml:space="preserve">
+    <value>出料门关</value>
+  </data>
+  <data name="ModulePickPosition" xml:space="preserve">
+    <value>模组取料位置</value>
+  </data>
+  <data name="TransferAPosition" xml:space="preserve">
+    <value>中转位A位置</value>
+  </data>
+  <data name="TransferBPosition" xml:space="preserve">
+    <value>中转位B位置</value>
+  </data>
+  <data name="RollerA1Position" xml:space="preserve">
+    <value>辊清洗A1位置</value>
+  </data>
+  <data name="RollerA2Position" xml:space="preserve">
+    <value>辊清洗A2位置</value>
+  </data>
+  <data name="RollerB1Position" xml:space="preserve">
+    <value>辊清洗B1位置</value>
+  </data>
+  <data name="RollerB2Position" xml:space="preserve">
+    <value>辊清洗B2位置</value>
+  </data>
+  <data name="ModulePick" xml:space="preserve">
+    <value>模组取料</value>
+  </data>
+  <data name="WorkAreaPick" xml:space="preserve">
+    <value>工作区取料</value>
+  </data>
+  <data name="TurnTo0" xml:space="preserve">
+    <value>翻转到0度</value>
+  </data>
+  <data name="TurnTo180" xml:space="preserve">
+    <value>翻转到180度</value>
+  </data>
+  <data name="CommandReceived" xml:space="preserve">
+    <value>命令已接收</value>
+  </data>
+  <data name="PickFromModule" xml:space="preserve">
+    <value>从模组取料</value>
+  </data>
+  <data name="PlaceToTransferA" xml:space="preserve">
+    <value>放料到中转位A</value>
+  </data>
+  <data name="PickFromTransferA" xml:space="preserve">
+    <value>从中转位A取料</value>
+  </data>
+  <data name="PlaceToTransferB" xml:space="preserve">
+    <value>放料到中转位B</value>
+  </data>
+  <data name="PickFromTransferB" xml:space="preserve">
+    <value>从中转位B取料</value>
+  </data>
+  <data name="PlaceToRollerA1" xml:space="preserve">
+    <value>放料到辊清洗A1</value>
+  </data>
+  <data name="PlaceToRollerA2" xml:space="preserve">
+    <value>放料到辊清洗A2</value>
+  </data>
+  <data name="PlaceToRollerB1" xml:space="preserve">
+    <value>放料到辊清洗B1</value>
+  </data>
+  <data name="PlaceToRollerB2" xml:space="preserve">
+    <value>放料到辊清洗B2</value>
+  </data>
+  <data name="RobotUpperArm" xml:space="preserve">
+    <value>Robot上手臂</value>
+  </data>
+  <data name="LtpPickPosition" xml:space="preserve">
+    <value>LTP取料位</value>
+  </data>
+  <data name="RobotLowerArm" xml:space="preserve">
+    <value>Robot下手臂</value>
+  </data>
+  <data name="LtpPlacePosition" xml:space="preserve">
+    <value>LTP放料位</value>
+  </data>
+  <data name="PickFromRobot2" xml:space="preserve">
+    <value>从Robot 2取</value>
+  </data>
+  <data name="PlaceToArm1" xml:space="preserve">
+    <value>放料到手臂1</value>
+  </data>
+  <data name="PlaceToArm2" xml:space="preserve">
+    <value>放料到手臂2</value>
+  </data>
+  <data name="PickFromArm3" xml:space="preserve">
+    <value>从手臂3取</value>
+  </data>
+  <data name="PlaceToRobot" xml:space="preserve">
+    <value>放料到机器人</value>
+  </data>
+  <data name="PickFromArm2" xml:space="preserve">
+    <value>从手臂2取</value>
+  </data>
+  <data name="ClampClose" xml:space="preserve">
+    <value>夹子夹紧</value>
+  </data>
+  <data name="ClampOpen" xml:space="preserve">
+    <value>夹子松开</value>
+  </data>
+  <data name="WaferDetection" xml:space="preserve">
+    <value>晶圆检测</value>
+  </data>
+  <data name="PolishADoorOpen" xml:space="preserve">
+    <value>研磨A门开</value>
+  </data>
+  <data name="PolishADoorClose" xml:space="preserve">
+    <value>研磨A门关</value>
+  </data>
+  <data name="PolishAPosition" xml:space="preserve">
+    <value>研磨A位</value>
+  </data>
+  <data name="PolishBPosition" xml:space="preserve">
+    <value>研磨B位</value>
+  </data>
+  <data name="PolishASideArm1XAxisPositionAdjustment" xml:space="preserve">
+    <value>A手臂1x轴位置设定</value>
+  </data>
+  <data name="PolishASideArm1ZAxisPositionAdjustment" xml:space="preserve">
+    <value>A侧手臂1z轴位置设定</value>
+  </data>
+  <data name="PickFromPolishA" xml:space="preserve">
+    <value>从PolishA取</value>
+  </data>
+  <data name="PickFromPolishB" xml:space="preserve">
+    <value>从PolishB取</value>
+  </data>
+  <data name="PlaceToTransferArm" xml:space="preserve">
+    <value>放到中转臂</value>
+  </data>
+  <data name="PickFromPolishBMaterial" xml:space="preserve">
+    <value>从PolishB取料</value>
+  </data>
+  <data name="PolishBLoadUnload" xml:space="preserve">
+    <value>PolishB上下料</value>
+  </data>
+  <data name="PickFromTransfer" xml:space="preserve">
+    <value>从中转取料</value>
+  </data>
+  <data name="PlaceToPolishA" xml:space="preserve">
+    <value>放入 Polish A</value>
+  </data>
+  <data name="PlaceToPolishB" xml:space="preserve">
+    <value>放入 Polish B</value>
+  </data>
+  <data name="Arm1Fiber1" xml:space="preserve">
+    <value>手臂1光纤1</value>
+  </data>
+  <data name="Arm1Fiber2" xml:space="preserve">
+    <value>手臂1光纤2</value>
+  </data>
+  <data name="Arm1Fiber3" xml:space="preserve">
+    <value>手臂1光纤3</value>
+  </data>
+  <data name="FoupSlot" xml:space="preserve">
+    <value>Foup/Slot</value>
+  </data>
+  <data name="WaferIndex" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Spare" xml:space="preserve">
+    <value>备用</value>
+  </data>
+  <data name="PlaceToPolishC" xml:space="preserve">
+    <value>放入 Polish C</value>
+  </data>
+  <data name="PlaceToPolishD" xml:space="preserve">
+    <value>放入 Polish D</value>
+  </data>
+  <data name="PolishCDownPiece" xml:space="preserve">
+    <value>研磨C下片</value>
+  </data>
+  <data name="PolishCUpPiece" xml:space="preserve">
+    <value>研磨C上片</value>
+  </data>
+  <data name="PolishDUpPiece" xml:space="preserve">
+    <value>研磨D上片</value>
+  </data>
+  <data name="PolishDDownPiece" xml:space="preserve">
+    <value>研磨D下片</value>
+  </data>
+  <data name="PolishASideArm2XAxisPositionAdjustment" xml:space="preserve">
+    <value>A手臂2x轴位置设定</value>
+  </data>
+  <data name="PolishASideArm2ZAxisPositionAdjustment" xml:space="preserve">
+    <value>A侧手臂2z轴位置设定</value>
+  </data>
+  <data name="PolishAUnloadPosition" xml:space="preserve">
+    <value>研磨A下片</value>
+  </data>
+  <data name="PolishBLoadPosition" xml:space="preserve">
+    <value>研磨B上片</value>
+  </data>
+  <data name="PolishALoadPosition" xml:space="preserve">
+    <value>研磨A上片</value>
+  </data>
+  <data name="PolishBUnloadPosition" xml:space="preserve">
+    <value>研磨B下片</value>
+  </data>
+  <data name="PolishASideArm3XAxisPositionAdjustment" xml:space="preserve">
+    <value>A手臂3x轴位置设定</value>
+  </data>
+  <data name="PolishASideArm3ZAxisPositionAdjustment" xml:space="preserve">
+    <value>A侧手臂3z轴位置设定</value>
+  </data>
+  <data name="Arm3Fiber1" xml:space="preserve">
+    <value>手臂3光纤1</value>
+  </data>
+  <data name="PickFromPolishA2" xml:space="preserve">
+    <value>从PolishA取2</value>
+  </data>
+  <data name="Arm3Fiber2" xml:space="preserve">
+    <value>手臂3光纤2</value>
+  </data>
+  <data name="Arm3Fiber3" xml:space="preserve">
+    <value>手臂3光纤3</value>
+  </data>
+  <data name="PickFromPolishC" xml:space="preserve">
+    <value>从PolishC取</value>
+  </data>
+  <data name="PlaceToTransfer" xml:space="preserve">
+    <value>放到中转</value>
+  </data>
+  <data name="Arm2Fiber1" xml:space="preserve">
+    <value>手臂2光纤1</value>
+  </data>
+  <data name="Arm2Fiber2" xml:space="preserve">
+    <value>手臂2光纤2</value>
+  </data>
+  <data name="Arm2Fiber3" xml:space="preserve">
+    <value>手臂2光纤3</value>
+  </data>
+  <data name="PickFromPolishD" xml:space="preserve">
+    <value>从PolishD取</value>
+  </data>
+  <data name="PickFromRoller1" xml:space="preserve">
+    <value>从Roll1取</value>
+  </data>
+  <data name="PickFromRoller2" xml:space="preserve">
+    <value>从Roll2取</value>
+  </data>
+  <data name="PickFromRoller3" xml:space="preserve">
+    <value>从Roll3取</value>
+  </data>
+  <data name="PlaceToRoller2" xml:space="preserve">
+    <value>放入Roll2</value>
+  </data>
+  <data name="PlaceToRoller3" xml:space="preserve">
+    <value>放入Roll3</value>
+  </data>
+  <data name="PlaceToPen1" xml:space="preserve">
+    <value>放入Pen1</value>
+  </data>
+  <data name="PlaceToPen2" xml:space="preserve">
+    <value>放入Pen2</value>
+  </data>
+  <data name="PickFromPen1" xml:space="preserve">
+    <value>从Pen1取</value>
+  </data>
+  <data name="PickFromPen2" xml:space="preserve">
+    <value>从Pen2取</value>
+  </data>
+  <data name="PlaceToDry" xml:space="preserve">
+    <value>放入Dry</value>
+  </data>
+  <data name="WaferTransferInformationMap" xml:space="preserve">
+    <value>Wafer 信息</value>
+  </data>
+  <data name="ConfirmActionTips" xml:space="preserve">
+    <value>二次确认</value>
+  </data>
+  <data name="ConfirmActionContent" xml:space="preserve">
+    <value>你确定吗？</value>
+  </data>
+  <data name="ExportCsvFile" xml:space="preserve">
+    <value>导出CSV文件</value>
+  </data>
+  <data name="FileDirectory" xml:space="preserve">
+    <value>文件目录</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>文件名称</value>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>选择文件夹</value>
+  </data>
+  <data name="ExportWay" xml:space="preserve">
+    <value>导出方式</value>
+  </data>
+  <data name="Calibration" xml:space="preserve">
+    <value>校准</value>
+  </data>
+  <data name="ConsumableName" xml:space="preserve">
+    <value>耗材名</value>
+  </data>
+  <data name="WaferCountSet" xml:space="preserve">
+    <value>耗材个数设定</value>
+  </data>
+  <data name="UsedTimeSet" xml:space="preserve">
+    <value>使用时间设定</value>
+  </data>
+</root>

@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.ConfigTab.ConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CMP.Views.Tabs.ConfigTab"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:templateSelector="clr-namespace:CMP.ViewModels.Tabs.ConfigTab"
+             mc:Ignorable="d"
+             xmlns:regionNames="clr-namespace:Core.Common.RegionNames;assembly=Core"
+             xmlns:constants="clr-namespace:Core.Common.Constants;assembly=Core"
+             xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.ConfigTab"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:models="clr-namespace:CMP.Models.Config"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:ConfigViewModel}"
+             >
+    <UserControl.Resources>
+        <!-- 模板选择器 -->
+        <templateSelector:ConfigTemplateSelector x:Key="ConfigTemplateSelector">
+            <!-- ComboBox模板 - 用于Enum类型 -->
+            <templateSelector:ConfigTemplateSelector.ComboBoxTemplate>
+                <DataTemplate>
+                    <ComboBox 
+                        ItemsSource="{Binding Option}"                        
+                        SelectedItem="{Binding NewValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        viewModels:ComboBoxSyncBehavior.SyncCommand="{Binding DataContext.NewValueChangeCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
+                        Margin="2"/>
+                </DataTemplate>
+            </templateSelector:ConfigTemplateSelector.ComboBoxTemplate>
+
+            <!-- TextBox模板 - 用于Int和Double类型 -->
+            <templateSelector:ConfigTemplateSelector.TextBoxTemplate>
+                <DataTemplate>
+                    <TextBox 
+                        Text="{Binding NewValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        viewModels:ComboBoxSyncBehavior.SyncCommand="{Binding DataContext.NewValueChangeCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
+                        Margin="2"
+                        Width="100"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"/>
+                </DataTemplate>
+            </templateSelector:ConfigTemplateSelector.TextBoxTemplate>
+        </templateSelector:ConfigTemplateSelector>
+
+        <HierarchicalDataTemplate DataType="{x:Type models:ConfigTreeNode}" ItemsSource="{Binding Children}">
+            <TextBlock Text="{Binding Name}"/>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal" 
+                    Height="40" 
+                    Grid.ColumnSpan="2" 
+                    HorizontalAlignment="Stretch"
+                    Margin="2">
+            <Label Content="Filter" FontSize="10" Height="30" Margin="5,0,10,0"/>
+            <TextBox Width="250" Margin="0,0,5,0" BorderBrush="#A8A8A8" Height="30"/>
+            <Button Content="Clear" Width="100" 
+                    FontSize="10" Height="30" 
+                    BorderBrush="#8C8C8C"
+                    BorderThickness="1.5"
+                    Margin="15,0,5,0" />
+            <ToolBar Height="AUTO">
+                <Button Height="45" Margin="0 0 2 0" Command="{Binding ApplyCommand}">
+                    <StackPanel>
+                        <iconPacks:PackIconMaterialLight Kind="ContentSave" HorizontalAlignment="Center" />
+                        <TextBlock HorizontalAlignment="Center" Text="Apply"/>
+                    </StackPanel>
+                </Button>
+                <Button Height="45" Margin="0 0 2 0" Visibility="Hidden">
+                    <StackPanel>
+                        <iconPacks:PackIconPhosphorIcons Kind="CheckSquare" HorizontalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="OK" />
+                    </StackPanel>
+                </Button>
+                <Button Height="45" Margin="0 0 2 0" Visibility="Hidden">
+                    <StackPanel>
+                        <iconPacks:PackIconRemixIcon Kind="ArrowGoBackFill" HorizontalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="Cancel" />
+                    </StackPanel>
+                </Button>
+                <Button Height="45" Margin="0 0 2 0" Visibility="Hidden" >
+                    <StackPanel>
+                        <iconPacks:PackIconPicolIcons Kind="DocumentSansCancel" HorizontalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="EditCancel" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <Button Content="Synchronous PLC" Width="AUTO"
+                    FontSize="10" Height="30" 
+                    Command="{Binding SynchronouPlcCommand}"
+                    Margin="150,0,5,0" BorderBrush="#8C8C8C"
+                    BorderThickness="1.5"/>
+            <Button Content="Export" Width="auto"
+                    FontSize="10" Height="30"
+                    Command="{Binding ExportCsvCommand}"
+                    Margin="5,0,5,0" BorderBrush="#8C8C8C"
+                    BorderThickness="1.5">
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <TreeView Grid.Column="0" 
+                      VerticalAlignment="Top"
+                      MaxHeight="725"
+                      x:Name="polishTree"
+                      ItemsSource="{Binding ConfigTreeNodes}"
+                      Style="{StaticResource TreeViewBaseStyle}">
+                
+                <!-- 行为：选中节点执行命令-->
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="SelectedItemChanged" SourceObject="{Binding ElementName=polishTree}">
+                        <behavior:InvokeCommandAction Command="{Binding PolishChangedCommand}"
+                                  PassEventArgsToCommand="True"
+                                  CommandParameter="{Binding ElementName=polishTree, Path=SelectedItem}"/>
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </TreeView>
+
+            <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Center" 
+                          Cursor="SizeWE" ShowsPreview="True" Background="#ADADAD"
+                          Margin="10,0,10,0"/>
+
+            <TabControl Grid.Column="2"
+                        Margin="5,0,5,0"                        
+                        ItemsSource="{Binding SheetConfigModels}"
+                        SelectedItem="{Binding SelectedSheet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                <TabControl.ItemContainerStyle>
+                    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource SecondaryTabItemStyle}"/>
+                </TabControl.ItemContainerStyle>
+                
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding SheetName}"/>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <DataGrid         
+                              SelectionUnit="CellOrRowHeader" 
+                              SelectionMode="Extended"
+                              Style="{StaticResource styleDataGridView}"
+                              ItemsSource="{Binding ConfigModes}"
+                              x:Name="equipmentConfigGrid"    
+                              RowHeaderWidth="20"
+                              MaxHeight="673"
+                              BorderBrush="#B5B5B5"
+                              BorderThickness="1"
+                              HorizontalAlignment="Stretch"
+                              CanUserSortColumns="False"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              VirtualizingPanel.ScrollUnit="Pixel"
+                              >
+
+                            <behavior:Interaction.Triggers>
+                                <behavior:EventTrigger EventName="SelectionChanged">
+                                    <behavior:InvokeCommandAction Command="{Binding DataContext.SelecteRowCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"                                                                                                            
+                                          PassEventArgsToCommand="True"
+                                          CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"/>
+                                </behavior:EventTrigger>
+                            </behavior:Interaction.Triggers>
+
+                            <DataGrid.RowHeaderTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconRemixIcon Kind="ArrowRightWideLine" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGrid.RowHeaderTemplate>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.ECID}"
+                                                    Binding="{Binding ECID}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Class}"
+                                                    Binding="{Binding Class}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Name}"
+                                                    Binding="{Binding Name}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Unit}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    Binding="{Binding Unit}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.CurrentValue}"
+                                                    Width="AUTO" IsReadOnly="True"                                                                 
+                                                    Binding="{Binding SetValue}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTemplateColumn Header="{x:Static constants:ColumnNames.NewValue}"
+                                                    Width="AUTO"
+                                                    CellTemplateSelector="{StaticResource ConfigTemplateSelector}"
+                                                    CellEditingTemplateSelector="{StaticResource ConfigTemplateSelector}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Default}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    Binding="{Binding DefaultValue}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Min}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    Binding="{Binding Min}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Max}"
+                                                    Width="AUTO" IsReadOnly="True"
+                                                    Binding="{Binding Max}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                                <DataGridTextColumn Header="{x:Static constants:ColumnNames.Description}"
+                                                    Width="400" IsReadOnly="True"
+                                                    Binding="{Binding Description}"
+                                                    ElementStyle="{StaticResource CenterAlignmentStyle}"
+                                                    EditingElementStyle="{StaticResource EditCenterAlignmentStyle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,24 @@
+<Border x:Class="CMP.Controls.Basic.InteractiveDialog.InteractiveDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        CornerRadius="10"
+        Width="320"
+        Height="280"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:interactiveDialog="clr-namespace:CMP.Controls.Basic.InteractiveDialog"
+        d:DataContext="{d:DesignInstance interactiveDialog:InteractiveDialogViewModel}"
+        Background="{DynamicResource RegionBrush}">
+    
+    <StackPanel VerticalAlignment="Center" Margin="32">
+        <TextBlock Style="{StaticResource TextBlockLargeBold}" Text="{Binding Message}"/>
+        <TextBox Margin="0,32,0,0" Style="{StaticResource TextBoxExtend}" Text="{Binding Result,UpdateSourceTrigger=PropertyChanged}" hc:InfoElement.Placeholder="{lex:Loc PleaseInput}"/>
+        <Button Width="120" Margin="0,32,0,0" Command="{Binding OkCmd}" Style="{StaticResource ButtonPrimary}" Content="{lex:Loc Ok}"/>
+        <Button Width="120" Margin="0,8,0,0" Command="{Binding CancelCmd}" Style="{StaticResource ButtonDefault}" Content="{lex:Loc Cancel}"/>
+    </StackPanel>
+</Border>

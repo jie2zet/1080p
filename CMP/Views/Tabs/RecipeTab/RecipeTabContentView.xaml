@@ -1,0 +1,26 @@
+<UserControl x:Class="CMP.Views.Tabs.RecipeTab.RecipeTabContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.RecipeTab"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:RecipeTabContentViewModel}"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Border Margin="10">
+        <TabControl Style="{StaticResource TertiaryTabControlStyle}">
+            
+            <TabItem Header="Editor" Style="{StaticResource TertiaryTabItemStyle}">
+                <ContentControl prism:RegionManager.RegionName="RecipeInsideEditorRegion" />
+            </TabItem>
+            <TabItem Header="HCD" Style="{StaticResource TertiaryTabItemStyle}"/>
+            <TabItem Header="Other" Style="{StaticResource TertiaryTabItemStyle}"/>
+            
+        </TabControl>
+    </Border>
+</UserControl>

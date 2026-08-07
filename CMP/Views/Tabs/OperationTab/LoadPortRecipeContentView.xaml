@@ -1,0 +1,331 @@
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.LoadPortRecipeContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CMP.Views.Tabs.OperationTab" 
+             xmlns:local1="clr-namespace:CMP.Views.Tabs.RecipeTab.Content"
+             xmlns:validation="clr-namespace:CMP.Validation"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:SlotIdConverter x:Key="SlotIdConverter"/>
+        <!-- 添加字符串为空的转换器 -->
+        <converters:StringNullOrEmptyConverter x:Key="StringNullOrEmptyConverter"/>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="79*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" Text="Recipe Assignment" 
+                   FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <!-- 主内容区域 - 分为左右两部分 -->
+        <Grid Grid.Row="1" Margin="0,0,0,36" Grid.RowSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 左侧：Wafer 数据区域 -->
+            <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 左侧标题 -->
+                    <TextBlock Grid.Row="0" Text="Wafer List" 
+                               FontSize="14" FontWeight="SemiBold" 
+                               Margin="10,10,10,5"/>
+
+                    <!-- Wafer 数据网格 -->
+                    <DataGrid Grid.Row="1" x:Name="WaferDataGrid"
+                              ItemsSource="{Binding WaferList}"
+                              AutoGenerateColumns="False" 
+                              SelectionMode="Extended"
+                              SelectionUnit="FullRow"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              Height="720"
+                              RowHeight="25"
+                              Width="410">
+
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Padding" Value="2,0,2,0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridCell">
+                                            <Border Padding="{TemplateBinding Padding}" 
+                               
+                               
+                                Background="{TemplateBinding Background}" 
+                                SnapsToDevicePixels="True">
+                                                <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                            VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                               
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <!-- 添加行样式来控制禁用状态 -->
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Setter Property="Background" Value="White"/>
+                                <Setter Property="Opacity" Value="0.6"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding WaferStatus}" Value="NonWafer">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="Background" Value="LightGray"/>
+                                        <Setter Property="Opacity" Value="1.0"/>
+                                    </DataTrigger>
+
+                                    <!-- 当已分配 Recipe 但仍然选中时 -->
+
+                                    <DataTrigger Binding="{Binding SequenceRecipe, Converter={StaticResource StringNullOrEmptyConverter}}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="Background" Value="LightGray"/>
+                                        <Setter Property="Opacity" Value="1.0"/>
+                                    </DataTrigger>
+                                    
+                                    <!-- 选中行时保持文本颜色 -->
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Foreground" Value="LightGray"/>
+                                        <Setter Property="Background" Value="#2C66A7"/>
+                                    </Trigger>
+
+                                    <!-- 鼠标悬停时的效果 -->
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="White"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="" 
+                                                    Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Width="40"/>
+                            <!-- 修改 DataGridTextColumn -->
+                            <DataGridTextColumn Header="SlotID" 
+                                Binding="{Binding SlotID, Converter={StaticResource SlotIdConverter}}" 
+                                IsReadOnly="True" 
+                                Width="58"/>
+                            <DataGridTextColumn Header="WaferStatus" 
+                                                Binding="{Binding WaferStatus}" 
+                                                IsReadOnly="True" 
+                                                                        Width="110"/>
+                            <DataGridTemplateColumn Width="140">
+                                <DataGridTemplateColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="2,0" HorizontalAlignment="Stretch">
+                                            <TextBox x:Name="BatchWaferNameTextBox"
+                             Padding="4,2"
+                             Margin="0"
+                             HorizontalAlignment="Stretch"
+                             VerticalContentAlignment="Center"
+                             KeyDown="BatchWaferNameTextBox_KeyDown">
+                                                <TextBox.Text>
+                                                    <Binding Path="BatchWaferName" UpdateSourceTrigger="PropertyChanged">
+                                                        <Binding.ValidationRules>
+                                                            <validation:WaferNameValidationRule ValidationStep="RawProposedValue"/>
+                                                        </Binding.ValidationRules>
+                                                    </Binding>
+                                                </TextBox.Text>
+                                            </TextBox>
+                                            <TextBlock Text="waferName"
+                               Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Foreground="Gray"
+                               IsHitTestVisible="False">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Text, ElementName=BatchWaferNameTextBox}" Value="">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.HeaderTemplate>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Padding="0"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         VerticalContentAlignment="Center"
+                         VerticalAlignment="Center">
+                                            <TextBox.Text>
+                                                <Binding Path="WaferName" UpdateSourceTrigger="PropertyChanged">
+                                                    <Binding.ValidationRules>
+                                                        <validation:WaferNameValidationRule ValidationStep="RawProposedValue"/>
+                                                    </Binding.ValidationRules>
+                                                </Binding>
+                                            </TextBox.Text>
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="IsReadOnly" Value="False"/>
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding WaferStatus}" Value="NonWafer">
+                                                            <Setter Property="IsReadOnly" Value="True"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding SequenceRecipe, Converter={StaticResource StringNullOrEmptyConverter}}" Value="False">
+                                                            <Setter Property="IsReadOnly" Value="True"/>
+                                                        </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=IsSelected}" Value="True"/>
+                                                                <Condition Binding="{Binding WaferStatus}" Value="NormalExistence"/>
+                                                                <Condition Binding="{Binding SequenceRecipe, Converter={StaticResource StringNullOrEmptyConverter}}" Value="True"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Background" Value="#FFFFFFFF"/>
+                                                            <Setter Property="Foreground" Value="#1F1F1F"/>
+                                                            <Setter Property="BorderBrush" Value="#4DA3FF"/>
+                                                            <Setter Property="BorderThickness" Value="1"/>
+                                                            <Setter Property="Padding" Value="4,0"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- 左侧操作按钮 -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,10,10">
+                        <Button Content="Select All" 
+                                Command="{Binding SelectAllCommand}" 
+                                Margin="0,0,10,0" Padding="15,5"/>
+                        <Button Content="Clear Selection" 
+                                Command="{Binding ClearSelectionCommand}" 
+                                Margin="0,0,10,0" Padding="15,5"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 分隔符 -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+            <!-- 右侧：Recipe 选择和操作区域 -->
+            <Border Grid.Column="2" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <!-- 缩小的 Sequence Recipe Editor View -->
+                    <GroupBox Grid.Row="2" Header="Recipe Plan" Margin="10,0,10,10">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <Grid>
+                                <Grid.LayoutTransform>
+                                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                                </Grid.LayoutTransform>
+                                <local1:SequenceRecipeEditorView DataContext="{Binding SequenceEditorViewModel}"  >
+                                    <local1:SequenceRecipeEditorView.Resources>
+                                        <!-- 只读文本框样式 -->
+                                        <Style x:Key="ReadOnlyTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                            <Setter Property="IsReadOnly" Value="True"/>
+                                            <Setter Property="Background" Value="#F5F5F5"/>
+                                            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+                                        </Style>
+
+                                        <!-- 只读组合框样式 -->
+                                        <Style x:Key="ReadOnlyComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                                            <Setter Property="IsHitTestVisible" Value="False"/>
+                                            <Setter Property="Focusable" Value="False"/>
+                                            <Setter Property="Background" Value="#F5F5F5"/>
+                                        </Style>
+
+                                        <!-- 只读复选框样式 -->
+                                        <Style x:Key="ReadOnlyCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                            <Setter Property="IsHitTestVisible" Value="False"/>
+                                            <Setter Property="Focusable" Value="False"/>
+                                        </Style>
+
+                                        <!-- 应用样式到具体控件 -->
+                                        <Style TargetType="TextBox" BasedOn="{StaticResource ReadOnlyTextBoxStyle}"/>
+                                        <Style TargetType="ComboBox" BasedOn="{StaticResource ReadOnlyComboBoxStyle}"/>
+                                        <Style TargetType="CheckBox" BasedOn="{StaticResource ReadOnlyCheckBoxStyle}"/>
+
+
+                                        <!-- 示例：隐藏特定按钮 -->
+                                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                            <Style.Triggers>
+                                                <Trigger Property="Name" Value="SaveButton">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                                <Trigger Property="Name" Value="SaveAsButton">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                                <Trigger Property="Name" Value="NewButton">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                                <Trigger Property="Name" Value="DeleteButton">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </local1:SequenceRecipeEditorView.Resources>
+                                </local1:SequenceRecipeEditorView>
+                            </Grid>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <!-- 右侧操作按钮 -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0,10,10" >
+                        <Button Content="Assign Recipe" Height="30" 
+                                Command="{Binding AssignRecipeCommand}" 
+                                Margin="0,0,0,10" 
+                                Style="{StaticResource ButtonPrimary}"/>
+                        <Button Content="Cancel" Height="30"
+                                Margin="10,0,0,10" 
+                                Command="{Binding CancelCommand}" 
+                                Padding="10,8" Visibility="Hidden"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- 底部状态信息 -->
+        <StatusBar Grid.Row="3" Margin="0,10,0,0">
+            <StatusBar.Items>
+                <StatusBarItem>
+                    <TextBlock Text="{Binding StatusMessage}"/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock>
+                        <Run Text="Selected Wafers:"/>
+                        <Run Text="{Binding SelectedWaferCount}" FontWeight="Bold"/>
+                    </TextBlock>
+                </StatusBarItem>
+            </StatusBar.Items>
+        </StatusBar>
+    </Grid>
+</UserControl>
