@@ -1,31 +1,33 @@
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
 using CMP.Controls.Basic.InteractiveDialog;
+using CMP.Extensions;
 using CMP.Models.Recipe.RecipeEdit;
+using CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate;
+using CMP.Services.Auth;
 using CMP.Utils;
+using CMP.Views.Tabs.RecipeTab;
+using Core.Controls.Behaviors;
 using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SqlSugar;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Drawing;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using WPFLocalizeExtension.Extensions;
 using static CMP.Models.Recipe.RecipeEdit.Recipe;
 using ComboBox = System.Windows.Controls.ComboBox;
 using Dialog = HandyControl.Controls.Dialog;
 using MessageBox = HandyControl.Controls.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
-using CMP.Views.Tabs.RecipeTab;
-using CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate;
-using System.Configuration;
-using CMP.Extensions;
-using CMP.Services.Auth;
-using WPFLocalizeExtension.Extensions;
-using System.Drawing;
-using System.Threading.Tasks;
 
 namespace CMP.ViewModels.Tabs.RecipeTab;
 
@@ -1384,12 +1386,31 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             // Create and return a NumericUpDown template
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(NumericUpDown));
-            factory.SetBinding(NumericUpDown.ValueProperty,
-                new Binding($"Steps[{_stepIndex}].Value")
-                {
-                    Mode = BindingMode.TwoWay,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
-                });
+            // 超出 [Min, Max] 的非 0 输入，1 秒后自动恢复为 Min/Max
+            factory.AddHandler(
+                NumericUpDown.ValueChangedEvent,
+                new EventHandler<FunctionEventArgs<double>>(OnNumericUpDownValueChanged));
+            factory.AddHandler(
+                TextBoxBase.TextChangedEvent,
+                new TextChangedEventHandler(OnNumericTextChanged));
+            // 创建绑定，添加验证规则
+            var valueBinding = new Binding($"Steps[{_stepIndex}].Value")
+            {
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            // 添加自定义验证规则
+            var rule = new ZeroOrRangeValidationRule { Min = Convert.ToDouble(data.Min), Max = Convert.ToDouble(data.Max) };
+            if (data.Min == data.Max) rule = new ZeroOrRangeValidationRule { Min = Convert.ToDouble(-10000.00), Max = Convert.ToDouble(10000.00) };
+            valueBinding.ValidationRules.Add(rule);
+
+            factory.SetBinding(NumericUpDown.ValueProperty, valueBinding);
+            //factory.SetBinding(NumericUpDown.ValueProperty,
+            //    new Binding($"Steps[{_stepIndex}].Value")
+            //    {
+            //        Mode = BindingMode.TwoWay,
+            //        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            //    });
             factory.SetBinding(Control.BackgroundProperty,
             new Binding("Background")
             {
@@ -1398,14 +1419,9 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             template.VisualTree = factory;
             // int without decimal
             factory.SetValue(NumericUpDown.DecimalPlacesProperty, data.Type?.ToLower() == "int" ? 0 : 2);
-            // max and min
-            if (data.Min == 0 && data.Max == 0)
-            {
-                data.Min = -10000;
-                data.Max = 10000;
-            }
-            factory.SetValue(NumericUpDown.MinimumProperty, Convert.ToDouble(data.Min));
-            factory.SetValue(NumericUpDown.MaximumProperty, Convert.ToDouble(data.Max));
+            // 交由 1 秒自动恢复逻辑纠正为 Min（如 Min=50 时输入 -5 → 自动恢复为 50）
+            factory.SetValue(NumericUpDown.MinimumProperty, -10000.00);
+            factory.SetValue(NumericUpDown.MaximumProperty, 10000.00);
             return template;
         }
         else
@@ -1428,5 +1444,85 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             
             return template;
         }
+    }
+
+    /// <summary>
+    /// 数值参数（int/float）输入超出 [Min, Max] 范围（0 豁免）时，
+    /// 启动/重置 1 秒防抖计时器；1 秒后值仍未回到范围内，则自动恢复为 Min 或 Max。
+    /// 通过 ValueChanged（微调按钮/滚轮/方向键等）与 TextChanged（键盘输入，编辑中）两条路径共同检测。
+    /// </summary>
+    private static void OnNumericUpDownValueChanged(object? sender, FunctionEventArgs<double> e)
+    {
+        if (sender is not NumericUpDown nud) return;
+        if (nud.DataContext is not Recipe.Data data) return;
+        if (data.Type is not ("int" or "float")) return;
+
+        double value = nud.Value;
+        if (data.Min == data.Max) return;  //兼容老的json配置min和max都为0的情况
+        if (value == 0) return;                                   // 0 为豁免值
+        if (value >= data.Min && value <= data.Max) return;      // 在范围内
+
+        ScheduleClamp(nud);
+    }
+
+    /// <summary>
+    /// 编辑期间（有键盘焦点）的文本变化检测：
+    /// NumericUpDown 在聚焦时只有落在控件 [Minimum, Maximum] 内的输入才会实时更新 Value，
+    /// 超出控件上限的输入需在此处兑底检测，统一走 1 秒自动恢复。
+    /// </summary>
+    private static void OnNumericTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (sender is not NumericUpDown nud) return;
+        if (nud.DataContext is not Recipe.Data data) return;
+        if (data.Type is not ("int" or "float")) return;
+        if (e.OriginalSource is not TextBox textBox) return;
+        if (!double.TryParse(textBox.Text, out double value)) return;
+        if (data.Min == data.Max) return;  //兼容老的json配置min和max都为0的情况
+        if (value == 0 || (value >= data.Min && value <= data.Max))
+        {
+            CancelClamp(nud);
+            return;
+        }
+        ScheduleClamp(nud);
+    }
+
+    private static void ScheduleClamp(NumericUpDown nud)
+    {
+        if (nud.Tag is not DispatcherTimer timer)
+        {
+            timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            var weakNud = new WeakReference(nud);
+            timer.Tick += (_, _) => OnNumericClampTick(weakNud, timer);
+            nud.Tag = timer;
+        }
+        timer.Stop();
+        timer.Start();
+    }
+
+    private static void CancelClamp(NumericUpDown nud)
+    {
+        if (nud.Tag is DispatcherTimer timer)
+        {
+            timer.Stop();
+        }
+    }
+
+    private static void OnNumericClampTick(WeakReference weakNud, DispatcherTimer timer)
+    {
+        timer.Stop();
+        if (weakNud.Target is not NumericUpDown nud) return;
+        if (nud.DataContext is not Recipe.Data data) return;
+
+        double value = nud.Value;
+        if (value == 0) return;
+        if (value >= data.Min && value <= data.Max) return;
+
+        // 自动恢复为最小值或最大值
+        nud.Value = value < data.Min ? data.Min : data.Max;
+        // 控件在获得键盘焦点时不刷新内部文本框（SetText 仅在未聚焦时生效），
+        // 强制刷新一次显示，否则要等光标移出输入框才能看到恢复后的值
+        var setText = typeof(NumericUpDown).GetMethod("SetText",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        setText?.Invoke(nud, [true]);
     }
 }
