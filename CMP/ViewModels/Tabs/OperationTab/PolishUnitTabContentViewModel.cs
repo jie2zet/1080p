@@ -836,11 +836,11 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, Convert.ToUInt32(0x010), 1,
                     writeBufTemp);
             }
-            catch
+            catch(Exception ex)
             {
                 byte[] writeBufTemp = { w10Low, 0x03 };
                 err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, Convert.ToUInt32(0x010), 1, writeBufTemp);
-                Growl.ErrorGlobal($"Get Sequence Failed, Index: {waferIndex}");
+                Growl.ErrorGlobal($"Assign Recipe Failed, Index: {waferIndex},Error Information: {ex.Message},{ex.StackTrace}");
             }
 
             //err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, Convert.ToUInt32(0x010), 1, writeBufTemp);
