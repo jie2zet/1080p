@@ -57,6 +57,10 @@ public partial class LoadPortData
             var builder = new StringBuilder(records.Count * 128);
             foreach (var record in records)
             {
+                if(record.ActionTime == string.Empty)
+                {
+                    continue;
+                }
                 builder.Append(EscapeCsv(waferName)).Append(',')
                     .Append(EscapeCsv(loadPortTag)).Append(',')
                     .Append(cassetteNo).Append(',')

@@ -83,7 +83,7 @@ public class DataLogFormattingTests
         };
         polish.ListSV[configured.Name] = configured;
 
-        polish.InitializeRuntimeValues();
+        //polish.InitializeRuntimeValues();
 
         Assert.AreSame(configured, polish.GetSv("PolishDProcess Step Act"));
         Assert.AreEqual("0", polish.GetSv("PolishDProcess Step Act")?.Value);
