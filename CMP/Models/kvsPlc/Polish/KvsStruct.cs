@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 namespace CMP.Models.kvsPlc.Polish { 
 	class KvStruct {
 		const int stChuckRecipeFormat_WSIZE = 1150;
-		const int stConditionSweepRecipeFormat_WSIZE = 50;
+		const int stConditionSweepRecipeFormat_WSIZE = 48;
 		const int stExsituRecipeFormat_WSIZE = 750;
-		const int stHeadSweepRecipeFormat_WSIZE = 50;
+		const int stHeadSweepRecipeFormat_WSIZE = 48;
 		const int stInsituConditionRecipeFormat_WSIZE = 30;
 		const int stLoadRecipeFormat_WSIZE = 1000;
 		const int stPolishRecipeFormat_WSIZE = 1650;
@@ -361,7 +361,7 @@ namespace CMP.Models.kvsPlc.Polish {
         public class stConditionSweepRecipeFormat
         {
             public short ConditionSweepType = default(short);
-            public float ConditionSweepCount = default(float);
+            public short ConditionSweepCount = default(short);
             public float StartPosition = default(float);
             public float EndPosition = default(float);
             public short ZoneCount = default(short);
@@ -423,7 +423,7 @@ namespace CMP.Models.kvsPlc.Polish {
         public class stHeadSweepRecipeFormat
         {
             public short HeadSweepType = default(short);
-            public float HeadSweepCount = default(float);
+            public short HeadSweepCount = default(short);
             public float StartPosition = default(float);
             public float EndPosition = default(float);
             public short ZoneCount = default(short);
@@ -1308,31 +1308,31 @@ namespace CMP.Models.kvsPlc.Polish {
         public static void ByteTo_stConditionSweepRecipeFormat(ref stConditionSweepRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
         {
             ByteToShort(ref dst.ConditionSweepType, src, 1, 0 + wordOffset);
-            ByteToFloat(ref dst.ConditionSweepCount, src, 1, 2 + wordOffset);
-            ByteToFloat(ref dst.StartPosition, src, 1, 4 + wordOffset);
-            ByteToFloat(ref dst.EndPosition, src, 1, 6 + wordOffset);
-            ByteToShort(ref dst.ZoneCount, src, 1, 8 + wordOffset);
-            ByteToShort(ref dst.Reserve, src, 1, 9 + wordOffset);
-            ByteToFloat(ref dst.Zone1Ratio, src, 1, 10 + wordOffset);
-            ByteToFloat(ref dst.Zone2Ratio, src, 1, 12 + wordOffset);
-            ByteToFloat(ref dst.Zone3Ratio, src, 1, 14 + wordOffset);
-            ByteToFloat(ref dst.Zone4Ratio, src, 1, 16 + wordOffset);
-            ByteToFloat(ref dst.Zone5Ratio, src, 1, 18 + wordOffset);
-            ByteToFloat(ref dst.Zone6Ratio, src, 1, 20 + wordOffset);
-            ByteToFloat(ref dst.Zone7Ratio, src, 1, 22 + wordOffset);
-            ByteToFloat(ref dst.Zone8Ratio, src, 1, 24 + wordOffset);
-            ByteToFloat(ref dst.Zone9Ratio, src, 1, 26 + wordOffset);
-            ByteToFloat(ref dst.Zone10Ratio, src, 1, 28 + wordOffset);
-            ByteToFloat(ref dst.Zone11Ratio, src, 1, 30 + wordOffset);
-            ByteToFloat(ref dst.Zone12Ratio, src, 1, 32 + wordOffset);
-            ByteToFloat(ref dst.Zone13Ratio, src, 1, 34 + wordOffset);
-            ByteToFloat(ref dst.Zone14Ratio, src, 1, 36 + wordOffset);
-            ByteToFloat(ref dst.Zone15Ratio, src, 1, 38 + wordOffset);
-            ByteToFloat(ref dst.Zone16Ratio, src, 1, 40 + wordOffset);
-            ByteToFloat(ref dst.Zone17Ratio, src, 1, 42 + wordOffset);
-            ByteToFloat(ref dst.Zone18Ratio, src, 1, 44 + wordOffset);
-            ByteToFloat(ref dst.Zone19Ratio, src, 1, 46 + wordOffset);
-            ByteToFloat(ref dst.Zone20Ratio, src, 1, 48 + wordOffset);
+            ByteToShort(ref dst.ConditionSweepCount, src, 1, 1 + wordOffset);
+            ByteToFloat(ref dst.StartPosition, src, 1, 2 + wordOffset);
+            ByteToFloat(ref dst.EndPosition, src, 1, 4 + wordOffset);
+            ByteToShort(ref dst.ZoneCount, src, 1, 6 + wordOffset);
+            ByteToShort(ref dst.Reserve, src, 1, 7 + wordOffset);
+            ByteToFloat(ref dst.Zone1Ratio, src, 1, 8 + wordOffset);
+            ByteToFloat(ref dst.Zone2Ratio, src, 1, 10 + wordOffset);
+            ByteToFloat(ref dst.Zone3Ratio, src, 1, 12 + wordOffset);
+            ByteToFloat(ref dst.Zone4Ratio, src, 1, 14 + wordOffset);
+            ByteToFloat(ref dst.Zone5Ratio, src, 1, 16 + wordOffset);
+            ByteToFloat(ref dst.Zone6Ratio, src, 1, 18 + wordOffset);
+            ByteToFloat(ref dst.Zone7Ratio, src, 1, 20 + wordOffset);
+            ByteToFloat(ref dst.Zone8Ratio, src, 1, 22 + wordOffset);
+            ByteToFloat(ref dst.Zone9Ratio, src, 1, 24 + wordOffset);
+            ByteToFloat(ref dst.Zone10Ratio, src, 1, 26 + wordOffset);
+            ByteToFloat(ref dst.Zone11Ratio, src, 1, 28 + wordOffset);
+            ByteToFloat(ref dst.Zone12Ratio, src, 1, 30 + wordOffset);
+            ByteToFloat(ref dst.Zone13Ratio, src, 1, 32 + wordOffset);
+            ByteToFloat(ref dst.Zone14Ratio, src, 1, 34 + wordOffset);
+            ByteToFloat(ref dst.Zone15Ratio, src, 1, 36 + wordOffset);
+            ByteToFloat(ref dst.Zone16Ratio, src, 1, 38 + wordOffset);
+            ByteToFloat(ref dst.Zone17Ratio, src, 1, 40 + wordOffset);
+            ByteToFloat(ref dst.Zone18Ratio, src, 1, 42 + wordOffset);
+            ByteToFloat(ref dst.Zone19Ratio, src, 1, 44 + wordOffset);
+            ByteToFloat(ref dst.Zone20Ratio, src, 1, 46 + wordOffset);
         }
         private static void ByteToBase_stConditionSweepRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -1442,31 +1442,31 @@ namespace CMP.Models.kvsPlc.Polish {
         public static void ByteTo_stHeadSweepRecipeFormat(ref stHeadSweepRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
         {
             ByteToShort(ref dst.HeadSweepType, src, 1, 0 + wordOffset);
-            ByteToFloat(ref dst.HeadSweepCount, src, 1, 2 + wordOffset);
-            ByteToFloat(ref dst.StartPosition, src, 1, 4 + wordOffset);
-            ByteToFloat(ref dst.EndPosition, src, 1, 6 + wordOffset);
-            ByteToShort(ref dst.ZoneCount, src, 1, 8 + wordOffset);
-            ByteToShort(ref dst.Reserve1, src, 1, 9 + wordOffset);
-            ByteToFloat(ref dst.Zone1Ratio, src, 1, 10 + wordOffset);
-            ByteToFloat(ref dst.Zone2Ratio, src, 1, 12 + wordOffset);
-            ByteToFloat(ref dst.Zone3Ratio, src, 1, 14 + wordOffset);
-            ByteToFloat(ref dst.Zone4Ratio, src, 1, 16 + wordOffset);
-            ByteToFloat(ref dst.Zone5Ratio, src, 1, 18 + wordOffset);
-            ByteToFloat(ref dst.Zone6Ratio, src, 1, 20 + wordOffset);
-            ByteToFloat(ref dst.Zone7Ratio, src, 1, 22 + wordOffset);
-            ByteToFloat(ref dst.Zone8Ratio, src, 1, 24 + wordOffset);
-            ByteToFloat(ref dst.Zone9Ratio, src, 1, 26 + wordOffset);
-            ByteToFloat(ref dst.Zone10Ratio, src, 1, 28 + wordOffset);
-            ByteToFloat(ref dst.Zone11Ratio, src, 1, 30 + wordOffset);
-            ByteToFloat(ref dst.Zone12Ratio, src, 1, 32 + wordOffset);
-            ByteToFloat(ref dst.Zone13Ratio, src, 1, 34 + wordOffset);
-            ByteToFloat(ref dst.Zone14Ratio, src, 1, 36 + wordOffset);
-            ByteToFloat(ref dst.Zone15Ratio, src, 1, 38 + wordOffset);
-            ByteToFloat(ref dst.Zone16Ratio, src, 1, 40 + wordOffset);
-            ByteToFloat(ref dst.Zone17Ratio, src, 1, 42 + wordOffset);
-            ByteToFloat(ref dst.Zone18Ratio, src, 1, 44 + wordOffset);
-            ByteToFloat(ref dst.Zone19Ratio, src, 1, 46 + wordOffset);
-            ByteToFloat(ref dst.Zone20Ratio, src, 1, 48 + wordOffset);
+            ByteToShort(ref dst.HeadSweepCount, src, 1, 1 + wordOffset);
+            ByteToFloat(ref dst.StartPosition, src, 1, 2 + wordOffset);
+            ByteToFloat(ref dst.EndPosition, src, 1, 4 + wordOffset);
+            ByteToShort(ref dst.ZoneCount, src, 1, 6 + wordOffset);
+            ByteToShort(ref dst.Reserve1, src, 1, 7 + wordOffset);
+            ByteToFloat(ref dst.Zone1Ratio, src, 1, 8 + wordOffset);
+            ByteToFloat(ref dst.Zone2Ratio, src, 1, 10 + wordOffset);
+            ByteToFloat(ref dst.Zone3Ratio, src, 1, 12 + wordOffset);
+            ByteToFloat(ref dst.Zone4Ratio, src, 1, 14 + wordOffset);
+            ByteToFloat(ref dst.Zone5Ratio, src, 1, 16 + wordOffset);
+            ByteToFloat(ref dst.Zone6Ratio, src, 1, 18 + wordOffset);
+            ByteToFloat(ref dst.Zone7Ratio, src, 1, 20 + wordOffset);
+            ByteToFloat(ref dst.Zone8Ratio, src, 1, 22 + wordOffset);
+            ByteToFloat(ref dst.Zone9Ratio, src, 1, 24 + wordOffset);
+            ByteToFloat(ref dst.Zone10Ratio, src, 1, 26 + wordOffset);
+            ByteToFloat(ref dst.Zone11Ratio, src, 1, 28 + wordOffset);
+            ByteToFloat(ref dst.Zone12Ratio, src, 1, 30 + wordOffset);
+            ByteToFloat(ref dst.Zone13Ratio, src, 1, 32 + wordOffset);
+            ByteToFloat(ref dst.Zone14Ratio, src, 1, 34 + wordOffset);
+            ByteToFloat(ref dst.Zone15Ratio, src, 1, 36 + wordOffset);
+            ByteToFloat(ref dst.Zone16Ratio, src, 1, 38 + wordOffset);
+            ByteToFloat(ref dst.Zone17Ratio, src, 1, 40 + wordOffset);
+            ByteToFloat(ref dst.Zone18Ratio, src, 1, 42 + wordOffset);
+            ByteToFloat(ref dst.Zone19Ratio, src, 1, 44 + wordOffset);
+            ByteToFloat(ref dst.Zone20Ratio, src, 1, 46 + wordOffset);
         }
         private static void ByteToBase_stHeadSweepRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -1901,31 +1901,31 @@ namespace CMP.Models.kvsPlc.Polish {
         public static void stConditionSweepRecipeFormat_ToByte(ref byte[] dst, stConditionSweepRecipeFormat src, int len = 1, int wordOffset = 0)
         {
             ShortToByte(ref dst, src.ConditionSweepType, 1, 0 + wordOffset);
-            FloatToByte(ref dst, src.ConditionSweepCount, 1, 2 + wordOffset);
-            FloatToByte(ref dst, src.StartPosition, 1, 4 + wordOffset);
-            FloatToByte(ref dst, src.EndPosition, 1, 6 + wordOffset);
-            ShortToByte(ref dst, src.ZoneCount, 1, 8 + wordOffset);
-            ShortToByte(ref dst, src.Reserve, 1, 9 + wordOffset);
-            FloatToByte(ref dst, src.Zone1Ratio, 1, 10 + wordOffset);
-            FloatToByte(ref dst, src.Zone2Ratio, 1, 12 + wordOffset);
-            FloatToByte(ref dst, src.Zone3Ratio, 1, 14 + wordOffset);
-            FloatToByte(ref dst, src.Zone4Ratio, 1, 16 + wordOffset);
-            FloatToByte(ref dst, src.Zone5Ratio, 1, 18 + wordOffset);
-            FloatToByte(ref dst, src.Zone6Ratio, 1, 20 + wordOffset);
-            FloatToByte(ref dst, src.Zone7Ratio, 1, 22 + wordOffset);
-            FloatToByte(ref dst, src.Zone8Ratio, 1, 24 + wordOffset);
-            FloatToByte(ref dst, src.Zone9Ratio, 1, 26 + wordOffset);
-            FloatToByte(ref dst, src.Zone10Ratio, 1, 28 + wordOffset);
-            FloatToByte(ref dst, src.Zone11Ratio, 1, 30 + wordOffset);
-            FloatToByte(ref dst, src.Zone12Ratio, 1, 32 + wordOffset);
-            FloatToByte(ref dst, src.Zone13Ratio, 1, 34 + wordOffset);
-            FloatToByte(ref dst, src.Zone14Ratio, 1, 36 + wordOffset);
-            FloatToByte(ref dst, src.Zone15Ratio, 1, 38 + wordOffset);
-            FloatToByte(ref dst, src.Zone16Ratio, 1, 40 + wordOffset);
-            FloatToByte(ref dst, src.Zone17Ratio, 1, 42 + wordOffset);
-            FloatToByte(ref dst, src.Zone18Ratio, 1, 44 + wordOffset);
-            FloatToByte(ref dst, src.Zone19Ratio, 1, 46 + wordOffset);
-            FloatToByte(ref dst, src.Zone20Ratio, 1, 48 + wordOffset);
+            ShortToByte(ref dst, src.ConditionSweepCount, 1, 1 + wordOffset);
+            FloatToByte(ref dst, src.StartPosition, 1, 2 + wordOffset);
+            FloatToByte(ref dst, src.EndPosition, 1, 4 + wordOffset);
+            ShortToByte(ref dst, src.ZoneCount, 1, 6 + wordOffset);
+            ShortToByte(ref dst, src.Reserve, 1, 7 + wordOffset);
+            FloatToByte(ref dst, src.Zone1Ratio, 1, 8 + wordOffset);
+            FloatToByte(ref dst, src.Zone2Ratio, 1, 10 + wordOffset);
+            FloatToByte(ref dst, src.Zone3Ratio, 1, 12 + wordOffset);
+            FloatToByte(ref dst, src.Zone4Ratio, 1, 14 + wordOffset);
+            FloatToByte(ref dst, src.Zone5Ratio, 1, 16 + wordOffset);
+            FloatToByte(ref dst, src.Zone6Ratio, 1, 18 + wordOffset);
+            FloatToByte(ref dst, src.Zone7Ratio, 1, 20 + wordOffset);
+            FloatToByte(ref dst, src.Zone8Ratio, 1, 22 + wordOffset);
+            FloatToByte(ref dst, src.Zone9Ratio, 1, 24 + wordOffset);
+            FloatToByte(ref dst, src.Zone10Ratio, 1, 26 + wordOffset);
+            FloatToByte(ref dst, src.Zone11Ratio, 1, 28 + wordOffset);
+            FloatToByte(ref dst, src.Zone12Ratio, 1, 30 + wordOffset);
+            FloatToByte(ref dst, src.Zone13Ratio, 1, 32 + wordOffset);
+            FloatToByte(ref dst, src.Zone14Ratio, 1, 34 + wordOffset);
+            FloatToByte(ref dst, src.Zone15Ratio, 1, 36 + wordOffset);
+            FloatToByte(ref dst, src.Zone16Ratio, 1, 38 + wordOffset);
+            FloatToByte(ref dst, src.Zone17Ratio, 1, 40 + wordOffset);
+            FloatToByte(ref dst, src.Zone18Ratio, 1, 42 + wordOffset);
+            FloatToByte(ref dst, src.Zone19Ratio, 1, 44 + wordOffset);
+            FloatToByte(ref dst, src.Zone20Ratio, 1, 46 + wordOffset);
         }
         private static void stConditionSweepRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
@@ -2031,31 +2031,31 @@ namespace CMP.Models.kvsPlc.Polish {
         public static void stHeadSweepRecipeFormat_ToByte(ref byte[] dst, stHeadSweepRecipeFormat src, int len = 1, int wordOffset = 0)
         {
             ShortToByte(ref dst, src.HeadSweepType, 1, 0 + wordOffset);
-            FloatToByte(ref dst, src.HeadSweepCount, 1, 2 + wordOffset);
-            FloatToByte(ref dst, src.StartPosition, 1, 4 + wordOffset);
-            FloatToByte(ref dst, src.EndPosition, 1, 6 + wordOffset);
-            ShortToByte(ref dst, src.ZoneCount, 1, 8 + wordOffset);
-            ShortToByte(ref dst, src.Reserve1, 1, 9 + wordOffset);
-            FloatToByte(ref dst, src.Zone1Ratio, 1, 10 + wordOffset);
-            FloatToByte(ref dst, src.Zone2Ratio, 1, 12 + wordOffset);
-            FloatToByte(ref dst, src.Zone3Ratio, 1, 14 + wordOffset);
-            FloatToByte(ref dst, src.Zone4Ratio, 1, 16 + wordOffset);
-            FloatToByte(ref dst, src.Zone5Ratio, 1, 18 + wordOffset);
-            FloatToByte(ref dst, src.Zone6Ratio, 1, 20 + wordOffset);
-            FloatToByte(ref dst, src.Zone7Ratio, 1, 22 + wordOffset);
-            FloatToByte(ref dst, src.Zone8Ratio, 1, 24 + wordOffset);
-            FloatToByte(ref dst, src.Zone9Ratio, 1, 26 + wordOffset);
-            FloatToByte(ref dst, src.Zone10Ratio, 1, 28 + wordOffset);
-            FloatToByte(ref dst, src.Zone11Ratio, 1, 30 + wordOffset);
-            FloatToByte(ref dst, src.Zone12Ratio, 1, 32 + wordOffset);
-            FloatToByte(ref dst, src.Zone13Ratio, 1, 34 + wordOffset);
-            FloatToByte(ref dst, src.Zone14Ratio, 1, 36 + wordOffset);
-            FloatToByte(ref dst, src.Zone15Ratio, 1, 38 + wordOffset);
-            FloatToByte(ref dst, src.Zone16Ratio, 1, 40 + wordOffset);
-            FloatToByte(ref dst, src.Zone17Ratio, 1, 42 + wordOffset);
-            FloatToByte(ref dst, src.Zone18Ratio, 1, 44 + wordOffset);
-            FloatToByte(ref dst, src.Zone19Ratio, 1, 46 + wordOffset);
-            FloatToByte(ref dst, src.Zone20Ratio, 1, 48 + wordOffset);
+            ShortToByte(ref dst, src.HeadSweepCount, 1, 1 + wordOffset);
+            FloatToByte(ref dst, src.StartPosition, 1, 2 + wordOffset);
+            FloatToByte(ref dst, src.EndPosition, 1, 4 + wordOffset);
+            ShortToByte(ref dst, src.ZoneCount, 1, 6 + wordOffset);
+            ShortToByte(ref dst, src.Reserve1, 1, 7 + wordOffset);
+            FloatToByte(ref dst, src.Zone1Ratio, 1, 8 + wordOffset);
+            FloatToByte(ref dst, src.Zone2Ratio, 1, 10 + wordOffset);
+            FloatToByte(ref dst, src.Zone3Ratio, 1, 12 + wordOffset);
+            FloatToByte(ref dst, src.Zone4Ratio, 1, 14 + wordOffset);
+            FloatToByte(ref dst, src.Zone5Ratio, 1, 16 + wordOffset);
+            FloatToByte(ref dst, src.Zone6Ratio, 1, 18 + wordOffset);
+            FloatToByte(ref dst, src.Zone7Ratio, 1, 20 + wordOffset);
+            FloatToByte(ref dst, src.Zone8Ratio, 1, 22 + wordOffset);
+            FloatToByte(ref dst, src.Zone9Ratio, 1, 24 + wordOffset);
+            FloatToByte(ref dst, src.Zone10Ratio, 1, 26 + wordOffset);
+            FloatToByte(ref dst, src.Zone11Ratio, 1, 28 + wordOffset);
+            FloatToByte(ref dst, src.Zone12Ratio, 1, 30 + wordOffset);
+            FloatToByte(ref dst, src.Zone13Ratio, 1, 32 + wordOffset);
+            FloatToByte(ref dst, src.Zone14Ratio, 1, 34 + wordOffset);
+            FloatToByte(ref dst, src.Zone15Ratio, 1, 36 + wordOffset);
+            FloatToByte(ref dst, src.Zone16Ratio, 1, 38 + wordOffset);
+            FloatToByte(ref dst, src.Zone17Ratio, 1, 40 + wordOffset);
+            FloatToByte(ref dst, src.Zone18Ratio, 1, 42 + wordOffset);
+            FloatToByte(ref dst, src.Zone19Ratio, 1, 44 + wordOffset);
+            FloatToByte(ref dst, src.Zone20Ratio, 1, 46 + wordOffset);
         }
         private static void stHeadSweepRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
