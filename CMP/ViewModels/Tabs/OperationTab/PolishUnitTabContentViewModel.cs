@@ -2454,7 +2454,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 KST.stHeadSweepRecipeFormat headSweepRecipe = new KST.stHeadSweepRecipeFormat();
                 headSweepRecipe.HeadSweepType = GetRealVal<short>(recipeContent, "HeadSweepType", 0);
-                headSweepRecipe.HeadSweepCount = GetRealVal<float>(recipeContent, "HeadSweepCount", 0);
+                headSweepRecipe.HeadSweepCount = GetRealVal<short>(recipeContent, "HeadSweepCount", 0);
                 headSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
                 headSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
                 headSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
@@ -2569,7 +2569,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 KST.stConditionSweepRecipeFormat conditionSweepRecipe = new KST.stConditionSweepRecipeFormat();
                 conditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
-                conditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                conditionSweepRecipe.ConditionSweepCount = GetRealVal<short>(recipeContent, "ConditionSweepCount", 0);
                 conditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
                 conditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
                 conditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);

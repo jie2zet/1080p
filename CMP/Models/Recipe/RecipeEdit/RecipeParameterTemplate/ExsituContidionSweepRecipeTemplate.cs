@@ -20,7 +20,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Min = 0,
             Max = 2,
             Default = "0",
-            Options = ["1:Fix", "2:Traverse"],
+            Options = ["1:Fix", "2:Traverse"], 
             CompatibleName = [],
             Steps = []
           },
@@ -29,7 +29,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Id = 2,
             Name = "Condition Sweep Count",
             Unit = "count/min",
-            Type = "float",
+            Type = "int",
             Min = 0,
             Max = 100,
             Default = "10",

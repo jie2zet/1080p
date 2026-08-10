@@ -29,7 +29,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Id = 2,
             Name = "Head Sweep Count",
             Unit = "count/min",
-            Type = "float",
+            Type = "int",
             Min = 0,
             Max = 20,
             Default = "0",
