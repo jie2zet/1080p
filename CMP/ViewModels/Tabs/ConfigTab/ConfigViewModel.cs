@@ -376,17 +376,20 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                         {
                             case ConfigDataType.Enum:
                                 {
-                                    model.SetValue = GlobalService.plcComm.ReadShortVari(model.PLCLink).ToString();
+                                    var result = GlobalService.plcComm.ReadShortVari(model.PLCLink);
+                                    model.SetValue = result.ToString();
                                 }
                                 break;
                             case ConfigDataType.Int:
                                 {
-                                    model.SetValue = GlobalService.plcComm.ReadIntVari(model.PLCLink).ToString()!;
+                                    var result = GlobalService.plcComm.ReadIntVari(model.PLCLink);
+                                    model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
                                 }
                                 break;
                             case ConfigDataType.Double:
                                 {
-                                    model.SetValue = GlobalService.plcComm.ReadFloatVari(model.PLCLink).ToString()!;
+                                    var result = GlobalService.plcComm.ReadFloatVari(model.PLCLink);
+                                    model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
                                 }
                                 break;
                             default:
