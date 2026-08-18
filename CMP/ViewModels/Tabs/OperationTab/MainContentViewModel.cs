@@ -396,10 +396,16 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
         private void ExecuteAutoReturnCommand()
         {
+            foreach (var loadPort in LoadPortManager.Instance.GetAllLoadPorts().Values)
+            {
+                loadPort.ExecuteStopLoad(notify: false);
+            }
+            Growl.InfoGlobal("全部 LoadPort 已停止入料");
+
             var plc = GlobalService.plcComm;
             if (!plc.IsPLCConnected)
             {
-                Growl.WarningGlobal("PLC 未连接");
+                Growl.WarningGlobal("PLC 未连接，未写 M170");
                 return;
             }
 

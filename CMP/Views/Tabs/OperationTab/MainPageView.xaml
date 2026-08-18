@@ -56,9 +56,12 @@
                                             IsEnabled="{Binding LoadPortStatus.FoupDockStatus, Converter={StaticResource FoupDockStatusToIsEnabledConverter}}"
                                             Command="{Binding MOVCommand}" 
                                             CommandParameter="CLDMP"/>
-                                    <Button Content="Unload" Width="85" 
+                                    <Button Content="Unload" Width="70" Margin="0,0,3,0"
                                             Command="{Binding MOVCommand}" 
                                             CommandParameter="CULOD"/>
+                                    <Button Content="{lex:Loc StopLoad}" Width="85"
+                                            Style="{StaticResource ButtonDanger}"
+                                            Command="{Binding StopLoadCommand}"/>
                                 </StackPanel>
                                 <Border BorderBrush="DarkGray" BorderThickness="1" Width="150" Background="White" 
                                         Margin="1" CornerRadius="3">
