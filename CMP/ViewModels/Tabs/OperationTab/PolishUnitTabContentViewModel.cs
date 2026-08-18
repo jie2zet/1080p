@@ -1,4 +1,5 @@
-﻿using CMP.Constants.Plc;
+﻿using CMP.Services.Auth;
+using CMP.Constants.Plc;
 using CMP.Extensions;
 using CMP.Lang;
 using CMP.Models.kvsPlc;
@@ -412,30 +413,30 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
         //_eventAggregator.GetEvent<PubSubEvent>().Subscribe(OnPolishSocketsChanged);
 
-        AutoCommand = new DelegateCommand<string>(AutoCommandExecute);
-        AbortUnitCommand = new DelegateCommand<string>(AbortUnitCommandExecute);
-        AbortCommand = new DelegateCommand<string>(AbortCommandExecute);
-        StartCommand = new DelegateCommand<string>(StartCommandExecute);
-        RunCommand = new DelegateCommand<string>(RunCommandExecute);
-        PressCommand = new DelegateCommand<string>(PressCommandExecute);
-        VentCommand = new DelegateCommand<string>(VentCommandExecute);
-        VacuumCommand = new DelegateCommand<string>(VacuumCommandExecute);
-        UpCommand = new DelegateCommand<string>(UpCommandExecute);
-        DownCommand = new DelegateCommand<string>(DownCommandExecute);
-        SetCommand = new DelegateCommand<string>(SetCommandExecute);
-        ResetCommand = new DelegateCommand<string>(ResetCommandExecute);
-        ServoCommand = new DelegateCommand<string>(ServoCommandExecute);
-        LoadCommand = new DelegateCommand<string>(LoadCommandExecute);
-        PolishCommand = new DelegateCommand<string>(PolishCommandExecute);
-        InitializeCommand = new DelegateCommand<string>(InitializeCommandExecute);
-        AutoModeCommand = new DelegateCommand<string>(AutoModeCommandExecute);
-        ManualModeCommand = new DelegateCommand<string>(ManualModeCommandExecute);
-        AutoRunCommand = new DelegateCommand<string>(AutoRunCommandExecute);
-        ConditionCommand = new DelegateCommand<string>(BreakInCommandExecute);
-        UnloadCommand = new DelegateCommand<string>(UnloadCommandExecute);
-        DechuckCommand = new DelegateCommand<string>(DechuckCommandExecute);
-        SlurrySwitchCommand = new DelegateCommand<string>(SlurrySwitchCommandExecute);
-        PositionCommand = new DelegateCommand<string>(PositionCommandExecute);
+        AutoCommand = OperationAudit.Create<string>("Auto", AutoCommandExecute, () => TabTitle ?? string.Empty);
+        AbortUnitCommand = OperationAudit.Create<string>("AbortUnit", AbortUnitCommandExecute, () => TabTitle ?? string.Empty);
+        AbortCommand = OperationAudit.Create<string>("Abort", AbortCommandExecute, () => TabTitle ?? string.Empty);
+        StartCommand = OperationAudit.Create<string>("Start", StartCommandExecute, () => TabTitle ?? string.Empty);
+        RunCommand = OperationAudit.Create<string>("Run", RunCommandExecute, () => TabTitle ?? string.Empty);
+        PressCommand = OperationAudit.Create<string>("Press", PressCommandExecute, () => TabTitle ?? string.Empty);
+        VentCommand = OperationAudit.Create<string>("Vent", VentCommandExecute, () => TabTitle ?? string.Empty);
+        VacuumCommand = OperationAudit.Create<string>("Vacuum", VacuumCommandExecute, () => TabTitle ?? string.Empty);
+        UpCommand = OperationAudit.Create<string>("Up", UpCommandExecute, () => TabTitle ?? string.Empty);
+        DownCommand = OperationAudit.Create<string>("Down", DownCommandExecute, () => TabTitle ?? string.Empty);
+        SetCommand = OperationAudit.Create<string>("Set", SetCommandExecute, () => TabTitle ?? string.Empty);
+        ResetCommand = OperationAudit.Create<string>("Reset", ResetCommandExecute, () => TabTitle ?? string.Empty);
+        ServoCommand = OperationAudit.Create<string>("Servo", ServoCommandExecute, () => TabTitle ?? string.Empty);
+        LoadCommand = OperationAudit.Create<string>("Load", LoadCommandExecute, () => TabTitle ?? string.Empty);
+        PolishCommand = OperationAudit.Create<string>("Polish", PolishCommandExecute, () => TabTitle ?? string.Empty);
+        InitializeCommand = OperationAudit.Create<string>("Initialize", InitializeCommandExecute, () => TabTitle ?? string.Empty);
+        AutoModeCommand = OperationAudit.Create<string>("AutoMode", AutoModeCommandExecute, () => TabTitle ?? string.Empty);
+        ManualModeCommand = OperationAudit.Create<string>("ManualMode", ManualModeCommandExecute, () => TabTitle ?? string.Empty);
+        AutoRunCommand = OperationAudit.Create<string>("AutoRun", AutoRunCommandExecute, () => TabTitle ?? string.Empty);
+        ConditionCommand = OperationAudit.Create<string>("BreakIn", BreakInCommandExecute, () => TabTitle ?? string.Empty);
+        UnloadCommand = OperationAudit.Create<string>("Unload", UnloadCommandExecute, () => TabTitle ?? string.Empty);
+        DechuckCommand = OperationAudit.Create<string>("Dechuck", DechuckCommandExecute, () => TabTitle ?? string.Empty);
+        SlurrySwitchCommand = OperationAudit.Create<string>("SlurrySwitch", SlurrySwitchCommandExecute, () => TabTitle ?? string.Empty);
+        PositionCommand = OperationAudit.Create<string>("Position", PositionCommandExecute, () => TabTitle ?? string.Empty);
 
 
         kvLink = link;

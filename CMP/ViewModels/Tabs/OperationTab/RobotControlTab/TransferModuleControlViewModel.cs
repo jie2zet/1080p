@@ -11,6 +11,7 @@ using CMP.Services.Plc;
 using CMP.ViewModels.Common;
 using Prism.Commands;
 using WPFLocalizeExtension.Extensions;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab;
 
@@ -523,10 +524,10 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(ExecuteBack);
 
         // Station Commands
-        StationResetCommand = new DelegateCommand(ExecuteStationReset);
-        StationStartCommand = new DelegateCommand(ExecuteStationStart);
-        StationStopCommand = new DelegateCommand(ExecuteStationStop);
-        StationAlarmResetCommand = new DelegateCommand(ExecuteStationAlarmReset);
+        StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "TransferModule");
+        StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "TransferModule");
+        StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "TransferModule");
+        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", ExecuteStationAlarmReset, () => "TransferModule");
 
         // Jog Commands
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
@@ -535,11 +536,11 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         ReleaseJogDownCommand = new DelegateCommand(ExecuteReleaseJogDown);
 
         // Toggle Button Commands - 写入当前状态的反值
-        LoadPositionMoveCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.LoadPositionMove, !LoadPositionMoveToggle));
-        UnloadPositionMoveCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.UnloadPositionMove, !UnloadPositionMoveToggle));
-        SparePositionMoveCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.SparePositionMove, !SparePositionMoveToggle));
-        EnableCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.Enable, !IsEnabled));
-        OriginCommand = new DelegateCommand(() =>
+        LoadPositionMoveCommand = OperationAudit.Create("LoadPositionMove", () => _plc.Write(TransferModuleAddress.LoadPositionMove, !LoadPositionMoveToggle), () => "TransferModule");
+        UnloadPositionMoveCommand = OperationAudit.Create("UnloadPositionMove", () => _plc.Write(TransferModuleAddress.UnloadPositionMove, !UnloadPositionMoveToggle), () => "TransferModule");
+        SparePositionMoveCommand = OperationAudit.Create("SparePositionMove", () => _plc.Write(TransferModuleAddress.SparePositionMove, !SparePositionMoveToggle), () => "TransferModule");
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(TransferModuleAddress.Enable, !IsEnabled), () => "TransferModule");
+        OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -548,60 +549,60 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
             }
 
             OriginToggle = false;
-        });
-        EmergencyStopCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.EmergencyStop, !EmergencyStopToggle));
-        AlarmResetCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.AlarmReset, !AlarmResetToggle));
-        SaveCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.Save, !SaveToggle));
-        LoadOperationCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(TransferModuleAddress.EmergencyStop, !EmergencyStopToggle), () => "TransferModule");
+        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(TransferModuleAddress.AlarmReset, !AlarmResetToggle), () => "TransferModule");
+        SaveCommand = OperationAudit.Create("Save", () => _plc.Write(TransferModuleAddress.Save, !SaveToggle), () => "TransferModule");
+        LoadOperationCommand = OperationAudit.Create("LoadOperation", () =>
         {
             _plc.Write(TransferModuleAddress.LoadOperation, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.LoadOperation, false);
-        });
-        UnloadOperationCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        UnloadOperationCommand = OperationAudit.Create("UnloadOperation", () =>
         {
             _plc.Write(TransferModuleAddress.UnloadOperation, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.UnloadOperation, false);
-        });
-        ManualModeCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.ManualMode, !ManualModeToggle));
-        AutoModeCommand = new DelegateCommand(() => _plc.Write(TransferModuleAddress.AutoMode, !AutoModeToggle));
-        LoadDoorOpenCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(TransferModuleAddress.ManualMode, !ManualModeToggle), () => "TransferModule");
+        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(TransferModuleAddress.AutoMode, !AutoModeToggle), () => "TransferModule");
+        LoadDoorOpenCommand = OperationAudit.Create("LoadDoorOpen", () =>
         {
             _plc.Write(TransferModuleAddress.LoadDoorOpenWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.LoadDoorOpenWrite, false);
-        });
-        LoadDoorCloseCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        LoadDoorCloseCommand = OperationAudit.Create("LoadDoorClose", () =>
         {
             _plc.Write(TransferModuleAddress.LoadDoorCloseWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.LoadDoorCloseWrite, false);
-        });
-        SideDoorOpenCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        SideDoorOpenCommand = OperationAudit.Create("SideDoorOpen", () =>
         {
             _plc.Write(TransferModuleAddress.SideDoorOpenWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.SideDoorOpenWrite, false);
-        });
-        SideDoorCloseCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        SideDoorCloseCommand = OperationAudit.Create("SideDoorClose", () =>
         {
             _plc.Write(TransferModuleAddress.SideDoorCloseWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.SideDoorCloseWrite, false);
-        });
-        UnloadDoorOpenCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        UnloadDoorOpenCommand = OperationAudit.Create("UnloadDoorOpen", () =>
         {
             _plc.Write(TransferModuleAddress.UnloadDoorOpenWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.UnloadDoorOpenWrite, false);
-        });
-        UnloadDoorCloseCommand = new DelegateCommand(() =>
+        }, () => "TransferModule");
+        UnloadDoorCloseCommand = OperationAudit.Create("UnloadDoorClose", () =>
         {
             _plc.Write(TransferModuleAddress.UnloadDoorCloseWrite, true);
             Thread.Sleep(50);
             _plc.Write(TransferModuleAddress.UnloadDoorCloseWrite, false);
-        });
+        }, () => "TransferModule");
     }
 
     #region PLC 读取

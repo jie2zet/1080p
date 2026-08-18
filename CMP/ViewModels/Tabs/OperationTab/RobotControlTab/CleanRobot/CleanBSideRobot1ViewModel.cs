@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
 {
@@ -464,91 +465,91 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
             StationOperationCommand = new DelegateCommand(() => CurrentViewIndex = 1);
 
             //急停按下、报警复位、保存
-            EmergencyCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.EmergencyStop, !EmergencyStopToggle));
-            AlarmResetCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.AlarmReset, true));
-            SaveCommand = new DelegateCommand(OnSaveCommand);
+            EmergencyCommand = OperationAudit.Create("Emergency", () => _plc.Write(CleanRobotB1Address.EmergencyStop, !EmergencyStopToggle), () => "CleanBSideRobot1");
+            AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(CleanRobotB1Address.AlarmReset, true), () => "CleanBSideRobot1");
+            SaveCommand = OperationAudit.Create("Save", OnSaveCommand, () => "CleanBSideRobot1");
 
             //RobotControl - 程序区
-            StartCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.Start, true));
-            PauseCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.Pause, !IsPaused));
-            StopCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.Stop, !IsStopped));
-            ResetCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.Reset, true));
+            StartCommand = OperationAudit.Create("Start", () => _plc.Write(CleanRobotB1Address.Start, true), () => "CleanBSideRobot1");
+            PauseCommand = OperationAudit.Create("Pause", () => _plc.Write(CleanRobotB1Address.Pause, !IsPaused), () => "CleanBSideRobot1");
+            StopCommand = OperationAudit.Create("Stop", () => _plc.Write(CleanRobotB1Address.Stop, !IsStopped), () => "CleanBSideRobot1");
+            ResetCommand = OperationAudit.Create("Reset", () => _plc.Write(CleanRobotB1Address.Reset, true), () => "CleanBSideRobot1");
 
             //RobotControl - 工作区
-            RollerA1_1Command = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.RollA1_Const, 0));
-            RollerA1_2Command = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.RollA1_Const, 1));
-            RollerA3Command = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.RollA3_Const, 2));
-            PenA1Command = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.PenA1_Const, 3));
+            RollerA1_1Command = OperationAudit.Create("RollerA1_1", () => _plc.Write(CleanRobotB1Address.RollA1_Const, 0), () => "CleanBSideRobot1");
+            RollerA1_2Command = OperationAudit.Create("RollerA1_2", () => _plc.Write(CleanRobotB1Address.RollA1_Const, 1), () => "CleanBSideRobot1");
+            RollerA3Command = OperationAudit.Create("RollerA3", () => _plc.Write(CleanRobotB1Address.RollA3_Const, 2), () => "CleanBSideRobot1");
+            PenA1Command = OperationAudit.Create("PenA1", () => _plc.Write(CleanRobotB1Address.PenA1_Const, 3), () => "CleanBSideRobot1");
 
-            WorkAreaPickupCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.WorkAreaPickup, !WorkAreaPickupToggle));
-            WorkAreaPlaceCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.WorkAreaPlace, !WorkAreaPlaceToggle));
-            WaitConfirmCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.WaitConfirm, !WaitConfirmToggle));
+            WorkAreaPickupCommand = OperationAudit.Create("WorkAreaPickup", () => _plc.Write(CleanRobotB1Address.WorkAreaPickup, !WorkAreaPickupToggle), () => "CleanBSideRobot1");
+            WorkAreaPlaceCommand = OperationAudit.Create("WorkAreaPlace", () => _plc.Write(CleanRobotB1Address.WorkAreaPlace, !WorkAreaPlaceToggle), () => "CleanBSideRobot1");
+            WaitConfirmCommand = OperationAudit.Create("WaitConfirm", () => _plc.Write(CleanRobotB1Address.WaitConfirm, !WaitConfirmToggle), () => "CleanBSideRobot1");
 
-            AutoModeCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.AutoMode, !AutoModeToggle));
-            UseUpperArmCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.UseUpperArm, !UseUpperArmToggle));
-            UseLowerArmCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.UseLowerArm, !UseLowerArmToggle));
-            ConfirmSwitchCommand = new DelegateCommand(() => _plc.Write(CleanRobotB1Address.ConfirmSwitch, !ConfirmSwitchToggle));
+            AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(CleanRobotB1Address.AutoMode, !AutoModeToggle), () => "CleanBSideRobot1");
+            UseUpperArmCommand = OperationAudit.Create("UseUpperArm", () => _plc.Write(CleanRobotB1Address.UseUpperArm, !UseUpperArmToggle), () => "CleanBSideRobot1");
+            UseLowerArmCommand = OperationAudit.Create("UseLowerArm", () => _plc.Write(CleanRobotB1Address.UseLowerArm, !UseLowerArmToggle), () => "CleanBSideRobot1");
+            ConfirmSwitchCommand = OperationAudit.Create("ConfirmSwitch", () => _plc.Write(CleanRobotB1Address.ConfirmSwitch, !ConfirmSwitchToggle), () => "CleanBSideRobot1");
             //RobotControl - 感应区
             //none commands
 
             //Station Operation
             BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
-            StationResetCommand = new DelegateCommand(() => { _plc.Write(CleanRobotB1Address.StationReset, true); });
-            StationStartCommand = new DelegateCommand(() => { _plc.Write(CleanRobotB1Address.StationStart, true); });
-            StationStopCommand = new DelegateCommand(() => { _plc.Write(CleanRobotB1Address.StationStop, true); });
-            StationAlarmResetCommand = new DelegateCommand(() => { _plc.Write(CleanRobotB1Address.StationAlarmReset, true); });
+            StationResetCommand = OperationAudit.Create("StationReset", () => { _plc.Write(CleanRobotB1Address.StationReset, true); }, () => "CleanBSideRobot1");
+            StationStartCommand = OperationAudit.Create("StationStart", () => { _plc.Write(CleanRobotB1Address.StationStart, true); }, () => "CleanBSideRobot1");
+            StationStopCommand = OperationAudit.Create("StationStop", () => { _plc.Write(CleanRobotB1Address.StationStop, true); }, () => "CleanBSideRobot1");
+            StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => { _plc.Write(CleanRobotB1Address.StationAlarmReset, true); }, () => "CleanBSideRobot1");
 
-            PickFromRoller1Command = new DelegateCommand(() =>
+            PickFromRoller1Command = OperationAudit.Create("PickFromRoller1", () =>
             {
                 _plc.Write(CleanRobotB1Address.PickFromRoller1, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PickFromRoller1, false);
-            });
-            PickFromRoller2Command = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            PickFromRoller2Command = OperationAudit.Create("PickFromRoller2", () =>
             {
                 _plc.Write(CleanRobotB1Address.PickFromRoller2, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PickFromRoller2, false);
-            });
-            PlaceToRoller3Command = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            PlaceToRoller3Command = OperationAudit.Create("PlaceToRoller3", () =>
             {
                 _plc.Write(CleanRobotB1Address.PlaceToRoller3, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PlaceToRoller3, false);
-            });
-            PickFromRoller3Command = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            PickFromRoller3Command = OperationAudit.Create("PickFromRoller3", () =>
             {
                 _plc.Write(CleanRobotB1Address.PickFromRoller3, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PickFromRoller3, false);
-            });
-            PlaceToPen1Command = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            PlaceToPen1Command = OperationAudit.Create("PlaceToPen1", () =>
             {
                 _plc.Write(CleanRobotB1Address.PlaceToPen1, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PlaceToPen1, false);
-            });
-            PlaceToRollerB2Command = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            PlaceToRollerB2Command = OperationAudit.Create("PlaceToRollerB2", () =>
             {
                 _plc.Write(CleanRobotB1Address.PlaceToRollerB2, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotB1Address.PlaceToRollerB2, false);
-            });
+            }, () => "CleanBSideRobot1");
 
-            StationManualModeCommand = new DelegateCommand(() =>
+            StationManualModeCommand = OperationAudit.Create("StationManualMode", () =>
             {
                 StationManualModeToggle = true;
                 StationAutoModeToggle = false;
                 _plc.Write(CleanRobotB1Address.StationManualMode, true);
                 _plc.Write(CleanRobotB1Address.StationAutoMode, false);
-            });
-            StationAutoModeCommand = new DelegateCommand(() =>
+            }, () => "CleanBSideRobot1");
+            StationAutoModeCommand = OperationAudit.Create("StationAutoMode", () =>
             {
                 StationManualModeToggle = false;
                 StationAutoModeToggle = true;
                 _plc.Write(CleanRobotB1Address.StationManualMode, false);
                 _plc.Write(CleanRobotB1Address.StationAutoMode, true);
-            });
+            }, () => "CleanBSideRobot1");
         }
 
         private async void ReadTimer_Tick(object? sender, EventArgs e)

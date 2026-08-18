@@ -1,4 +1,5 @@
-﻿using CMP.Services.LoadPort;
+﻿using CMP.Services.Auth;
+using CMP.Services.LoadPort;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.IO.Ports;
@@ -8,6 +9,7 @@ using HandyControl.Controls;
 using Azure;
 using CMP.Models.Resource;
 using CMP.Models.Operation.LoadPort;
+using Prism.Commands;
 
 
 namespace CMP.ViewModels.Tabs.OperationTab
@@ -417,13 +419,14 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
             // 初始化命令
             RefreshPortsCommand = new DelegateCommand(OnRefreshPorts);
-            ConnectCommand = new DelegateCommand(OnConnect, CanConnect).ObservesProperty(() => SelectedPort);
-            DisconnectCommand = new DelegateCommand(OnDisconnect, CanDisconnect);
-            SendMoveCommand = new DelegateCommand(OnSendMoveCommand, CanSendCommands).ObservesProperty(() => SelectedMoveAction);
-            SendSetCommand = new DelegateCommand(OnSendSetCommand, CanSendSetCommand);
-            SendGetCommand = new DelegateCommand(OnSendGetCommand, CanSendGetCommand);
-            SendQueryCommand = new DelegateCommand(OnSendQueryCommand, CanSendQueryCommand);
-            // 初始化清空日志命令
+            ConnectCommand = OperationAudit.Create("Connect", OnConnect, () => SelectedPort ?? "SerialPort", CanConnect)
+                .ObservesProperty(() => SelectedPort);
+            DisconnectCommand = OperationAudit.Create("Disconnect", OnDisconnect, () => SelectedPort ?? "SerialPort", CanDisconnect);
+            SendMoveCommand = OperationAudit.Create("MOV", OnSendMoveCommand, () => SelectedPort ?? "SerialPort", CanSendCommands)
+                .ObservesProperty(() => SelectedMoveAction);
+            SendSetCommand = OperationAudit.Create("SET", OnSendSetCommand, () => SelectedPort ?? "SerialPort", CanSendSetCommand);
+            SendGetCommand = OperationAudit.Create("GET", OnSendGetCommand, () => SelectedPort ?? "SerialPort", CanSendGetCommand);
+            SendQueryCommand = OperationAudit.Create("Query", OnSendQueryCommand, () => SelectedPort ?? "SerialPort", CanSendQueryCommand);
             ClearLogCommand = new DelegateCommand(ClearLog);
             // 订阅响应事件
             _serialService.ResponseReceived += SerialService_ResponseReceived;

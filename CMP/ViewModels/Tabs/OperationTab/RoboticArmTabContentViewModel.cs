@@ -1,3 +1,4 @@
+using CMP.Services.Auth;
 using CMP.Models.Operation.RoboticArm;
 using CMP.Utils;
 using CMP.ViewModels.Common;
@@ -34,7 +35,7 @@ public class RoboticArmTabContentViewModel : TabContentViewModelBase
         set => SetProperty(ref _roboticArm, value);
     }
 
-    /// <summary>?? GlobalService.globalRobots.listRobot ???????EFEMRobot???????????υτ RobotStatus / SV_STCtrl ??????</summary>
+    /// <summary>?? GlobalService.globalRobots.listRobot ???????EFEMRobot???????????ÿÿ RobotStatus / SV_STCtrl ??????</summary>
     public List<CMP.Models.Resource.RoboticArm>? EquipRobots => GlobalService.globalRobots?.listRobot;
     
     public List<string> ArmSource { get; } = Enum.GetNames<Arm>().ToList();
@@ -84,12 +85,12 @@ public class RoboticArmTabContentViewModel : TabContentViewModelBase
         // Initialize Robotic Arms
         InitializeRoboticArms();
         
-        AutoModeOnCommand = new DelegateCommand<string>(async s => await AutoModeOnCommandExecuteAsync(s));
-        RunCommand = new DelegateCommand<RoboticArm>(async r => await RunCommandExecuteAsync(r));
-        PauseCommand = new DelegateCommand<RoboticArm>(async r => await RunCommandExecuteAsync(r));
-        StopCommand = new DelegateCommand<RoboticArm>(async r => await RunCommandExecuteAsync(r));
-        AbortCommand = new DelegateCommand<RoboticArm>(async r => await RunCommandExecuteAsync(r));
-        ResetCommand = new DelegateCommand<RoboticArm>(async r => await RunCommandExecuteAsync(r));
+        AutoModeOnCommand = OperationAudit.CreateAsync<string>("AutoModeOn", AutoModeOnCommandExecuteAsync, () => TabTitle ?? string.Empty);
+        RunCommand = OperationAudit.CreateAsync<RoboticArm>("Run", RunCommandExecuteAsync, () => TabTitle ?? string.Empty, formatTarget: r => $"Arm{r.ArmId}");
+        PauseCommand = OperationAudit.CreateAsync<RoboticArm>("Pause", RunCommandExecuteAsync, () => TabTitle ?? string.Empty, formatTarget: r => $"Arm{r.ArmId}");
+        StopCommand = OperationAudit.CreateAsync<RoboticArm>("Stop", RunCommandExecuteAsync, () => TabTitle ?? string.Empty, formatTarget: r => $"Arm{r.ArmId}");
+        AbortCommand = OperationAudit.CreateAsync<RoboticArm>("Abort", RunCommandExecuteAsync, () => TabTitle ?? string.Empty, formatTarget: r => $"Arm{r.ArmId}");
+        ResetCommand = OperationAudit.CreateAsync<RoboticArm>("Reset", RunCommandExecuteAsync, () => TabTitle ?? string.Empty, formatTarget: r => $"Arm{r.ArmId}");
         // ??????????????????????????
        // StartAutomaticScanning();
     }

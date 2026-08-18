@@ -1,9 +1,11 @@
+using CMP.Services.Auth;
 using CMP.Models.Operation.Bot;
 using CMP.ViewModels.Common;
 using HandyControl.Controls;
 using System.Collections.ObjectModel;
 using CMP.Models.DataCenter;
 using CMP.Models.Resource;
+using Prism.Commands;
 
 namespace CMP.ViewModels.Tabs.OperationTab;
 
@@ -55,15 +57,15 @@ public class BotTabContentViewModel : TabContentViewModelBase
         _offset = offset;
         _size = size;
 
-        ServerOnCommand = new DelegateCommand<AxisData>(ServerOnCommandExecute);
-        RunCommand = new DelegateCommand<AxisData>(RunCommandExecute);
-        HomeCommand = new DelegateCommand<AxisData>(HomeCommandExecute);
+        ServerOnCommand = OperationAudit.Create<AxisData>("Servo", ServerOnCommandExecute, () => TabTitle ?? string.Empty, formatTarget: a => a.ModuleName);
+        RunCommand = OperationAudit.Create<AxisData>("Run", RunCommandExecute, () => TabTitle ?? string.Empty, formatTarget: a => a.ModuleName);
+        HomeCommand = OperationAudit.Create<AxisData>("Home", HomeCommandExecute, () => TabTitle ?? string.Empty, formatTarget: a => a.ModuleName);
         PressJogPlusCommand = new DelegateCommand<AxisData>(axis => PressCommandExecute(axis, "JogPlus"));
         ReleaseJogPlusCommand = new DelegateCommand<AxisData>(axis => ReleaseCommandExecute(axis, "JogPlus"));
         PressJogMinusCommand = new DelegateCommand<AxisData>(axis => PressCommandExecute(axis, "JogMinus"));
         ReleaseJogMinusCommand = new DelegateCommand<AxisData>(axis => ReleaseCommandExecute(axis, "JogMinus"));
-        StopCommand = new DelegateCommand<AxisData>(StopCommandExecute);
-        SetPosCommand = new DelegateCommand<AxisData>(SetPosCommandExecute);
+        StopCommand = OperationAudit.Create<AxisData>("Stop", StopCommandExecute, () => TabTitle ?? string.Empty, formatTarget: a => a.ModuleName);
+        SetPosCommand = OperationAudit.Create<AxisData>("SetPos", SetPosCommandExecute, () => TabTitle ?? string.Empty, formatTarget: a => a.ModuleName);
 
         _dataCenter = GlobalService.DataCenter;
 
@@ -90,7 +92,7 @@ public class BotTabContentViewModel : TabContentViewModelBase
         
         if (axisData != null)
         {       
-            //当axisData不为null,更新当前位置或者其他信息等操作 
+            //??axisData???null,????????????????????????? 
             
             axisData.CurrentPosition = axis.GetCurrentPosition();
             

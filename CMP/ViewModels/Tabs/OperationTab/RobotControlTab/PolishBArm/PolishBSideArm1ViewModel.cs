@@ -10,6 +10,7 @@ using CMP.Services.Log;
 using CMP.Services.Plc;
 using CMP.ViewModels.Common;
 using Prism.Commands;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 {
@@ -518,30 +519,30 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 
             StationOperationCommand = new DelegateCommand(() => CurrentViewIndex = 1);
 
-            StandbyMoveX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StandbyPosMove_1x, !StandbyPosMoveToggle_1x));
-            TransferMoveX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.TransferArmMove_1x, !TransferArmMoveToggle_1x));
-            PolishCMoveX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.PolishCMove_1x, !PolishCPosMoveToggle_1x));
-            PolishDMoveX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.PolishDMove_1x, !PolishDPosMoveToggle_1x));
+            StandbyMoveX1Command = OperationAudit.Create("StandbyMoveX1", () => _plc.Write(PolishBSideArm1Address.StandbyPosMove_1x, !StandbyPosMoveToggle_1x), () => "PolishBSideArm1");
+            TransferMoveX1Command = OperationAudit.Create("TransferMoveX1", () => _plc.Write(PolishBSideArm1Address.TransferArmMove_1x, !TransferArmMoveToggle_1x), () => "PolishBSideArm1");
+            PolishCMoveX1Command = OperationAudit.Create("PolishCMoveX1", () => _plc.Write(PolishBSideArm1Address.PolishCMove_1x, !PolishCPosMoveToggle_1x), () => "PolishBSideArm1");
+            PolishDMoveX1Command = OperationAudit.Create("PolishDMoveX1", () => _plc.Write(PolishBSideArm1Address.PolishDMove_1x, !PolishDPosMoveToggle_1x), () => "PolishBSideArm1");
 
-            StandbyMoveZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StandbyPosMove_1z, !StandbyPosMoveToggle_1z));
-            TransferMoveZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.TransferArmMove_1z, !TransferArmMoveToggle_1z));
-            PolishCMoveZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.PolishCMove_1z, !PolishCPosMoveToggle_1z));
-            PolishDMoveZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.PolishDMove_1z, !PolishDPosMoveToggle_1z));
+            StandbyMoveZ1Command = OperationAudit.Create("StandbyMoveZ1", () => _plc.Write(PolishBSideArm1Address.StandbyPosMove_1z, !StandbyPosMoveToggle_1z), () => "PolishBSideArm1");
+            TransferMoveZ1Command = OperationAudit.Create("TransferMoveZ1", () => _plc.Write(PolishBSideArm1Address.TransferArmMove_1z, !TransferArmMoveToggle_1z), () => "PolishBSideArm1");
+            PolishCMoveZ1Command = OperationAudit.Create("PolishCMoveZ1", () => _plc.Write(PolishBSideArm1Address.PolishCMove_1z, !PolishCPosMoveToggle_1z), () => "PolishBSideArm1");
+            PolishDMoveZ1Command = OperationAudit.Create("PolishDMoveZ1", () => _plc.Write(PolishBSideArm1Address.PolishDMove_1z, !PolishDPosMoveToggle_1z), () => "PolishBSideArm1");
 
-            EnableCommandX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.Enable_1x, !IsEnabled_1x));
-            EnableCommandZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.Enable_1z, !IsEnabled_1z));
+            EnableCommandX1Command = OperationAudit.Create("EnableCommandX1", () => _plc.Write(PolishBSideArm1Address.Enable_1x, !IsEnabled_1x), () => "PolishBSideArm1");
+            EnableCommandZ1Command = OperationAudit.Create("EnableCommandZ1", () => _plc.Write(PolishBSideArm1Address.Enable_1z, !IsEnabled_1z), () => "PolishBSideArm1");
 
-            PressJogUpX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogUp_1x, true));
-            ReleaseJogUpX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogUp_1x, false));
-            PressJogDownX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogDown_1x, true));
-            ReleaseJogDownX1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogDown_1x, false));
+            PressJogUpX1Command = OperationAudit.Create("PressJogUpX1", () => _plc.Write(PolishBSideArm1Address.JogUp_1x, true), () => "PolishBSideArm1");
+            ReleaseJogUpX1Command = OperationAudit.Create("ReleaseJogUpX1", () => _plc.Write(PolishBSideArm1Address.JogUp_1x, false), () => "PolishBSideArm1");
+            PressJogDownX1Command = OperationAudit.Create("PressJogDownX1", () => _plc.Write(PolishBSideArm1Address.JogDown_1x, true), () => "PolishBSideArm1");
+            ReleaseJogDownX1Command = OperationAudit.Create("ReleaseJogDownX1", () => _plc.Write(PolishBSideArm1Address.JogDown_1x, false), () => "PolishBSideArm1");
 
-            PressJogUpZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogUp_1z, true));
-            ReleaseJogUpZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogUp_1z, false));
-            PressJogDownZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogDown_1z, true));
-            ReleaseJogDownZ1Command = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.JogDown_1z, false));
+            PressJogUpZ1Command = OperationAudit.Create("PressJogUpZ1", () => _plc.Write(PolishBSideArm1Address.JogUp_1z, true), () => "PolishBSideArm1");
+            ReleaseJogUpZ1Command = OperationAudit.Create("ReleaseJogUpZ1", () => _plc.Write(PolishBSideArm1Address.JogUp_1z, false), () => "PolishBSideArm1");
+            PressJogDownZ1Command = OperationAudit.Create("PressJogDownZ1", () => _plc.Write(PolishBSideArm1Address.JogDown_1z, true), () => "PolishBSideArm1");
+            ReleaseJogDownZ1Command = OperationAudit.Create("ReleaseJogDownZ1", () => _plc.Write(PolishBSideArm1Address.JogDown_1z, false), () => "PolishBSideArm1");
 
-            OrignX1Command = new DelegateCommand(() =>
+            OrignX1Command = OperationAudit.Create("OrignX1", () =>
             {
                 if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                         MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -550,8 +551,8 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 }
 
                 OriginToggle_1x = false;
-            });
-            OrignZ1Command = new DelegateCommand(() =>
+            }, () => "PolishBSideArm1");
+            OrignZ1Command = OperationAudit.Create("OrignZ1", () =>
             {
                 if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                         MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -560,51 +561,51 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 }
 
                 OriginToggle_1z = false;
-            });
+            }, () => "PolishBSideArm1");
 
-            EmergencyCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.EmergencyStop, !EmergencyStopToggle));
-            AlarmResetCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.AlarmReset, !AlarmResetToggle));
-            SaveCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.Save, !SaveToggle));
+            EmergencyCommand = OperationAudit.Create("Emergency", () => _plc.Write(PolishBSideArm1Address.EmergencyStop, !EmergencyStopToggle), () => "PolishBSideArm1");
+            AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishBSideArm1Address.AlarmReset, !AlarmResetToggle), () => "PolishBSideArm1");
+            SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishBSideArm1Address.Save, !SaveToggle), () => "PolishBSideArm1");
 
             BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
-            StationResetCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StationReset, true));
-            StationStartCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StationStart, true));
-            StationStopCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StationStop, true));
-            StationAlarmResetCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.StationAlarmReset, true));
+            StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(PolishBSideArm1Address.StationReset, true), () => "PolishBSideArm1");
+            StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(PolishBSideArm1Address.StationStart, true), () => "PolishBSideArm1");
+            StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(PolishBSideArm1Address.StationStop, true), () => "PolishBSideArm1");
+            StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(PolishBSideArm1Address.StationAlarmReset, true), () => "PolishBSideArm1");
 
-            PickFromTransferCommand = new DelegateCommand(() =>
+            PickFromTransferCommand = OperationAudit.Create("PickFromTransfer", () =>
             {
                 _plc.Write(PolishBSideArm1Address.PickFromTransfer, true);
                 Thread.Sleep(50);
                 _plc.Write(PolishBSideArm1Address.PickFromTransfer, false);
-            });
-            PlaceToPolishCCommand = new DelegateCommand(() =>
+            }, () => "PolishBSideArm1");
+            PlaceToPolishCCommand = OperationAudit.Create("PlaceToPolishC", () =>
             {
                 _plc.Write(PolishBSideArm1Address.PlaceToPolishC, true);
                 Thread.Sleep(50);
                 _plc.Write(PolishBSideArm1Address.PlaceToPolishC, false);
-            });
-            PlaceToPolishDCommand = new DelegateCommand(() =>
+            }, () => "PolishBSideArm1");
+            PlaceToPolishDCommand = OperationAudit.Create("PlaceToPolishD", () =>
             {
                 _plc.Write(PolishBSideArm1Address.PlaceToPolishD, true);
                 Thread.Sleep(50);
                 _plc.Write(PolishBSideArm1Address.PlaceToPolishD, false);
-            });
-            Spare1Command = new DelegateCommand(() =>
+            }, () => "PolishBSideArm1");
+            Spare1Command = OperationAudit.Create("Spare1", () =>
             {
                 _plc.Write(PolishBSideArm1Address.Spare1, true);
                 Thread.Sleep(50);
                 _plc.Write(PolishBSideArm1Address.Spare1, false);
-            });
-            Spare2Command = new DelegateCommand(() =>
+            }, () => "PolishBSideArm1");
+            Spare2Command = OperationAudit.Create("Spare2", () =>
             {
                 _plc.Write(PolishBSideArm1Address.Spare2, true);
                 Thread.Sleep(50);   
                 _plc.Write(PolishBSideArm1Address.Spare2, false);
-            });
+            }, () => "PolishBSideArm1");
 
-            ManualModeCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.ManualMode, !ManualModeToggle));
-            AutoModeCommand = new DelegateCommand(() => _plc.Write(PolishBSideArm1Address.AutoMode, !AutoModeToggle));
+            ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishBSideArm1Address.ManualMode, !ManualModeToggle), () => "PolishBSideArm1");
+            AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishBSideArm1Address.AutoMode, !AutoModeToggle), () => "PolishBSideArm1");
         }
 
         private async void ReadTimer_Tick(object? sender, EventArgs e)

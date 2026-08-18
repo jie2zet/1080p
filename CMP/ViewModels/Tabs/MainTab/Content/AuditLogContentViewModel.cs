@@ -12,6 +12,8 @@ public class AuditLogContentViewModel : BindableBase
     private List<AuditLogModel> _auditLogs = new();
     private string _userNameFilter = string.Empty;
     private string _selectedActionFilter = "全部";
+    private string _selectedModuleFilter = "全部";
+    private string _targetFilter = string.Empty;
     private DateTime _startTime = DateTime.Today;
     private DateTime _endTime = DateTime.Today.AddDays(1).AddSeconds(-1);
     private int _page = 1;
@@ -44,6 +46,29 @@ public class AuditLogContentViewModel : BindableBase
         set => SetProperty(ref _userNameFilter, value);
     }
 
+    public List<string> ModuleFilters { get; } =
+    [
+        "全部",
+        AuditModules.Auth,
+        AuditModules.Recipe,
+        AuditModules.EC,
+        AuditModules.Calibration,
+        AuditModules.Consumable,
+        AuditModules.Operation
+    ];
+
+    public string SelectedModuleFilter
+    {
+        get => _selectedModuleFilter;
+        set => SetProperty(ref _selectedModuleFilter, value);
+    }
+
+    public string TargetFilter
+    {
+        get => _targetFilter;
+        set => SetProperty(ref _targetFilter, value);
+    }
+
     public List<string> ActionFilters { get; } =
     [
         "全部",
@@ -58,7 +83,10 @@ public class AuditLogContentViewModel : BindableBase
         AuditActions.RecipeSaveAs,
         AuditActions.ConfigApply,
         AuditActions.ConfigSyncPlc,
-        AuditActions.ConfigExport
+        AuditActions.ConfigExport,
+        AuditActions.CalibrationSave,
+        AuditActions.CalibrationAssign,
+        AuditActions.ConsumableUpdate
     ];
 
     public string SelectedActionFilter
@@ -96,7 +124,13 @@ public class AuditLogContentViewModel : BindableBase
 
     private void QueryInfo()
     {
-        var data = AuditLogService.Query(UserNameFilter, SelectedActionFilter, StartTime, EndTime);
+        var data = AuditLogService.Query(
+            UserNameFilter,
+            SelectedActionFilter,
+            StartTime,
+            EndTime,
+            SelectedModuleFilter,
+            TargetFilter);
         SetAuditLogSource(data);
     }
 

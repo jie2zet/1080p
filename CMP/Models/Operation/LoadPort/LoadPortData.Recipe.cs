@@ -1,4 +1,5 @@
-﻿using CMP.Models.Resource;
+﻿using CMP.Services.Auth;
+using CMP.Models.Resource;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.ViewModels.Tabs.OperationTab;
@@ -19,8 +20,8 @@ namespace CMP.Models.Operation.LoadPort
         public ICommand RejectCommand { get; private set; }
 
         private void  initLoadPortRecipe() {
-            AssignCommand = new DelegateCommand<string>(ExecuteAssignCommand, CanAssignCommand).ObservesProperty(() => IsConnected);
-            RejectCommand = new DelegateCommand<string>(ExecuteRejectCommand, CanRejectCommand).ObservesProperty(() => IsConnected);
+            AssignCommand = OperationAudit.Create<string>("Assign", ExecuteAssignCommand, () => TabName, CanAssignCommand).ObservesProperty(() => IsConnected);
+            RejectCommand = OperationAudit.Create<string>("Reject", ExecuteRejectCommand, () => TabName, CanRejectCommand).ObservesProperty(() => IsConnected);
         }
 
       

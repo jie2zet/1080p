@@ -26,20 +26,41 @@
                          hc:InfoElement.TitleWidth="80"
                          Text="{Binding UserNameFilter, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource TextBoxExtend}"
-                         Width="220"
+                         Width="180"
                          FontSize="14"
                          Height="30"/>
 
                 <ComboBox Height="30"
                           Margin="10,0,0,0"
+                          ItemsSource="{Binding ModuleFilters}"
+                          SelectedItem="{Binding SelectedModuleFilter}"
+                          Width="170"
+                          hc:InfoElement.TitlePlacement="Left"
+                          hc:InfoElement.TitleWidth="50"
+                          FontSize="14"
+                          hc:InfoElement.Title="模块"
+                          Style="{StaticResource ComboBoxExtend}"/>
+
+                <ComboBox Height="30"
+                          Margin="10,0,0,0"
                           ItemsSource="{Binding ActionFilters}"
                           SelectedItem="{Binding SelectedActionFilter}"
-                          Width="200"
+                          Width="190"
                           hc:InfoElement.TitlePlacement="Left"
-                          hc:InfoElement.TitleWidth="60"
-                          FontSize="16"
+                          hc:InfoElement.TitleWidth="50"
+                          FontSize="14"
                           hc:InfoElement.Title="操作"
                           Style="{StaticResource ComboBoxExtend}"/>
+
+                <TextBox hc:InfoElement.Title="对象"
+                         hc:InfoElement.TitlePlacement="Left"
+                         hc:InfoElement.TitleWidth="50"
+                         Text="{Binding TargetFilter, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource TextBoxExtend}"
+                         Width="180"
+                         FontSize="14"
+                         Height="30"
+                         Margin="10,0,0,0"/>
 
                 <hc:DateTimePicker Height="30"
                                    hc:InfoElement.Title="开始时间"
@@ -84,13 +105,17 @@
                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
                   ScrollViewer.CanContentScroll="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
-                <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" Width="120"/>
-                <DataGridTextColumn Header="角色" Binding="{Binding Level}" Width="120"/>
-                <DataGridTextColumn Header="操作" Binding="{Binding Action}" Width="140"/>
-                <DataGridTextColumn Header="结果" Binding="{Binding Result}" Width="100"/>
-                <DataGridTextColumn Header="详情" Binding="{Binding Detail}" Width="*" MinWidth="200"/>
-                <DataGridTextColumn Header="时间" Binding="{Binding Timestamp}" Width="180"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                <DataGridTextColumn Header="时间" Binding="{Binding Timestamp}" Width="170"/>
+                <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" Width="100"/>
+                <DataGridTextColumn Header="角色" Binding="{Binding Level}" Width="100"/>
+                <DataGridTextColumn Header="模块" Binding="{Binding Module}" Width="100"/>
+                <DataGridTextColumn Header="操作" Binding="{Binding Action}" Width="130"/>
+                <DataGridTextColumn Header="对象" Binding="{Binding Target}" Width="220"/>
+                <DataGridTextColumn Header="原值" Binding="{Binding OldValue}" Width="100"/>
+                <DataGridTextColumn Header="新值" Binding="{Binding NewValue}" Width="100"/>
+                <DataGridTextColumn Header="结果" Binding="{Binding Result}" Width="90"/>
+                <DataGridTextColumn Header="详情" Binding="{Binding Detail}" Width="*" MinWidth="120"/>
             </DataGrid.Columns>
         </DataGrid>
 

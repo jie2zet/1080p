@@ -6,6 +6,7 @@ using CMP.Services.Log;
 using CMP.Services.Plc;
 using CMP.ViewModels.Common;
 using WPFLocalizeExtension.Extensions;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab;
 
@@ -735,27 +736,27 @@ public class PolishASideArm1ControlViewModel : TabContentViewModelBase
         StationOperationCommand = new DelegateCommand(() => CurrentViewIndex = 1);
         BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
 
-        StationResetCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.StationReset, true));
-        StationStartCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.StationStart, true));
-        StationStopCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.StationStop, true));
-        StationAlarmResetCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.StationAlarmReset, true));
+        StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(PolishASideArm1Address.StationReset, true), () => "PolishASideArm1");
+        StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(PolishASideArm1Address.StationStart, true), () => "PolishASideArm1");
+        StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(PolishASideArm1Address.StationStop, true), () => "PolishASideArm1");
+        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(PolishASideArm1Address.StationAlarmReset, true), () => "PolishASideArm1");
 
-        XPressJogUpCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XJogUp, true));
-        XReleaseJogUpCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XJogUp, false));
-        XPressJogDownCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XJogDown, true));
-        XReleaseJogDownCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XJogDown, false));
+        XPressJogUpCommand = OperationAudit.Create("XPressJogUp", () => _plc.Write(PolishASideArm1Address.XJogUp, true), () => "PolishASideArm1");
+        XReleaseJogUpCommand = OperationAudit.Create("XReleaseJogUp", () => _plc.Write(PolishASideArm1Address.XJogUp, false), () => "PolishASideArm1");
+        XPressJogDownCommand = OperationAudit.Create("XPressJogDown", () => _plc.Write(PolishASideArm1Address.XJogDown, true), () => "PolishASideArm1");
+        XReleaseJogDownCommand = OperationAudit.Create("XReleaseJogDown", () => _plc.Write(PolishASideArm1Address.XJogDown, false), () => "PolishASideArm1");
 
-        ZPressJogUpCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZJogUp, true));
-        ZReleaseJogUpCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZJogUp, false));
-        ZPressJogDownCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZJogDown, true));
-        ZReleaseJogDownCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZJogDown, false));
+        ZPressJogUpCommand = OperationAudit.Create("ZPressJogUp", () => _plc.Write(PolishASideArm1Address.ZJogUp, true), () => "PolishASideArm1");
+        ZReleaseJogUpCommand = OperationAudit.Create("ZReleaseJogUp", () => _plc.Write(PolishASideArm1Address.ZJogUp, false), () => "PolishASideArm1");
+        ZPressJogDownCommand = OperationAudit.Create("ZPressJogDown", () => _plc.Write(PolishASideArm1Address.ZJogDown, true), () => "PolishASideArm1");
+        ZReleaseJogDownCommand = OperationAudit.Create("ZReleaseJogDown", () => _plc.Write(PolishASideArm1Address.ZJogDown, false), () => "PolishASideArm1");
 
-        XStandbyPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XStandbyPositionMove, !XStandbyPositionMoveToggle));
-        XTransferArmPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XTransferArmPositionMove, !XTransferArmPositionMoveToggle));
-        XPolishAPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XPolishAPositionMove, !XPolishAPositionMoveToggle));
-        XPolishBPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XPolishBPositionMove, !XPolishBPositionMoveToggle));
-        XEnableCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.XEnable, !XIsEnabled));
-        XOriginCommand = new DelegateCommand(() =>
+        XStandbyPositionMoveCommand = OperationAudit.Create("XStandbyPositionMove", () => _plc.Write(PolishASideArm1Address.XStandbyPositionMove, !XStandbyPositionMoveToggle), () => "PolishASideArm1");
+        XTransferArmPositionMoveCommand = OperationAudit.Create("XTransferArmPositionMove", () => _plc.Write(PolishASideArm1Address.XTransferArmPositionMove, !XTransferArmPositionMoveToggle), () => "PolishASideArm1");
+        XPolishAPositionMoveCommand = OperationAudit.Create("XPolishAPositionMove", () => _plc.Write(PolishASideArm1Address.XPolishAPositionMove, !XPolishAPositionMoveToggle), () => "PolishASideArm1");
+        XPolishBPositionMoveCommand = OperationAudit.Create("XPolishBPositionMove", () => _plc.Write(PolishASideArm1Address.XPolishBPositionMove, !XPolishBPositionMoveToggle), () => "PolishASideArm1");
+        XEnableCommand = OperationAudit.Create("XEnable", () => _plc.Write(PolishASideArm1Address.XEnable, !XIsEnabled), () => "PolishASideArm1");
+        XOriginCommand = OperationAudit.Create("XOrigin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -764,14 +765,14 @@ public class PolishASideArm1ControlViewModel : TabContentViewModelBase
             }
 
             XOriginToggle = false;
-        });
+        }, () => "PolishASideArm1");
 
-        ZStandbyPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZStandbyPositionMove, !ZStandbyPositionMoveToggle));
-        ZTransferArmPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZTransferArmPositionMove, !ZTransferArmPositionMoveToggle));
-        ZPolishAPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZPolishAPositionMove, !ZPolishAPositionMoveToggle));
-        ZPolishBPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZPolishBPositionMove, !ZPolishBPositionMoveToggle));
-        ZEnableCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ZEnable, !ZIsEnabled));
-        ZOriginCommand = new DelegateCommand(() =>
+        ZStandbyPositionMoveCommand = OperationAudit.Create("ZStandbyPositionMove", () => _plc.Write(PolishASideArm1Address.ZStandbyPositionMove, !ZStandbyPositionMoveToggle), () => "PolishASideArm1");
+        ZTransferArmPositionMoveCommand = OperationAudit.Create("ZTransferArmPositionMove", () => _plc.Write(PolishASideArm1Address.ZTransferArmPositionMove, !ZTransferArmPositionMoveToggle), () => "PolishASideArm1");
+        ZPolishAPositionMoveCommand = OperationAudit.Create("ZPolishAPositionMove", () => _plc.Write(PolishASideArm1Address.ZPolishAPositionMove, !ZPolishAPositionMoveToggle), () => "PolishASideArm1");
+        ZPolishBPositionMoveCommand = OperationAudit.Create("ZPolishBPositionMove", () => _plc.Write(PolishASideArm1Address.ZPolishBPositionMove, !ZPolishBPositionMoveToggle), () => "PolishASideArm1");
+        ZEnableCommand = OperationAudit.Create("ZEnable", () => _plc.Write(PolishASideArm1Address.ZEnable, !ZIsEnabled), () => "PolishASideArm1");
+        ZOriginCommand = OperationAudit.Create("ZOrigin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -780,44 +781,44 @@ public class PolishASideArm1ControlViewModel : TabContentViewModelBase
             }
 
             ZOriginToggle = false;
-        });
+        }, () => "PolishASideArm1");
 
-        EmergencyStopCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.EmergencyStop, !EmergencyStopToggle));
-        AlarmResetCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.AlarmReset, !AlarmResetToggle));
-        SaveCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.Save, !SaveToggle));
+        EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(PolishASideArm1Address.EmergencyStop, !EmergencyStopToggle), () => "PolishASideArm1");
+        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishASideArm1Address.AlarmReset, !AlarmResetToggle), () => "PolishASideArm1");
+        SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishASideArm1Address.Save, !SaveToggle), () => "PolishASideArm1");
 
-        PickFromTransferCommand = new DelegateCommand(() =>
+        PickFromTransferCommand = OperationAudit.Create("PickFromTransfer", () =>
         {
             _plc.Write(PolishASideArm1Address.PickFromTransfer, true);
             Thread.Sleep(50);
             _plc.Write(PolishASideArm1Address.PickFromTransfer, false);
-        });
-        PlaceToPolishACommand = new DelegateCommand(() =>
+        }, () => "PolishASideArm1");
+        PlaceToPolishACommand = OperationAudit.Create("PlaceToPolishA", () =>
         {
             _plc.Write(PolishASideArm1Address.PlaceToPolishA, true);
             Thread.Sleep(50);
             _plc.Write(PolishASideArm1Address.PlaceToPolishA, false);
-        });
-        PlaceToPolishBCommand = new DelegateCommand(() =>
+        }, () => "PolishASideArm1");
+        PlaceToPolishBCommand = OperationAudit.Create("PlaceToPolishB", () =>
         {
             _plc.Write(PolishASideArm1Address.PlaceToPolishB, true);
             Thread.Sleep(50);
             _plc.Write(PolishASideArm1Address.PlaceToPolishB, false);
-        });
-        Spare1Command = new DelegateCommand(() =>
+        }, () => "PolishASideArm1");
+        Spare1Command = OperationAudit.Create("Spare1", () =>
         {
             _plc.Write(PolishASideArm1Address.Spare1, true);
             Thread.Sleep(50);
             _plc.Write(PolishASideArm1Address.Spare1, false);
-        });
-        Spare2Command = new DelegateCommand(() =>
+        }, () => "PolishASideArm1");
+        Spare2Command = OperationAudit.Create("Spare2", () =>
         {
             _plc.Write(PolishASideArm1Address.Spare2, true);
             Thread.Sleep(50);
             _plc.Write(PolishASideArm1Address.Spare2, false);
-        });
-        ManualModeCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.ManualMode, !ManualModeToggle));
-        AutoModeCommand = new DelegateCommand(() => _plc.Write(PolishASideArm1Address.AutoMode, !AutoModeToggle));
+        }, () => "PolishASideArm1");
+        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishASideArm1Address.ManualMode, !ManualModeToggle), () => "PolishASideArm1");
+        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishASideArm1Address.AutoMode, !AutoModeToggle), () => "PolishASideArm1");
 
     }
 

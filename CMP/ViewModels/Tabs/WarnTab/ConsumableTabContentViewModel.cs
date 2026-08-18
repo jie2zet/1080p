@@ -1,4 +1,5 @@
-﻿using CMP.Constants.Enums;
+﻿using CMP.Services.Auth;
+using CMP.Constants.Enums;
 using CMP.Models.kvsPlc;
 using CMP.Models.Warn;
 using CMP.Services.Log;
@@ -31,6 +32,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
         private ObservableCollection<IgnoreConsumableProperty> _ignoreConsumableProperties;
         //<耗材名、耗材参数>
         private ObservableCollection<ConsumableModel> _consumableModels;
+        private readonly Dictionary<string, (string? WaferCountSet, string? UsedTimeSet)> _lastWritten = new();
 
         public ObservableCollection<ConsumableModel> ConsumableModels
         {
@@ -163,6 +165,37 @@ namespace CMP.ViewModels.Tabs.WarnTab
                 Growl.Warning($"{SpecifiedConsumable.Workstation}-{SpecifiedConsumable.ConsumableName} write Failure.");
                 return;
             }
+
+            var key = ConsumableKey(SpecifiedConsumable);
+            _lastWritten.TryGetValue(key, out var lastWritten);
+            var target = $"{SpecifiedConsumable.Workstation}/{SpecifiedConsumable.ConsumableName}";
+
+            if (SpecifiedConsumable.IsWaferCountSetEditable &&
+                !string.Equals(lastWritten.WaferCountSet, SpecifiedConsumable.WaferCountSet, StringComparison.Ordinal))
+            {
+                AuditLogService.WriteChange(
+                    AuditModules.Consumable,
+                    AuditActions.ConsumableUpdate,
+                    $"{target}/WaferCountSet",
+                    lastWritten.WaferCountSet,
+                    SpecifiedConsumable.WaferCountSet,
+                    "Success");
+            }
+
+            if (SpecifiedConsumable.IsUsedTimeSetEditable &&
+                !string.Equals(lastWritten.UsedTimeSet, SpecifiedConsumable.UsedTimeSet, StringComparison.Ordinal))
+            {
+                AuditLogService.WriteChange(
+                    AuditModules.Consumable,
+                    AuditActions.ConsumableUpdate,
+                    $"{target}/UsedTimeSet",
+                    lastWritten.UsedTimeSet,
+                    SpecifiedConsumable.UsedTimeSet,
+                    "Success");
+            }
+
+            _lastWritten[key] = (SpecifiedConsumable.WaferCountSet, SpecifiedConsumable.UsedTimeSet);
+
             //Write To Json
             SpecifiedConsumable.UpdateTime = DateTime.Now.ToString(_dateTimeFormate);
             FileUtil.WriteFile(consumableFile, JsonConvert.SerializeObject(_consumableModels, Formatting.Indented));
@@ -236,7 +269,8 @@ namespace CMP.ViewModels.Tabs.WarnTab
             }
 
             foreach (var model in _consumableModels)
-            {                
+            {
+                _lastWritten[ConsumableKey(model)] = (model.WaferCountSet, model.UsedTimeSet);
                 model.UsedTimeSet = DateTime.Now.ToString(_shortTimeFormate);
                 model.WaferCountSet = "0";
             }
@@ -280,6 +314,11 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     x.ConsumableName == model.ConsumableName &&
                     x.IgnoreProperty == nameof(ConsumableModel.UsedTimeSet));
             }
+        }
+
+        private static string ConsumableKey(ConsumableModel model)
+        {
+            return $"{model.Workstation}/{model.ConsumableName}";
         }
 
         private static int GetSock(ConsumableModel model)

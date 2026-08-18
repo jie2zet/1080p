@@ -5,6 +5,7 @@ using Prism.Commands;
 using System;
 using System.Windows.Threading;
 using WPFLocalizeExtension.Extensions;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab;
 
@@ -171,10 +172,10 @@ public class CacheBodyViewModel : TabContentViewModelBase
         _readTimer.Tick += ReadTimer_Tick;
         _readTimer.Start();
 
-        CacheADoorOpenCommand = new DelegateCommand(ExecuteCacheADoorOpen);
-        CacheADoorCloseCommand = new DelegateCommand(ExecuteCacheADoorClose);
-        CacheBDoorOpenCommand = new DelegateCommand(ExecuteCacheBDoorOpen);
-        CacheBDoorCloseCommand = new DelegateCommand(ExecuteCacheBDoorClose);
+        CacheADoorOpenCommand = OperationAudit.Create("CacheADoorOpen", ExecuteCacheADoorOpen, () => "CacheBody");
+        CacheADoorCloseCommand = OperationAudit.Create("CacheADoorClose", ExecuteCacheADoorClose, () => "CacheBody");
+        CacheBDoorOpenCommand = OperationAudit.Create("CacheBDoorOpen", ExecuteCacheBDoorOpen, () => "CacheBody");
+        CacheBDoorCloseCommand = OperationAudit.Create("CacheBDoorClose", ExecuteCacheBDoorClose, () => "CacheBody");
     }
 
     private async void ReadTimer_Tick(object? sender, EventArgs e)
