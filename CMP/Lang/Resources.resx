@@ -1803,4 +1803,106 @@
   <data name="UsedTimeSet" xml:space="preserve">
     <value>Used Time Set</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Audit Log</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="ModifyTime" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="Operate" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="OldValue" xml:space="preserve">
+    <value>Old Value</value>
+  </data>
+  <data name="NewValue" xml:space="preserve">
+    <value>New Value</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>End Time</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Tips" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="SelectUserToDelete" xml:space="preserve">
+    <value>Please select a user to delete.</value>
+  </data>
+  <data name="CannotDeleteCurrentUser" xml:space="preserve">
+    <value>The currently logged-in user cannot be deleted.</value>
+  </data>
+  <data name="ConfirmDeleteUser" xml:space="preserve">
+    <value>Delete user "{0}"?</value>
+  </data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>Deleted successfully.</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Delete failed.</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>The user name already exists.</value>
+  </data>
+  <data name="AddFailed" xml:space="preserve">
+    <value>Add failed.</value>
+  </data>
+  <data name="SelectUserToEdit" xml:space="preserve">
+    <value>Please select a user to edit.</value>
+  </data>
+  <data name="EditSuccess" xml:space="preserve">
+    <value>Saved successfully.</value>
+  </data>
+  <data name="EditFailed" xml:space="preserve">
+    <value>Save failed.</value>
+  </data>
+  <data name="AddUserTitle" xml:space="preserve">
+    <value>Add User</value>
+  </data>
+  <data name="EditUserTitle" xml:space="preserve">
+    <value>Edit User</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Required fields cannot be empty.</value>
+  </data>
+  <data name="PasswordRequiredOnAdd" xml:space="preserve">
+    <value>Password is required when adding a user.</value>
+  </data>
 </root>

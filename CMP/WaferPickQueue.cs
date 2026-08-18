@@ -1,4 +1,5 @@
 using CMP.Models.Resource;
+using CMP.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,6 +37,7 @@ public static class WaferPickQueue
         {
             GlobalService.waferQueue.Enqueue(wafer);
         }
+        WaferRuntimeStore.Instance.RequestSave();
     }
 
     public static void EnqueueRange(IEnumerable<Wafer> wafers)
@@ -47,6 +49,16 @@ public static class WaferPickQueue
                 GlobalService.waferQueue.Enqueue(wafer);
             }
         }
+        WaferRuntimeStore.Instance.RequestSave();
+    }
+
+    public static void ReplaceAll(IEnumerable<Wafer> wafers)
+    {
+        lock (Sync)
+        {
+            RebuildQueue(wafers.ToList());
+        }
+        WaferRuntimeStore.Instance.RequestSave();
     }
 
     public static bool HeadMatches(Wafer wafer)
@@ -75,6 +87,7 @@ public static class WaferPickQueue
             }
 
             dequeued = GlobalService.waferQueue.Dequeue();
+            WaferRuntimeStore.Instance.RequestSave();
             return true;
         }
     }
@@ -93,6 +106,7 @@ public static class WaferPickQueue
                 .ToList();
             RebuildQueue(remaining);
         }
+        WaferRuntimeStore.Instance.RequestSave();
     }
 
     public static int RemoveByLoadportId(int loadportId)
@@ -112,6 +126,7 @@ public static class WaferPickQueue
                 .ToList();
             var removed = GlobalService.waferQueue.Count - remaining.Count;
             RebuildQueue(remaining);
+            WaferRuntimeStore.Instance.RequestSave();
             return removed;
         }
     }
@@ -129,6 +144,7 @@ public static class WaferPickQueue
             var merged = others.Concat(wafers).ToList();
             RebuildQueue(merged);
         }
+        WaferRuntimeStore.Instance.RequestSave();
     }
 
     public static void RotateToHead(Wafer target)
@@ -147,6 +163,7 @@ public static class WaferPickQueue
             list.Insert(0, item);
             RebuildQueue(list);
         }
+        WaferRuntimeStore.Instance.RequestSave();
     }
 
     private static bool MatchesWafer(Wafer left, Wafer right) =>

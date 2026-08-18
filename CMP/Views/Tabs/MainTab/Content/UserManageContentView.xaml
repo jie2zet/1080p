@@ -18,7 +18,7 @@
 
     <TabControl Style="{StaticResource SecondaryTabControlStyle}"
                 ItemContainerStyle="{StaticResource SecondaryTabItemStyle}">
-        <TabItem Header="用户数据">
+        <TabItem Header="{lex:Loc UserData}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -29,12 +29,12 @@
                 <Border Grid.Row="0" BorderThickness="2" BorderBrush="White" Height="70" Margin="5,10,5,10" Padding="10,0,10,0">
                     <hc:RelativePanel VerticalAlignment="Center">
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Height="70">
-                            <TextBox hc:InfoElement.Title="用户名"
+                            <TextBox hc:InfoElement.Title="{lex:Loc UserName}"
                                      hc:InfoElement.TitlePlacement="Left"
-                                     hc:InfoElement.TitleWidth="80"
+                                     hc:InfoElement.TitleWidth="100"
                                      Text="{Binding UserNameFilter, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource TextBoxExtend}"
-                                     Width="260"
+                                     Width="280"
                                      FontSize="14"
                                      Height="30"/>
 
@@ -46,17 +46,17 @@
                                       hc:InfoElement.TitlePlacement="Left"
                                       hc:InfoElement.TitleWidth="80"
                                       FontSize="16"
-                                      hc:InfoElement.Title="角色"
+                                      hc:InfoElement.Title="{lex:Loc Role}"
                                       Style="{StaticResource ComboBoxExtend}"/>
 
-                            <Button Content="刷新"
+                            <Button Content="{lex:Loc Refresh}"
                                     Command="{Binding RefreshCommand}"
                                     Style="{StaticResource ButtonSuccess}"
                                     FontSize="14"
                                     VerticalAlignment="Center"
                                     Margin="10,0,0,0"/>
 
-                            <Button Content="删除"
+                            <Button Content="{lex:Loc Delete}"
                                     Command="{Binding DeleteCommand}"
                                     Style="{StaticResource ButtonSuccess}"
                                     FontSize="14"
@@ -68,7 +68,7 @@
                                     hc:RelativePanel.AlignRightWithPanel="True"
                                     Orientation="Horizontal"
                                     Height="70">
-                            <Button Content="新增"
+                            <Button Content="{lex:Loc Add}"
                                     Command="{Binding AddUserCommand}"
                                     CommandParameter="UserManageDialogView"
                                     Style="{StaticResource ButtonSuccess}"
@@ -96,10 +96,10 @@
                           ScrollViewer.CanContentScroll="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
-                        <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" Width="180"/>
-                        <DataGridTextColumn Header="角色" Binding="{Binding Level}" Width="140"/>
-                        <DataGridTextColumn Header="组" Binding="{Binding Group}" Width="140"/>
-                        <DataGridTemplateColumn Header="启用" Width="80">
+                        <DataGridTextColumn Header="{lex:Loc UserName}" Binding="{Binding UserName}" Width="180"/>
+                        <DataGridTextColumn Header="{lex:Loc Role}" Binding="{Binding Level}" Width="140"/>
+                        <DataGridTextColumn Header="{lex:Loc Group}" Binding="{Binding Group}" Width="140"/>
+                        <DataGridTemplateColumn Header="{lex:Loc Enabled}" Width="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
@@ -108,11 +108,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="修改时间" Binding="{Binding ModifyTime}" Width="*" MinWidth="180"/>
-                        <DataGridTemplateColumn Width="100" CanUserResize="False" Header="操作">
+                        <DataGridTextColumn Header="{lex:Loc ModifyTime}" Binding="{Binding ModifyTime}" Width="*" MinWidth="180"/>
+                        <DataGridTemplateColumn Width="100" CanUserResize="False" Header="{lex:Loc Operate}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="编辑"
+                                    <Button Content="{lex:Loc Edit}"
                                             Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}"
                                             Width="60"
@@ -140,7 +140,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem Header="审计日志">
+        <TabItem Header="{lex:Loc AuditLog}">
             <local:AuditLogContentView/>
         </TabItem>
     </TabControl>

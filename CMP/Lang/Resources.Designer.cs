@@ -1587,5 +1587,40 @@ namespace CMP.Lang {
         {
             get { return ResourceManager.GetString("WaferTransferInformationMap", resourceCulture); }
         }
+
+        internal static string AuditLog => ResourceManager.GetString("AuditLog", resourceCulture)!;
+        internal static string UserName => ResourceManager.GetString("UserName", resourceCulture)!;
+        internal static string Role => ResourceManager.GetString("Role", resourceCulture)!;
+        internal static string Refresh => ResourceManager.GetString("Refresh", resourceCulture)!;
+        internal static string Enabled => ResourceManager.GetString("Enabled", resourceCulture)!;
+        internal static string ModifyTime => ResourceManager.GetString("ModifyTime", resourceCulture)!;
+        internal static string Operate => ResourceManager.GetString("Operate", resourceCulture)!;
+        internal static string Module => ResourceManager.GetString("Module", resourceCulture)!;
+        internal static string Target => ResourceManager.GetString("Target", resourceCulture)!;
+        internal static string OldValue => ResourceManager.GetString("OldValue", resourceCulture)!;
+        internal static string NewValue => ResourceManager.GetString("NewValue", resourceCulture)!;
+        internal static string Result => ResourceManager.GetString("Result", resourceCulture)!;
+        internal static string Detail => ResourceManager.GetString("Detail", resourceCulture)!;
+        internal static string StartTime => ResourceManager.GetString("StartTime", resourceCulture)!;
+        internal static string EndTime => ResourceManager.GetString("EndTime", resourceCulture)!;
+        internal static string All => ResourceManager.GetString("All", resourceCulture)!;
+        internal static string Password => ResourceManager.GetString("Password", resourceCulture)!;
+        internal static string Tips => ResourceManager.GetString("Tips", resourceCulture)!;
+        internal static string Time => ResourceManager.GetString("Time", resourceCulture)!;
+        internal static string SelectUserToDelete => ResourceManager.GetString("SelectUserToDelete", resourceCulture)!;
+        internal static string CannotDeleteCurrentUser => ResourceManager.GetString("CannotDeleteCurrentUser", resourceCulture)!;
+        internal static string ConfirmDeleteUser => ResourceManager.GetString("ConfirmDeleteUser", resourceCulture)!;
+        internal static string ConfirmDeleteTitle => ResourceManager.GetString("ConfirmDeleteTitle", resourceCulture)!;
+        internal static string DeleteSuccess => ResourceManager.GetString("DeleteSuccess", resourceCulture)!;
+        internal static string DeleteFailed => ResourceManager.GetString("DeleteFailed", resourceCulture)!;
+        internal static string UserNameExists => ResourceManager.GetString("UserNameExists", resourceCulture)!;
+        internal static string AddFailed => ResourceManager.GetString("AddFailed", resourceCulture)!;
+        internal static string SelectUserToEdit => ResourceManager.GetString("SelectUserToEdit", resourceCulture)!;
+        internal static string EditSuccess => ResourceManager.GetString("EditSuccess", resourceCulture)!;
+        internal static string EditFailed => ResourceManager.GetString("EditFailed", resourceCulture)!;
+        internal static string AddUserTitle => ResourceManager.GetString("AddUserTitle", resourceCulture)!;
+        internal static string EditUserTitle => ResourceManager.GetString("EditUserTitle", resourceCulture)!;
+        internal static string FieldRequired => ResourceManager.GetString("FieldRequired", resourceCulture)!;
+        internal static string PasswordRequiredOnAdd => ResourceManager.GetString("PasswordRequiredOnAdd", resourceCulture)!;
     }
 }

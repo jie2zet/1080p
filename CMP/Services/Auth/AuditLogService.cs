@@ -141,12 +141,12 @@ public static class AuditLogService
             query = query.Where(x => x.UserName.Contains(keyword));
         }
 
-        if (!string.IsNullOrWhiteSpace(action) && action != "全部")
+        if (!string.IsNullOrWhiteSpace(action) && !IsAllFilter(action))
         {
             query = query.Where(x => x.Action == action);
         }
 
-        if (!string.IsNullOrWhiteSpace(module) && module != "全部")
+        if (!string.IsNullOrWhiteSpace(module) && !IsAllFilter(module))
         {
             query = query.Where(x => x.Module == module);
         }
@@ -171,4 +171,7 @@ public static class AuditLogService
 
         return query.OrderBy(x => x.Id, OrderByType.Desc).ToList();
     }
+
+    public static bool IsAllFilter(string? value) =>
+        string.IsNullOrWhiteSpace(value) || value is "全部" or "All";
 }

@@ -1,6 +1,7 @@
 using CMP.Extensions;
 using CMP.Models.Operation.LoadPort;
 using CMP.Models.Resource;
+using CMP.Services;
 using CMP.Services.Auth;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
@@ -68,6 +69,7 @@ public class MainViewModel : BindableBase
         try
         {
             await LoadPortManager.Instance.InitializeAsync(_loadPortService);
+            WaferRuntimeStore.Instance.RestoreAll();
             await LoadPortManager.Instance.ConnectAllLoadPortsAsync();
             LoadPortManager.Instance.AllSelectedWafersCompleted += OnAllSelectedWafersCompleted;
             LoadPortManager.Instance.StartWaferMonitoring();

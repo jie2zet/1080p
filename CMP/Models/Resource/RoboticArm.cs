@@ -47,6 +47,34 @@ public class RoboticArm : BindableBase
         get => _isVisibleWafer;
         set => SetProperty(ref _isVisibleWafer, value);
     }
+
+    private string _upperArmWaferInfo = "";
+    public string UpperArmWaferInfo
+    {
+        get => _upperArmWaferInfo;
+        set => SetProperty(ref _upperArmWaferInfo, value);
+    }
+
+    private bool _isVisibleUpperArmWafer;
+    public bool IsVisibleUpperArmWafer
+    {
+        get => _isVisibleUpperArmWafer;
+        set => SetProperty(ref _isVisibleUpperArmWafer, value);
+    }
+
+    private string _lowerArmWaferInfo = "";
+    public string LowerArmWaferInfo
+    {
+        get => _lowerArmWaferInfo;
+        set => SetProperty(ref _lowerArmWaferInfo, value);
+    }
+
+    private bool _isVisibleLowerArmWafer;
+    public bool IsVisibleLowerArmWafer
+    {
+        get => _isVisibleLowerArmWafer;
+        set => SetProperty(ref _isVisibleLowerArmWafer, value);
+    }
     private List<string> _waferTrackingAddresses = new List<string>();
     public List<string> WaferTrackingAddresses
     {
@@ -357,40 +385,57 @@ public class RoboticArm : BindableBase
 
 
     //}
-    // 在 RoboticArm 类中添加私有字段来跟踪晶圆状态
     private string _lastWaferInfo = string.Empty;
     private bool _lastIsVisibleWafer = false;
+    private string _lastUpperArmWaferInfo = string.Empty;
+    private bool _lastIsVisibleUpperArmWafer;
+    private string _lastLowerArmWaferInfo = string.Empty;
+    private bool _lastIsVisibleLowerArmWafer;
     private readonly object _trackingLock = new object();
 
     /// <summary>
-    /// 追踪晶圆信息
+    /// 追踪晶圆信息（双手臂各记一片，不再在第一片处中断）
     /// </summary>
     public void TrackWaferInfo()
     {
         try
         {
-            string currentWaferInfo = string.Empty;
-            bool currentIsVisible = false;
-            string arm = string.Empty;
+            string upperInfo = string.Empty;
+            string lowerInfo = string.Empty;
+            string singleInfo = string.Empty;
+            bool upperVisible = false;
+            bool lowerVisible = false;
+            bool singleVisible = false;
+            bool trackedUpper = false;
+            bool trackedLower = false;
+            bool trackedNone = false;
 
-            // 遍历所有需要追踪的地址
             foreach (string address in WaferTrackingAddresses)
             {
                 try
                 {
-                    // 异步读取字地址的值
                     short value = mcComm.ReadShortVari(address);
-                    arm = _handMapping.ContainsKey(address)?_handMapping[address]:"None";
-                    // 如果有值（非0），则处理晶圆信息
-                    if (value > 0)
+                    var arm = _handMapping.ContainsKey(address) ? _handMapping[address] : "None";
+                    var waferInfo = value > 0 ? DecodeWaferInfo(value) : string.Empty;
+                    var hasWafer = !string.IsNullOrEmpty(waferInfo);
+
+                    if (string.Equals(arm, "Upper", StringComparison.OrdinalIgnoreCase))
                     {
-                        var waferInfo = DecodeWaferInfo(value);
-                        if (!string.IsNullOrEmpty(waferInfo))
-                        {
-                            currentIsVisible = true;
-                            currentWaferInfo = waferInfo;
-                        }
-                        break; // 找到第一个有效的晶圆信息就停止
+                        trackedUpper = true;
+                        upperVisible = hasWafer;
+                        upperInfo = hasWafer ? waferInfo : string.Empty;
+                    }
+                    else if (string.Equals(arm, "Lower", StringComparison.OrdinalIgnoreCase))
+                    {
+                        trackedLower = true;
+                        lowerVisible = hasWafer;
+                        lowerInfo = hasWafer ? waferInfo : string.Empty;
+                    }
+                    else
+                    {
+                        trackedNone = true;
+                        singleVisible = hasWafer;
+                        singleInfo = hasWafer ? waferInfo : string.Empty;
                     }
                 }
                 catch (Exception ex)
@@ -399,18 +444,52 @@ public class RoboticArm : BindableBase
                 }
             }
 
-            // 更新UI属性
-            IsVisibleWafer = currentIsVisible;
-            WaferInfo = currentWaferInfo;
+            IsVisibleUpperArmWafer = upperVisible;
+            UpperArmWaferInfo = upperInfo;
+            IsVisibleLowerArmWafer = lowerVisible;
+            LowerArmWaferInfo = lowerInfo;
 
-            // 检查晶圆状态是否发生变化
-            CheckAndLogWaferStateChange(currentWaferInfo,arm, currentIsVisible);
+            var combinedVisible = upperVisible || lowerVisible || singleVisible;
+            string combinedInfo;
+            if (upperVisible && lowerVisible)
+            {
+                combinedInfo = $"{upperInfo}/{lowerInfo}";
+            }
+            else if (upperVisible)
+            {
+                combinedInfo = upperInfo;
+            }
+            else if (lowerVisible)
+            {
+                combinedInfo = lowerInfo;
+            }
+            else
+            {
+                combinedInfo = singleInfo;
+            }
 
-            // 更新上次状态
+            IsVisibleWafer = combinedVisible;
+            WaferInfo = combinedInfo;
+
+            if (trackedUpper)
+            {
+                CheckAndLogWaferStateChange(upperInfo, "Upper", upperVisible);
+            }
+
+            if (trackedLower)
+            {
+                CheckAndLogWaferStateChange(lowerInfo, "Lower", lowerVisible);
+            }
+
+            if (trackedNone)
+            {
+                CheckAndLogWaferStateChange(singleInfo, "None", singleVisible);
+            }
+
             lock (_trackingLock)
             {
-                _lastIsVisibleWafer = currentIsVisible;
-                _lastWaferInfo = currentWaferInfo;
+                _lastIsVisibleWafer = combinedVisible;
+                _lastWaferInfo = combinedInfo;
             }
         }
         catch (Exception ex)
@@ -610,16 +689,15 @@ public class RoboticArm : BindableBase
     /// </summary>
     /// <param name="currentWaferInfo">当前晶圆信息</param>
     /// <param name="currentIsVisible">当前是否可见</param>
-    private void CheckAndLogWaferStateChange(string currentWaferInfo,string arm, bool currentIsVisible)
+    private void CheckAndLogWaferStateChange(string currentWaferInfo, string arm, bool currentIsVisible)
     {
         bool prevState;
         string prevWaferInfo;
 
-        // 获取上次状态
         lock (_trackingLock)
         {
-            prevState = _lastIsVisibleWafer;
-            prevWaferInfo = _lastWaferInfo;
+            GetLastArmState(arm, out prevState, out prevWaferInfo);
+            SetLastArmState(arm, currentIsVisible, currentWaferInfo ?? string.Empty);
         }
 
         string timestamp = DateTime.Now.ToString("HH:mm:ss.f");
@@ -655,6 +733,44 @@ public class RoboticArm : BindableBase
         catch (Exception ex)
         {
             Growl.WarningGlobal($"记录机器人{_name}晶圆状态变化时发生错误: {ex.Message}");
+        }
+    }
+
+    private void GetLastArmState(string arm, out bool visible, out string waferInfo)
+    {
+        switch (arm)
+        {
+            case "Upper":
+                visible = _lastIsVisibleUpperArmWafer;
+                waferInfo = _lastUpperArmWaferInfo;
+                break;
+            case "Lower":
+                visible = _lastIsVisibleLowerArmWafer;
+                waferInfo = _lastLowerArmWaferInfo;
+                break;
+            default:
+                visible = _lastIsVisibleWafer;
+                waferInfo = _lastWaferInfo;
+                break;
+        }
+    }
+
+    private void SetLastArmState(string arm, bool visible, string waferInfo)
+    {
+        switch (arm)
+        {
+            case "Upper":
+                _lastIsVisibleUpperArmWafer = visible;
+                _lastUpperArmWaferInfo = waferInfo;
+                break;
+            case "Lower":
+                _lastIsVisibleLowerArmWafer = visible;
+                _lastLowerArmWaferInfo = waferInfo;
+                break;
+            default:
+                _lastIsVisibleWafer = visible;
+                _lastWaferInfo = waferInfo;
+                break;
         }
     }
 
