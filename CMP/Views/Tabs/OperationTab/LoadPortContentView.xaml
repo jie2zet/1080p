@@ -1,30 +1,27 @@
 ﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.LoadPortContentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
- xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
- mc:Ignorable="d"
- xmlns:lex="http://wpflocalizeextension.codeplex.com"
- xmlns:prism="http://prismlibrary.com/"
- xmlns:hc="https://handyorg.github.io/handycontrol" 
- xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
- xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.OperationTab"             
- xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
- prism:ViewModelLocator.AutoWireViewModel="True"
- d:DataContext="{d:DesignInstance viewModels:LoadPortContentViewModel}"
- lex:ResxLocalizationProvider.DefaultAssembly="CMP"
- lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:extensions="clr-namespace:Core.Controls.Extensions;assembly=Core"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             xmlns:lp="clr-namespace:CMP.Models.Operation.LoadPort"
+             xmlns:converters="clr-namespace:Core.Controls.Converters;assembly=Core"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:LoadPortContentViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="450" Width="1582">
     <UserControl.Resources>
-        <!-- Converter for Bot Server State -->
         <converters:OnOffStateConverter x:Key="OnOffStateConverter" />
-        <!-- Converter for String Formatting -->
         <converters:StringFormatConverter x:Key="StringFormatConverter" />
-       
-         <converters:SlotIdConverter x:Key="SlotIdConverter"/>
-       
-        <!-- 在UserControl.Resources中添加 -->
+        <converters:SlotIdConverter x:Key="SlotIdConverter"/>
+
         <Style x:Key="SmallButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonPrimary}">
             <Setter Property="MinWidth" Value="55"/>
             <Setter Property="MaxWidth" Value="70"/>
@@ -44,7 +41,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="1"/>
         </Style>
-        <!-- 扁平化按钮样式 -->
+
         <Style x:Key="FlatButtonStyle" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -54,7 +51,7 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="3">
-                            <ContentPresenter HorizontalAlignment="Center" 
+                            <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -72,20 +69,19 @@
             <Setter Property="Height" Value="28"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
-    </UserControl.Resources>
-    <Border BorderThickness="1" Margin="5" Padding="0" CornerRadius="4">
-        <StackPanel extensions:StackPanelHelpers.Spacing="10" Orientation="Horizontal">
-            <!-- LoadPort 1 -->
+
+        <!-- 单口操作面板：DataContext = LoadPortData -->
+        <DataTemplate x:Key="LoadPortPanelTemplate" DataType="{x:Type lp:LoadPortData}">
             <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
-              hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-              Padding="10" Style="{StaticResource GroupBoxTab.Small}">
+                      hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
                 <GroupBox.Header>
                     <StackPanel>
                         <TextBlock Padding="5" Foreground="White">
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource StringFormatConverter}">
                                     <Binding Source="{lex:Loc LoadPort}" />
-                                    <Binding Source="1" />
+                                    <Binding Path="DisplayNumber" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -101,20 +97,18 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- 第一行：FOUP图片和晶圆列表 -->
+                    <!-- FOUP + 晶圆列表 -->
                     <Grid Grid.Row="0" Margin="0 0 0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- 左边FOUP图片 -->
-                        <Image Grid.Column="0" Source="{Binding LoadPortDatas[0].FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                        <Image Grid.Column="0" Source="{Binding FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
 
-                        <!-- 右边晶圆列表（每行一个） -->
-                        <ScrollViewer Grid.Column="1"  HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto"  Height="260" Width="110">
-                            <ItemsControl ItemsSource="{Binding LoadPortDatas[0].WaferList}">
-                                <ItemsControl.ItemsPanel >
+                        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Height="260" Width="110">
+                            <ItemsControl ItemsSource="{Binding WaferList}">
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Vertical" />
                                     </ItemsPanelTemplate>
@@ -123,7 +117,7 @@
                                     <DataTemplate>
                                         <Border Width="100" Height="8" Margin="1" Background="{Binding WaferColor}" ToolTip="{Binding WaferStatus}">
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SlotID,Converter={StaticResource SlotIdConverter}}"    FontSize="7" Foreground="White" />
+                                                <TextBlock Text="{Binding SlotID, Converter={StaticResource SlotIdConverter}}" FontSize="7" Foreground="White" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
@@ -132,46 +126,58 @@
                         </ScrollViewer>
                     </Grid>
 
-                    <!-- 第二行：Connect/Disconnect按钮 -->
+                    <!-- Connect / Disconnect / StopLoad -->
                     <Grid Grid.Row="1" Margin="0 0 0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Grid.Column="1" 
-                            Content="{lex:Loc Connect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[0].ConnectCommand}"
-                            CommandParameter="COM1"
-                            Margin="0 0 10 0"
-                            Width="80"
-                            Background="#2C66A7"
-                            Foreground="White"
-                            BorderBrush="#005A9E"/>
+                        <Button Grid.Column="1"
+                                Content="{lex:Loc Connect}"
+                                Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding ConnectCommand}"
+                                CommandParameter="{Binding PortNumber}"
+                                Margin="0 0 10 0"
+                                Width="80"
+                                Background="#2C66A7"
+                                Foreground="White"
+                                BorderBrush="#005A9E"/>
 
-                        <Button Grid.Column="2" 
-                            Content="{lex:Loc Disconnect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[0].DisconnectCommand}"
-                            CommandParameter="COM1"
-                            Width="80"
-                            Background="#CC0000"
-                            Foreground="White"
-                            BorderBrush="#990000" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                    </Grid> 
-                    <!-- 第三行：控制按钮区域 -->
-                    <Grid Grid.Row="2" Margin=" 0 10 0 10">
+                        <Button Grid.Column="2"
+                                Content="{lex:Loc Disconnect}"
+                                Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding DisconnectCommand}"
+                                CommandParameter="{Binding PortNumber}"
+                                Margin="0 0 10 0"
+                                Width="80"
+                                Background="#CC0000"
+                                Foreground="White"
+                                BorderBrush="#990000"
+                                IsEnabled="{Binding IsConnected}"/>
+
+                        <Button Grid.Column="3"
+                                Content="{lex:Loc StopLoad}"
+                                Style="{StaticResource FlatButtonStyle}"
+                                Command="{Binding StopLoadCommand}"
+                                Width="88"
+                                Background="#CC0000"
+                                Foreground="White"
+                                BorderBrush="#990000"/>
+                    </Grid>
+
+                    <!-- MOV / SET 按钮 -->
+                    <Grid Grid.Row="2" Margin="0 10 0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- 左边8个按钮 -->
-                        <Grid Grid.Column="0" Margin="0 0 5 0 ">
+                        <Grid Grid.Column="0" Margin="0 0 5 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -183,24 +189,22 @@
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
 
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}"  Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="CULOD"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/> 
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}"  Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="DOROP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="REMAP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="STOP_"  Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
+                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}" Command="{Binding MOVCommand}" CommandParameter="CULOD" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}" Command="{Binding MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding MOVCommand}" CommandParameter="DOROP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding MOVCommand}" CommandParameter="REMAP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding MOVCommand}" CommandParameter="STOP_" Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding IsConnected}"/>
                         </Grid>
 
-                        <!-- 中间虚线分隔 -->
                         <Rectangle Grid.Column="1" Width="1" Fill="LightGray" Margin="2 0" VerticalAlignment="Stretch">
                             <Rectangle.StrokeDashArray>
                                 <DoubleCollection>1,1</DoubleCollection>
                             </Rectangle.StrokeDashArray>
                         </Rectangle>
 
-                        <!-- 右边8个按钮 -->
                         <Grid Grid.Column="2" Margin="5 0 0 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -213,18 +217,18 @@
                                 <RowDefinition Height="32"/>
                             </Grid.RowDefinitions>
 
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[0].SETCommand}" CommandParameter="RESET" IsEnabled="{Binding LoadPortDatas[0].IsConnected}"/>
+                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding IsConnected}"/>
+                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding SETCommand}" CommandParameter="RESET" IsEnabled="{Binding IsConnected}"/>
                         </Grid>
                     </Grid>
 
-                    <!-- 第四行：下拉列表、输入框和按钮 -->
+                    <!-- SET 参数 -->
                     <Grid Grid.Row="3" Margin="0 0 0 10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -232,30 +236,29 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox Grid.Column="0" 
-                          ItemsSource="{Binding LoadPortDatas[0].CommandList}"
-                          SelectedItem="{Binding LoadPortDatas[0].SelectedCommand}"
-                          Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" 
-                             Text="{Binding LoadPortDatas[0].CommandParameter}"
-                             Margin="5 0 5 0"/>
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding CommandList}"
+                                  SelectedItem="{Binding SelectedCommand}"
+                                  Margin="0 0 5 0"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding CommandParameter}"
+                                 Margin="5 0 5 0"/>
                         <Button Grid.Column="2" Style="{StaticResource ButtonPrimary}"
-                            Content="{lex:Loc Set}" Width="80"
-                            Command="{Binding LoadPortDatas[0].SETCommand}"
-                            Margin="5 0 0 0"/>
+                                Content="{lex:Loc Set}" Width="80"
+                                Command="{Binding SETCommand}"
+                                Margin="5 0 0 0"/>
                     </Grid>
 
-                    <!-- 第五行：日志展示区 -->
+                    <!-- 日志 -->
                     <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" Width="280" Height="150">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding LoadPortDatas[0].LogMessages}" 
-                         BorderThickness="0"  >
+                            <ListBox ItemsSource="{Binding LogMessages}" BorderThickness="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding}" 
-                                       FontFamily="Consolas" 
-                                       FontSize="8"
-                                       TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding}"
+                                                   FontFamily="Consolas"
+                                                   FontSize="8"
+                                                   TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
@@ -263,748 +266,17 @@
                     </Border>
                 </Grid>
             </GroupBox>
+        </DataTemplate>
+    </UserControl.Resources>
 
-            <!-- LoadPort 2 -->
-            <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
-                  hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-                  Padding="10" Style="{StaticResource GroupBoxTab.Small}">
-                <GroupBox.Header>
-                    <StackPanel>
-                        <TextBlock Padding="5" Foreground="White">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                    <Binding Source="{lex:Loc LoadPort}" />
-                                    <Binding Source="2" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </GroupBox.Header>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- 第一行：FOUP图片和晶圆列表 -->
-                    <Grid Grid.Row="0" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边FOUP图片 -->
-                        <Image Grid.Column="0" Source="{Binding LoadPortDatas[1].FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                        <!-- 右边晶圆列表（每行一个） -->
-                        <ScrollViewer Grid.Column="1"  HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto"  Height="260" Width="110">
-                            <ItemsControl ItemsSource="{Binding LoadPortDatas[1].WaferList}">
-                                <ItemsControl.ItemsPanel >
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="100" Height="8" Margin="1" Background="{Binding WaferColor}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SlotID}" FontSize="8" Foreground="White" />
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
-
-                    <!-- 第二行：Connect/Disconnect按钮 -->
-                    <Grid Grid.Row="1" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="1" 
-                            Content="{lex:Loc Connect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[1].ConnectCommand}"
-                            CommandParameter="1"
-                            Margin="0 0 10 0"
-                            Width="80"
-                            Background="#2C66A7"
-                            Foreground="White"
-                            BorderBrush="#005A9E"/>
-
-                        <Button Grid.Column="2" 
-                            Content="{lex:Loc Disconnect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[1].DisconnectCommand}"
-                            CommandParameter="1"
-                            Width="80"
-                            Background="#CC0000"
-                            Foreground="White"
-                            BorderBrush="#990000" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                    </Grid>
-                    <!-- 第三行：控制按钮区域 -->
-                    <Grid Grid.Row="2" Margin=" 0 10 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边8个按钮 -->
-                        <Grid Grid.Column="0" Margin="0 0 5 0 ">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}"  Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="CULOD"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}"  Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="DOROP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="REMAP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="STOP_"  Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                        </Grid>
-
-                        <!-- 中间虚线分隔 -->
-                        <Rectangle Grid.Column="1" Width="1" Fill="LightGray" Margin="2 0" VerticalAlignment="Stretch">
-                            <Rectangle.StrokeDashArray>
-                                <DoubleCollection>1,1</DoubleCollection>
-                            </Rectangle.StrokeDashArray>
-                        </Rectangle>
-
-                        <!-- 右边8个按钮 -->
-                        <Grid Grid.Column="2" Margin="5 0 0 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[1].SETCommand}" CommandParameter="RESET" IsEnabled="{Binding LoadPortDatas[1].IsConnected}"/>
-                        </Grid>
-                    </Grid>
-
-                    <!-- 第四行：下拉列表、输入框和按钮 -->
-                    <Grid Grid.Row="3" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox Grid.Column="0" 
-                          ItemsSource="{Binding LoadPortDatas[1].CommandList}"
-                          SelectedItem="{Binding LoadPortDatas[1].SelectedCommand}"
-                          Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="{Binding LoadPortDatas[1].CommandParameter}"  Margin="5 0 5 0"/>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonPrimary}"
-                            Content="{lex:Loc Set}" Width="80"
-                            Command="{Binding LoadPortDatas[1].SETCommand}"
-                            Margin="5 0 0 0"/>
-                    </Grid>
-
-                    <!-- 第五行：日志展示区 -->
-                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" Width="280" Height="150">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding LoadPortDatas[1].LogMessages}"  BorderThickness="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" 
-                                           FontFamily="Consolas" 
-                                           FontSize="8"
-                                           TextWrapping="Wrap"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
-            </GroupBox>
-
-            <!-- LoadPort 3 -->
-            <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
-              hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-              Padding="10" Style="{StaticResource GroupBoxTab.Small}">
-                <GroupBox.Header>
-                    <StackPanel>
-                        <TextBlock Padding="5" Foreground="White">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                    <Binding Source="{lex:Loc LoadPort}" />
-                                    <Binding Source="3" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </GroupBox.Header>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- 第一行：FOUP图片和晶圆列表 -->
-                    <Grid Grid.Row="0" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边FOUP图片 -->
-                        <Image Grid.Column="0" Source="{Binding LoadPortDatas[2].FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                        <!-- 右边晶圆列表（每行一个） -->
-                        <ScrollViewer Grid.Column="1"  HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto"  Height="260" Width="110">
-                            <ItemsControl ItemsSource="{Binding LoadPortDatas[2].WaferList}">
-                                <ItemsControl.ItemsPanel >
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="100" Height="8" Margin="1" Background="{Binding WaferColor}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SlotID}" FontSize="8" Foreground="White" />
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
-
-                    <!-- 第二行：Connect/Disconnect按钮 -->
-                    <Grid Grid.Row="1" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="1" 
-                            Content="{lex:Loc Connect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[2].ConnectCommand}"
-                            CommandParameter="1"
-                            Margin="0 0 10 0"
-                            Width="80"
-                            Background="#2C66A7"
-                            Foreground="White"
-                            BorderBrush="#005A9E"/>
-
-                        <Button Grid.Column="2" 
-                            Content="{lex:Loc Disconnect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[2].DisconnectCommand}"
-                            CommandParameter="1"
-                            Width="80"
-                            Background="#CC0000"
-                            Foreground="White"
-                            BorderBrush="#990000" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                    </Grid>
-                    <!-- 第三行：控制按钮区域 -->
-                    <Grid Grid.Row="2" Margin=" 0 10 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边8个按钮 -->
-                        <Grid Grid.Column="0" Margin="0 0 5 0 ">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}"  Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="CULOD"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}"  Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="DOROP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="REMAP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="STOP_"  Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                        </Grid>
-
-                        <!-- 中间虚线分隔 -->
-                        <Rectangle Grid.Column="1" Width="1" Fill="LightGray" Margin="2 0" VerticalAlignment="Stretch">
-                            <Rectangle.StrokeDashArray>
-                                <DoubleCollection>1,1</DoubleCollection>
-                            </Rectangle.StrokeDashArray>
-                        </Rectangle>
-
-                        <!-- 右边8个按钮 -->
-                        <Grid Grid.Column="2" Margin="5 0 0 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[2].SETCommand}" CommandParameter="RESET" IsEnabled="{Binding LoadPortDatas[2].IsConnected}"/>
-                        </Grid>
-                    </Grid>
-
-                    <!-- 第四行：下拉列表、输入框和按钮 -->
-                    <Grid Grid.Row="3" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox Grid.Column="0" 
-                            ItemsSource="{Binding LoadPortDatas[2].CommandList}"
-                            SelectedItem="{Binding LoadPortDatas[2].SelectedCommand}"
-                            Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="{Binding LoadPortDatas[2].CommandParameter}"  Margin="5 0 5 0"/>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonPrimary}"
-                            Content="{lex:Loc Set}" Width="80"
-                            Command="{Binding LoadPortDatas[2].SETCommand}"
-                            Margin="5 0 0 0"/>
-                    </Grid>
-
-                    <!-- 第五行：日志展示区 -->
-                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" Width="280" Height="150">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding LoadPortDatas[2].LogMessages}"  BorderThickness="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" 
-                               FontFamily="Consolas" 
-                               FontSize="8"
-                               TextWrapping="Wrap"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
-            </GroupBox>
-            <!-- LoadPort 4 -->
-            <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
-              hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-              Padding="10" Style="{StaticResource GroupBoxTab.Small}">
-                <GroupBox.Header>
-                    <StackPanel>
-                        <TextBlock Padding="5" Foreground="White">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                    <Binding Source="{lex:Loc LoadPort}" />
-                                    <Binding Source="4" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </GroupBox.Header>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- 第一行：FOUP图片和晶圆列表 -->
-                    <Grid Grid.Row="0" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边FOUP图片 -->
-                        <Image Grid.Column="0" Source="{Binding LoadPortDatas[3].FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                        <!-- 右边晶圆列表（每行一个） -->
-                        <ScrollViewer Grid.Column="1"  HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto"  Height="260" Width="110">
-                            <ItemsControl ItemsSource="{Binding LoadPortDatas[3].WaferList}">
-                                <ItemsControl.ItemsPanel >
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="100" Height="8" Margin="1" Background="{Binding WaferColor}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SlotID}" FontSize="8" Foreground="White" />
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
-
-                    <!-- 第二行：Connect/Disconnect按钮 -->
-                    <Grid Grid.Row="1" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="1" 
-                            Content="{lex:Loc Connect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[3].ConnectCommand}"
-                            CommandParameter="1"
-                            Margin="0 0 10 0"
-                            Width="80"
-                            Background="#2C66A7"
-                            Foreground="White"
-                            BorderBrush="#005A9E"/>
-
-                        <Button Grid.Column="2" 
-                            Content="{lex:Loc Disconnect}"
-                            Style="{StaticResource FlatButtonStyle}"
-                            Command="{Binding LoadPortDatas[3].DisconnectCommand}"
-                            CommandParameter="1"
-                            Width="80"
-                            Background="#CC0000"
-                            Foreground="White"
-                            BorderBrush="#990000" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                    </Grid>
-                    <!-- 第三行：控制按钮区域 -->
-                    <Grid Grid.Row="2" Margin=" 0 10 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边8个按钮 -->
-                        <Grid Grid.Column="0" Margin="0 0 5 0 ">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}"  Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="CULOD"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}"  Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="DOROP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="REMAP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="STOP_"  Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                        </Grid>
-
-                        <!-- 中间虚线分隔 -->
-                        <Rectangle Grid.Column="1" Width="1" Fill="LightGray" Margin="2 0" VerticalAlignment="Stretch">
-                            <Rectangle.StrokeDashArray>
-                                <DoubleCollection>1,1</DoubleCollection>
-                            </Rectangle.StrokeDashArray>
-                        </Rectangle>
-
-                        <!-- 右边8个按钮 -->
-                        <Grid Grid.Column="2" Margin="5 0 0 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[3].SETCommand}" CommandParameter="RESET" IsEnabled="{Binding LoadPortDatas[3].IsConnected}"/>
-                        </Grid>
-                    </Grid>
-
-                    <!-- 第四行：下拉列表、输入框和按钮 -->
-                    <Grid Grid.Row="3" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox Grid.Column="0" 
-                          ItemsSource="{Binding LoadPortDatas[3].CommandList}"
-                          SelectedItem="{Binding LoadPortDatas[3].SelectedCommand}"
-                          Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="{Binding LoadPortDatas[3].CommandParameter}"  Margin="5 0 5 0"/>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonPrimary}"
-                            Content="{lex:Loc Set}" Width="80"
-                            Command="{Binding LoadPortDatas[3].SETCommand}"
-                            Margin="5 0 0 0"/>
-                    </Grid>
-
-                    <!-- 第五行：日志展示区 -->
-                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" Width="280" Height="150">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding LoadPortDatas[3].LogMessages}"  BorderThickness="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" 
-                               FontFamily="Consolas" 
-                               FontSize="8"
-                               TextWrapping="Wrap"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
-            </GroupBox>
-            <!-- LoadPort 5-->
-            <GroupBox MinHeight="330" MinWidth="200" Background="Transparent"
-      hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-      Padding="10" Style="{StaticResource GroupBoxTab.Small}">
-                <GroupBox.Header>
-                    <StackPanel>
-                        <TextBlock Padding="5" Foreground="White">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                    <Binding Source="{lex:Loc LoadPort}" />
-                                    <Binding Source="5" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </GroupBox.Header>
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- 第一行：FOUP图片和晶圆列表 -->
-                    <Grid Grid.Row="0" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边FOUP图片 -->
-                        <Image Grid.Column="0" Source="{Binding LoadPortDatas[4].FoupImageSource}" Width="80" Height="80" Margin="0 0 10 0" VerticalAlignment="Center"/>
-
-                        <!-- 右边晶圆列表（每行一个） -->
-                        <ScrollViewer Grid.Column="1"  HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto"  Height="260" Width="110">
-                            <ItemsControl ItemsSource="{Binding LoadPortDatas[4].WaferList}">
-                                <ItemsControl.ItemsPanel >
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Width="100" Height="8" Margin="1" Background="{Binding WaferColor}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding SlotID}" FontSize="8" Foreground="White" />
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </Grid>
-
-                    <!-- 第二行：Connect/Disconnect按钮 -->
-                    <Grid Grid.Row="1" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="1" 
-                Content="{lex:Loc Connect}"
-                Style="{StaticResource FlatButtonStyle}"
-                Command="{Binding LoadPortDatas[4].ConnectCommand}"
-                CommandParameter="1"
-                Margin="0 0 10 0"
-                Width="80"
-                Background="#2C66A7"
-                Foreground="White"
-                BorderBrush="#005A9E"/>
-
-                        <Button Grid.Column="2" 
-                Content="{lex:Loc Disconnect}"
-                Style="{StaticResource FlatButtonStyle}"
-                Command="{Binding LoadPortDatas[4].DisconnectCommand}"
-                CommandParameter="1"
-                Width="80"
-                Background="#CC0000"
-                Foreground="White"
-                BorderBrush="#990000" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                    </Grid>
-                    <!-- 第三行：控制按钮区域 -->
-                    <Grid Grid.Row="2" Margin=" 0 10 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 左边8个按钮 -->
-                        <Grid Grid.Column="0" Margin="0 0 5 0 ">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Load}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="CLDMP" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnLoad}"  Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="CULOD"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Dock}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="YDOOR" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnDock}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="YWAIT" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Latch}"  Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="DORCL" Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc UnLatch}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="DOROP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc Mapping}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="REMAP"  Style="{StaticResource SmallButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Stop}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="STOP_"  Style="{StaticResource SmallDangerButtonStyle}" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                        </Grid>
-
-                        <!-- 中间虚线分隔 -->
-                        <Rectangle Grid.Column="1" Width="1" Fill="LightGray" Margin="2 0" VerticalAlignment="Stretch">
-                            <Rectangle.StrokeDashArray>
-                                <DoubleCollection>1,1</DoubleCollection>
-                            </Rectangle.StrokeDashArray>
-                        </Rectangle>
-
-                        <!-- 右边8个按钮 -->
-                        <Grid Grid.Column="2" Margin="5 0 0 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
-                            </Grid.RowDefinitions>
-
-                            <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc Clamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="PODCL" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="0" Grid.Column="1" Content="{lex:Loc UnClamp}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="PODOP" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="0" Content="{lex:Loc Vacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="VACON" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="1" Grid.Column="1" Content="{lex:Loc UnVacc}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="VACOF" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="0" Content="{lex:Loc Open}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="DORBK" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="2" Grid.Column="1" Content="{lex:Loc Close}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="DORFW" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="0" Content="{lex:Loc ORG}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].MOVCommand}" CommandParameter="ORGSH" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                            <Button Grid.Row="3" Grid.Column="1" Content="{lex:Loc Reset}" Style="{StaticResource SmallButtonStyle}" Command="{Binding LoadPortDatas[4].SETCommand}" CommandParameter="RESET" IsEnabled="{Binding LoadPortDatas[4].IsConnected}"/>
-                        </Grid>
-                    </Grid>
-
-                    <!-- 第四行：下拉列表、输入框和按钮 -->
-                    <Grid Grid.Row="3" Margin="0 0 0 10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ComboBox Grid.Column="0" 
-                              ItemsSource="{Binding LoadPortDatas[4].CommandList}"
-                              SelectedItem="{Binding LoadPortDatas[4].SelectedCommand}"
-                              Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="{Binding LoadPortDatas[4].CommandParameter}"  Margin="5 0 5 0"/>
-                        <Button Grid.Column="2" Style="{StaticResource ButtonPrimary}"
-                            Content="{lex:Loc Set}" Width="80"
-                            Command="{Binding LoadPortDatas[4].SETCommand}"
-                            Margin="5 0 0 0"/>
-                    </Grid>
-
-                    <!-- 第五行：日志展示区 -->
-                    <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="1" Width="280" Height="150">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding LoadPortDatas[4].LogMessages}"  BorderThickness="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}" 
-                               FontFamily="Consolas" 
-                               FontSize="8"
-                               TextWrapping="Wrap"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
-                    </Border>
-                </Grid>
-            </GroupBox>
-        </StackPanel>   
+    <Border BorderThickness="1" Margin="5" Padding="0" CornerRadius="4">
+        <ItemsControl ItemsSource="{Binding LoadPortDatas}"
+                      ItemTemplate="{StaticResource LoadPortPanelTemplate}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel extensions:StackPanelHelpers.Spacing="10" Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Border>
 </UserControl>
