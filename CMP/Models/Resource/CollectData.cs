@@ -2,6 +2,8 @@
 using CMP.Models.kvsPlc;
 using KHT = CMP.Models.kvsPlc.KvHostLink;
 using KHST = CMP.Models.kvsPlc.Polish.KvStruct;
+using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
+using KHSTRollerIOData = CMP.Models.kvsPlc.Roll.KvsStructRollerIOData;
 using KHSTCLEAN = CMP.Models.kvsPlc.Clean.KvStruct;
 using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
 using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
@@ -425,38 +427,37 @@ namespace CMP.Models.Resource
 
     public class Roller:CollectDataChamber
     {
-        KHSTCLEAN.stRollerCollectData _stRollerCollectData;
+        KHSTRollerCollectData.stRollerCollectData _stRollerCollectData;
         public FieldInfo[] collectDataFields;
         public string rollerName = string.Empty;
         public FieldInfo[] ioDataFields;
 
         public Roller(string name, KVLink link) : base(name, link)
         {
-            _stRollerCollectData = new KHSTCLEAN.stRollerCollectData();
-            collectDataFields = typeof(KHSTSV.stRollerCollectData).GetFields();
+            _stRollerCollectData = new KHSTRollerCollectData.stRollerCollectData();
+            collectDataFields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields();
             rollerName = name;
-            ioDataFields = typeof(KHSTIO.stRollerIOData).GetFields();
+            ioDataFields = typeof(KHSTRollerIOData.stRollerIOData).GetFields();
         }
 
         public override void CollectData()
         {
             CollectProcessData();
-            CollectProcessData1();
-            CollectIOData1();
+            CollectIOData();
             CollectMotorServoStatus();
         }
 
-        private void CollectProcessData1()
+        private void CollectProcessData()
         {
             byte[] _readBuf = new byte[2048];
             err = KHT.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHSTSV.stRollerCollectData _stRollerCollectData = new KHSTSV.stRollerCollectData();
-                KHSTSV.ByteTo_stRollerCollectData(ref _stRollerCollectData, _readBuf);
+                KHSTRollerCollectData.stRollerCollectData _stRollerCollectData = new KHSTRollerCollectData.stRollerCollectData();
+                KHSTRollerCollectData.ByteTo_stRollerCollectData(ref _stRollerCollectData, _readBuf);
                 if (_stRollerCollectData != null)
                 {
-                    CompiledFieldAccessor<stRollerCollectData>.ProcessAllFields(_stRollerCollectData, (name, value) =>
+                    CompiledFieldAccessor<KHSTRollerCollectData.stRollerCollectData>.ProcessAllFields(_stRollerCollectData, (name, value) =>
                     {
                         SetSv(this.rollerName + name, value);
                     });
@@ -464,192 +465,45 @@ namespace CMP.Models.Resource
             }
         }
 
-        private void CollectProcessData()
-        {
-            err = KHT.KHLReadVariable(kvLink.sock, "dataCollection", readBuf, true);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
-            {
-                KHSTCLEAN.ByteTo_stRollerCollectData(ref _stRollerCollectData, readBuf);
-                SetSv(Keys.RollerA1ProcessStepAct, _stRollerCollectData.RollerA1ProcessStepAct);
-                SetSv(Keys.RollerA1ProcessStepSet, _stRollerCollectData.RollerA1ProcessStepSet);
-                SetSv(Keys.RollerA1ProcessTypeAct, _stRollerCollectData.RollerA1ProcessTypeAct);
-                SetSv(Keys.RollerA1ProcessTypeSet, _stRollerCollectData.RollerA1ProcessTypeSet);
-                SetSv(Keys.RollerA1RecipeTimeAct, _stRollerCollectData.RollerA1RecipeTimeAct);
-                SetSv(Keys.RollerA1RecipeTimeSet, _stRollerCollectData.RollerA1RecipeTimeSet);
-                SetSv(Keys.RollerA1UpperRollerRotateVelocityAct, _stRollerCollectData.RollerA1UpperRollerRotateVelocityAct);
-                SetSv(Keys.RollerA1UpperRollerRotateVelocitySet, _stRollerCollectData.RollerA1UpperRollerRotateVelocitySet);
-                SetSv(Keys.RollerA1LowerRollerRotateVelocityAct, _stRollerCollectData.RollerA1LowerRollerRotateVelocityAct);
-                SetSv(Keys.RollerA1LowerRollerRotateVelocitySet, _stRollerCollectData.RollerA1LowerRollerRotateVelocitySet);
-                SetSv(Keys.RollerA1WFLeftPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA1WFLeftPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA1WFLeftPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA1WFLeftPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA1WFRightPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA1WFRightPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA1WFRightPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA1WFRightPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA1UpperRollerPressureAct, _stRollerCollectData.RollerA1UpperRollerPressureAct);
-                SetSv(Keys.RollerA1UpperRollerPressureSet, _stRollerCollectData.RollerA1UpperRollerPressureSet);
-                SetSv(Keys.RollerA1LowerRollerPressureAct, _stRollerCollectData.RollerA1LowerRollerPressureAct);
-                SetSv(Keys.RollerA1LowerRollerPressureSet, _stRollerCollectData.RollerA1LowerRollerPressureSet);
-                SetSv(Keys.RollerA1WFUpperFaceDIWFlowrateAct, _stRollerCollectData.RollerA1WFUpperFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA1WFUpperFaceDIWFlowrateSet, _stRollerCollectData.RollerA1WFUpperFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA1WFLowerFaceDIWFlowrateAct, _stRollerCollectData.RollerA1WFLowerFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA1WFLowerFaceDIWFlowrateSet, _stRollerCollectData.RollerA1WFLowerFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA1WFUpperFaceChemicalSupplyAct, _stRollerCollectData.RollerA1WFUpperFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA1WFUpperFaceChemicalSupplySet, _stRollerCollectData.RollerA1WFUpperFaceChemicalSupplySet);
-                SetSv(Keys.RollerA1WFLowerFaceChemicalSupplyAct, _stRollerCollectData.RollerA1WFLowerFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA1WFLowerFaceChemicalSupplySet, _stRollerCollectData.RollerA1WFLowerFaceChemicalSupplySet);
-                SetSv(Keys.RollerA1MegaSonicSupplyAct, _stRollerCollectData.RollerA1MegaSonicSupplyAct);
-                SetSv(Keys.RollerA1MegaSonicSupplySet, _stRollerCollectData.RollerA1MegaSonicSupplySet);
-                SetSv(Keys.RollerA1ChemicalEnterFlowratemeteAct, _stRollerCollectData.RollerA1ChemicalEnterFlowratemeteAct);
-                SetSv(Keys.RollerA1ChemicalEnterFlowratemeteSet, _stRollerCollectData.RollerA1ChemicalEnterFlowratemeteSet);
-                SetSv(Keys.RollerA1DIWEnterFlowratemeteAct, _stRollerCollectData.RollerA1DIWEnterFlowratemeteAct);
-                SetSv(Keys.RollerA1DIWEnterFlowratemeteSet, _stRollerCollectData.RollerA1DIWEnterFlowratemeteSet);
-                SetSv(Keys.RollerA1WFLeftPillarRotateMotorAngleAct, _stRollerCollectData.RollerA1WFLeftPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA1WFRightPillarRotateMotorAngleAct, _stRollerCollectData.RollerA1WFRightPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA1UpperRollerRotateMotorAngleAct, _stRollerCollectData.RollerA1UpperRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA1LowerRollerRotateMotorAngleAct, _stRollerCollectData.RollerA1LowerRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA1ChemicalEntrancePressureAct, _stRollerCollectData.RollerA1ChemicalEntrancePressureAct);
-                SetSv(Keys.RollerA1WFLowerFaceChemicalWashPressureAct, _stRollerCollectData.RollerA1WFLowerFaceChemicalWashPressureAct);
-                SetSv(Keys.RollerA1WFUpperFaceChemicalWashFlowrateAct, _stRollerCollectData.RollerA1WFUpperFaceChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA1QuartzChemicalWashFlowrateAct, _stRollerCollectData.RollerA1QuartzChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA1WFLowerFaceDIWWashPressureAct, _stRollerCollectData.RollerA1WFLowerFaceDIWWashPressureAct);
-                SetSv(Keys.RollerA1UpperRollerDIWWashFlowrateAct, _stRollerCollectData.RollerA1UpperRollerDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1QuartzDIWWashFlowrateAct, _stRollerCollectData.RollerA1QuartzDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1UpperRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA1UpperRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1LowerRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA1LowerRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1MageSonicDIWWashFlowrateAct, _stRollerCollectData.RollerA1MageSonicDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1ChamberDIWWashFlowrateAct, _stRollerCollectData.RollerA1ChamberDIWWashFlowrateAct);
-                SetSv(Keys.RollerA1PillarWashFlowrateAct, _stRollerCollectData.RollerA1PillarWashFlowrateAct);
-                SetSv(Keys.RollerA1CoolingWaterCirculationFlowrateAct, _stRollerCollectData.RollerA1CoolingWaterCirculationFlowrateAct);
-                SetSv(Keys.RollerA1LowerRollerDownPressureAct, _stRollerCollectData.RollerA1LowerRollerDownPressureAct);
-                SetSv(Keys.RollerA1ClampCylinderPressureAct, _stRollerCollectData.RollerA1ClampCylinderPressureAct);
-                SetSv(Keys.RollerA1UpperRollerPressureAct1, _stRollerCollectData.RollerA1UpperRollerPressureAct1);
-                SetSv(Keys.RollerA1ClampPressureAct, _stRollerCollectData.RollerA1ClampPressureAct);
-                SetSv(Keys.RollerA1ClampPressureSet, _stRollerCollectData.RollerA1ClampPressureSet);
-
-                SetSv(Keys.RollerA2ProcessStepAct, _stRollerCollectData.RollerA2ProcessStepAct);
-                SetSv(Keys.RollerA2ProcessStepSet, _stRollerCollectData.RollerA2ProcessStepSet);
-                SetSv(Keys.RollerA2ProcessTypeAct, _stRollerCollectData.RollerA2ProcessTypeAct);
-                SetSv(Keys.RollerA2ProcessTypeSet, _stRollerCollectData.RollerA2ProcessTypeSet);
-                SetSv(Keys.RollerA2RecipeTimeAct, _stRollerCollectData.RollerA2RecipeTimeAct);
-                SetSv(Keys.RollerA2RecipeTimeSet, _stRollerCollectData.RollerA2RecipeTimeSet);
-                SetSv(Keys.RollerA2UpperRollerRotateVelocityAct, _stRollerCollectData.RollerA2UpperRollerRotateVelocityAct);
-                SetSv(Keys.RollerA2UpperRollerRotateVelocitySet, _stRollerCollectData.RollerA2UpperRollerRotateVelocitySet);
-                SetSv(Keys.RollerA2LowerRollerRotateVelocityAct, _stRollerCollectData.RollerA2LowerRollerRotateVelocityAct);
-                SetSv(Keys.RollerA2LowerRollerRotateVelocitySet, _stRollerCollectData.RollerA2LowerRollerRotateVelocitySet);
-                SetSv(Keys.RollerA2WFLeftPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA2WFLeftPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA2WFLeftPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA2WFLeftPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA2WFRightPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA2WFRightPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA2WFRightPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA2WFRightPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA2UpperRollerPressureAct, _stRollerCollectData.RollerA2UpperRollerPressureAct);
-                SetSv(Keys.RollerA2UpperRollerPressureSet, _stRollerCollectData.RollerA2UpperRollerPressureSet);
-                SetSv(Keys.RollerA2LowerRollerPressureAct, _stRollerCollectData.RollerA2LowerRollerPressureAct);
-                SetSv(Keys.RollerA2LowerRollerPressureSet, _stRollerCollectData.RollerA2LowerRollerPressureSet);
-                SetSv(Keys.RollerA2WFUpperFaceDIWFlowrateAct, _stRollerCollectData.RollerA2WFUpperFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA2WFUpperFaceDIWFlowrateSet, _stRollerCollectData.RollerA2WFUpperFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA2WFLowerFaceDIWFlowrateAct, _stRollerCollectData.RollerA2WFLowerFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA2WFLowerFaceDIWFlowrateSet, _stRollerCollectData.RollerA2WFLowerFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA2WFUpperFaceChemicalSupplyAct, _stRollerCollectData.RollerA2WFUpperFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA2WFUpperFaceChemicalSupplySet, _stRollerCollectData.RollerA2WFUpperFaceChemicalSupplySet);
-                SetSv(Keys.RollerA2WFLowerFaceChemicalSupplyAct, _stRollerCollectData.RollerA2WFLowerFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA2WFLowerFaceChemicalSupplySet, _stRollerCollectData.RollerA2WFLowerFaceChemicalSupplySet);
-                SetSv(Keys.RollerA2MegaSonicSupplyAct, _stRollerCollectData.RollerA2MegaSonicSupplyAct);
-                SetSv(Keys.RollerA2MegaSonicSupplySet, _stRollerCollectData.RollerA2MegaSonicSupplySet);
-                SetSv(Keys.RollerA2ChemicalEnterFlowratemeteAct, _stRollerCollectData.RollerA2ChemicalEnterFlowratemeteAct);
-                SetSv(Keys.RollerA2ChemicalEnterFlowratemeteSet, _stRollerCollectData.RollerA2ChemicalEnterFlowratemeteSet);
-                SetSv(Keys.RollerA2DIWEnterFlowratemeteAct, _stRollerCollectData.RollerA2DIWEnterFlowratemeteAct);
-                SetSv(Keys.RollerA2DIWEnterFlowratemeteSet, _stRollerCollectData.RollerA2DIWEnterFlowratemeteSet);
-                SetSv(Keys.RollerA2WFLeftPillarRotateMotorAngleAct, _stRollerCollectData.RollerA2WFLeftPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA2WFRightPillarRotateMotorAngleAct, _stRollerCollectData.RollerA2WFRightPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA2UpperRollerRotateMotorAngleAct, _stRollerCollectData.RollerA2UpperRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA2LowerRollerRotateMotorAngleAct, _stRollerCollectData.RollerA2LowerRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA2ChemicalEntrancePressureAct, _stRollerCollectData.RollerA2ChemicalEntrancePressureAct);
-                SetSv(Keys.RollerA2WFLowerFaceChemicalWashPressureAct, _stRollerCollectData.RollerA2WFLowerFaceChemicalWashPressureAct);
-                SetSv(Keys.RollerA2WFUpperFaceChemicalWashFlowrateAct, _stRollerCollectData.RollerA2WFUpperFaceChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA2QuartzChemicalWashFlowrateAct, _stRollerCollectData.RollerA2QuartzChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA2WFLowerFaceDIWWashPressureAct, _stRollerCollectData.RollerA2WFLowerFaceDIWWashPressureAct);
-                SetSv(Keys.RollerA2UpperRollerDIWWashFlowrateAct, _stRollerCollectData.RollerA2UpperRollerDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2QuartzDIWWashFlowrateAct, _stRollerCollectData.RollerA2QuartzDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2UpperRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA2UpperRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2LowerRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA2LowerRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2MageSonicDIWWashFlowrateAct, _stRollerCollectData.RollerA2MageSonicDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2ChamberDIWWashFlowrateAct, _stRollerCollectData.RollerA2ChamberDIWWashFlowrateAct);
-                SetSv(Keys.RollerA2PillarWashFlowrateAct, _stRollerCollectData.RollerA2PillarWashFlowrateAct);
-                SetSv(Keys.RollerA2CoolingWaterCirculationFlowrateAct, _stRollerCollectData.RollerA2CoolingWaterCirculationFlowrateAct);
-                SetSv(Keys.RollerA2LowerRollerDownPressureAct, _stRollerCollectData.RollerA2LowerRollerDownPressureAct);
-                SetSv(Keys.RollerA2ClampCylinderPressureAct, _stRollerCollectData.RollerA2ClampCylinderPressureAct);
-                SetSv(Keys.RollerA2UpperRollerPressureAct1, _stRollerCollectData.RollerA2UpperRollerPressureAct1);
-                SetSv(Keys.RollerA2ClampPressureAct, _stRollerCollectData.RollerA2ClampPressureAct);
-                SetSv(Keys.RollerA2ClampPressureSet, _stRollerCollectData.RollerA2ClampPressureSet);
-
-                SetSv(Keys.RollerA3ProcessStepAct, _stRollerCollectData.RollerA3ProcessStepAct);
-                SetSv(Keys.RollerA3ProcessStepSet, _stRollerCollectData.RollerA3ProcessStepSet);
-                SetSv(Keys.RollerA3ProcessTypeAct, _stRollerCollectData.RollerA3ProcessTypeAct);
-                SetSv(Keys.RollerA3ProcessTypeSet, _stRollerCollectData.RollerA3ProcessTypeSet);
-                SetSv(Keys.RollerA3RecipeTimeAct, _stRollerCollectData.RollerA3RecipeTimeAct);
-                SetSv(Keys.RollerA3RecipeTimeSet, _stRollerCollectData.RollerA3RecipeTimeSet);
-                SetSv(Keys.RollerA3UpperRollerRotateVelocityAct, _stRollerCollectData.RollerA3UpperRollerRotateVelocityAct);
-                SetSv(Keys.RollerA3UpperRollerRotateVelocitySet, _stRollerCollectData.RollerA3UpperRollerRotateVelocitySet);
-                SetSv(Keys.RollerA3LowerRollerRotateVelocityAct, _stRollerCollectData.RollerA3LowerRollerRotateVelocityAct);
-                SetSv(Keys.RollerA3LowerRollerRotateVelocitySet, _stRollerCollectData.RollerA3LowerRollerRotateVelocitySet);
-                SetSv(Keys.RollerA3WFLeftPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA3WFLeftPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA3WFLeftPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA3WFLeftPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA3WFRightPillarRotateMotorVelocityAct, _stRollerCollectData.RollerA3WFRightPillarRotateMotorVelocityAct);
-                SetSv(Keys.RollerA3WFRightPillarRotateMotorVelocitySet, _stRollerCollectData.RollerA3WFRightPillarRotateMotorVelocitySet);
-                SetSv(Keys.RollerA3UpperRollerPressureAct, _stRollerCollectData.RollerA3UpperRollerPressureAct);
-                SetSv(Keys.RollerA3UpperRollerPressureSet, _stRollerCollectData.RollerA3UpperRollerPressureSet);
-                SetSv(Keys.RollerA3LowerRollerPressureAct, _stRollerCollectData.RollerA3LowerRollerPressureAct);
-                SetSv(Keys.RollerA3LowerRollerPressureSet, _stRollerCollectData.RollerA3LowerRollerPressureSet);
-                SetSv(Keys.RollerA3WFUpperFaceDIWFlowrateAct, _stRollerCollectData.RollerA3WFUpperFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA3WFUpperFaceDIWFlowrateSet, _stRollerCollectData.RollerA3WFUpperFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA3WFLowerFaceDIWFlowrateAct, _stRollerCollectData.RollerA3WFLowerFaceDIWFlowrateAct);
-                SetSv(Keys.RollerA3WFLowerFaceDIWFlowrateSet, _stRollerCollectData.RollerA3WFLowerFaceDIWFlowrateSet);
-                SetSv(Keys.RollerA3WFUpperFaceChemicalSupplyAct, _stRollerCollectData.RollerA3WFUpperFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA3WFUpperFaceChemicalSupplySet, _stRollerCollectData.RollerA3WFUpperFaceChemicalSupplySet);
-                SetSv(Keys.RollerA3WFLowerFaceChemicalSupplyAct, _stRollerCollectData.RollerA3WFLowerFaceChemicalSupplyAct);
-                SetSv(Keys.RollerA3WFLowerFaceChemicalSupplySet, _stRollerCollectData.RollerA3WFLowerFaceChemicalSupplySet);
-                SetSv(Keys.RollerA3MegaSonicSupplyAct, _stRollerCollectData.RollerA3MegaSonicSupplyAct);
-                SetSv(Keys.RollerA3MegaSonicSupplySet, _stRollerCollectData.RollerA3MegaSonicSupplySet);
-                SetSv(Keys.RollerA3ChemicalEnterFlowratemeteAct, _stRollerCollectData.RollerA3ChemicalEnterFlowratemeteAct);
-                SetSv(Keys.RollerA3ChemicalEnterFlowratemeteSet, _stRollerCollectData.RollerA3ChemicalEnterFlowratemeteSet);
-                SetSv(Keys.RollerA3DIWEnterFlowratemeteAct, _stRollerCollectData.RollerA3DIWEnterFlowratemeteAct);
-                SetSv(Keys.RollerA3DIWEnterFlowratemeteSet, _stRollerCollectData.RollerA3DIWEnterFlowratemeteSet);
-                SetSv(Keys.RollerA3WFLeftPillarRotateMotorAngleAct, _stRollerCollectData.RollerA3WFLeftPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA3WFRightPillarRotateMotorAngleAct, _stRollerCollectData.RollerA3WFRightPillarRotateMotorAngleAct);
-                SetSv(Keys.RollerA3UpperRollerRotateMotorAngleAct, _stRollerCollectData.RollerA3UpperRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA3LowerRollerRotateMotorAngleAct, _stRollerCollectData.RollerA3LowerRollerRotateMotorAngleAct);
-                SetSv(Keys.RollerA3ChemicalEntrancePressureAct, _stRollerCollectData.RollerA3ChemicalEntrancePressureAct);
-                SetSv(Keys.RollerA3WFLowerFaceChemicalWashPressureAct, _stRollerCollectData.RollerA3WFLowerFaceChemicalWashPressureAct);
-                SetSv(Keys.RollerA3WFUpperFaceChemicalWashFlowrateAct, _stRollerCollectData.RollerA3WFUpperFaceChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA3QuartzChemicalWashFlowrateAct, _stRollerCollectData.RollerA3QuartzChemicalWashFlowrateAct);
-                SetSv(Keys.RollerA3WFLowerFaceDIWWashPressureAct, _stRollerCollectData.RollerA3WFLowerFaceDIWWashPressureAct);
-                SetSv(Keys.RollerA3UpperRollerDIWWashFlowrateAct, _stRollerCollectData.RollerA3UpperRollerDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3QuartzDIWWashFlowrateAct, _stRollerCollectData.RollerA3QuartzDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3UpperRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA3UpperRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3LowerRollerInsideDIWWashFlowrateAct, _stRollerCollectData.RollerA3LowerRollerInsideDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3MageSonicDIWWashFlowrateAct, _stRollerCollectData.RollerA3MageSonicDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3ChamberDIWWashFlowrateAct, _stRollerCollectData.RollerA3ChamberDIWWashFlowrateAct);
-                SetSv(Keys.RollerA3PillarWashFlowrateAct, _stRollerCollectData.RollerA3PillarWashFlowrateAct);
-                SetSv(Keys.RollerA3CoolingWaterCirculationFlowrateAct, _stRollerCollectData.RollerA3CoolingWaterCirculationFlowrateAct);
-                SetSv(Keys.RollerA3LowerRollerDownPressureAct, _stRollerCollectData.RollerA3LowerRollerDownPressureAct);
-                SetSv(Keys.RollerA3ClampCylinderPressureAct, _stRollerCollectData.RollerA3ClampCylinderPressureAct);
-                SetSv(Keys.RollerA3UpperRollerPressureAct1, _stRollerCollectData.RollerA3UpperRollerPressureAct1);
-                SetSv(Keys.RollerA3ClampPressureAct, _stRollerCollectData.RollerA3ClampPressureAct);
-                SetSv(Keys.RollerA3ClampPressureSet, _stRollerCollectData.RollerA3ClampPressureSet);
-            }
-        }
-
-        private void CollectIOData1()
+        private void CollectIOData()
         {
             byte[] _readBuf = new byte[2048];
-            err = KHT.KHLReadVariable(kvLink.sock, "IOData", _readBuf, true);
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData1", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHSTIO.stRollerIOData _stRollerIOData = new KHSTIO.stRollerIOData();
-                KHSTIO.ByteTo_stRollerIOData(ref _stRollerIOData, _readBuf);
+                KHSTRollerIOData.stRollerIOData _stRollerIOData = new KHSTRollerIOData.stRollerIOData();
+                KHSTRollerIOData.ByteTo_stRollerIOData(ref _stRollerIOData, _readBuf);
                 if (_stRollerIOData != null)
                 {
-                    CompiledFieldAccessor<stRollerIOData>.ProcessAllFields(_stRollerIOData, (name, value) =>
+                    CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(_stRollerIOData, (name, value) =>
                     {
-                        SetSv(this.rollerName + name, value);
+                        SetSv(this.rollerName + "_1" + name, value);
+                    });
+                }
+            }
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData2", _readBuf, true);
+            if (err == (int)KHLUserError.KHL_ERR_NONE)
+            {
+                KHSTRollerIOData.stRollerIOData _stRollerIOData = new KHSTRollerIOData.stRollerIOData();
+                KHSTRollerIOData.ByteTo_stRollerIOData(ref _stRollerIOData, _readBuf);
+                if (_stRollerIOData != null)
+                {
+                    CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(_stRollerIOData, (name, value) =>
+                    {
+                        SetSv(this.rollerName + "_2" + name, value);
+                    });
+                }
+            }
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData3", _readBuf, true);
+            if (err == (int)KHLUserError.KHL_ERR_NONE)
+            {
+                KHSTRollerIOData.stRollerIOData _stRollerIOData = new KHSTRollerIOData.stRollerIOData();
+                KHSTRollerIOData.ByteTo_stRollerIOData(ref _stRollerIOData, _readBuf);
+                if (_stRollerIOData != null)
+                {
+                    CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(_stRollerIOData, (name, value) =>
+                    {
+                        SetSv(this.rollerName + "_3" + name, value);
                     });
                 }
             }

@@ -11,14 +11,14 @@ using Newtonsoft.Json;
 using CMP.Utils;
 using CMP.Services.Log;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
-using KST = CMP.Models.kvsPlc.Clean.KvStruct;
+using KSTRecipe = CMP.Models.kvsPlc.Roll.KvsStructRollerRecipe;
 using RecipeContent = CMP.Models.Recipe.RecipeEdit.Recipe.Content;
 using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
 using DryIoc.FastExpressionCompiler.LightExpression;
 using CMP.Models.DataCenter;
-using CMP.Models.kvsPlc.SV;
+using CMP.Models.kvsPlc.Roll;
 using System.Windows;
 using System.Threading.Tasks;
 
@@ -333,7 +333,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 {
                     byte[] data = new byte[256];
                     uint devTopNo = (uint)(Convert.ToUInt32(_baseChamberAddress?.Replace("ZF", "")) + 10 + 5 * i);
-                    KST.IntToByte(ref data, wafer.SequnceValue[i]);
+                    KSTRecipe.IntToByte(ref data, wafer.SequnceValue[i]);
                     int error = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, devTopNo, 2, data);
                     if (error != (int)KHLUserError.KHL_ERR_NONE)
                     {
@@ -391,7 +391,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);
             if (recipeContent != null)
             {
-                KST.stRollerRecipeFormat plcRecipe = new KST.stRollerRecipeFormat();
+                KSTRecipe.stRollerRecipeFormat plcRecipe = new KSTRecipe.stRollerRecipeFormat();
                 //byte[] data = new byte[20480];
                 for (int i = 0; i < recipeContent.Data?[0].Steps.Count; i++)
                 {
@@ -412,7 +412,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                     plcRecipe.UpperRollInnerRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRollInnerRinseSupply", i);
                     plcRecipe.DownRollInnerRinseSupply[i] = GetRealVal<short>(recipeContent, "DownRollInnerRinseSupply", i);
                 }
-                KST.stRollerRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
+                KSTRecipe.stRollerRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _veriableName, _writeBuf, true);
                 if (_err == (int)KHLUserError.KHL_ERR_NONE)
                 {
@@ -584,7 +584,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);
             if (recipeContent != null)
             {
-                KST.stRollerRecipeFormat plcRecipe = new KST.stRollerRecipeFormat();
+                KSTRecipe.stRollerRecipeFormat plcRecipe = new KSTRecipe.stRollerRecipeFormat();
                 for (int i = 0; i < recipeContent.Data?[0].Steps.Count; i++)
                 {
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
@@ -604,7 +604,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                     plcRecipe.UpperRollInnerRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRollInnerRinseSupply", i);
                     plcRecipe.DownRollInnerRinseSupply[i] = GetRealVal<short>(recipeContent, "DownRollInnerRinseSupply", i);
                 }
-                KST.stRollerRecipeFormat_ToByte(ref _writeBuf, plcRecipe,  1, 0);
+                KSTRecipe.stRollerRecipeFormat_ToByte(ref _writeBuf, plcRecipe,  1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _veriableName, _writeBuf, true);
                 if (_err == (int)KHLUserError.KHL_ERR_NONE)
                 {
@@ -1083,13 +1083,13 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     /// </summary>
     private void RefreshHmi()
     {
-        KvStruct.stRollerCollectData data;
+        KvsStructRollerCollectData.stRollerCollectData data;
         // 刷新4个电机的实际速度值
-        RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarRotateMotorVelocityAct).Replace("_1", ""));
-        RollerViewPoco.WfRightPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFRightPillarRotateMotorVelocityAct).Replace("_1", ""));
+        RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarRotationMotorSpeedAct).Replace("_1", ""));
+        RollerViewPoco.WfRightPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFRightPillarRotationMotorSpeedAct).Replace("_1", ""));
         
-        RollerViewPoco.UpperRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerRotateVelocityAct).Replace("_1", ""));
-        RollerViewPoco.LowerRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerRotateVelocityAct).Replace("_1", ""));
+        RollerViewPoco.UpperRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerRotationSpeedAct).Replace("_1", ""));
+        RollerViewPoco.LowerRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerRotationSpeedAct).Replace("_1", ""));
 
 
         RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarMotorServoOn).Replace("_1", ""));
