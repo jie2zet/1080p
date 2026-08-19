@@ -767,6 +767,7 @@ namespace CMP.Models.Operation.LoadPort
             var portName = $"COM{wafer.LoadportID + 12}";
             var lp = LoadPortManager.Instance.GetLoadPort(portName);
             if (lp?.LoadPortStatus == null) return false;
+            if (lp.IsStopLoad && !IsInFlightPickWafer(wafer)) return false;
             if (lp.LoadPortStatus.foupPlacementStatus != FoupPlacementStatus.Normal) return false;
             //if(lp.LoadPortStatus.FoupDockStatus != FoupDockStatus.Docking) return false;
             //if (lp.LoadPortStatus.FIMSDoorStatus != FIMSDoorStatus.Open) return false;
@@ -1065,6 +1066,7 @@ namespace CMP.Models.Operation.LoadPort
         // 当接收到 inf:cldmp 反馈时调用
         private void OnInfCldmpReceived(bool readySignal)
         {  //wafer准备好
+            ClearStopLoad();
             switch (PortNumber) {
 
                 case "COM12":
@@ -1117,13 +1119,14 @@ namespace CMP.Models.Operation.LoadPort
 
             WriteCassetteLogWhenFoupUnload();
 
-            if (IsCycle)
+            if (IsCycle && !IsStopLoad)
             {
                 _ = OnInfCulodCycleDelayAndContinueAsync(wafers);
                 return;
             }
 
             ResetWafersToInitialState(wafers);
+            ClearStopLoad();
             //else
             //{
             //    ResetWafersToInitialState();
@@ -1143,6 +1146,14 @@ namespace CMP.Models.Operation.LoadPort
                     return;
                 await dispatcher.InvokeAsync(() =>
                 {
+                    if (IsStopLoad)
+                    {
+                        AddLogMessage($"StopLoad：跳过 {TabName} Cycle 自动 Load");
+                        ResetWafersToInitialState(wafers);
+                        ClearStopLoad();
+                        return;
+                    }
+
                     Logger.Info("@ cycle status execute cldmp command@");
                     if (CurrentCycleCount == 0)
                     {
@@ -1270,6 +1281,9 @@ namespace CMP.Models.Operation.LoadPort
         }
         public string PortNumber => _portName;
 
+        /// <summary>界面显示序号，COM12–COM16 对应 1–5。</summary>
+        public int DisplayNumber => GetLoadportId() + 1;
+
         public String TabName
         {
             get => _tabName;
@@ -1358,6 +1372,7 @@ namespace CMP.Models.Operation.LoadPort
 
 
             initLoadPortRecipe();
+            InitStopLoadCommand();
 
             //PlcIsConnected = _plcService.IsConnected;
             // 启动PLC操作处理任务
@@ -2177,7 +2192,7 @@ namespace CMP.Models.Operation.LoadPort
                                 }
                                 else
                                 {
-                                    if (IsCycle)
+                                    if (IsCycle && !IsStopLoad)
                                     {
                                         wafer.WaferStatus = WaferStatus.WaitAssignRecipe;
                                         wafer.IsSelected = true;
@@ -2192,7 +2207,7 @@ namespace CMP.Models.Operation.LoadPort
                     }
                 }));
 
-                if (IsCycle)
+                if (IsCycle && !IsStopLoad)
                 {
                     // 在下一个UI循环中恢复WaferQueue，避免阻塞当前处理
                     Task.Run(() =>
@@ -2371,7 +2386,7 @@ namespace CMP.Models.Operation.LoadPort
         {
             try
             {
-                if (!IsCycle)
+                if (!IsCycle || IsStopLoad)
                 {
                     return;
                 }

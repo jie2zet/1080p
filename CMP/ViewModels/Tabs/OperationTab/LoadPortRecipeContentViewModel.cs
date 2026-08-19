@@ -411,6 +411,9 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 bool allSuccess = true;
                 if (allSuccess)
                 {
+                    // 重新 Assign 视为恢复本口入料
+                    _loadPortData.ClearStopLoad();
+
                     // 按SlotID顺序将wafer添加到全局队列
                     lock (_globalLock)
                     {

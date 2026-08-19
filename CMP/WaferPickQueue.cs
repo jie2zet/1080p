@@ -97,10 +97,18 @@ public static class WaferPickQueue
 
     public static int RemoveByLoadportId(int loadportId)
     {
+        return RemoveByLoadportIdExcept(loadportId, except: null);
+    }
+
+    /// <summary>
+    /// 移除指定 LoadPort 的待取片，可保留正在取的那一片以免打断进行中的取片。
+    /// </summary>
+    public static int RemoveByLoadportIdExcept(int loadportId, Wafer? except)
+    {
         lock (Sync)
         {
             var remaining = GlobalService.waferQueue
-                .Where(w => w.LoadportID != loadportId)
+                .Where(w => w.LoadportID != loadportId || (except != null && MatchesWafer(w, except)))
                 .ToList();
             var removed = GlobalService.waferQueue.Count - remaining.Count;
             RebuildQueue(remaining);
