@@ -3,6 +3,7 @@ using CMP.Models.Config;
 using CMP.Models.kvsPlc;
 using CMP.Models.Operation.Bot;
 using CMP.Models.Recipe.RecipeEdit;
+using CMP.Models.Resource;
 using CMP.Utils;
 using CMP.ViewModels.Common.Dialog;
 using CMP.ViewModels.Tabs.RecipeTab;
@@ -22,7 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static CMP.Constants.Plc.PlcHandle.CmdPolish.Gas;
+using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Polish.KvStruct;
 
@@ -34,7 +35,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         private string _calibrationFileName = "Calibration.json";
         private string _polishIdentifier = "";
         private bool _isInitialized = false;
-        private KVLink kvLink = new ("");
+        private KVLink kvLink = new("");
 
         /// <summary>
         /// 500000
@@ -64,7 +65,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             get { return _calibrationDisplayInfos; }
             set { _calibrationDisplayInfos = value; RaisePropertyChanged(); }
         }
-	
+
 
         public DelegateCommand SaveZoneCommand { get; set; }
         public DelegateCommand<string> CopyToZoneCommand { get; set; }
@@ -144,7 +145,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 BuildCalibrationDisplays();
                 return;
             }
-            if (_isInitialized) return;
+            //if (_isInitialized) return;
             string json = FileUtil.ReadFile(_calibrationFileName);
             var dic = JsonConvert.DeserializeObject<Dictionary<string, ObservableCollection<CalibrationModel>>>(json)!;
             // This is for testing purposes only
@@ -159,6 +160,23 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
         private void OnSaveZone()
         {
+            foreach (var kvp in CalibModelDictionary)
+            {
+                var models = kvp.Value;
+                for (int i = 1; i < models.Count; i++)
+                {
+                    // 校验 Read 列是否递增，前面的数据不能比后面的数据大
+                    if (models[i].Read < models[i - 1].Read)
+                    {
+                        Growl.Warning(new GrowlInfo()
+                        {
+                            Message = $"{kvp.Key}, Row: {i + 1}, Read 数据必须递增，前面的数据不能比后面的数据大，请修正后再保存。",
+                            ShowCloseButton = true
+                        });
+                        return;
+                    }
+                }
+            }
             var json = JsonConvert.SerializeObject(CalibModelDictionary, Formatting.Indented);
             FileUtil.WriteFile(_calibrationFileName, json);
             Growl.Success(new GrowlInfo() { Message = Lang.Resources.SaveSuccessful, ShowCloseButton = true });
@@ -171,7 +189,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             float[] arrayRead = new float[50];
             for (int i = 0; i < arraySet.Length; i++)
             {
-                if(i < CalibModelDictionary[name].Count)
+                if (i < CalibModelDictionary[name].Count)
                 {
                     arraySet[i] = CalibModelDictionary[name][i].Set;
                     arrayAct[i] = CalibModelDictionary[name][i].Act;
@@ -388,6 +406,64 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     Models = kvp.Value
                 })
             );
+            if (!_polishIdentifier.StartsWith("Polish")) return;
+            new Task(() => {
+                KHSTSV.stPolishCollectData stPolishCollectData = new();
+                byte[] _readBuf = new byte[2048];
+                var err = KHL.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
+                if (err == (int)KHLUserError.KHL_ERR_NONE)
+                {
+                    KHSTSV.ByteTo_stPolishCollectData(ref stPolishCollectData, _readBuf);
+                    //读取Inline和Sensor的值
+                    foreach (var displayInfo in CalibrationDisplayInfos)
+                    {
+                        switch (displayInfo.Name)
+                        {
+                            case "Zone1":
+                                displayInfo.Inline = stPolishCollectData.Zone1PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone1PressureSet;
+                                break;
+                            case "Zone2":
+                                displayInfo.Inline = stPolishCollectData.Zone2PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone2PressureSet;
+                                break;
+                            case "Zone3":
+                                displayInfo.Inline = stPolishCollectData.Zone3PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone3PressureSet;
+                                break;
+                            case "Zone4":
+                                displayInfo.Inline = stPolishCollectData.Zone4PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone4PressureSet;
+                                break;
+                            case "Zone5":
+                                displayInfo.Inline = stPolishCollectData.Zone5PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone5PressureSet;
+                                break;
+                            case "Zone6":
+                                displayInfo.Inline = stPolishCollectData.Zone6PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone6PressureSet;
+                                break;
+                            case "Zone7":
+                                displayInfo.Inline = stPolishCollectData.Zone7PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone7PressureSet;
+                                break;
+                            case "Zone8":
+                                displayInfo.Inline = stPolishCollectData.Zone8PressureAct;
+                                displayInfo.Sensor = stPolishCollectData.Zone8PressureSet;
+                                break;
+                            case "RRing":
+                                displayInfo.Inline = stPolishCollectData.RetainerRingAirBagPressureAct;
+                                displayInfo.Sensor = stPolishCollectData.RetainerRingAirBagPressureSet;
+                                break;
+                            case "Disk":
+                                displayInfo.Inline = stPolishCollectData.ConditionDownForcePressureAct;
+                                displayInfo.Sensor = stPolishCollectData.ConditionDownForcePressureSet;
+                                break;
+                        }
+                    }
+                }
+            }).Start();
+            
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -437,6 +513,11 @@ namespace CMP.ViewModels.Tabs.ConfigTab
     public class CalibrationDisplayInfo
     {
         public string? Name { get; set; }
+
+        public float Inline { get; set; }
+
+        public float Sensor { get; set; }
+
         public ObservableCollection<CalibrationModel>? Models { get; set; }
     }
 }
