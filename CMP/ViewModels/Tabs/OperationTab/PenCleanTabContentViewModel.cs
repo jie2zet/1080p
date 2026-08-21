@@ -20,6 +20,7 @@ using System.Windows;
 using System.Threading.Tasks;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Clean.KvStruct;
+using KSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using RecipeContent = CMP.Models.Recipe.RecipeEdit.Recipe.Content;
 
 namespace CMP.ViewModels.Tabs.OperationTab;
@@ -308,14 +309,14 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     /// </summary>
     private void RefreshHmi()
     {
-        KvStruct.stPenCollectData data;
+        KSTPenCollectData.stPenCollectData data;
         // 刷新电机速度和位置的实际值
-        PenClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1ChuckRotationMotorVelocityAct).Replace("_1", ""));
+        PenClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1ChuckRotationSpeedAct).Replace("_1", ""));
 
-        PenClean.PenArmSweepMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepMotorVelocityAct).Replace("_1", ""));
-        PenClean.PenArmSweepMotor.ActPosition = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepMotorPositionAct).Replace("_1", ""));
+        PenClean.PenArmSweepMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepSpeedAct).Replace("_1", ""));
+        PenClean.PenArmSweepMotor.ActPosition = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepAngleAct).Replace("_1", ""));
 
-        PenClean.PenRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenRotationMotorVelocityAct).Replace("_1", ""));
+        PenClean.PenRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenHeadRotationSpeedAct).Replace("_1", ""));
 
         PenClean.ChuckRotationMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1ChuckMotorServoOn).Replace("_1", ""));
         PenClean.PenArmSweepMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepMotorServoOn).Replace("_1", ""));

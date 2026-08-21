@@ -4,6 +4,8 @@ using KHT = CMP.Models.kvsPlc.KvHostLink;
 using KHST = CMP.Models.kvsPlc.Polish.KvStruct;
 using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using KHSTRollerIOData = CMP.Models.kvsPlc.Roll.KvsStructRollerIOData;
+using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
+using KHSTPenIOData = CMP.Models.kvsPlc.Pen.KvsStructPenIOData;
 using KHSTCLEAN = CMP.Models.kvsPlc.Clean.KvStruct;
 using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
 using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
@@ -723,14 +725,14 @@ namespace CMP.Models.Resource
 
     public class Pen:CollectDataChamber
     {
-        KHSTCLEAN.stPenCollectData _stPenCollectData;
+        KHSTPenCollectData.stPenCollectData _stPenCollectData;
         public FieldInfo[] collectDataFields;
         public string penName = string.Empty;
         public FieldInfo[] ioDataFields;
         public Pen(string name, KVLink link) : base(name, link)
         {
-            _stPenCollectData = new KHSTCLEAN.stPenCollectData();
-            collectDataFields = typeof(KHSTSV.stPenCollectData).GetFields();
+            _stPenCollectData = new KHSTPenCollectData.stPenCollectData();
+            collectDataFields = typeof(KHSTPenCollectData.stPenCollectData).GetFields();
             penName = name;
             ioDataFields = typeof(KHSTIO.stPenIOData).GetFields();
         }
@@ -738,146 +740,21 @@ namespace CMP.Models.Resource
         public override void CollectData()
         {
             CollectProcessData();
-            CollectProcessData1();
-            CollectIOData1();
+            CollectIOData();
             CollectMotorServoStatus();
         }
 
         private void CollectProcessData()
         {
-            err = KHT.KHLReadVariable(kvLink.sock, "dataCollection", readBuf, true);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
-            {
-                KHSTCLEAN.ByteTo_stPenCollectData(ref _stPenCollectData, readBuf);
-                SetSv(Keys.PenA1ProcessStepAct, _stPenCollectData.PenA1ProcessStepAct);
-                SetSv(Keys.PenA1ProcessStepSet, _stPenCollectData.PenA1ProcessStepSet);
-                SetSv(Keys.PenA1ProcessTypeAct, _stPenCollectData.PenA1ProcessTypeAct);
-                SetSv(Keys.PenA1ProcessTypeSet, _stPenCollectData.PenA1ProcessTypeSet);
-                SetSv(Keys.PenA1RecipeTimeAct, _stPenCollectData.PenA1RecipeTimeAct);
-                SetSv(Keys.PenA1RecipeTimeSet, _stPenCollectData.PenA1RecipeTimeSet);
-                SetSv(Keys.PenA1ChuckRotationMotorVelocityAct, _stPenCollectData.PenA1ChuckRotationMotorVelocityAct);
-                SetSv(Keys.PenA1ChuckRotationMotorVelocitySet, _stPenCollectData.PenA1ChuckRotationMotorVelocitySet);
-                SetSv(Keys.PenA1PenArmSweepMotorVelocityAct, _stPenCollectData.PenA1PenArmSweepMotorVelocityAct);
-                SetSv(Keys.PenA1PenArmSweepMotorVelocitySet, _stPenCollectData.PenA1PenArmSweepMotorVelocitySet);
-                SetSv(Keys.PenA1PenArmSweepMotorPositionAct, _stPenCollectData.PenA1PenArmSweepMotorPositionAct);
-                SetSv(Keys.PenA1PenArmSweepMotorPositionSet, _stPenCollectData.PenA1PenArmSweepMotorPositionSet);
-                SetSv(Keys.PenA1PenArmSweepMotorCycleAct, _stPenCollectData.PenA1PenArmSweepMotorCycleAct);
-                SetSv(Keys.PenA1PenArmSweepMotorCycleSet, _stPenCollectData.PenA1PenArmSweepMotorCycleSet);
-                SetSv(Keys.PenA1PenRotationMotorVelocityAct, _stPenCollectData.PenA1PenRotationMotorVelocityAct);
-                SetSv(Keys.PenA1PenRotationMotorVelocitySet, _stPenCollectData.PenA1PenRotationMotorVelocitySet);
-                SetSv(Keys.PenA1PenPressureSetValueAct, _stPenCollectData.PenA1PenPressureSetValueAct);
-                SetSv(Keys.PenA1PenPressureSetValueSet, _stPenCollectData.PenA1PenPressureSetValueSet);
-                SetSv(Keys.PenA1WFUpperFaceN2OutletFlowrateAct, _stPenCollectData.PenA1WFUpperFaceN2OutletFlowrateAct);
-                SetSv(Keys.PenA1WFUpperFaceN2OutletFlowrateSet, _stPenCollectData.PenA1WFUpperFaceN2OutletFlowrateSet);
-                SetSv(Keys.PenA1WFUpperFaceDIWFlowrateAct, _stPenCollectData.PenA1WFUpperFaceDIWFlowrateAct);
-                SetSv(Keys.PenA1WFUpperFaceDIWFlowrateSet, _stPenCollectData.PenA1WFUpperFaceDIWFlowrateSet);
-                SetSv(Keys.PenA1WFLowerFaceDIWFlowrateAct, _stPenCollectData.PenA1WFLowerFaceDIWFlowrateAct);
-                SetSv(Keys.PenA1WFLowerFaceDIWFlowrateSet, _stPenCollectData.PenA1WFLowerFaceDIWFlowrateSet);
-                SetSv(Keys.PenA1WFLowerFaceN2SupplyAct, _stPenCollectData.PenA1WFLowerFaceN2SupplyAct);
-                SetSv(Keys.PenA1WFLowerFaceN2SupplySet, _stPenCollectData.PenA1WFLowerFaceN2SupplySet);
-                SetSv(Keys.PenA1WFUpperLowerFaceChemicalSupplyAct, _stPenCollectData.PenA1WFUpperLowerFaceChemicalSupplyAct);
-                SetSv(Keys.PenA1WFUpperLowerFaceChemicalSupplySet, _stPenCollectData.PenA1WFUpperLowerFaceChemicalSupplySet);
-                SetSv(Keys.PenA1WFUpperFaceChemicalSupplyAct, _stPenCollectData.PenA1WFUpperFaceChemicalSupplyAct);
-                SetSv(Keys.PenA1WFUpperFaceChemicalSupplySet, _stPenCollectData.PenA1WFUpperFaceChemicalSupplySet);
-                SetSv(Keys.PenA1WFUpperFaceDICO2SupplyAct, _stPenCollectData.PenA1WFUpperFaceDICO2SupplyAct);
-                SetSv(Keys.PenA1WFUpperFaceDICO2SupplySet, _stPenCollectData.PenA1WFUpperFaceDICO2SupplySet);
-                SetSv(Keys.PenA1DIWInletFlowrateAct, _stPenCollectData.PenA1DIWInletFlowrateAct);
-                SetSv(Keys.PenA1DIWInletFlowrateSet, _stPenCollectData.PenA1DIWInletFlowrateSet);
-                SetSv(Keys.PenA1DIWSupplyPressureAct, _stPenCollectData.PenA1DIWSupplyPressureAct);
-                SetSv(Keys.PenA1DIWSupplyPressureSet, _stPenCollectData.PenA1DIWSupplyPressureSet);
-                SetSv(Keys.PenA1ChemicalFlowrateAct, _stPenCollectData.PenA1ChemicalFlowrateAct);
-                SetSv(Keys.PenA1ChemicalFlowrateSet, _stPenCollectData.PenA1ChemicalFlowrateSet);
-                SetSv(Keys.PenA1CO2SupplyPressureAct, _stPenCollectData.PenA1CO2SupplyPressureAct);
-                SetSv(Keys.PenA1CO2SupplyPressureSet, _stPenCollectData.PenA1CO2SupplyPressureSet);
-                SetSv(Keys.PenA1ChuckRotationMotorPositionAct, _stPenCollectData.PenA1ChuckRotationMotorPositionAct1);
-                SetSv(Keys.PenA1PenRotationMotorPositionAct, _stPenCollectData.PenA1PenRotationMotorPositionAct);
-                SetSv(Keys.PenA1DIWSupplyPressureAct1, _stPenCollectData.PenA1DIWSupplyPressureAct1);
-                SetSv(Keys.PenA1CarbonatedDIWResistanceAct, _stPenCollectData.PenA1CarbonatedDIWResistanceAct);
-                SetSv(Keys.PenA1CarbonatedDIWFlowrateAct, _stPenCollectData.PenA1CarbonatedDIWFlowrateAct);
-                SetSv(Keys.PenA1DIWChamberFlowrateAct, _stPenCollectData.PenA1DIWChamberFlowrateAct);
-                SetSv(Keys.PenA1PenDIWWashFlowrateAct, _stPenCollectData.PenA1PenDIWWashFlowrateAct);
-                SetSv(Keys.PenA1QuartzDIWWashFlowrateAct, _stPenCollectData.PenA1QuartzDIWWashFlowrateAct);
-                SetSv(Keys.PenA1ChemicalSupplyPressureAct, _stPenCollectData.PenA1ChemicalSupplyPressureAct);
-                SetSv(Keys.PenA1QuartzChemicalWashFlowrateAct, _stPenCollectData.PenA1QuartzChemicalWashFlowrateAct);
-                SetSv(Keys.PenA1WFUpperFaceWashChemicalFlowrateAct, _stPenCollectData.PenA1WFUpperFaceWashChemicalFlowrateAct);
-                SetSv(Keys.PenA1WFLowerFaceWashChemicalFlowrateAct, _stPenCollectData.PenA1WFLowerFaceWashChemicalFlowrateAct);
-                SetSv(Keys.PenA1WFUpperFaceN2PressureAct, _stPenCollectData.PenA1WFUpperFaceN2PressureAct);
-                SetSv(Keys.PenA1WFLowerFaceN2PressureAct, _stPenCollectData.PenA1WFLowerFaceN2PressureAct);
-                SetSv(Keys.PenA1WFLowerFaceN2OutletFlowAct, _stPenCollectData.PenA1WFLowerFaceN2OutletFlowAct1);
-                SetSv(Keys.PenA1CUPPurgeFlowAct, _stPenCollectData.PenA1CUPPurgeFlowAct);
-                SetSv(Keys.PenA1CO2SupplyPressureAct1, _stPenCollectData.PenA1CO2SupplyPressureAct1);
-                SetSv(Keys.PenA2ProcessStepAct, _stPenCollectData.PenA2ProcessStepAct);
-                SetSv(Keys.PenA2ProcessStepSet, _stPenCollectData.PenA2ProcessStepSet);
-                SetSv(Keys.PenA2ProcessTypeAct, _stPenCollectData.PenA2ProcessTypeAct);
-                SetSv(Keys.PenA2ProcessTypeSet, _stPenCollectData.PenA2ProcessTypeSet);
-                SetSv(Keys.PenA2RecipeTimeAct, _stPenCollectData.PenA2RecipeTimeAct);
-                SetSv(Keys.PenA2RecipeTimeSet, _stPenCollectData.PenA2RecipeTimeSet);
-                SetSv(Keys.PenA2ChuckRotationMotorVelocityAct, _stPenCollectData.PenA2ChuckRotationMotorVelocityAct);
-                SetSv(Keys.PenA2ChuckRotationMotorVelocitySet, _stPenCollectData.PenA2ChuckRotationMotorVelocitySet);
-                SetSv(Keys.PenA2PenArmSweepMotorVelocityAct, _stPenCollectData.PenA2PenArmSweepMotorVelocityAct);
-                SetSv(Keys.PenA2PenArmSweepMotorVelocitySet, _stPenCollectData.PenA2PenArmSweepMotorVelocitySet);
-                SetSv(Keys.PenA2PenArmSweepMotorPositionAct, _stPenCollectData.PenA2PenArmSweepMotorPositionAct);
-                SetSv(Keys.PenA2PenArmSweepMotorPositionSet, _stPenCollectData.PenA2PenArmSweepMotorPositionSet);
-                SetSv(Keys.PenA2PenArmSweepMotorCycleAct, _stPenCollectData.PenA2PenArmSweepMotorCycleAct);
-                SetSv(Keys.PenA2PenArmSweepMotorCycleSet, _stPenCollectData.PenA2PenArmSweepMotorCycleSet);
-                SetSv(Keys.PenA2PenRotationMotorVelocityAct, _stPenCollectData.PenA2PenRotationMotorVelocityAct);
-                SetSv(Keys.PenA2PenRotationMotorVelocitySet, _stPenCollectData.PenA2PenRotationMotorVelocitySet);
-                SetSv(Keys.PenA2PenPressureSetValueAct, _stPenCollectData.PenA2PenPressureSetValueAct);
-                SetSv(Keys.PenA2PenPressureSetValueSet, _stPenCollectData.PenA2PenPressureSetValueSet);
-                SetSv(Keys.PenA2WFUpperFaceN2OutletFlowrateAct, _stPenCollectData.PenA2WFUpperFaceN2OutletFlowrateAct);
-                SetSv(Keys.PenA2WFUpperFaceN2OutletFlowrateSet, _stPenCollectData.PenA2WFUpperFaceN2OutletFlowrateSet);
-                SetSv(Keys.PenA2WFUpperFaceDIWFlowrateAct, _stPenCollectData.PenA2WFUpperFaceDIWFlowrateAct);
-                SetSv(Keys.PenA2WFUpperFaceDIWFlowrateSet, _stPenCollectData.PenA2WFUpperFaceDIWFlowrateSet);
-                SetSv(Keys.PenA2WFLowerFaceDIWFlowrateAct, _stPenCollectData.PenA2WFLowerFaceDIWFlowrateAct);
-                SetSv(Keys.PenA2WFLowerFaceDIWFlowrateSet, _stPenCollectData.PenA2WFLowerFaceDIWFlowrateSet);
-                SetSv(Keys.PenA2WFLowerFaceN2SupplyAct, _stPenCollectData.PenA2WFLowerFaceN2SupplyAct);
-                SetSv(Keys.PenA2WFLowerFaceN2SupplySet, _stPenCollectData.PenA2WFLowerFaceN2SupplySet);
-                SetSv(Keys.PenA2WFUpperLowerFaceChemicalSupplyAct, _stPenCollectData.PenA2WFUpperLowerFaceChemicalSupplyAct);
-                SetSv(Keys.PenA2WFUpperLowerFaceChemicalSupplySet, _stPenCollectData.PenA2WFUpperLowerFaceChemicalSupplySet);
-                SetSv(Keys.PenA2WFUpperFaceChemicalSupplyAct, _stPenCollectData.PenA2WFUpperFaceChemicalSupplyAct);
-                SetSv(Keys.PenA2WFUpperFaceChemicalSupplySet, _stPenCollectData.PenA2WFUpperFaceChemicalSupplySet);
-                SetSv(Keys.PenA2WFUpperFaceDICO2SupplyAct, _stPenCollectData.PenA2WFUpperFaceDICO2SupplyAct);
-                SetSv(Keys.PenA2WFUpperFaceDICO2SupplySet, _stPenCollectData.PenA2WFUpperFaceDICO2SupplySet);
-                SetSv(Keys.PenA2DIWInletFlowrateAct, _stPenCollectData.PenA2DIWInletFlowrateAct);
-                SetSv(Keys.PenA2DIWInletFlowrateSet, _stPenCollectData.PenA2DIWInletFlowrateSet);
-                SetSv(Keys.PenA2DIWSupplyPressureAct, _stPenCollectData.PenA2DIWSupplyPressureAct);
-                SetSv(Keys.PenA2DIWSupplyPressureSet, _stPenCollectData.PenA2DIWSupplyPressureSet);
-                SetSv(Keys.PenA2ChemicalFlowrateAct, _stPenCollectData.PenA2ChemicalFlowrateAct);
-                SetSv(Keys.PenA2ChemicalFlowrateSet, _stPenCollectData.PenA2ChemicalFlowrateSet);
-                SetSv(Keys.PenA2CO2SupplyPressure1Act, _stPenCollectData.PenA2CO2SupplyPressure1Act);
-                SetSv(Keys.PenA2CO2SupplyPressure1Set, _stPenCollectData.PenA2CO2SupplyPressure1Set);
-                SetSv(Keys.PenA2ChuckRotationMotorPositionAct, _stPenCollectData.PenA2ChuckRotationMotorPositionAct);
-                SetSv(Keys.PenA2PenRotationMotorPositionAct, _stPenCollectData.PenA2PenRotationMotorPositionAct);
-                SetSv(Keys.PenA2DIWSupplyPressureAct1, _stPenCollectData.PenA2DIWSupplyPressureAct1);
-                SetSv(Keys.PenA2CarbonatedDIWResistanceAct, _stPenCollectData.PenA2CarbonatedDIWResistanceAct);
-                SetSv(Keys.PenA2CarbonatedDIWFlowrateAct, _stPenCollectData.PenA2CarbonatedDIWFlowrateAct);
-                SetSv(Keys.PenA2DIWChamberFlowrateAct, _stPenCollectData.PenA2DIWChamberFlowrateAct);
-                SetSv(Keys.PenA2PenDIWWashFlowrateAct, _stPenCollectData.PenA2PenDIWWashFlowrateAct);
-                SetSv(Keys.PenA2QuartzDIWWashFlowrateAct, _stPenCollectData.PenA2QuartzDIWWashFlowrateAct);
-                SetSv(Keys.PenA2ChemicalSupplyPressureAct, _stPenCollectData.PenA2ChemicalSupplyPressureAct);
-                SetSv(Keys.PenA2QuartzChemicalWashFlowrateAct, _stPenCollectData.PenA2QuartzChemicalWashFlowrateAct);
-                SetSv(Keys.PenA2WFUpperFaceWashChemicalFlowrateAct, _stPenCollectData.PenA2WFUpperFaceWashChemicalFlowrateAct);
-                SetSv(Keys.PenA2WFLowerFaceWashChemicalFlowrateAct, _stPenCollectData.PenA2WFLowerFaceWashChemicalFlowrateAct);
-                SetSv(Keys.PenA2WFUpperFaceN2PressureAct, _stPenCollectData.PenA2WFUpperFaceN2PressureAct);
-                SetSv(Keys.PenA2WFLowerFaceN2PressureAct, _stPenCollectData.PenA2WFLowerFaceN2PressureAct);
-                SetSv(Keys.PenA2WFLowerFaceN2OutletFlowAct, _stPenCollectData.PenA2WFLowerFaceN2OutletFlowAct);
-                SetSv(Keys.PenA2CUPPurgeFlowAct, _stPenCollectData.PenA2CUPPurgeFlowAct);
-                SetSv(Keys.PenA2CO2SupplyPressure2Act, _stPenCollectData.PenA2CO2SupplyPressure2Act);
-
-            }
-        }
-
-        private void CollectProcessData1()
-        {
             byte[] _readBuf = new byte[2048];
             err = KHT.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHSTSV.stPenCollectData _stPenCollectData = new KHSTSV.stPenCollectData();
-                KHSTSV.ByteTo_stPenCollectData(ref _stPenCollectData, _readBuf);
+                KHSTPenCollectData.stPenCollectData _stPenCollectData = new KHSTPenCollectData.stPenCollectData();
+                KHSTPenCollectData.ByteTo_stPenCollectData(ref _stPenCollectData, _readBuf);
                 if (_stPenCollectData != null)
                 {
-                    CompiledFieldAccessor<stPenCollectData>.ProcessAllFields(_stPenCollectData, (name, value) =>
+                    CompiledFieldAccessor<KHSTPenCollectData.stPenCollectData>.ProcessAllFields(_stPenCollectData, (name, value) =>
                     {
                         SetSv(this.penName + name, value);
                     });
@@ -885,10 +762,10 @@ namespace CMP.Models.Resource
             }
         }
 
-        private void CollectIOData1()
+        private void CollectIOData()
         {
             byte[] _readBuf = new byte[2048];
-            err = KHT.KHLReadVariable(kvLink.sock, "IOData", _readBuf, true);
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData1", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KHSTIO.stPenIOData _stPenIOData = new KHSTIO.stPenIOData();
@@ -897,7 +774,20 @@ namespace CMP.Models.Resource
                 {
                     CompiledFieldAccessor<stPenIOData>.ProcessAllFields(_stPenIOData, (name, value) =>
                     {
-                        SetSv(this.penName + name, value);
+                        SetSv(this.penName + "_1" + name, value);
+                    });
+                }
+            }
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData2", _readBuf, true);
+            if (err == (int)KHLUserError.KHL_ERR_NONE)
+            {
+                KHSTIO.stPenIOData _stPenIOData = new KHSTIO.stPenIOData();
+                KHSTIO.ByteTo_stPenIOData(ref _stPenIOData, _readBuf);
+                if (_stPenIOData != null)
+                {
+                    CompiledFieldAccessor<stPenIOData>.ProcessAllFields(_stPenIOData, (name, value) =>
+                    {
+                        SetSv(this.penName + "_2" + name, value);
                     });
                 }
             }
