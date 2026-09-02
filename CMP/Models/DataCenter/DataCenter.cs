@@ -211,14 +211,17 @@ namespace CMP.Models.DataCenter
                 var results = await Task.WhenAll(tasks);
                 foreach (var alarmList in results)
                 {
-                    if (alarmList.Count > 0)
+                    var enabledAlarmList = alarmList
+                        .Where(alarm => ChamberAvailability.IsEnabled(alarm.Unit))
+                        .ToList();
+                    if (enabledAlarmList.Count > 0)
                     {
-                        if (alarmList[0].Unit == Unit.None)
+                        if (enabledAlarmList[0].Unit == Unit.None)
                         {
-                            resultAlarms.AddRange(alarmList);
+                            resultAlarms.AddRange(enabledAlarmList);
                             continue;
                         }
-                        foreach (Alarm alarm in alarmList)
+                        foreach (Alarm alarm in enabledAlarmList)
                         {
                             if (alarm.Type == "Alarm")
                             {
@@ -243,7 +246,7 @@ namespace CMP.Models.DataCenter
                             }
                         }
                     }
-                    resultAlarms.AddRange(alarmList);
+                    resultAlarms.AddRange(enabledAlarmList);
                 }
                 if (resultAlarms.Count > 0)
                 {

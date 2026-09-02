@@ -138,6 +138,14 @@ namespace CMP.Models.Resource
 
         public abstract List<Alarm> CollectAlarm();
 
+        protected static bool CanRaiseAlarm(Alarm? alarm)
+        {
+            return alarm != null
+                && alarm.Enabled
+                && ChamberAvailability.IsEnabled(alarm.Unit)
+                && !alarm.IsAlarmed;
+        }
+
         //public static class Keys
         //{
         //    public const string PolishARecipeRequestTimeout = "Polish A Recipe Request Timeout";
@@ -415,7 +423,7 @@ namespace CMP.Models.Resource
                     {
                         string propertyName = this.alarmName + fields[i].Name;
                         Alarm alarmTemp = dicAlarm[propertyName];
-                        if (alarmTemp != null && alarmTemp.Enabled && alarmTemp.IsAlarmed == false)
+                        if (CanRaiseAlarm(alarmTemp))
                         {
                             alarmTemp.AlarmTime = DateTime.Now;
                             alarmTemp.DefaultOperation = "None";
@@ -456,7 +464,7 @@ namespace CMP.Models.Resource
                     {
                         string propertyName = this.alarmName + fields[i].Name;
                         Alarm alarmTemp = dicAlarm[propertyName];
-                        if (alarmTemp != null && alarmTemp.Enabled && alarmTemp.IsAlarmed == false)
+                        if (CanRaiseAlarm(alarmTemp))
                         {
                             alarmTemp.AlarmTime = DateTime.Now;
                             alarmTemp.DefaultOperation = "None";
@@ -496,7 +504,7 @@ namespace CMP.Models.Resource
                     {
                         string propertyName = this.alarmName + fields[i].Name;
                         Alarm alarmTemp = dicAlarm[propertyName];
-                        if (alarmTemp != null && alarmTemp.Enabled && alarmTemp.IsAlarmed == false)
+                        if (CanRaiseAlarm(alarmTemp))
                         {
                             alarmTemp.AlarmTime = DateTime.Now;
                             alarmTemp.DefaultOperation = "None";
@@ -536,7 +544,7 @@ namespace CMP.Models.Resource
                     {
                         string propertyName = this.alarmName + fields[i].Name;
                         Alarm alarmTemp = dicAlarm[propertyName];
-                        if (alarmTemp != null && alarmTemp.Enabled && alarmTemp.IsAlarmed == false)
+                        if (CanRaiseAlarm(alarmTemp))
                         {
                             alarmTemp.AlarmTime = DateTime.Now;
                             alarmTemp.DefaultOperation = "None";
@@ -582,7 +590,7 @@ namespace CMP.Models.Resource
                             {
                                 if (dicAlarm.TryGetValue(propertyName, out Alarm alarmTemp))
                                 {
-                                    if (alarmTemp != null && alarmTemp.Enabled && !alarmTemp.IsAlarmed)
+                                    if (CanRaiseAlarm(alarmTemp))
                                     {
                                         //alarmTemp.Type = "Alarm";
                                         alarmTemp.AlarmId = Convert.ToInt32(alarmTemp.AlarmName.substring(1, alarmTemp.AlarmName.length()));
