@@ -878,8 +878,12 @@ namespace CMP.Models.Operation.LoadPort
         /// </summary>
         public void NotifyHostUnloadRequested()
         {
-            if (FoupWorkflowState == LoadportFoupStatus.Load)
-                FoupWorkflowState = LoadportFoupStatus.WaitUnload;
+            if (FoupWorkflowState != LoadportFoupStatus.Load)
+                return;
+
+            var previousWorkflow = FoupWorkflowState;
+            FoupWorkflowState = LoadportFoupStatus.WaitUnload;
+            TryPublishStatusChanged(LoadPortStatus, previousWorkflow, FoupWorkflowState);
         }
 
         // 更新wafer状态
@@ -1980,6 +1984,7 @@ namespace CMP.Models.Operation.LoadPort
                     if (enteredUnload)
                         OnFoupUnloadClearPlcPickAllow();
 
+                    TryPublishStatusChanged(LoadPortStatus, prevWorkflow, nextWorkflow);
                 }
             }
             catch (Exception ex)
