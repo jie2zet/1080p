@@ -287,7 +287,7 @@
                             </GroupBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="1" Grid.Column="0">
-                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenB2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            <GroupBox Visibility="{Binding PenB2.IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Background="Transparent" hc:TitleElement.Background="{Binding PenB2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
             Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
@@ -882,7 +882,7 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                             </GroupBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5" Grid.Row="6" Grid.Column="0">
-                            <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding PenA2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
+                            <GroupBox Visibility="{Binding PenA2.IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}" Background="Transparent" hc:TitleElement.Background="{Binding PenA2.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
             Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="150" Height="140">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">

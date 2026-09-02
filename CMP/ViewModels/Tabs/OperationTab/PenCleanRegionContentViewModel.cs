@@ -35,9 +35,9 @@ public class PenCleanRegionContentViewModel : BindableBase
             var items = new ObservableCollection<TabContentViewModelBase>
             {
                 new PenCleanTabContentViewModel(0, $"{Resources.PenClean} A1", PenCleanConfigFactory.CreatePenA1Config(), _eventAggregator),
-                new PenCleanTabContentViewModel(1, $"{Resources.PenClean} A2", PenCleanConfigFactory.CreatePenA2Config(), _eventAggregator),
+                // new PenCleanTabContentViewModel(1, $"{Resources.PenClean} A2", PenCleanConfigFactory.CreatePenA2Config(), _eventAggregator),
                 new PenCleanTabContentViewModel(2, $"{Resources.PenClean} B1", PenCleanConfigFactory.CreatePenB1Config(), _eventAggregator),
-                new PenCleanTabContentViewModel(3, $"{Resources.PenClean} B2", PenCleanConfigFactory.CreatePenB2Config(), _eventAggregator),
+                // new PenCleanTabContentViewModel(3, $"{Resources.PenClean} B2", PenCleanConfigFactory.CreatePenB2Config(), _eventAggregator),
             };
             Application.Current?.Dispatcher.BeginInvoke(DispatcherPriority.Background, () => PenCleanTabItems = items);
         });

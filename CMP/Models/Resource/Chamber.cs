@@ -49,6 +49,8 @@ public class Chamber : BindableBase
     private KVLink _kvLink;
     private int _err;
 
+    public bool IsEnabled { get; }
+
     private string _startPermitionVarName;
     private string _readyVarName;
     private string _autoStartVarName;
@@ -171,6 +173,7 @@ public class Chamber : BindableBase
     {
         _chamberStatus = ChamberStatus.Disconnect;
         _name = name;
+        IsEnabled = ChamberAvailability.IsEnabled(name);
         _kvLink = link;
         _startPermitionVarName = "PLCStartPermition";
         _readyVarName = "PLCReady";
@@ -205,34 +208,40 @@ public class Chamber : BindableBase
         _isResetErrorNeedClear = false;
         _isAutoRunNeedClear = false;
 
-        _ = Task.Run(async () =>
+        if (IsEnabled)
         {
-            try
+            _ = Task.Run(async () =>
             {
-                await MonitorStatusLoopAsync(CancellationToken.None).ConfigureAwait(false);
-            }
-            catch (Exception ex)
+                try
+                {
+                    await MonitorStatusLoopAsync(CancellationToken.None).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Chamber {_name} MonitorStatusLoopAsync 异常", ex);
+                }
+            });
+            _ = Task.Run(async () =>
             {
-                Logger.Error($"Chamber {_name} MonitorStatusLoopAsync 异常", ex);
-            }
-        });
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await MonitorLoggerStatusLoopAsync(CancellationToken.None).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"Chamber {_name} MonitorLoggerStatusLoopAsync 异常", ex);
-            }
-        });
+                try
+                {
+                    await MonitorLoggerStatusLoopAsync(CancellationToken.None).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Chamber {_name} MonitorLoggerStatusLoopAsync 异常", ex);
+                }
+            });
+        }
 
         // Initialize LogConfig based on chamber name
         InitLogConfig();
 
         // 启动 Wafer 位置监控
-        StartWaferMonitoring();
+        if (IsEnabled)
+        {
+            StartWaferMonitoring();
+        }
     }
 
     private void InitLogConfig()
@@ -765,6 +774,11 @@ public class Chamber : BindableBase
 
     public bool IsInitialized()
     {
+        if (!IsEnabled)
+        {
+            return false;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return false;
@@ -792,6 +806,11 @@ public class Chamber : BindableBase
 
     public bool IsAutoMode()
     {
+        if (!IsEnabled)
+        {
+            return false;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return false;
@@ -832,6 +851,11 @@ public class Chamber : BindableBase
     /// <returns></returns>
     public bool IsConnected()
     {
+        if (!IsEnabled)
+        {
+            return false;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline)
         {
             return false;
@@ -854,16 +878,31 @@ public class Chamber : BindableBase
 
     public void SwitchToOffline()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         ChamberStatus = ChamberStatus.Offline;
     }
 
     public void SwitchToOnline()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         ChamberStatus = ChamberStatus.Uninitialized;
     }
 
     public void InitializeCommand()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -885,6 +924,11 @@ public class Chamber : BindableBase
 
     public void SwitchToAutoModeCommand()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -906,6 +950,11 @@ public class Chamber : BindableBase
 
     public void SwitchToManualModeCommand()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -927,6 +976,11 @@ public class Chamber : BindableBase
 
     public void AbortCommand()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         //if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         //{
         //    return;
@@ -944,6 +998,11 @@ public class Chamber : BindableBase
 
     public void ResetError()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -964,6 +1023,11 @@ public class Chamber : BindableBase
 
     public void ResetErrorClear()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -983,6 +1047,11 @@ public class Chamber : BindableBase
 
     public void PlcStartAndReady()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus == ChamberStatus.Offline || _chamberStatus == ChamberStatus.Disconnect)
         {
             return;
@@ -995,6 +1064,11 @@ public class Chamber : BindableBase
 
     public void PlcAutoStart()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus != ChamberStatus.Auto)
         {
             return;
@@ -1014,6 +1088,11 @@ public class Chamber : BindableBase
 
     public void ResetAutoStart()
     {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
         if (_chamberStatus != ChamberStatus.Auto)
         {
             return;
@@ -1354,7 +1433,7 @@ public class GlobalChambers
 
                 foreach (var chamber in listChamber)
                 {
-                    if (chamber.IsConnected() && chamber.ChamberStatus != ChamberStatus.Alarm)
+                    if (chamber.IsEnabled && chamber.IsConnected() && chamber.ChamberStatus != ChamberStatus.Alarm)
                         chamber.IsInitialized();
                 }
             }
