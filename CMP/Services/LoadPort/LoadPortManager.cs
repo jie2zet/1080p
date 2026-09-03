@@ -161,7 +161,7 @@ public class LoadPortManager
                 _loadPorts = new Dictionary<string, LoadPortData>();
 
                 // 初始化5个LoadPort
-                for (int i = 12; i < 17; i++)
+                for (int i = 12; i < 16; i++)
                 {
                     string portName = $"COM{i}";
                     var loadPort = new LoadPortData(portName, loadPortService);
