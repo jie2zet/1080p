@@ -1,3 +1,4 @@
+using CMP.Services.Auth;
 using CMP.Constants.Plc;
 using CMP.Extensions;
 using CMP.Lang;
@@ -204,22 +205,22 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
 
     private void InitializeCommands()
     {
-        InitializeCommand = new DelegateCommand<string>(InitializeCommandExecute);
-        AutoModeCommand = new DelegateCommand<string>(AutoModeCommandExecute);
-        ManualModeCommand = new DelegateCommand<string>(ManualModeCommandExecute);
-        AutoRunCommand = new DelegateCommand<string>(AutoRunCommandExecute);
-        ExecuteRecipeCommand = new DelegateCommand<string>(ExecuteRecipeCommandExecute);
-        StartCommand = new DelegateCommand<string>(StartCommandExecute);
-        StopCommand = new DelegateCommand<string>(StopCommandExecute);
-        AutoCommand = new DelegateCommand<string>(AutoCommandExecute);
-        AbortCommand = new DelegateCommand<string>(AbortCommandExecute);
-        CloseCommand = new DelegateCommand<string>(CloseCommandExecute);
-        MotorCommand = new DelegateCommand<string>(MotorCommandExecute);
-        ServoCommand = new DelegateCommand<string>(ServoCommandExecute);
-        CylinderCommand = new DelegateCommand<string>(CylinderCommandExecute);
-        PressureCommand = new DelegateCommand<string>(PressureCommandExecute);
-        LiquidCommand = new DelegateCommand<string>(LiquidCommandExecute);
-        GasCommand = new DelegateCommand<string>(GasCommandExecute);
+        InitializeCommand = OperationAudit.Create<string>("Initialize", InitializeCommandExecute, () => TabTitle ?? string.Empty);
+        AutoModeCommand = OperationAudit.Create<string>("AutoMode", AutoModeCommandExecute, () => TabTitle ?? string.Empty);
+        ManualModeCommand = OperationAudit.Create<string>("ManualMode", ManualModeCommandExecute, () => TabTitle ?? string.Empty);
+        AutoRunCommand = OperationAudit.Create<string>("AutoRun", AutoRunCommandExecute, () => TabTitle ?? string.Empty);
+        ExecuteRecipeCommand = OperationAudit.Create<string>("ExecuteRecipe", ExecuteRecipeCommandExecute, () => TabTitle ?? string.Empty);
+        StartCommand = OperationAudit.Create<string>("Start", StartCommandExecute, () => TabTitle ?? string.Empty);
+        StopCommand = OperationAudit.Create<string>("Stop", StopCommandExecute, () => TabTitle ?? string.Empty);
+        AutoCommand = OperationAudit.Create<string>("Auto", AutoCommandExecute, () => TabTitle ?? string.Empty);
+        AbortCommand = OperationAudit.Create<string>("Abort", AbortCommandExecute, () => TabTitle ?? string.Empty);
+        CloseCommand = OperationAudit.Create<string>("Close", CloseCommandExecute, () => TabTitle ?? string.Empty);
+        MotorCommand = OperationAudit.Create<string>("Motor", MotorCommandExecute, () => TabTitle ?? string.Empty);
+        ServoCommand = OperationAudit.Create<string>("Servo", ServoCommandExecute, () => TabTitle ?? string.Empty);
+        CylinderCommand = OperationAudit.Create<string>("Cylinder", CylinderCommandExecute, () => TabTitle ?? string.Empty);
+        PressureCommand = OperationAudit.Create<string>("Pressure", PressureCommandExecute, () => TabTitle ?? string.Empty);
+        LiquidCommand = OperationAudit.Create<string>("Liquid", LiquidCommandExecute, () => TabTitle ?? string.Empty);
+        GasCommand = OperationAudit.Create<string>("Gas", GasCommandExecute, () => TabTitle ?? string.Empty);
     }
 
     private async Task MonitorLoopAsync()

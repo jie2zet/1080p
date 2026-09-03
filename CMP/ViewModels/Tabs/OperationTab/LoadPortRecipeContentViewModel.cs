@@ -1,4 +1,5 @@
-﻿using CMP.Models.Operation.LoadPort;
+﻿using CMP.Services.Auth;
+using CMP.Models.Operation.LoadPort;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
 using CMP.Services.LoadPort;
@@ -216,12 +217,14 @@ namespace CMP.ViewModels.Tabs.OperationTab
             }
         }
 
+        private string RecipeAuditUnit() => _loadPortData?.TabName ?? "LoadPort";
+
         private void InitializeCommands()
         {
-            SelectAllCommand = new DelegateCommand(ExecuteSelectAll, CanExecuteSelectAll);
-            ClearSelectionCommand = new DelegateCommand(ExecuteClearSelection, CanExecuteClearSelection);
-            AssignRecipeCommand = new DelegateCommand(ExecuteAssignRecipe, CanExecuteAssignRecipe);
-            CancelCommand = new DelegateCommand(ExecuteCancel);
+            SelectAllCommand = OperationAudit.Create("SelectAll", ExecuteSelectAll, RecipeAuditUnit, CanExecuteSelectAll);
+            ClearSelectionCommand = OperationAudit.Create("ClearSelection", ExecuteClearSelection, RecipeAuditUnit, CanExecuteClearSelection);
+            AssignRecipeCommand = OperationAudit.Create("AssignRecipe", ExecuteAssignRecipe, RecipeAuditUnit, CanExecuteAssignRecipe);
+            CancelCommand = OperationAudit.Create("CancelAssign", ExecuteCancel, RecipeAuditUnit);
         }
 
         public async Task InitializeRuntimeStateAsync()

@@ -11,6 +11,7 @@ using CMP.Services.Plc;
 using CMP.ViewModels.Common;
 using Prism.Commands;
 using WPFLocalizeExtension.Extensions;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab;
 
@@ -582,17 +583,17 @@ public class TransferRobotControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
 
         // Move Commands (Toggle)
-        ModulePickMoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.ModulePickMove, !ModulePickMoveToggle));
-        TransferAMoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.TransferAMove, !TransferAMoveToggle));
-        TransferBMoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.TransferBMove, !TransferBMoveToggle));
-        RollerA1MoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RollerA1Move, !RollerA1MoveToggle));
-        RollerA2MoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RollerA2Move, !RollerA2MoveToggle));
-        RollerB1MoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RollerB1Move, !RollerB1MoveToggle));
-        RollerB2MoveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RollerB2Move, !RollerB2MoveToggle));
+        ModulePickMoveCommand = OperationAudit.Create("ModulePickMove", () => _plc.Write(TransferRobotAddress.ModulePickMove, !ModulePickMoveToggle), () => "TransferRobot");
+        TransferAMoveCommand = OperationAudit.Create("TransferAMove", () => _plc.Write(TransferRobotAddress.TransferAMove, !TransferAMoveToggle), () => "TransferRobot");
+        TransferBMoveCommand = OperationAudit.Create("TransferBMove", () => _plc.Write(TransferRobotAddress.TransferBMove, !TransferBMoveToggle), () => "TransferRobot");
+        RollerA1MoveCommand = OperationAudit.Create("RollerA1Move", () => _plc.Write(TransferRobotAddress.RollerA1Move, !RollerA1MoveToggle), () => "TransferRobot");
+        RollerA2MoveCommand = OperationAudit.Create("RollerA2Move", () => _plc.Write(TransferRobotAddress.RollerA2Move, !RollerA2MoveToggle), () => "TransferRobot");
+        RollerB1MoveCommand = OperationAudit.Create("RollerB1Move", () => _plc.Write(TransferRobotAddress.RollerB1Move, !RollerB1MoveToggle), () => "TransferRobot");
+        RollerB2MoveCommand = OperationAudit.Create("RollerB2Move", () => _plc.Write(TransferRobotAddress.RollerB2Move, !RollerB2MoveToggle), () => "TransferRobot");
 
         // Axis Control
-        EnableCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.Enable, !IsEnabled));
-        OriginCommand = new DelegateCommand(() =>
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(TransferRobotAddress.Enable, !IsEnabled), () => "TransferRobot");
+        OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -601,97 +602,97 @@ public class TransferRobotControlViewModel : TabContentViewModelBase
             }
 
             OriginToggle = false;
-        });
+        }, () => "TransferRobot");
         PressJogUpCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.JogUp, true));
         ReleaseJogUpCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.JogUp, false));
         PressJogDownCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.JogDown, true));
         ReleaseJogDownCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.JogDown, false));
 
         // Robot Control
-        RobotStartCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RobotStart, true));
-        RobotPauseCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RobotPause, !RobotPauseToggle));
-        RobotStopCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RobotStop, true));
-        RobotResetCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.RobotReset, true));
+        RobotStartCommand = OperationAudit.Create("RobotStart", () => _plc.Write(TransferRobotAddress.RobotStart, true), () => "TransferRobot");
+        RobotPauseCommand = OperationAudit.Create("RobotPause", () => _plc.Write(TransferRobotAddress.RobotPause, !RobotPauseToggle), () => "TransferRobot");
+        RobotStopCommand = OperationAudit.Create("RobotStop", () => _plc.Write(TransferRobotAddress.RobotStop, true), () => "TransferRobot");
+        RobotResetCommand = OperationAudit.Create("RobotReset", () => _plc.Write(TransferRobotAddress.RobotReset, true), () => "TransferRobot");
 
-        WorkAreaPickCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.WorkAreaPick, !WorkAreaPickToggle));
-        WorkAreaPlaceCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.WorkAreaPlace, !WorkAreaPlaceToggle));
-        WaitConfirmCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.WaitConfirm, !WaitConfirmToggle));
-        AutoModeCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.AutoMode, !AutoModeToggle));
-        UseUpperArmCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.UseUpperArm, !UseUpperArmToggle));
-        UseLowerArmCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.UseLowerArm, !UseLowerArmToggle));
-        ConfirmSwitchCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.ConfirmSwitch, !ConfirmSwitchToggle));
-        TurnTo0Command = new DelegateCommand(() => _plc.Write(TransferRobotAddress.TurnTo0, !TurnTo0Toggle));
-        TurnTo180Command = new DelegateCommand(() => _plc.Write(TransferRobotAddress.TurnTo180, !TurnTo180Toggle));
-        RobotSafePositionCommand = new DelegateCommand(() => { /* No direct write defined for safe pos button in address file or just read? Assuming standard toggle write pattern if address existed, but address definition only shows status. Checking logic... Address file defines RobotSafePosition as DBitAddress. If it's a command, it's missing in const string. Assuming it's just an indicator for now or use a placeholder if write is needed. Based on UI, it's a toggle button. But address list only has RobotSafePosition as DBitAddress (read). I will comment out write provided there's no address. */ });
+        WorkAreaPickCommand = OperationAudit.Create("WorkAreaPick", () => _plc.Write(TransferRobotAddress.WorkAreaPick, !WorkAreaPickToggle), () => "TransferRobot");
+        WorkAreaPlaceCommand = OperationAudit.Create("WorkAreaPlace", () => _plc.Write(TransferRobotAddress.WorkAreaPlace, !WorkAreaPlaceToggle), () => "TransferRobot");
+        WaitConfirmCommand = OperationAudit.Create("WaitConfirm", () => _plc.Write(TransferRobotAddress.WaitConfirm, !WaitConfirmToggle), () => "TransferRobot");
+        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(TransferRobotAddress.AutoMode, !AutoModeToggle), () => "TransferRobot");
+        UseUpperArmCommand = OperationAudit.Create("UseUpperArm", () => _plc.Write(TransferRobotAddress.UseUpperArm, !UseUpperArmToggle), () => "TransferRobot");
+        UseLowerArmCommand = OperationAudit.Create("UseLowerArm", () => _plc.Write(TransferRobotAddress.UseLowerArm, !UseLowerArmToggle), () => "TransferRobot");
+        ConfirmSwitchCommand = OperationAudit.Create("ConfirmSwitch", () => _plc.Write(TransferRobotAddress.ConfirmSwitch, !ConfirmSwitchToggle), () => "TransferRobot");
+        TurnTo0Command = OperationAudit.Create("TurnTo0", () => _plc.Write(TransferRobotAddress.TurnTo0, !TurnTo0Toggle), () => "TransferRobot");
+        TurnTo180Command = OperationAudit.Create("TurnTo180", () => _plc.Write(TransferRobotAddress.TurnTo180, !TurnTo180Toggle), () => "TransferRobot");
+        RobotSafePositionCommand = OperationAudit.Create("RobotSafePosition", () => { /* No direct write defined for safe pos button in address file or just read? Assuming standard toggle write pattern if address existed, but address definition only shows status. Checking logic... Address file defines RobotSafePosition as DBitAddress. If it's a command, it's missing in const string. Assuming it's just an indicator for now or use a placeholder if write is needed. Based on UI, it's a toggle button. But address list only has RobotSafePosition as DBitAddress (read). I will comment out write provided there's no address. */ }, () => "TransferRobot");
 
         // Bottom Bar
-        EmergencyStopCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.EmergencyStop, !EmergencyStopToggle));
-        AlarmResetCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.AxisAlarmReset, !AlarmResetToggle));
-        SaveCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.Save, !SaveToggle));
+        EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(TransferRobotAddress.EmergencyStop, !EmergencyStopToggle), () => "TransferRobot");
+        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(TransferRobotAddress.AxisAlarmReset, !AlarmResetToggle), () => "TransferRobot");
+        SaveCommand = OperationAudit.Create("Save", () => _plc.Write(TransferRobotAddress.Save, !SaveToggle), () => "TransferRobot");
 
         // Station Operation
-        StationResetCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.StationReset, true));
-        StationStartCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.StationStart, true));
-        StationStopCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.StationStop, true));
-        StationAlarmResetCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.GlobalAlarmReset, true)); // Using GlobalAlarmReset (B0B)
+        StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(TransferRobotAddress.StationReset, true), () => "TransferRobot");
+        StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(TransferRobotAddress.StationStart, true), () => "TransferRobot");
+        StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(TransferRobotAddress.StationStop, true), () => "TransferRobot");
+        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(TransferRobotAddress.GlobalAlarmReset, true), () => "TransferRobot"); // Using GlobalAlarmReset (B0B)
 
-        StationModulePickCommand = new DelegateCommand(() =>
+        StationModulePickCommand = OperationAudit.Create("StationModulePick", () =>
         {
             _plc.Write(TransferRobotAddress.StationModulePick, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationModulePick, false);
-        });
-        StationTransferAPlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationTransferAPlaceCommand = OperationAudit.Create("StationTransferAPlace", () =>
         {
             _plc.Write(TransferRobotAddress.StationTransferAPlace, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationTransferAPlace, false);
-        });
-        StationTransferAPickCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationTransferAPickCommand = OperationAudit.Create("StationTransferAPick", () =>
         {
             _plc.Write(TransferRobotAddress.StationTransferAPick, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationTransferAPick, false);
-        });
-        StationTransferBPlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationTransferBPlaceCommand = OperationAudit.Create("StationTransferBPlace", () =>
         {
             _plc.Write(TransferRobotAddress.StationTransferBPlace, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationTransferBPlace, false);
-        });
-        StationTransferBPickCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationTransferBPickCommand = OperationAudit.Create("StationTransferBPick", () =>
         {
             _plc.Write(TransferRobotAddress.StationTransferBPick, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationTransferBPick, false);
-        });
-        StationRollerA1PlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationRollerA1PlaceCommand = OperationAudit.Create("StationRollerA1Place", () =>
         {
             _plc.Write(TransferRobotAddress.StationRollerA1Place, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationRollerA1Place, false);
-        });
-        StationRollerA2PlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationRollerA2PlaceCommand = OperationAudit.Create("StationRollerA2Place", () =>
         {
             _plc.Write(TransferRobotAddress.StationRollerA2Place, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationRollerA2Place, false);
-        });
-        StationRollerB1PlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationRollerB1PlaceCommand = OperationAudit.Create("StationRollerB1Place", () =>
         {
             _plc.Write(TransferRobotAddress.StationRollerB1Place, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationRollerB1Place, false);
-        });
-        StationRollerB2PlaceCommand = new DelegateCommand(() =>
+        }, () => "TransferRobot");
+        StationRollerB2PlaceCommand = OperationAudit.Create("StationRollerB2Place", () =>
         {
             _plc.Write(TransferRobotAddress.StationRollerB2Place, true);
             Thread.Sleep(50);
             _plc.Write(TransferRobotAddress.StationRollerB2Place, false);
-        });
+        }, () => "TransferRobot");
 
-        ManualModeStationCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.ManualMode, !ManualModeStationToggle));
-        AutoModeStationCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.AutoModeStation, !AutoModeStationToggle));
+        ManualModeStationCommand = OperationAudit.Create("ManualModeStation", () => _plc.Write(TransferRobotAddress.ManualMode, !ManualModeStationToggle), () => "TransferRobot");
+        AutoModeStationCommand = OperationAudit.Create("AutoModeStation", () => _plc.Write(TransferRobotAddress.AutoModeStation, !AutoModeStationToggle), () => "TransferRobot");
     }
 
     private async void ReadTimer_Tick(object? sender, EventArgs e)

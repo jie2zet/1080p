@@ -1,4 +1,5 @@
 ﻿//using CMP.Models.Operation.Brush;
+using CMP.Services.Auth;
 using CMP.Models.Resource;
 using CMP.Models.Operation.LoadPort;
 using CMP.Services.LoadPort;
@@ -265,14 +266,14 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 .Subscribe(() => _ = InitializeLoadPortsAsync(), ThreadOption.UIThread);
             _ = InitializeLoadPortsAsync();
 
-            InitCommand = new DelegateCommand(async () => await ExecuteInitCommandAsync());
-            AutoModeCommand = new DelegateCommand(async () => await ExecuteAutoModeCommandAsync());
-            ManualModeCommand = new DelegateCommand(async () => await ExecuteManualModelCommandAsync());
-            AutoRunCommand = new DelegateCommand(async () => await ExecuteAutoRunCommandAsync());
-            ResetAlarmCommand = new DelegateCommand(async () => await ExecuteResetAlarmCommandAsync());
-            AbortCommand = new DelegateCommand(ExecuteAbortCommand);
-            StopCommand = new DelegateCommand(async () => await ExecuteStopCommandAsync());
-            AutoReturnCommand = new DelegateCommand(ExecuteAutoReturnCommand);
+            InitCommand = OperationAudit.CreateAsync("Initialize", ExecuteInitCommandAsync, () => "Main");
+            AutoModeCommand = OperationAudit.CreateAsync("AutoMode", ExecuteAutoModeCommandAsync, () => "Main");
+            ManualModeCommand = OperationAudit.CreateAsync("ManualMode", ExecuteManualModelCommandAsync, () => "Main");
+            AutoRunCommand = OperationAudit.CreateAsync("AutoRun", ExecuteAutoRunCommandAsync, () => "Main");
+            ResetAlarmCommand = OperationAudit.CreateAsync("ResetAlarm", ExecuteResetAlarmCommandAsync, () => "Main");
+            AbortCommand = OperationAudit.Create("Abort", ExecuteAbortCommand, () => "Main");
+            StopCommand = OperationAudit.CreateAsync("Stop", ExecuteStopCommandAsync, () => "Main");
+            AutoReturnCommand = OperationAudit.Create("StopLoad", ExecuteAutoReturnCommand, () => "Main");
             SingleChamberOfflineCommand = new RelayCommand<string>(ExecuteSingleChamberOffline);
             SingleChamberOnlineCommand = new RelayCommand<string>(ExecuteSingleChamberOnline);
             SingleChamberConnectCommand = new RelayCommand<string>(ExecuteSingleChamberConnect);

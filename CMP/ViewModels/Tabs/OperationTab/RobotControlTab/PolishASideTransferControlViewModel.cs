@@ -11,6 +11,7 @@ using CMP.Services.Plc;
 using CMP.ViewModels.Common;
 using Prism.Commands;
 using WPFLocalizeExtension.Extensions;
+using CMP.Services.Auth;
 
 namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab;
 
@@ -611,10 +612,10 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(ExecuteBack);
 
         // Station Commands
-        StationResetCommand = new DelegateCommand(ExecuteStationReset);
-        StationStartCommand = new DelegateCommand(ExecuteStationStart);
-        StationStopCommand = new DelegateCommand(ExecuteStationStop);
-        StationAlarmResetCommand = new DelegateCommand(ExecuteStationAlarmReset);
+        StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "PolishASideTransfer");
+        StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "PolishASideTransfer");
+        StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "PolishASideTransfer");
+        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", ExecuteStationAlarmReset, () => "PolishASideTransfer");
 
         // Jog Commands
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
@@ -623,14 +624,14 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
         ReleaseJogDownCommand = new DelegateCommand(ExecuteReleaseJogDown);
 
         // Toggle Button Commands
-        StandbyPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.StandbyPositionMove, !StandbyPositionMoveToggle));
-        RobotUpperArmMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.RobotUpperArmPositionMove, !RobotUpperArmMoveToggle));
-        LtpPickPositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.LtpPickPositionMove, !LtpPickPositionMoveToggle));
-        RobotLowerArmMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.RobotLowerArmPositionMove, !RobotLowerArmMoveToggle));
-        LtpPlacePositionMoveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.LtpPlacePositionMove, !LtpPlacePositionMoveToggle));
+        StandbyPositionMoveCommand = OperationAudit.Create("StandbyPositionMove", () => _plc.Write(PolishASideTransferAddress.StandbyPositionMove, !StandbyPositionMoveToggle), () => "PolishASideTransfer");
+        RobotUpperArmMoveCommand = OperationAudit.Create("RobotUpperArmMove", () => _plc.Write(PolishASideTransferAddress.RobotUpperArmPositionMove, !RobotUpperArmMoveToggle), () => "PolishASideTransfer");
+        LtpPickPositionMoveCommand = OperationAudit.Create("LtpPickPositionMove", () => _plc.Write(PolishASideTransferAddress.LtpPickPositionMove, !LtpPickPositionMoveToggle), () => "PolishASideTransfer");
+        RobotLowerArmMoveCommand = OperationAudit.Create("RobotLowerArmMove", () => _plc.Write(PolishASideTransferAddress.RobotLowerArmPositionMove, !RobotLowerArmMoveToggle), () => "PolishASideTransfer");
+        LtpPlacePositionMoveCommand = OperationAudit.Create("LtpPlacePositionMove", () => _plc.Write(PolishASideTransferAddress.LtpPlacePositionMove, !LtpPlacePositionMoveToggle), () => "PolishASideTransfer");
 
-        EnableCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.Enable, !IsEnabled));
-        OriginCommand = new DelegateCommand(() =>
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(PolishASideTransferAddress.Enable, !IsEnabled), () => "PolishASideTransfer");
+        OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
                     MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -639,27 +640,27 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
             }
 
             OriginToggle = false;
-        });
-        EmergencyStopCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.EmergencyStop, !EmergencyStopToggle));
-        AlarmResetCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.AlarmReset, !AlarmResetToggle));
-        SaveCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.Save, !SaveToggle));
+        }, () => "PolishASideTransfer");
+        EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(PolishASideTransferAddress.EmergencyStop, !EmergencyStopToggle), () => "PolishASideTransfer");
+        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishASideTransferAddress.AlarmReset, !AlarmResetToggle), () => "PolishASideTransfer");
+        SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishASideTransferAddress.Save, !SaveToggle), () => "PolishASideTransfer");
 
-        ManualModeCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.ManualMode, !ManualModeToggle));
-        AutoModeCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.AutoMode, !AutoModeToggle));
+        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishASideTransferAddress.ManualMode, !ManualModeToggle), () => "PolishASideTransfer");
+        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishASideTransferAddress.AutoMode, !AutoModeToggle), () => "PolishASideTransfer");
 
         // New Left Operations Commands
-        PickFromRobot2Command = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PickFromRobot2, !PickFromRobot2Toggle));
-        PlaceToArm1Command = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PlaceToArm1, !PlaceToArm1Toggle));
-        PlaceToArm2Command = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PlaceToArm2, !PlaceToArm2Toggle));
-        PickFromArm3Command = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PickFromArm3, !PickFromArm3Toggle));
-        PlaceToRobotCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PlaceToRobot, !PlaceToRobotToggle));
-        PickFromArm2Command = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PickFromArm2, !PickFromArm2Toggle));
+        PickFromRobot2Command = OperationAudit.Create("PickFromRobot2", () => _plc.Write(PolishASideTransferAddress.PickFromRobot2, !PickFromRobot2Toggle), () => "PolishASideTransfer");
+        PlaceToArm1Command = OperationAudit.Create("PlaceToArm1", () => _plc.Write(PolishASideTransferAddress.PlaceToArm1, !PlaceToArm1Toggle), () => "PolishASideTransfer");
+        PlaceToArm2Command = OperationAudit.Create("PlaceToArm2", () => _plc.Write(PolishASideTransferAddress.PlaceToArm2, !PlaceToArm2Toggle), () => "PolishASideTransfer");
+        PickFromArm3Command = OperationAudit.Create("PickFromArm3", () => _plc.Write(PolishASideTransferAddress.PickFromArm3, !PickFromArm3Toggle), () => "PolishASideTransfer");
+        PlaceToRobotCommand = OperationAudit.Create("PlaceToRobot", () => _plc.Write(PolishASideTransferAddress.PlaceToRobot, !PlaceToRobotToggle), () => "PolishASideTransfer");
+        PickFromArm2Command = OperationAudit.Create("PickFromArm2", () => _plc.Write(PolishASideTransferAddress.PickFromArm2, !PickFromArm2Toggle), () => "PolishASideTransfer");
 
         // New Right Operations Commands
-        ClampCloseCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.ClampCloseWrite, !ClampCloseToggle));
-        ClampOpenCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.ClampOpenWrite, !ClampOpenToggle));
-        PolishADoorOpenCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PolishADoorWrite, !PolishADoorOpenToggle));
-        PolishADoorCloseCommand = new DelegateCommand(() => _plc.Write(PolishASideTransferAddress.PolishADoorCloseWrite, !PolishADoorCloseToggle));
+        ClampCloseCommand = OperationAudit.Create("ClampClose", () => _plc.Write(PolishASideTransferAddress.ClampCloseWrite, !ClampCloseToggle), () => "PolishASideTransfer");
+        ClampOpenCommand = OperationAudit.Create("ClampOpen", () => _plc.Write(PolishASideTransferAddress.ClampOpenWrite, !ClampOpenToggle), () => "PolishASideTransfer");
+        PolishADoorOpenCommand = OperationAudit.Create("PolishADoorOpen", () => _plc.Write(PolishASideTransferAddress.PolishADoorWrite, !PolishADoorOpenToggle), () => "PolishASideTransfer");
+        PolishADoorCloseCommand = OperationAudit.Create("PolishADoorClose", () => _plc.Write(PolishASideTransferAddress.PolishADoorCloseWrite, !PolishADoorCloseToggle), () => "PolishASideTransfer");
     }
 
     #region PLC 读取

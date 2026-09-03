@@ -216,6 +216,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                             AuditLogService.WriteCurrentUser(
                                 AuditActions.ConfigExport,
                                 "Success",
+                                result.Directory ?? string.Empty,
+                                AuditModules.EC,
                                 result.Directory ?? string.Empty);
                         }
                         else Growl.Error($"{exportInfo} Eport Failed!");
@@ -264,6 +266,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                             AuditLogService.WriteCurrentUser(
                                 AuditActions.ConfigExport,
                                 "Success",
+                                fullFilePath,
+                                AuditModules.EC,
                                 fullFilePath);
                         }
                         catch (Exception ex)
@@ -323,6 +327,9 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 {
                     hSocket = GlobalService.kvHostLinkInit.kvLinkDryB.sock;
                 }
+
+                var oldValues = ConfigModels.Select(m => m.SetValue ?? string.Empty).ToList();
+
                 foreach (var model in ConfigModels)
                 {
                     byte[] readData = new byte[256];
@@ -423,10 +430,32 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     Message = Lang.Resources.SaveSuccessful,
                     ShowCloseButton = true,
                 });
+
+                var unitName = SelectedNode?.Name ?? string.Empty;
+                for (int i = 0; i < ConfigModels.Count && i < oldValues.Count; i++)
+                {
+                    var item = ConfigModels[i];
+                    var oldValue = oldValues[i];
+                    var newValue = item.SetValue ?? string.Empty;
+                    if (string.Equals(oldValue, newValue, StringComparison.Ordinal))
+                        continue;
+
+                    AuditLogService.WriteChange(
+                        AuditModules.EC,
+                        AuditActions.ConfigSyncPlc,
+                        FormatEcTarget(unitName, item),
+                        oldValue,
+                        newValue,
+                        "Success",
+                        item.PLCLink);
+                }
+
                 AuditLogService.WriteCurrentUser(
                     AuditActions.ConfigSyncPlc,
                     "Success",
-                    SelectedNode?.Name ?? string.Empty);
+                    unitName,
+                    AuditModules.EC,
+                    unitName);
             }
         }
 
@@ -515,6 +544,15 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 configModelsCopy.Add(mode);
             }
             List<int> writeFailureModels = new List<int>();
+            var pendingChanges = newValueChangedList
+                .Where(index => index >= 0 && index < ConfigModels.Count && index < configModelsCopy.Count)
+                .Select(index => (
+                    Index: index,
+                    Item: ConfigModels[index],
+                    OldValue: configModelsCopy[index].SetValue ?? string.Empty,
+                    NewValue: ConfigModels[index].NewValue ?? string.Empty))
+                .ToList();
+
             foreach (var index in newValueChangedList)
             {
                 ConfigModels[index].SetValue = ConfigModels[index].NewValue;
@@ -556,10 +594,30 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 Message = Lang.Resources.SaveSuccessful,
                 ShowCloseButton = true,
             });
+
+            var unitName = SelectedNode?.Name ?? string.Empty;
+            foreach (var change in pendingChanges)
+            {
+                if (string.Equals(change.OldValue, change.NewValue, StringComparison.Ordinal))
+                    continue;
+
+                var failed = writeFailureModels.Contains(change.Index);
+                AuditLogService.WriteChange(
+                    AuditModules.EC,
+                    AuditActions.ConfigApply,
+                    FormatEcTarget(unitName, change.Item),
+                    change.OldValue,
+                    change.NewValue,
+                    failed ? "PlcFailed" : "Success",
+                    change.Item.PLCLink);
+            }
+
             AuditLogService.WriteCurrentUser(
                 AuditActions.ConfigApply,
                 "Success",
-                SelectedNode?.Name ?? string.Empty);
+                unitName,
+                AuditModules.EC,
+                unitName);
 
             newValueChangedList.Clear();
             newValueChangedList = new List<int>();
@@ -629,6 +687,11 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 }
             }
             #endregion
+        }
+
+        private static string FormatEcTarget(string unitName, ConfigModel item)
+        {
+            return $"{unitName}/ECID:{item.ECID}/{item.Class}/{item.Name}";
         }
 
         private void OnNewValueChangeCommand(ConfigModel model)

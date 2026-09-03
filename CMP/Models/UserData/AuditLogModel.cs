@@ -12,7 +12,19 @@ public class AuditLogModel
 
     public string Level { get; set; } = string.Empty;
 
+    [SugarColumn(IsNullable = true)]
+    public string Module { get; set; } = string.Empty;
+
     public string Action { get; set; } = string.Empty;
+
+    [SugarColumn(IsNullable = true)]
+    public string Target { get; set; } = string.Empty;
+
+    [SugarColumn(IsNullable = true)]
+    public string OldValue { get; set; } = string.Empty;
+
+    [SugarColumn(IsNullable = true)]
+    public string NewValue { get; set; } = string.Empty;
 
     public string Result { get; set; } = string.Empty;
 

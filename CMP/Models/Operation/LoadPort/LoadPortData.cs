@@ -1,4 +1,5 @@
-﻿using CMP.Models.Resource;
+﻿using CMP.Services.Auth;
+using CMP.Models.Resource;
 using CMP.Models.Warn;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
@@ -1347,11 +1348,11 @@ namespace CMP.Models.Operation.LoadPort
                 });
             }
             // 初始化命令
-            ConnectCommand = new DelegateCommand<string>(ExecuteConnectCommand);
-            DisconnectCommand = new DelegateCommand<string>(ExecuteDisconnectCommand);
-            MOVCommand = new DelegateCommand<string>(ExecuteMOVCommand, CanExecuteMOVCommand).ObservesProperty(() => IsConnected);
-            SETCommand = new DelegateCommand<string>(ExecuteSETCommand, CanExecuteSETCommand).ObservesProperty(() => IsConnected);
-            GETCommand = new DelegateCommand<string>(ExecuteGETCommand, CanExecuteGETCommand).ObservesProperty(() => IsConnected);
+            ConnectCommand = OperationAudit.Create<string>("Connect", ExecuteConnectCommand, () => TabName);
+            DisconnectCommand = OperationAudit.Create<string>("Disconnect", ExecuteDisconnectCommand, () => TabName);
+            MOVCommand = OperationAudit.Create<string>("MOV", ExecuteMOVCommand, () => TabName, CanExecuteMOVCommand).ObservesProperty(() => IsConnected);
+            SETCommand = OperationAudit.Create<string>("SET", ExecuteSETCommand, () => TabName, CanExecuteSETCommand).ObservesProperty(() => IsConnected);
+            GETCommand = OperationAudit.Create<string>("GET", ExecuteGETCommand, () => TabName, CanExecuteGETCommand).ObservesProperty(() => IsConnected);
             _serialPort = new SerialPort
             {
                 PortName = portName,

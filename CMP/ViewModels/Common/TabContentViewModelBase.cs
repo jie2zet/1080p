@@ -1,3 +1,4 @@
+using CMP.Services.Auth;
 using CMP.Services.Plc;
 using Prism.Commands;
 using System.Windows.Threading;
@@ -242,7 +243,7 @@ public static class EditableValueItemHelper
     {
         foreach (var item in items)
         {
-            item.SetCommand = new DelegateCommand(() =>
+            item.SetCommand = OperationAudit.Create("SetValue", () =>
             {
                 writeAction(item.Address, item.Value);
                 item.PlcValue = item.Value;
@@ -252,7 +253,7 @@ public static class EditableValueItemHelper
                 {
                     raisePropertyChanged(item.DirtyPropertyName);
                 }
-            });
+            }, () => item.Address);
 
             item.CancelCommand = new DelegateCommand(() =>
             {
@@ -305,7 +306,7 @@ public static class EditableFloatItemHelper
     {
         foreach (var item in items)
         {
-            item.SetCommand = new DelegateCommand(() =>
+            item.SetCommand = OperationAudit.Create("SetValue", () =>
                 PlcEditableValueHelper.SaveFloatAndResetDirty(
                     plc,
                     item.Address,
@@ -313,7 +314,7 @@ public static class EditableFloatItemHelper
                     ref item.PlcValue,
                     ref item.HasPlcValue,
                     ref item.IsDirty,
-                    () => raisePropertyChanged(item.DirtyPropertyName)));
+                    () => raisePropertyChanged(item.DirtyPropertyName)), () => item.Address);
 
             item.CancelCommand = new DelegateCommand(() =>
                 PlcEditableValueHelper.CancelToPlcValueAndResetDirty(

@@ -1,4 +1,5 @@
-﻿using CMP.Extensions;
+﻿using CMP.Services.Auth;
+using CMP.Extensions;
 using CMP.Models.Config;
 using CMP.Models.kvsPlc;
 using CMP.Models.Operation.Bot;
@@ -51,6 +52,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         uint offsetZone = 500;
 
         private Dictionary<string, ObservableCollection<CalibrationModel>> _calibModelDictionary;
+        private Dictionary<string, List<(float Set, float Act, float Read)>> _savedSnapshot = new();
 
         public Dictionary<string, ObservableCollection<CalibrationModel>> CalibModelDictionary
         {
@@ -143,6 +145,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             {
                 CalibModelDictionary = GetDefaultZoneDataDic(simpleFileName);
                 BuildCalibrationDisplays();
+                CaptureCalibrationSnapshot();
                 return;
             }
             //if (_isInitialized) return;
@@ -155,6 +158,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             }
             CalibModelDictionary = dic;
             BuildCalibrationDisplays();
+            CaptureCalibrationSnapshot();
             _isInitialized = true;
         }
 
@@ -177,8 +181,21 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     }
                 }
             }
+            var changeCount = WriteCalibrationDiff(AuditActions.CalibrationSave, "Success");
             var json = JsonConvert.SerializeObject(CalibModelDictionary, Formatting.Indented);
             FileUtil.WriteFile(_calibrationFileName, json);
+            CaptureCalibrationSnapshot();
+            if (changeCount == 0)
+            {
+                AuditLogService.WriteChange(
+                    AuditModules.Calibration,
+                    AuditActions.CalibrationSave,
+                    _polishIdentifier,
+                    string.Empty,
+                    string.Empty,
+                    "Success",
+                    "No point value changed");
+            }
             Growl.Success(new GrowlInfo() { Message = Lang.Resources.SaveSuccessful, ShowCloseButton = true });
         }
 
@@ -203,76 +220,88 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 }
             }
 
+            bool assignSuccess = false;
             switch (name)
             {
                 case "Zone1":
-                    AssignCaliValueToPLC(0, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(0, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone2":
-                    AssignCaliValueToPLC(1, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(1, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone3":
-                    AssignCaliValueToPLC(2, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(2, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone4":
-                    AssignCaliValueToPLC(3, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(3, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone5":
-                    AssignCaliValueToPLC(4, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(4, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone6":
-                    AssignCaliValueToPLC(5, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(5, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone7":
-                    AssignCaliValueToPLC(6, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(6, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Zone8":
-                    AssignCaliValueToPLC(7, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(7, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RRing":
-                    AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA1Lower":
                 case "RollerB1Lower":
-                    AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA1Upper":
                 case "RollerB1Upper":
-                    AssignCaliValueToPLC(9, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(9, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA2Lower":
                 case "RollerB2Lower":
-                    AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA2Upper":
                 case "RollerB2Upper":
-                    AssignCaliValueToPLC(15, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(15, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA3Lower":
                 case "RollerB3Lower":
-                    AssignCaliValueToPLC(20, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(20, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "RollerA3Upper":
                 case "RollerB3Upper":
-                    AssignCaliValueToPLC(21, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(21, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "PenA1":
-                    AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 //case "PenA2":
                 //    AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
                 //    break;
                 case "PenB1":
-                    AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "PenB2":
-                    AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
                 case "Disk"://Disk
                     uint setBaseAddress = 518000;
-                    AssignCaliValueToPLC(0, setBaseAddress, arraySet, arrayRead, arrayAct, name);
+                    assignSuccess = AssignCaliValueToPLC(0, setBaseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
             }
+
+            var result = assignSuccess ? "Success" : "Failed";
+            WriteCalibrationDiff(AuditActions.CalibrationAssign, result, name);
+            AuditLogService.WriteChange(
+                AuditModules.Calibration,
+                AuditActions.CalibrationAssign,
+                $"{_polishIdentifier}/{name}",
+                string.Empty,
+                string.Empty,
+                result,
+                "Assign to PLC");
         }
 
         /// <summary>
@@ -284,7 +313,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         /// <param name="read">反馈值数组</param>
         /// <param name="act">真实值数组</param>
         /// <param name="caliName">校准项目名称</param>
-        private void AssignCaliValueToPLC(uint coefficient, uint baseAddress, float[] set, float[] read, float[] act, string caliName)
+        private bool AssignCaliValueToPLC(uint coefficient, uint baseAddress, float[] set, float[] read, float[] act, string caliName)
         {
             uint setBaseAddress = baseAddress + coefficient * offsetZone;//设定值
             uint actBaseAddress = setBaseAddress + offsetType;//真实值
@@ -292,21 +321,36 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
             byte[] writeBuf = new byte[256];
             int err;
+            var success = true;
 
             KST.FloatToByte(ref writeBuf, set, 50, 0);
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, setBaseAddress, 100, writeBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE) Growl.InfoGlobal($"Assign {caliName} Cali SetValue Successful");
-            else Growl.Error($"Assign {caliName} adress:{setBaseAddress} Cali SetValue Error:{err}");
+            else
+            {
+                success = false;
+                Growl.Error($"Assign {caliName} adress:{setBaseAddress} Cali SetValue Error:{err}");
+            }
 
             KST.FloatToByte(ref writeBuf, act, 50, 0);
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, actBaseAddress, 100, writeBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE) Growl.InfoGlobal($"Assign {caliName} Cali ActValue Successful");
-            else Growl.Error($"Assign {caliName} adress:{actBaseAddress} Cali ActValue Error:{err}");
+            else
+            {
+                success = false;
+                Growl.Error($"Assign {caliName} adress:{actBaseAddress} Cali ActValue Error:{err}");
+            }
 
             KST.FloatToByte(ref writeBuf, read, 50, 0);
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, readBaseAddress, 100, writeBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE) Growl.InfoGlobal($"Assign {caliName} Cali ReadValue Successful");
-            else Growl.Error($"Assign {caliName} adress:{readBaseAddress} Cali ReadValue Error:{err}");
+            else
+            {
+                success = false;
+                Growl.Error($"Assign {caliName} adress:{readBaseAddress} Cali ReadValue Error:{err}");
+            }
+
+            return success;
         }
 
         private Dictionary<string, ObservableCollection<CalibrationModel>> GetDefaultZoneDataDic(string fileName)
@@ -464,6 +508,58 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 }
             }).Start();
             
+        }
+
+        private void CaptureCalibrationSnapshot()
+        {
+            _savedSnapshot = CalibModelDictionary?.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Select(m => (m.Set, m.Act, m.Read)).ToList())
+                ?? new Dictionary<string, List<(float Set, float Act, float Read)>>();
+        }
+
+        private int WriteCalibrationDiff(string action, string result, string? zoneName = null)
+        {
+            var count = 0;
+            if (CalibModelDictionary == null)
+                return count;
+
+            foreach (var kvp in CalibModelDictionary)
+            {
+                if (!string.IsNullOrEmpty(zoneName) && kvp.Key != zoneName)
+                    continue;
+
+                _savedSnapshot.TryGetValue(kvp.Key, out var oldList);
+                for (int i = 0; i < kvp.Value.Count; i++)
+                {
+                    var current = kvp.Value[i];
+                    var hasOld = oldList != null && i < oldList.Count;
+                    var oldSet = hasOld ? oldList![i].Set : (float?)null;
+                    var oldAct = hasOld ? oldList![i].Act : (float?)null;
+                    var oldRead = hasOld ? oldList![i].Read : (float?)null;
+
+                    count += WriteIfChanged(action, result, kvp.Key, i, "Set", oldSet, current.Set);
+                    count += WriteIfChanged(action, result, kvp.Key, i, "Act", oldAct, current.Act);
+                    count += WriteIfChanged(action, result, kvp.Key, i, "Read", oldRead, current.Read);
+                }
+            }
+
+            return count;
+        }
+
+        private int WriteIfChanged(string action, string result, string zone, int index, string field, float? oldValue, float newValue)
+        {
+            if (oldValue.HasValue && oldValue.Value.Equals(newValue))
+                return 0;
+
+            AuditLogService.WriteChange(
+                AuditModules.Calibration,
+                action,
+                $"{_polishIdentifier}/{zone}[{index}].{field}",
+                oldValue?.ToString() ?? string.Empty,
+                newValue.ToString(),
+                result);
+            return 1;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
