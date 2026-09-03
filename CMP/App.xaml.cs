@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using CMP.Adapters;
 using CMP.Extensions;
 using CMP.Modules;
+using CMP.Services;
 using CMP.Services.Auth;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
@@ -99,6 +100,15 @@ public partial class App
 
     protected override void OnExit(ExitEventArgs e)
     {
+        try
+        {
+            WaferRuntimeStore.Instance.Flush();
+        }
+        catch
+        {
+            // 退出时落盘失败不阻断关闭
+        }
+
         base.OnExit(e);
         _singleInstanceMutex?.ReleaseMutex();
         _singleInstanceMutex?.Dispose();

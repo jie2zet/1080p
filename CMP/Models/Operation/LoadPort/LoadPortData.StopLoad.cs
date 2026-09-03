@@ -1,5 +1,6 @@
 using CMP;
 using CMP.Models.Resource;
+using CMP.Services;
 using CMP.Services.LoadPort;
 using HandyControl.Controls;
 using Prism.Commands;
@@ -60,6 +61,7 @@ namespace CMP.Models.Operation.LoadPort
             AddLogMessage($"StopLoad：已停止 {TabName} 入料，移除待取 {removed} 片{inFlightHint}。机内片继续加工后放回。");
             if (notify)
                 Growl.InfoGlobal($"{TabName} 已停止入料");
+            WaferRuntimeStore.Instance.RequestSave();
         }
 
         /// <summary>
@@ -72,6 +74,7 @@ namespace CMP.Models.Operation.LoadPort
 
             IsStopLoad = false;
             AddLogMessage($"StopLoad：{TabName} 已恢复允许入料");
+            WaferRuntimeStore.Instance.RequestSave();
         }
 
         internal Wafer GetProcessingWafer()

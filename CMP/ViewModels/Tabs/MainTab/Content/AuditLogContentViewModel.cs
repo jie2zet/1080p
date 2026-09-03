@@ -1,3 +1,4 @@
+using CMP.Lang;
 using CMP.Models.UserData;
 using CMP.Services.Auth;
 using CMP.Utils;
@@ -11,8 +12,8 @@ public class AuditLogContentViewModel : BindableBase
     private List<AuditLogModel> _allAuditLogs = new();
     private List<AuditLogModel> _auditLogs = new();
     private string _userNameFilter = string.Empty;
-    private string _selectedActionFilter = "全部";
-    private string _selectedModuleFilter = "全部";
+    private string _selectedActionFilter = Resources.All;
+    private string _selectedModuleFilter = Resources.All;
     private string _targetFilter = string.Empty;
     private DateTime _startTime = DateTime.Today;
     private DateTime _endTime = DateTime.Today.AddDays(1).AddSeconds(-1);
@@ -48,7 +49,7 @@ public class AuditLogContentViewModel : BindableBase
 
     public List<string> ModuleFilters { get; } =
     [
-        "全部",
+        Resources.All,
         AuditModules.Auth,
         AuditModules.Recipe,
         AuditModules.EC,
@@ -71,7 +72,7 @@ public class AuditLogContentViewModel : BindableBase
 
     public List<string> ActionFilters { get; } =
     [
-        "全部",
+        Resources.All,
         "Login",
         "Logout",
         "SessionTimeout",
@@ -136,7 +137,7 @@ public class AuditLogContentViewModel : BindableBase
 
     private void LoadData()
     {
-        var data = AuditLogService.Query(null, "全部", StartTime, EndTime);
+        var data = AuditLogService.Query(null, null, StartTime, EndTime);
         SetAuditLogSource(data);
     }
 

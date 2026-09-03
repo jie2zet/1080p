@@ -6,7 +6,6 @@
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:hc="https://handyorg.github.io/handycontrol"
-             xmlns:local="clr-namespace:CMP.Views.Tabs.MainTab.Content"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:prism="http://prismlibrary.com/"
@@ -16,132 +15,123 @@
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources">
 
-    <TabControl Style="{StaticResource SecondaryTabControlStyle}"
-                ItemContainerStyle="{StaticResource SecondaryTabItemStyle}">
-        <TabItem Header="用户数据">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" BorderThickness="2" BorderBrush="White" Height="70" Margin="5,10,5,10" Padding="10,0,10,0">
-                    <hc:RelativePanel VerticalAlignment="Center">
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Height="70">
-                            <TextBox hc:InfoElement.Title="用户名"
-                                     hc:InfoElement.TitlePlacement="Left"
-                                     hc:InfoElement.TitleWidth="80"
-                                     Text="{Binding UserNameFilter, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource TextBoxExtend}"
-                                     Width="260"
-                                     FontSize="14"
-                                     Height="30"/>
+        <Border Grid.Row="0" BorderThickness="2" BorderBrush="White" Height="70" Margin="5,10,5,10" Padding="10,0,10,0">
+            <hc:RelativePanel VerticalAlignment="Center">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Height="70">
+                    <TextBox hc:InfoElement.Title="{lex:Loc UserName}"
+                             hc:InfoElement.TitlePlacement="Left"
+                             hc:InfoElement.TitleWidth="100"
+                             Text="{Binding UserNameFilter, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource TextBoxExtend}"
+                             Width="280"
+                             FontSize="14"
+                             Height="30"/>
 
-                            <ComboBox Height="30"
-                                      Margin="10,0,0,0"
-                                      ItemsSource="{Binding LevelFilters}"
-                                      SelectedItem="{Binding SelectedLevelFilter}"
-                                      Width="220"
-                                      hc:InfoElement.TitlePlacement="Left"
-                                      hc:InfoElement.TitleWidth="80"
-                                      FontSize="16"
-                                      hc:InfoElement.Title="角色"
-                                      Style="{StaticResource ComboBoxExtend}"/>
+                    <ComboBox Height="30"
+                              Margin="10,0,0,0"
+                              ItemsSource="{Binding LevelFilters}"
+                              SelectedItem="{Binding SelectedLevelFilter}"
+                              Width="220"
+                              hc:InfoElement.TitlePlacement="Left"
+                              hc:InfoElement.TitleWidth="80"
+                              FontSize="16"
+                              hc:InfoElement.Title="{lex:Loc Role}"
+                              Style="{StaticResource ComboBoxExtend}"/>
 
-                            <Button Content="刷新"
-                                    Command="{Binding RefreshCommand}"
-                                    Style="{StaticResource ButtonSuccess}"
-                                    FontSize="14"
-                                    VerticalAlignment="Center"
-                                    Margin="10,0,0,0"/>
+                    <Button Content="{lex:Loc Refresh}"
+                            Command="{Binding RefreshCommand}"
+                            Style="{StaticResource ButtonSuccess}"
+                            FontSize="14"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"/>
 
-                            <Button Content="删除"
-                                    Command="{Binding DeleteCommand}"
-                                    Style="{StaticResource ButtonSuccess}"
-                                    FontSize="14"
-                                    VerticalAlignment="Center"
-                                    Margin="10,0,0,0"/>
-                        </StackPanel>
+                    <Button Content="{lex:Loc Delete}"
+                            Command="{Binding DeleteCommand}"
+                            Style="{StaticResource ButtonSuccess}"
+                            FontSize="14"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"/>
+                </StackPanel>
 
-                        <StackPanel VerticalAlignment="Center"
-                                    hc:RelativePanel.AlignRightWithPanel="True"
-                                    Orientation="Horizontal"
-                                    Height="70">
-                            <Button Content="新增"
-                                    Command="{Binding AddUserCommand}"
-                                    CommandParameter="UserManageDialogView"
-                                    Style="{StaticResource ButtonSuccess}"
-                                    FontSize="14"
-                                    VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </hc:RelativePanel>
-                </Border>
+                <StackPanel VerticalAlignment="Center"
+                            hc:RelativePanel.AlignRightWithPanel="True"
+                            Orientation="Horizontal"
+                            Height="70">
+                    <Button Content="{lex:Loc Add}"
+                            Command="{Binding AddUserCommand}"
+                            CommandParameter="UserManageDialogView"
+                            Style="{StaticResource ButtonSuccess}"
+                            FontSize="14"
+                            VerticalAlignment="Center"/>
+                </StackPanel>
+            </hc:RelativePanel>
+        </Border>
 
-                <DataGrid x:Name="UsersGrid"
-                          Grid.Row="1"
-                          IsReadOnly="True"
-                          Margin="5"
-                          ItemsSource="{Binding UserData}"
-                          CanUserReorderColumns="False"
-                          CanUserAddRows="False"
-                          CanUserDeleteRows="False"
-                          RowHeaderWidth="60"
-                          AutoGenerateColumns="False"
-                          SelectedItem="{Binding SelectedItem}"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                          ScrollViewer.CanContentScroll="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
-                        <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" Width="180"/>
-                        <DataGridTextColumn Header="角色" Binding="{Binding Level}" Width="140"/>
-                        <DataGridTextColumn Header="组" Binding="{Binding Group}" Width="140"/>
-                        <DataGridTemplateColumn Header="启用" Width="80">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
-                                              HorizontalAlignment="Center"
-                                              IsHitTestVisible="False"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="修改时间" Binding="{Binding ModifyTime}" Width="*" MinWidth="180"/>
-                        <DataGridTemplateColumn Width="100" CanUserResize="False" Header="操作">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="编辑"
-                                            Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding}"
-                                            Width="60"
-                                            Style="{StaticResource ButtonSuccess}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+        <DataGrid x:Name="UsersGrid"
+                  Grid.Row="1"
+                  IsReadOnly="True"
+                  Margin="5"
+                  ItemsSource="{Binding UserData}"
+                  CanUserReorderColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  RowHeaderWidth="60"
+                  AutoGenerateColumns="False"
+                  SelectedItem="{Binding SelectedItem}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  ScrollViewer.CanContentScroll="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                <DataGridTextColumn Header="{lex:Loc UserName}" Binding="{Binding UserName}" Width="180"/>
+                <DataGridTextColumn Header="{lex:Loc Role}" Binding="{Binding Level}" Width="140"/>
+                <DataGridTextColumn Header="{lex:Loc Group}" Binding="{Binding Group}" Width="140"/>
+                <DataGridTemplateColumn Header="{lex:Loc Enabled}" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                                      HorizontalAlignment="Center"
+                                      IsHitTestVisible="False"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="{lex:Loc ModifyTime}" Binding="{Binding ModifyTime}" Width="*" MinWidth="180"/>
+                <DataGridTemplateColumn Width="100" CanUserResize="False" Header="{lex:Loc Operate}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="{lex:Loc Edit}"
+                                    Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}"
+                                    Width="60"
+                                    Style="{StaticResource ButtonSuccess}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
-                <Border Grid.Row="2" Background="AliceBlue" Height="50">
-                    <hc:Pagination HorizontalAlignment="Right"
-                                   DataCountPerPage="{Binding PageSize}"
-                                   MaxPageCount="{Binding TotalPages}"
-                                   PageIndex="{Binding Page, Mode=TwoWay}"
-                                   IsJumpEnabled="True"
-                                   Margin="10">
-                        <bh:Interaction.Triggers>
-                            <bh:EventTrigger EventName="PageUpdated">
-                                <prism:InvokeCommandAction Command="{Binding PageChangeCommand}"/>
-                            </bh:EventTrigger>
-                        </bh:Interaction.Triggers>
-                    </hc:Pagination>
-                </Border>
-            </Grid>
-        </TabItem>
-
-        <TabItem Header="审计日志">
-            <local:AuditLogContentView/>
-        </TabItem>
-    </TabControl>
+        <Border Grid.Row="2" Background="AliceBlue" Height="50">
+            <hc:Pagination HorizontalAlignment="Right"
+                           DataCountPerPage="{Binding PageSize}"
+                           MaxPageCount="{Binding TotalPages}"
+                           PageIndex="{Binding Page, Mode=TwoWay}"
+                           IsJumpEnabled="True"
+                           Margin="10">
+                <bh:Interaction.Triggers>
+                    <bh:EventTrigger EventName="PageUpdated">
+                        <prism:InvokeCommandAction Command="{Binding PageChangeCommand}"/>
+                    </bh:EventTrigger>
+                </bh:Interaction.Triggers>
+            </hc:Pagination>
+        </Border>
+    </Grid>
 </UserControl>

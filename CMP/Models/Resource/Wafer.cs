@@ -36,7 +36,12 @@ namespace CMP.Models.Resource
                 UpdateWaferColor(); 
             }
         }
-        public CurrentStation CurrentStation { get; set; }
+        public CurrentStation CurrentStation
+        {
+            get => _currentStation;
+            set => SetProperty(ref _currentStation, value);
+        }
+        private CurrentStation _currentStation;
         private string _sequenceRecipe;
         public string SequenceRecipe {
             get => _sequenceRecipe;

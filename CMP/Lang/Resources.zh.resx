@@ -1803,4 +1803,106 @@
   <data name="UsedTimeSet" xml:space="preserve">
     <value>使用时间设定</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>审计日志</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="ModifyTime" xml:space="preserve">
+    <value>修改时间</value>
+  </data>
+  <data name="Operate" xml:space="preserve">
+    <value>操作</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>模块</value>
+  </data>
+  <data name="Target" xml:space="preserve">
+    <value>对象</value>
+  </data>
+  <data name="OldValue" xml:space="preserve">
+    <value>原值</value>
+  </data>
+  <data name="NewValue" xml:space="preserve">
+    <value>新值</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>结果</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>结束时间</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Tips" xml:space="preserve">
+    <value>提示</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="SelectUserToDelete" xml:space="preserve">
+    <value>请先选择要删除的用户。</value>
+  </data>
+  <data name="CannotDeleteCurrentUser" xml:space="preserve">
+    <value>不能删除当前登录用户。</value>
+  </data>
+  <data name="ConfirmDeleteUser" xml:space="preserve">
+    <value>确定删除用户「{0}」吗？</value>
+  </data>
+  <data name="ConfirmDeleteTitle" xml:space="preserve">
+    <value>确认删除</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>删除成功。</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>删除失败。</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>用户名已存在。</value>
+  </data>
+  <data name="AddFailed" xml:space="preserve">
+    <value>新增失败。</value>
+  </data>
+  <data name="SelectUserToEdit" xml:space="preserve">
+    <value>请先选择要编辑的用户。</value>
+  </data>
+  <data name="EditSuccess" xml:space="preserve">
+    <value>编辑成功。</value>
+  </data>
+  <data name="EditFailed" xml:space="preserve">
+    <value>编辑失败。</value>
+  </data>
+  <data name="AddUserTitle" xml:space="preserve">
+    <value>新增用户</value>
+  </data>
+  <data name="EditUserTitle" xml:space="preserve">
+    <value>编辑用户</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>必填项不能为空。</value>
+  </data>
+  <data name="PasswordRequiredOnAdd" xml:space="preserve">
+    <value>新增用户时密码不能为空。</value>
+  </data>
 </root>

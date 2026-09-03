@@ -51,7 +51,10 @@ namespace CMP.Utils
                 db.CodeFirst.InitTables(
                     typeof(Alarm),
                     typeof(UserModel),
-                    typeof(AuditLogModel)
+                    typeof(AuditLogModel),
+                    typeof(WaferSnapshotModel),
+                    typeof(WaferPickQueueItemModel),
+                    typeof(LoadPortRuntimeStateModel)
                 );
 
                 InitSeedData(db);

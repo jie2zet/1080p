@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
              xmlns:bh="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              mc:Ignorable="d"
@@ -10,7 +11,9 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.MainTab.Content"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DataContext="{d:DesignInstance viewModels:AuditLogContentViewModel}">
+             d:DataContext="{d:DesignInstance viewModels:AuditLogContentViewModel}"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -20,13 +23,15 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" BorderThickness="2" BorderBrush="White" Height="70" Margin="5,10,5,10" Padding="10,0,10,0">
+            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                          HorizontalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Height="70">
-                <TextBox hc:InfoElement.Title="用户名"
+                <TextBox hc:InfoElement.Title="{lex:Loc UserName}"
                          hc:InfoElement.TitlePlacement="Left"
-                         hc:InfoElement.TitleWidth="80"
+                         hc:InfoElement.TitleWidth="100"
                          Text="{Binding UserNameFilter, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource TextBoxExtend}"
-                         Width="180"
+                         Width="240"
                          FontSize="14"
                          Height="30"/>
 
@@ -34,59 +39,63 @@
                           Margin="10,0,0,0"
                           ItemsSource="{Binding ModuleFilters}"
                           SelectedItem="{Binding SelectedModuleFilter}"
-                          Width="170"
+                          Width="200"
                           hc:InfoElement.TitlePlacement="Left"
-                          hc:InfoElement.TitleWidth="50"
+                          hc:InfoElement.TitleWidth="75"
                           FontSize="14"
-                          hc:InfoElement.Title="模块"
+                          hc:InfoElement.Title="{lex:Loc Module}"
                           Style="{StaticResource ComboBoxExtend}"/>
 
                 <ComboBox Height="30"
                           Margin="10,0,0,0"
                           ItemsSource="{Binding ActionFilters}"
                           SelectedItem="{Binding SelectedActionFilter}"
-                          Width="190"
+                          Width="220"
                           hc:InfoElement.TitlePlacement="Left"
-                          hc:InfoElement.TitleWidth="50"
+                          hc:InfoElement.TitleWidth="70"
                           FontSize="14"
-                          hc:InfoElement.Title="操作"
+                          hc:InfoElement.Title="{lex:Loc Action}"
                           Style="{StaticResource ComboBoxExtend}"/>
 
-                <TextBox hc:InfoElement.Title="对象"
+                <TextBox hc:InfoElement.Title="{lex:Loc Target}"
                          hc:InfoElement.TitlePlacement="Left"
-                         hc:InfoElement.TitleWidth="50"
+                         hc:InfoElement.TitleWidth="70"
                          Text="{Binding TargetFilter, UpdateSourceTrigger=PropertyChanged}"
                          Style="{StaticResource TextBoxExtend}"
-                         Width="180"
+                         Width="210"
                          FontSize="14"
                          Height="30"
                          Margin="10,0,0,0"/>
 
                 <hc:DateTimePicker Height="30"
-                                   hc:InfoElement.Title="开始时间"
+                                   hc:InfoElement.Title="{lex:Loc StartTime}"
                                    hc:InfoElement.TitlePlacement="Left"
-                                   FontSize="16"
+                                   hc:InfoElement.TitleWidth="95"
+                                   FontSize="14"
                                    SelectedDateTime="{Binding StartTime}"
                                    Margin="10,0,0,0"
-                                   Width="280"
+                                   Width="320"
                                    Style="{StaticResource DateTimePickerExtend}"/>
 
                 <hc:DateTimePicker Height="30"
-                                   hc:InfoElement.Title="结束时间"
+                                   hc:InfoElement.Title="{lex:Loc EndTime}"
                                    hc:InfoElement.TitlePlacement="Left"
-                                   FontSize="16"
+                                   hc:InfoElement.TitleWidth="85"
+                                   FontSize="14"
                                    SelectedDateTime="{Binding EndTime}"
                                    Margin="10,0,0,0"
-                                   Width="280"
+                                   Width="310"
                                    Style="{StaticResource DateTimePickerExtend}"/>
 
-                <Button Content="刷新"
+                <Button Content="{lex:Loc Refresh}"
                         Command="{Binding RefreshCommand}"
                         Style="{StaticResource ButtonSuccess}"
                         FontSize="14"
+                        MinWidth="90"
                         VerticalAlignment="Center"
                         Margin="10,0,0,0"/>
             </StackPanel>
+            </ScrollViewer>
         </Border>
 
         <DataGrid x:Name="AuditLogGrid"
@@ -106,16 +115,16 @@
                   ScrollViewer.CanContentScroll="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
-                <DataGridTextColumn Header="时间" Binding="{Binding Timestamp}" Width="170"/>
-                <DataGridTextColumn Header="用户名" Binding="{Binding UserName}" Width="100"/>
-                <DataGridTextColumn Header="角色" Binding="{Binding Level}" Width="100"/>
-                <DataGridTextColumn Header="模块" Binding="{Binding Module}" Width="100"/>
-                <DataGridTextColumn Header="操作" Binding="{Binding Action}" Width="130"/>
-                <DataGridTextColumn Header="对象" Binding="{Binding Target}" Width="220"/>
-                <DataGridTextColumn Header="原值" Binding="{Binding OldValue}" Width="100"/>
-                <DataGridTextColumn Header="新值" Binding="{Binding NewValue}" Width="100"/>
-                <DataGridTextColumn Header="结果" Binding="{Binding Result}" Width="90"/>
-                <DataGridTextColumn Header="详情" Binding="{Binding Detail}" Width="*" MinWidth="120"/>
+                <DataGridTextColumn Header="{lex:Loc Time}" Binding="{Binding Timestamp}" Width="170"/>
+                <DataGridTextColumn Header="{lex:Loc UserName}" Binding="{Binding UserName}" Width="100"/>
+                <DataGridTextColumn Header="{lex:Loc Role}" Binding="{Binding Level}" Width="100"/>
+                <DataGridTextColumn Header="{lex:Loc Module}" Binding="{Binding Module}" Width="100"/>
+                <DataGridTextColumn Header="{lex:Loc Action}" Binding="{Binding Action}" Width="130"/>
+                <DataGridTextColumn Header="{lex:Loc Target}" Binding="{Binding Target}" Width="220"/>
+                <DataGridTextColumn Header="{lex:Loc OldValue}" Binding="{Binding OldValue}" Width="100"/>
+                <DataGridTextColumn Header="{lex:Loc NewValue}" Binding="{Binding NewValue}" Width="100"/>
+                <DataGridTextColumn Header="{lex:Loc Result}" Binding="{Binding Result}" Width="90"/>
+                <DataGridTextColumn Header="{lex:Loc Detail}" Binding="{Binding Detail}" Width="*" MinWidth="120"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -1,4 +1,5 @@
-﻿using CMP.Models.Config;
+﻿using CMP.Lang;
+using CMP.Models.Config;
 using CMP.Models.UserData;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -72,6 +73,7 @@ namespace CMP.ViewModels.Common.Dialog
         }
 
         private bool isClicCancle = false;
+        private bool _isAdd;
 
         public DelegateCommand CancelCommand { get; set; }
 
@@ -106,11 +108,11 @@ namespace CMP.ViewModels.Common.Dialog
                 user.Group = TextBox3;
             }
 
-            if (Title.ToLower().Contains("add"))
+            if (_isAdd)
             {
                 param.Add("AddUserResult", user);
             }
-            else if (Title.ToLower().Contains("edit"))
+            else
             {
                 param.Add("EditUserResult", user);
             }
@@ -140,12 +142,12 @@ namespace CMP.ViewModels.Common.Dialog
             if (string.IsNullOrEmpty(TextBox1) || string.IsNullOrEmpty(TextBox3))
             {
                 allowClose = false;
-                MessageBox.Show("不设置为空的文本框。");
+                MessageBox.Show(Resources.FieldRequired);
             }
-            else if (Title != null && Title.ToLower().Contains("add") && string.IsNullOrEmpty(TextBox2))
+            else if (_isAdd && string.IsNullOrEmpty(TextBox2))
             {
                 allowClose = false;
-                MessageBox.Show("新增用户时密码不能为空。");
+                MessageBox.Show(Resources.PasswordRequiredOnAdd);
             }
 
             return allowClose;
@@ -165,6 +167,7 @@ namespace CMP.ViewModels.Common.Dialog
             TextBox1 = parameters.GetValue<string>("TextBox1");
             TextBox2 = parameters.GetValue<string>("TextBox2");
             TextBox3 = parameters.GetValue<string>("TextBox3");
+            _isAdd = parameters.ContainsKey("IsAdd") && parameters.GetValue<bool>("IsAdd");
         }
         public void ShowMessage(string message) 
         {

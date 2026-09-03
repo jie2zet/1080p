@@ -20,6 +20,29 @@
         <!-- AddBooleanToVisibilityConverter -->
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:StringToBrushConverter x:Key="StringToBrushConverter"/>
+        <DataTemplate x:Key="DualArmRobotCanvasTemplate">
+            <Canvas Width="100" Height="100">
+                <Image Source="/Assets/Images/Robot.png" Width="80" Height="80" Stretch="Fill"/>
+                <Image Source="/Assets/Images/wafer.png"
+                       Width="42" Height="42"
+                       Canvas.Left="50" Canvas.Top="0"
+                       Panel.ZIndex="1"
+                       Visibility="{Binding IsVisibleUpperArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBlock Canvas.Left="52" Canvas.Top="10" Panel.ZIndex="2"
+                           Foreground="Blue" FontWeight="Bold" FontSize="7"
+                           Text="{Binding UpperArmWaferInfo, StringFormat='U {0}'}"
+                           Visibility="{Binding IsVisibleUpperArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <Image Source="/Assets/Images/wafer.png"
+                       Width="42" Height="42"
+                       Canvas.Left="50" Canvas.Top="48"
+                       Panel.ZIndex="1"
+                       Visibility="{Binding IsVisibleLowerArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <TextBlock Canvas.Left="52" Canvas.Top="58" Panel.ZIndex="2"
+                           Foreground="Blue" FontWeight="Bold" FontSize="7"
+                           Text="{Binding LowerArmWaferInfo, StringFormat='L {0}'}"
+                           Visibility="{Binding IsVisibleLowerArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Canvas>
+        </DataTemplate>
 
     </UserControl.Resources>
     <Grid extensions:GridHelpers.ColumnDefinitions="380,1400">
@@ -76,7 +99,7 @@
                         <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[1].DockValue}" Canvas.Top="86" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[1].IsVisibility}"/>
                         <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[2].DockValue}" Canvas.Top="163" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[2].IsVisibility}"/>
                         <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[3].DockValue}" Canvas.Top="238" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[3].IsVisibility}"/>
-                        <Image Source="/Assets/Images/OnlyFoup.png" Width="75" Height="75" HorizontalAlignment="Left" Canvas.Left="{Binding AllLoadPorts[4].DockValue}" Canvas.Top="313" VerticalAlignment="Center" Visibility="{Binding AllLoadPorts[4].IsVisibility}"/>
+                       
                     </Canvas>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Grid.ColumnSpan="2">
                         <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding EFEMRobot.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
@@ -115,21 +138,9 @@
                                 </StackPanel>
                             </GroupBox.Header>
                             <Border>
-                                <StackPanel Orientation="Horizontal">
-                                    <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                        <Image Source="/Assets/Images/Robot.png"  Width="80" Stretch="Fill" Grid.Column="0" Height="80" />
-                                        <Image Source="/Assets/Images/wafer.png" 
-                                            Width="60" Height="60"
-                                               Canvas.Left="44" Canvas.Top="5"
-                                              Panel.ZIndex="1" 
-                                            Visibility="{Binding EFEMRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        <TextBlock Text="{Binding EFEMRobot.WaferInfo}" 
-                                             Canvas.Top="15" Panel.ZIndex="2" Canvas.Left="60"
-                                            Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                            Visibility="{Binding EFEMRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </Canvas>
-
-                                </StackPanel>
+                                <ContentControl Content="{Binding EFEMRobot}"
+                                                ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </GroupBox>
                     </StackPanel>
@@ -484,25 +495,9 @@
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <Border>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
-                                            <Image Source="/Assets/Images/wafer.png" 
-                                                Width="60" Height="60"
-                                                   Canvas.Left="54" Canvas.Top="20"
-                                                  Panel.ZIndex="1" 
-                                                Visibility="{Binding CleanBRobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <TextBlock Text="{Binding CleanBRobot2.WaferInfo}" 
-                                                 Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
-                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                                Visibility="{Binding CleanBRobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        </Canvas>
-
-
-
-                                        <!--<Image Source="/Assets/Images/Robot.png" VerticalAlignment="Center" Stretch="Fill" Width="80"
-                        HorizontalAlignment="Center"  Grid.Column="0" Height="80" />-->
-                                    </StackPanel>
+                                    <ContentControl Content="{Binding CleanBRobot2}"
+                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </GroupBox>
 
@@ -562,20 +557,9 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <Border>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
-                                            <Image Source="/Assets/Images/wafer.png" 
-                                                Width="60" Height="60"
-                                                   Canvas.Left="54" Canvas.Top="20"
-                                                  Panel.ZIndex="1" 
-                                                Visibility="{Binding CleanBRobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <TextBlock Text="{Binding CleanBRobot1.WaferInfo}" 
-                                                 Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
-                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                                Visibility="{Binding CleanBRobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        </Canvas>
-                                    </StackPanel>
+                                    <ContentControl Content="{Binding CleanBRobot1}"
+                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </GroupBox>
                         </StackPanel>
@@ -674,20 +658,9 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <Border>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
-                                            <Image Source="/Assets/Images/wafer.png" 
-                                                    Width="60" Height="60"
-                                                       Canvas.Left="54" Canvas.Top="20"
-                                                      Panel.ZIndex="1" 
-                                                    Visibility="{Binding CleanARobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <TextBlock Text="{Binding CleanARobot2.WaferInfo}" 
-                                                     Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
-                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                                    Visibility="{Binding CleanARobot2.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        </Canvas>
-                                    </StackPanel>
+                                    <ContentControl Content="{Binding CleanARobot2}"
+                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </GroupBox>
                             <GroupBox Background="Transparent" hc:TitleElement.Background="{Binding CleanARobot1.HeadColor, Converter={StaticResource StringToBrushConverter}, FallbackValue='#2C66A7'}"
@@ -727,20 +700,9 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                                     </StackPanel>
                                 </GroupBox.Header>
                                 <Border>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                            <Image Source="/Assets/Images/Robot.png" Margin="0,8"  Width="80"  Grid.Column="0" Height="80" />
-                                            <Image Source="/Assets/Images/wafer.png" 
-                                                    Width="60" Height="60"
-                                                       Canvas.Left="54" Canvas.Top="20"
-                                                      Panel.ZIndex="1" 
-                                                    Visibility="{Binding CleanARobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                            <TextBlock Text="{Binding CleanARobot1.WaferInfo}" 
-                                                        Canvas.Top="40" Panel.ZIndex="2" Canvas.Left="70"
-                                                    Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                                    Visibility="{Binding CleanARobot1.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        </Canvas>
-                                    </StackPanel>
+                                    <ContentControl Content="{Binding CleanARobot1}"
+                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
                             </GroupBox>
                         </StackPanel>
@@ -1057,20 +1019,9 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                                 </StackPanel>
                             </GroupBox.Header>
                             <Border>
-                                <StackPanel Orientation="Horizontal">
-                                    <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Width="100" Height="100" >
-                                        <Image Source="/Assets/Images/Robot.png"  Width="80" Stretch="Fill" Grid.Column="0" Height="80" />
-                                        <Image Source="/Assets/Images/wafer.png" 
-                                                Width="60" Height="60"
-                                                   Canvas.Left="44" Canvas.Top="5"
-                                                  Panel.ZIndex="1" 
-                                                Visibility="{Binding TransRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                        <TextBlock Text="{Binding TransRobot.WaferInfo}" 
-                                                 Canvas.Top="10" Panel.ZIndex="2" Canvas.Left="40"
-                                                Foreground="Blue" FontWeight="Bold" FontSize="8"
-                                                Visibility="{Binding TransRobot.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    </Canvas>
-                                </StackPanel>
+                                <ContentControl Content="{Binding TransRobot}"
+                                                ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
                         </GroupBox>
                     </StackPanel>

@@ -1,4 +1,5 @@
 ﻿using CMP.Extensions;
+using CMP.Lang;
 using CMP.Models.UserData;
 using CMP.Services.Auth;
 using CMP.Utils;
@@ -19,7 +20,7 @@ public class UserManageContentViewModel : BindableBase
     private List<UserModel> _userData = new();
     private UserModel? _selectedItem;
     private string _userNameFilter = string.Empty;
-    private string _selectedLevelFilter = "全部";
+    private string _selectedLevelFilter = Resources.All;
     private int _page = 1;
     private int _totalPages = 1;
     private bool _suppressPageChange;
@@ -52,7 +53,7 @@ public class UserManageContentViewModel : BindableBase
 
     public List<string> LevelFilters { get; } =
     [
-        "全部",
+        Resources.All,
         nameof(PermissionEnum.Administrator),
         nameof(PermissionEnum.Engineer),
         nameof(PermissionEnum.Operator)
@@ -108,7 +109,7 @@ public class UserManageContentViewModel : BindableBase
             query = query.Where(u => u.UserName.Contains(keyword));
         }
 
-        if (SelectedLevelFilter != "全部"
+        if (!AuditLogService.IsAllFilter(SelectedLevelFilter)
             && Enum.TryParse<PermissionEnum>(SelectedLevelFilter, true, out var level))
         {
             var levelName = level.ToString();
@@ -181,18 +182,18 @@ public class UserManageContentViewModel : BindableBase
     {
         if (SelectedItem == null)
         {
-            MessageBox.Show("请先选择要删除的用户。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Resources.SelectUserToDelete, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
         if (SessionContext.Instance.IsAuthenticated
             && SelectedItem.UserName.Equals(SessionContext.Instance.UserName, StringComparison.OrdinalIgnoreCase))
         {
-            MessageBox.Show("不能删除当前登录用户。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Resources.CannotDeleteCurrentUser, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
-        if (MessageBox.Show($"确定删除用户「{SelectedItem.UserName}」吗？", "确认删除",
+        if (MessageBox.Show(string.Format(Resources.ConfirmDeleteUser, SelectedItem.UserName), Resources.ConfirmDeleteTitle,
                 MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
         {
             return;
@@ -203,11 +204,11 @@ public class UserManageContentViewModel : BindableBase
         {
             SelectedItem = null;
             QueryInfo();
-            MessageBox.Show("删除成功。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Resources.DeleteSuccess, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Information);
         }
         else
         {
-            MessageBox.Show("删除失败。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Resources.DeleteFailed, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
@@ -215,10 +216,11 @@ public class UserManageContentViewModel : BindableBase
     {
         var param = new DialogParameters
         {
-            { "Title", "Add user Data" },
-            { "BlockName1", "UserName" },
-            { "BlockName2", "Password" },
-            { "BlockName3", "Group" }
+            { "Title", Resources.AddUserTitle },
+            { "BlockName1", Resources.UserName },
+            { "BlockName2", Resources.Password },
+            { "BlockName3", Resources.Group },
+            { "IsAdd", true }
         };
 
         _dialogService.ShowDialog(dialogName, param, r =>
@@ -236,7 +238,7 @@ public class UserManageContentViewModel : BindableBase
 
             if (Db.Queryable<UserModel>().Any(u => u.UserName == user.UserName))
             {
-                MessageBox.Show("用户名已存在。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.UserNameExists, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -247,11 +249,11 @@ public class UserManageContentViewModel : BindableBase
             if (insertResult > 0)
             {
                 QueryInfo();
-                MessageBox.Show("新增成功。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Resources.AddSuccessfully, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("新增失败。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.AddFailed, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         });
     }
@@ -261,7 +263,7 @@ public class UserManageContentViewModel : BindableBase
         var selectedUser = parameter as UserModel ?? SelectedItem;
         if (selectedUser == null)
         {
-            MessageBox.Show("请先选择要编辑的用户。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(Resources.SelectUserToEdit, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -269,10 +271,11 @@ public class UserManageContentViewModel : BindableBase
 
         var param = new DialogParameters
         {
-            { "Title", "Edit user data" },
-            { "BlockName1", "UserName" },
-            { "BlockName2", "Password" },
-            { "BlockName3", "Group" },
+            { "Title", Resources.EditUserTitle },
+            { "BlockName1", Resources.UserName },
+            { "BlockName2", Resources.Password },
+            { "BlockName3", Resources.Group },
+            { "IsAdd", false },
             { "TextBox1", selectedUser.UserName },
             { "TextBox2", string.Empty },
             { "TextBox3", selectedUser.Level.ToString() }
@@ -308,11 +311,11 @@ public class UserManageContentViewModel : BindableBase
             if (updateResult > 0)
             {
                 QueryInfo();
-                MessageBox.Show("编辑成功。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Resources.EditSuccess, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("编辑失败。", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Resources.EditFailed, Resources.Tips, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         });
     }

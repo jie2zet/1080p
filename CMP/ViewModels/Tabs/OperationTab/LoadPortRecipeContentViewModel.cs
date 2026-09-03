@@ -1,4 +1,5 @@
-﻿using CMP.Services.Auth;
+﻿using CMP.Services;
+using CMP.Services.Auth;
 using CMP.Models.Operation.LoadPort;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
@@ -432,6 +433,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
                     var elapsedTime = stopwatch.ElapsedMilliseconds;
 
                     _loadPortData.AddLogMessage($"Async parallel processing of {selectedWafers.Count} wafers with {WaferPickQueue.Count} tasks took {elapsedTime} ms");
+                    WaferRuntimeStore.Instance.RequestSave();
 
                     SelectedWaferCount = selectedWafers.Count;
                     StatusMessage = $"Successfully assigned '{SelectedSequence.Name}' to {selectedWafers.Count} wafer(s)";

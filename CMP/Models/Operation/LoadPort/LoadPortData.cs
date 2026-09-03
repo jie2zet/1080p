@@ -1,6 +1,7 @@
 ﻿using CMP.Services.Auth;
 using CMP.Models.Resource;
 using CMP.Models.Warn;
+using CMP.Services;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.Services.Plc;
@@ -877,8 +878,12 @@ namespace CMP.Models.Operation.LoadPort
         /// </summary>
         public void NotifyHostUnloadRequested()
         {
-            if (FoupWorkflowState == LoadportFoupStatus.Load)
-                FoupWorkflowState = LoadportFoupStatus.WaitUnload;
+            if (FoupWorkflowState != LoadportFoupStatus.Load)
+                return;
+
+            var previousWorkflow = FoupWorkflowState;
+            FoupWorkflowState = LoadportFoupStatus.WaitUnload;
+            TryPublishStatusChanged(LoadPortStatus, previousWorkflow, FoupWorkflowState);
         }
 
         // 更新wafer状态
@@ -1055,6 +1060,7 @@ namespace CMP.Models.Operation.LoadPort
                 }));
 
                 AddLogMessage($"Updated wafer status for cassette {cassetteId}-{PortNumber}, layer {layerNumber}");
+                WaferRuntimeStore.Instance.RequestSave();
             }
             catch (Exception ex)
             {
@@ -1086,9 +1092,10 @@ namespace CMP.Models.Operation.LoadPort
                     plcService.WriteBoolVari("M6943", readySignal);
                     break;
             }
-           
-                var maprd = _loadPortService.SendGetCommandAsync("MAPRD", _serialPort);
 
+            // 能走到 CLDMP INF 即本口已 Load：解除恢复保护，允许 Mapping 覆盖快照
+            WaferRuntimeStore.Instance.ReleaseMappingProtection(this);
+            _ = _loadPortService.SendGetCommandAsync("MAPRD", _serialPort);
         }
 
         private void OnInfCulodReceived(bool readySignal)
@@ -1185,6 +1192,12 @@ namespace CMP.Models.Operation.LoadPort
                 {
                     foreach (var wafer in wafers)
                     {
+                        // 机内片（非 Loadport）不能随 FOUP Unload 清成空槽
+                        if (wafer.CurrentStation != CurrentStation.Loadport)
+                        {
+                            continue;
+                        }
+
                         // 将wafer状态重置为初始状态
                         if (wafer.WaferStatus != WaferStatus.NonWafer)
                         {
@@ -1210,6 +1223,7 @@ namespace CMP.Models.Operation.LoadPort
                     }
 
                     AddLogMessage($"Reset all wafers to initial state for LoadPort {PortNumber}");
+                    WaferRuntimeStore.Instance.RequestSave();
                 }));
             }
             catch (Exception ex)
@@ -1673,6 +1687,16 @@ namespace CMP.Models.Operation.LoadPort
         {
             try
             {
+                if (WaferRuntimeStore.Instance.IsMappingProtected(PortNumber))
+                {
+                    AddLogMessage("Mapping 保护中：忽略 MAPRD 结果。未正常 Unload 时请勿 Load/扫片覆盖机内片。");
+                    Application.Current?.Dispatcher?.BeginInvoke(new Action(() =>
+                    {
+                        Growl.InfoGlobal($"{TabName} 已从快照恢复，当前 Mapping 不会覆盖槽位。正常 Unload 后再 Load 才会更新。");
+                    }));
+                    return;
+                }
+
                 // 根据实际协议解析Mapping响应
                 // 假设响应格式为: Slot1Data;Slot2Data;...;Slot25Data
                 String[] slotData = response.Select(c => c.ToString()).ToArray(); ;
@@ -1960,6 +1984,7 @@ namespace CMP.Models.Operation.LoadPort
                     if (enteredUnload)
                         OnFoupUnloadClearPlcPickAllow();
 
+                    TryPublishStatusChanged(LoadPortStatus, prevWorkflow, nextWorkflow);
                 }
             }
             catch (Exception ex)
@@ -2206,6 +2231,7 @@ namespace CMP.Models.Operation.LoadPort
                             }
                         
                     }
+                    WaferRuntimeStore.Instance.RequestSave();
                 }));
 
                 if (IsCycle && !IsStopLoad)
@@ -2381,6 +2407,7 @@ namespace CMP.Models.Operation.LoadPort
                 CurrentCycleCount = 0;
                 AddLogMessage($"Cycle mode enabled. Will run for {CycleNum} cycles.");
             }
+            WaferRuntimeStore.Instance.RequestSave();
         }
         
         private void SyncWaferQueueWithLastDictionary()

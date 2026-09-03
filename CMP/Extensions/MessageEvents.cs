@@ -1,4 +1,8 @@
-﻿namespace CMP.Extensions
+﻿using CMP.Models.Operation.LoadPort;
+using CMP.Services.LoadPort;
+using Prism.Events;
+
+namespace CMP.Extensions
 {
     //消息事件
     class MessageEvents : PubSubEvent<FormData>
@@ -23,6 +27,40 @@
     /// LoadPort 管理器完成初始化后通知主界面刷新 Slot Maps。
     /// </summary>
     public class LoadPortsReadyEvent : PubSubEvent { }
+
+    /// <summary>
+    /// LoadPort 状态发生变化时发布；EAP 或其他模块自行订阅。
+    /// </summary>
+    public class LoadPortStatusChangedEvent : PubSubEvent<LoadPortStatusChangedEventArgs> { }
+
+    /// <summary>
+    /// LoadPort 状态变更事件参数。
+    /// </summary>
+    public class LoadPortStatusChangedEventArgs
+    {
+        /// <summary>串口名，如 COM12。</summary>
+        public string PortName { get; init; } = string.Empty;
+
+        /// <summary>界面显示序号，COM12–COM16 对应 1–5。</summary>
+        public int DisplayNumber { get; init; }
+
+        /// <summary>LoadPort 索引，0–4。</summary>
+        public int LoadportId { get; init; }
+
+        /// <summary>上一帧流程状态。</summary>
+        public LoadportFoupStatus PreviousWorkflow { get; init; }
+
+        public LoadportFoupStatus CurrentWorkflow { get; init; }
+
+        /// <summary>当前硬件状态快照；尚未收到 STATE 响应时可能为 null。</summary>
+        public LoadPortStatus? HardwareStatus { get; init; }
+
+        /// <summary>相对上一帧发生变化的字段名。</summary>
+        public IReadOnlyList<string> ChangedFields { get; init; } = Array.Empty<string>();
+
+        public DateTime Timestamp { get; init; } = DateTime.Now;
+    }
+
     
     /// <summary>
     /// Recipe保存事件，用于通知其他组件Recipe已被保存
