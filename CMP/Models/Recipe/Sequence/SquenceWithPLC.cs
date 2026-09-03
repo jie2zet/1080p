@@ -269,8 +269,8 @@ namespace CMP.Models.Recipe.Sequence
             SetWord(CleanASideRollerOp2TypeAddress, ToUShort(ModeTypeConverter(data.CleanASideRollerOp2Type)));
             SetWord(CleanASideRollerOp3CheckedAddress, data.CleanASideRollerOp3Checked ? ToUShort(Selected) : ToUShort(Deselected));
             SetWord(CleanASidePenOp1CheckedAddress, data.CleanASidePenOp1Checked ? ToUShort(Selected) : ToUShort(Deselected));
-            SetWord(CleanASidePenOp1TypeAddress, ToUShort(ModeTypeConverter(data.CleanASidePenOp1Type)));
-            SetWord(CleanASidePenOp2CheckedAddress, data.CleanASidePenOp2Checked ? ToUShort(Selected) : ToUShort(Deselected));
+            //SetWord(CleanASidePenOp1TypeAddress, ToUShort(ModeTypeConverter(data.CleanASidePenOp1Type)));
+            //SetWord(CleanASidePenOp2CheckedAddress, data.CleanASidePenOp2Checked ? ToUShort(Selected) : ToUShort(Deselected));
             SetWord(CleanASideDryOpCheckedAddress, data.CleanASideDryOpChecked ? ToUShort(Selected) : ToUShort(Deselected));
 
             SetWord(CleanBSideRollerOp1CheckedAddress, data.CleanBSideRollerOp1Checked ? ToUShort(Selected) : ToUShort(Deselected));
@@ -279,8 +279,8 @@ namespace CMP.Models.Recipe.Sequence
             SetWord(CleanBSideRollerOp2TypeAddress, ToUShort(ModeTypeConverter(data.CleanBSideRollerOp2Type)));
             SetWord(CleanBSideRollerOp3CheckedAddress, data.CleanBSideRollerOp3Checked ? ToUShort(Selected) : ToUShort(Deselected));
             SetWord(CleanBSidePenOp1CheckedAddress, data.CleanBSidePenOp1Checked ? ToUShort(Selected) : ToUShort(Deselected));
-            SetWord(CleanBSidePenOp1TypeAddress, ToUShort(ModeTypeConverter(data.CleanBSidePenOp1Type)));
-            SetWord(CleanBSidePenOp2CheckedAddress, data.CleanBSidePenOp2Checked ? ToUShort(Selected) : ToUShort(Deselected));
+            //SetWord(CleanBSidePenOp1TypeAddress, ToUShort(ModeTypeConverter(data.CleanBSidePenOp1Type)));
+            //SetWord(CleanBSidePenOp2CheckedAddress, data.CleanBSidePenOp2Checked ? ToUShort(Selected) : ToUShort(Deselected));
             SetWord(CleanBSideDryOpCheckedAddress, data.CleanBSideDryOpChecked ? ToUShort(Selected) : ToUShort(Deselected));
 
             return words;

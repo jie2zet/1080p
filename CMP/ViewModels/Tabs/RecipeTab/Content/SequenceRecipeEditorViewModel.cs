@@ -1,11 +1,12 @@
 using CMP.Controls.Basic.InteractiveDialog;
 using CMP.Extensions;
-using CMP.Services.Auth;
 using CMP.Lang;
 using CMP.Models.kvsPlc;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
+using CMP.Services.Auth;
 using CMP.Services.Log;
+using CMP.Services.Recipe;
 using Dm.util;
 using DocumentFormat.OpenXml.EMMA;
 using DryIoc.ImTools;
@@ -517,17 +518,17 @@ public class SequenceRecipeEditorViewModel : BindableBase
         set => SetProperty(ref _cleanASidePenOp1Checked, value);
     }
 
-    public SequenceType CleanASidePenOp1Type
-    {
-        get => _cleanASidePenOp1Type;
-        set => SetProperty(ref _cleanASidePenOp1Type, value);
-    }
+    //public SequenceType CleanASidePenOp1Type
+    //{
+    //    get => _cleanASidePenOp1Type;
+    //    set => SetProperty(ref _cleanASidePenOp1Type, value);
+    //}
 
-    public bool CleanASidePenOp2Checked
-    {
-        get => _cleanASidePenOp2Checked;
-        set => SetProperty(ref _cleanASidePenOp2Checked, value);
-    }
+    //public bool CleanASidePenOp2Checked
+    //{
+    //    get => _cleanASidePenOp2Checked;
+    //    set => SetProperty(ref _cleanASidePenOp2Checked, value);
+    //}
 
     public bool CleanASideDryOpChecked
     {
@@ -573,17 +574,17 @@ public class SequenceRecipeEditorViewModel : BindableBase
         set => SetProperty(ref _cleanBSidePenOp1Checked, value);
     }
 
-    public SequenceType CleanBSidePenOp1Type
-    {
-        get => _cleanBSidePenOp1Type;
-        set => SetProperty(ref _cleanBSidePenOp1Type, value);
-    }
+    //public SequenceType CleanBSidePenOp1Type
+    //{
+    //    get => _cleanBSidePenOp1Type;
+    //    set => SetProperty(ref _cleanBSidePenOp1Type, value);
+    //}
 
-    public bool CleanBSidePenOp2Checked
-    {
-        get => _cleanBSidePenOp2Checked;
-        set => SetProperty(ref _cleanBSidePenOp2Checked, value);
-    }
+    //public bool CleanBSidePenOp2Checked
+    //{
+    //    get => _cleanBSidePenOp2Checked;
+    //    set => SetProperty(ref _cleanBSidePenOp2Checked, value);
+    //}
 
     public bool CleanBSideDryOpChecked
     {
@@ -1027,27 +1028,11 @@ public class SequenceRecipeEditorViewModel : BindableBase
         Growl.SuccessGlobal(Resources.SaveSuccessful);
         AuditLogService.WriteCurrentUser(AuditActions.RecipeSave, "Success", $"Sequence:{data.Name}");
 
-        ////仅供测试使用
+        //仅供测试使用
         //Wafer wafer = new Wafer();
-        //wafer.SequenceRecipe = SelectedSequence?.Name!;
-        //SetSequenceToWafer(wafer);
-        //TestWriteStep("ZF89000", wafer, GlobalService.kvHostLinkInit.kvLinkPolishA, "PolishA");
-        //TestWriteStep("ZF89000", wafer, GlobalService.kvHostLinkInit.kvLinkPolishB, "PolishB");
-        //TestWriteStep("ZF89000", wafer, GlobalService.kvHostLinkInit.kvLinkPolishC, "PolishC");
-        //TestWriteStep("ZF89000", wafer, GlobalService.kvHostLinkInit.kvLinkPolishD, "PolishD");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerA, "PolishA1");
-        //TestWriteStep("ZF94500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerA, "PolishA2");
-        //TestWriteStep("ZF114500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerA, "PolishA3");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerB, "PolishA1");
-        //TestWriteStep("ZF94500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerB, "PolishA2");
-        //TestWriteStep("ZF114500", wafer, GlobalService.kvHostLinkInit.kvLinkRollerB, "PolishA3");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkPenA, "PenA1");
-        //TestWriteStep("ZF94500", wafer, GlobalService.kvHostLinkInit.kvLinkPenA, "PenA2");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkPenB, "PenB1");
-        //TestWriteStep("ZF94500", wafer, GlobalService.kvHostLinkInit.kvLinkPenB, "PenB2");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkDryA, "DryA");
-        //TestWriteStep("ZF74500", wafer, GlobalService.kvHostLinkInit.kvLinkDryB, "DryB");
+        //wafer.SequnceValue = WaferSequencePlanner.BuildPlan(data).SequnceValue;
     }
+
 
     /// <summary>
     /// Saves the current sequence state as a new recipe
@@ -1173,8 +1158,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
 
             // Clean A-side pen operations
             CleanASidePenOp1Checked = CleanASidePenOp1Checked,
-            CleanASidePenOp1Type = CleanASidePenOp1Type,
-            CleanASidePenOp2Checked = CleanASidePenOp2Checked,
             CleanASideDryOpChecked = CleanASideDryOpChecked,
 
             // Clean B-side roller operations
@@ -1185,9 +1168,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
             CleanBSideRollerOp3Checked = CleanBSideRollerOp3Checked,
 
             // Clean B-side pen operations
-            CleanBSidePenOp1Checked = CleanBSidePenOp1Checked,
-            CleanBSidePenOp1Type = CleanBSidePenOp1Type,
-            CleanBSidePenOp2Checked = CleanBSidePenOp2Checked,
+            CleanBSidePenOp1Checked = CleanBSidePenOp1Checked, 
             CleanBSideDryOpChecked = CleanBSideDryOpChecked,
 
             // Recipe selection stubs for future implementation
@@ -1208,9 +1189,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
                 new RecipeSelection { Key = "RecipeRollerB2", Value = CleanBSideRollerOp2Checked ? CleanBRoller2Recipe : null },
                 new RecipeSelection { Key = "RecipeRollerB3", Value = CleanBSideRollerOp3Checked ? CleanBRoller3Recipe : null },
                 new RecipeSelection { Key = "RecipePenA1", Value = CleanASidePenOp1Checked ? CleanAPen1Recipe : null },
-                new RecipeSelection { Key = "RecipePenA2", Value = CleanASidePenOp2Checked ? CleanAPen2Recipe : null },
                 new RecipeSelection { Key = "RecipePenB1", Value = CleanBSidePenOp1Checked ? CleanBPen1Recipe : null },
-                new RecipeSelection { Key = "RecipePenB2", Value = CleanBSidePenOp2Checked ? CleanBPen2Recipe : null },
                 new RecipeSelection { Key = "RecipeDryA", Value = CleanASideDryOpChecked ? CleanADryRecipe : null },
                 new RecipeSelection { Key = "RecipeDryB", Value = CleanBSideDryOpChecked ? CleanBDryRecipe : null }
             ]
@@ -1256,8 +1235,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
         CleanASideRollerOp2Type = data.CleanASideRollerOp2Type;
         CleanASideRollerOp3Checked = data.CleanASideRollerOp3Checked;
         CleanASidePenOp1Checked = data.CleanASidePenOp1Checked;
-        CleanASidePenOp1Type = data.CleanASidePenOp1Type;
-        CleanASidePenOp2Checked = data.CleanASidePenOp2Checked;
         CleanASideDryOpChecked = data.CleanASideDryOpChecked;
 
         // Apply clean B-side operations
@@ -1267,8 +1244,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
         CleanBSideRollerOp2Type = data.CleanBSideRollerOp2Type;
         CleanBSideRollerOp3Checked = data.CleanBSideRollerOp3Checked;
         CleanBSidePenOp1Checked = data.CleanBSidePenOp1Checked;
-        CleanBSidePenOp1Type = data.CleanBSidePenOp1Type;
-        CleanBSidePenOp2Checked = data.CleanBSidePenOp2Checked;
         CleanBSideDryOpChecked = data.CleanBSideDryOpChecked;
 
         // Apply recipe selections
@@ -1376,8 +1351,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
         CleanASideRollerOp2Type = SequenceType.None;
         CleanASideRollerOp3Checked = false;
         CleanASidePenOp1Checked = false;
-        CleanASidePenOp1Type = SequenceType.None;
-        CleanASidePenOp2Checked = false;
         CleanASideDryOpChecked = false;
 
         // Reset clean B-side operations
@@ -1387,8 +1360,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
         CleanBSideRollerOp2Type = SequenceType.None;
         CleanBSideRollerOp3Checked = false;
         CleanBSidePenOp1Checked = false;
-        CleanBSidePenOp1Type = SequenceType.None;
-        CleanBSidePenOp2Checked = false;
         CleanBSideDryOpChecked = false;
 
         // Reset recipe selections
@@ -1461,750 +1432,6 @@ public class SequenceRecipeEditorViewModel : BindableBase
         public string Value { get; set; } = string.Empty;
     }
 
-    #endregion
-
-    #region Wafer的Sequnce逻辑算法
-    private void SetSequenceToWafer(Wafer wafer)
-    {
-        var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{wafer.SequenceRecipe}.json");
-        try
-        {
-            wafer.WaferSequenceModels = [];
-            var text = File.ReadAllText(path);
-            var data = JsonConvert.DeserializeObject<SequenceRecipeData>(text);
-            wafer.SequnceValue = new int[16];
-
-            if (data != null && !string.IsNullOrWhiteSpace(data.Name))
-            {
-                #region 确定每个chamber的执行顺序的步骤
-                int currentMaxStep = -1;
-                //Polish
-                if (data.PolishMainType == SequenceType.Parallel)
-                {
-                    if (data.PolishMainASideChecked)
-                    {
-                        if (data.PolishASideOperationType == SequenceType.Parallel)
-                        {
-                            if (data.PolishASideOperationBChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishB", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                            if (data.PolishASideOperationAChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishA", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                        }
-                        else if (data.PolishASideOperationType == SequenceType.Serial)
-                        {
-                            int currentStep = -1;
-                            if (data.PolishASideOperationBChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishB", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.PolishASideOperationAChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishA", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.PolishMainBSideChecked)
-                    {
-                        if (data.PolishBSideOperationType == SequenceType.Parallel)
-                        {
-                            if (data.PolishBSideOperationDChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishD", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                            if (data.PolishBSideOperationCChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishC", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                        }
-                        else if (data.PolishBSideOperationType == SequenceType.Serial)
-                        {
-                            int currentStep = -1;
-                            if (data.PolishBSideOperationDChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishD", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.PolishBSideOperationCChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishC", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-
-                            }
-                        }
-                    }
-                }
-                else if (data.PolishMainType == SequenceType.Serial)
-                {
-                    if (data.PolishMainASideChecked)
-                    {
-                        if (data.PolishASideOperationType == SequenceType.Parallel)
-                        {
-                            if (data.PolishASideOperationBChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishB", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                            if (data.PolishASideOperationAChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishA", ChamberSequnceStep = 0 });
-                                SetCurrentStep(ref currentMaxStep, 0);
-                            }
-                        }
-                        else if (data.PolishASideOperationType == SequenceType.Serial)
-                        {
-                            int currentStep = -1;
-                            if (data.PolishASideOperationBChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishB", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.PolishASideOperationAChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishA", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.PolishMainBSideChecked)
-                    {
-                        if (data.PolishBSideOperationType == SequenceType.Parallel)
-                        {
-                            int currentStep = currentMaxStep + 1;
-                            if (data.PolishBSideOperationDChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishD", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.PolishBSideOperationCChecked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishC", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        else if (data.PolishBSideOperationType == SequenceType.Serial)
-                        {
-                            int currentStep = currentMaxStep;
-                            if (data.PolishBSideOperationDChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishD", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.PolishBSideOperationCChecked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PolishC", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                }
-                //Roller
-                if (data.CleanMainType == SequenceType.Parallel)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASideRollerOp1Type == SequenceType.Parallel && data.CleanASideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Serial && data.CleanASideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                            }
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Parallel && data.CleanASideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Serial && data.CleanASideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Parallel && data.CleanBSideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Serial && data.CleanBSideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                            }
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Parallel && data.CleanBSideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Serial && data.CleanBSideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                }
-                else if (data.CleanMainType == SequenceType.Serial)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASideRollerOp1Type == SequenceType.Parallel && data.CleanASideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Serial && data.CleanASideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                            }
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Parallel && data.CleanASideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanASideRollerOp1Type == SequenceType.Serial && data.CleanASideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerA3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        int temCurrentMaxStep2 = currentMaxStep;
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Parallel && data.CleanBSideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = temCurrentMaxStep2 + 1;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Serial && data.CleanBSideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = temCurrentMaxStep2;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                            }
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Parallel && data.CleanBSideRollerOp2Type == SequenceType.Serial)
-                        {
-                            int currentStep = temCurrentMaxStep2 + 1;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        if (data.CleanBSideRollerOp1Type == SequenceType.Serial && data.CleanBSideRollerOp2Type == SequenceType.Parallel)
-                        {
-                            int currentStep = temCurrentMaxStep2;
-                            if (data.CleanBSideRollerOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSideRollerOp3Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "RollerB3", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                }
-                //Pen
-                if (data.CleanMainType == SequenceType.Parallel)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASidePenOp1Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASidePenOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASidePenOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        else if (data.CleanASidePenOp1Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASidePenOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASidePenOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        if (data.CleanBSidePenOp1Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanBSidePenOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSidePenOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        else if (data.CleanBSidePenOp1Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanBSidePenOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSidePenOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                }
-                else if (data.CleanMainType == SequenceType.Serial)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASidePenOp1Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            if (data.CleanASidePenOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASidePenOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        else if (data.CleanASidePenOp1Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep;
-                            if (data.CleanASidePenOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanASidePenOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenA2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        int tempCurrentMaxStep2 = currentMaxStep;
-                        if (data.CleanBSidePenOp1Type == SequenceType.Parallel)
-                        {
-                            int currentStep = tempCurrentMaxStep2 + 1;
-                            if (data.CleanBSidePenOp1Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSidePenOp2Checked)
-                            {
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                        else if (data.CleanBSidePenOp1Type == SequenceType.Serial)
-                        {
-                            int currentStep = tempCurrentMaxStep2;
-                            if (data.CleanBSidePenOp1Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB1", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                            if (data.CleanBSidePenOp2Checked)
-                            {
-                                currentStep += 1;
-                                wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "PenB2", ChamberSequnceStep = currentStep });
-                                SetCurrentStep(ref currentMaxStep, currentStep);
-                            }
-                        }
-                    }
-                }
-                //Dry
-                if (data.CleanMainType == SequenceType.Parallel)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASideDryOpChecked)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "DryA", ChamberSequnceStep = currentStep });
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        if (data.CleanBSideDryOpChecked)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "DryB", ChamberSequnceStep = currentStep });
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                    }
-                }
-                else if (data.CleanMainType == SequenceType.Serial)
-                {
-                    int tempCurrentMaxStep = currentMaxStep;
-                    if (data.CleanMainASideChecked)
-                    {
-                        if (data.CleanASideDryOpChecked)
-                        {
-                            int currentStep = tempCurrentMaxStep + 1;
-                            wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "DryA", ChamberSequnceStep = currentStep });
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                    }
-                    if (data.CleanMainBSideChecked)
-                    {
-                        int tempCurrentMaxStep2 = currentMaxStep;
-                        if (data.CleanBSideDryOpChecked)
-                        {
-                            int currentStep = tempCurrentMaxStep2 + 1;
-                            wafer.WaferSequenceModels.Add(new WaferSequenceModel() { ChamberName = "DryB", ChamberSequnceStep = currentStep });
-                            SetCurrentStep(ref currentMaxStep, currentStep);
-                        }
-                    }
-                }
-                #endregion
-
-                #region 确定每个chamber步骤需要写入的值
-                for (int i = 0; i < wafer.SequnceValue.Length; i++)
-                {
-                    var list = wafer.WaferSequenceModels.Where(x => x.ChamberSequnceStep == i).ToList();
-                    if (list.Count == 0)
-                    {
-                        wafer.SequnceValue[i] = 0;
-                        continue;
-                    }
-                    //多个值表示并行，值相加
-                    int val = 0;
-                    foreach (var item in list)
-                    {
-                        val += item.ChamberStepValue;
-                    }
-                    wafer.SequnceValue[i] = val;
-                }
-                #endregion
-            }
-            else
-            {
-                Growl.ErrorGlobal("sequence Data is null ");
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Error(ex.Message);
-            throw;
-        }
-    }
-
-    private void SetCurrentStep(ref int current, int step)
-    {
-        if (step > current)
-        {
-            current = step;
-        }
-    }
-
-    private void TestWriteStep(string baseAddress, Wafer wafer, KVLink link, string workPlace)
-    {
-        //向地址中写入wafer的sequence数值
-        for (int i = 0; i < wafer.SequnceValue.Length; i++)
-        {
-            byte[] data = new byte[256];
-            uint devTopNo = (uint)(Convert.ToUInt32(baseAddress?.Replace("ZF", "")) + 10 + 5 * i);
-            CMP.Models.kvsPlc.Polish.KvStruct.IntToByte(ref data, wafer.SequnceValue[i]);
-            int error = KvHostLink.KHLWriteDevicesAsWords(link.sock, KHLDevType.DEV_ZF, devTopNo, 2, data);
-            if (error != (int)KHLUserError.KHL_ERR_NONE)
-            {
-                Logger.For("SequenceTest").Debug($"向{workPlace}地址ZF{devTopNo}中写入数值{wafer.SequnceValue[i]}失败，错误码返回码{error}");
-            }
-            else
-            {
-                Logger.For("SequenceTest").Debug($"向{workPlace}地址ZF{devTopNo}中写入数值{wafer.SequnceValue[i]}成功");
-            }
-        }
-    }
     #endregion
 
 }

@@ -259,9 +259,9 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 case "PenA1":
                     AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
-                case "PenA2":
-                    AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
-                    break;
+                //case "PenA2":
+                //    AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
+                //    break;
                 case "PenB1":
                     AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
@@ -345,9 +345,9 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             else if (fileName.ToLower().StartsWith("pena"))
             {
                 var penA1CalibModel = GetDefaultZoneData();
-                var penA2CalibModel = GetDefaultZoneData();
+                //var penA2CalibModel = GetDefaultZoneData();
                 dic.Add("PenA1", penA1CalibModel);
-                dic.Add("PenA2", penA2CalibModel);
+                //dic.Add("PenA2", penA2CalibModel);
             }
             else if (fileName.ToLower().StartsWith("penb"))
             {
