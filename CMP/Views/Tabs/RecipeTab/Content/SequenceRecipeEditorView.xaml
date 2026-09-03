@@ -272,17 +272,6 @@
                                             </MultiBinding>
                                         </CheckBox.Content>
                                     </CheckBox>
-                                    <ComboBox SelectedValue="{Binding CleanASidePenOp1Type}" DisplayMemberPath="Name"
-                                              SelectedValuePath="Value" Height="20" MinWidth="50"
-                                              ItemsSource="{Binding TypeItems}" />
-                                    <CheckBox x:Name="CleanASidePenOp2" IsChecked="{Binding CleanASidePenOp2Checked}">
-                                        <CheckBox.Content>
-                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                                <Binding Source="{lex:Loc PenFormat}" />
-                                                <Binding Source="2" />
-                                            </MultiBinding>
-                                        </CheckBox.Content>
-                                    </CheckBox>
                                 </StackPanel>
                             </Border>
                         </GroupBox>
@@ -370,17 +359,6 @@
                                             <MultiBinding Converter="{StaticResource StringFormatConverter}">
                                                 <Binding Source="{lex:Loc PenFormat}" />
                                                 <Binding Source="1" />
-                                            </MultiBinding>
-                                        </CheckBox.Content>
-                                    </CheckBox>
-                                    <ComboBox SelectedValue="{Binding CleanBSidePenOp1Type}" DisplayMemberPath="Name"
-                                              SelectedValuePath="Value" Height="20" MinWidth="50"
-                                              ItemsSource="{Binding TypeItems}" />
-                                    <CheckBox x:Name="CleanBSidePenOp2" IsChecked="{Binding CleanBSidePenOp2Checked}">
-                                        <CheckBox.Content>
-                                            <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                                <Binding Source="{lex:Loc PenFormat}" />
-                                                <Binding Source="2" />
                                             </MultiBinding>
                                         </CheckBox.Content>
                                     </CheckBox>

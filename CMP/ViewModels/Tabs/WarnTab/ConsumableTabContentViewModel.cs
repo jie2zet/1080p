@@ -118,7 +118,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     ConsumableGroups = new ObservableCollection<ConsumableGroup>(rollerGroups);
                     break;
                 case "Pen":
-                    var penGroups = _consumableModels.Where(x => x.Workstation == WorkstationType.PenA1 || x.Workstation == WorkstationType.PenA2 || x.Workstation == WorkstationType.PenB1 || x.Workstation == WorkstationType.PenB2)
+                    var penGroups = _consumableModels.Where(x => x.Workstation == WorkstationType.PenA1 || x.Workstation == WorkstationType.PenB1)
                         .GroupBy(x => x.Workstation)
                         .Select(group => new ConsumableGroup(group.Key) { Consumables = new ObservableCollection<ConsumableModel>(group) });
                     ConsumableGroups = new ObservableCollection<ConsumableGroup>(penGroups);
@@ -226,12 +226,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392050 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pen", WaferCountAdress = 392054, UsedTimeAdress = 392052 });
-                    }
-                    if (value == WorkstationType.PenA2 || value == WorkstationType.PenB2)
-                    {
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392150 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pen", WaferCountAdress = 392154, UsedTimeAdress = 392152 });
-                    }
+                    } 
                 }                                
             }
 
@@ -320,13 +315,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                 case WorkstationType.PenA1:
                     hSock = GlobalService.kvHostLinkInit.kvLinkPenA.sock;
                     break;
-                case WorkstationType.PenA2:
-                    hSock = GlobalService.kvHostLinkInit.kvLinkPenA.sock;
-                    break;
                 case WorkstationType.PenB1:
-                    hSock = GlobalService.kvHostLinkInit.kvLinkPenB.sock;
-                    break;
-                case WorkstationType.PenB2:
                     hSock = GlobalService.kvHostLinkInit.kvLinkPenB.sock;
                     break;
                 default:
@@ -365,9 +354,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                 }
 
                 if (value == WorkstationType.PenA1 ||
-                    value == WorkstationType.PenA2 ||
-                    value == WorkstationType.PenB1 ||
-                    value == WorkstationType.PenB2)
+                    value == WorkstationType.PenB1)
                 {
                     _ignoreConsumableProperties.Add(new() { Workstation = value, ConsumableName = "Unit", IgnoreProperty = "UsedTime" });
                     _ignoreConsumableProperties.Add(new() { Workstation = value, ConsumableName = "Unit", IgnoreProperty = "UsedTimeSet" });

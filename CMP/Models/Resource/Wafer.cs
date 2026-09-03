@@ -60,6 +60,8 @@ namespace CMP.Models.Resource
             set { SetProperty(ref _isSelected, value); }
         }
 
+        public List<WaferSequenceModel> WaferSequenceModels { get; set; } = [];
+        public int[] SequnceValue { get; set; } = new int[16];
 
         private WaferSequenceTrackSide _sequenceTrackSide;
 
@@ -70,16 +72,7 @@ namespace CMP.Models.Resource
         {
             get => _sequenceTrackSide;
             set => SetProperty(ref _sequenceTrackSide, value);
-        }
-
-        /// <summary>
-        /// The execution sequence of each Wafer
-        /// </summary>
-        public List<WaferSequenceModel> WaferSequenceModels { get; set; }
-        /// <summary>
-        /// length is always 16，The values that need to be written into each chamber
-        /// </summary>
-        public int[] SequnceValue { get; set; } = [];
+        }     
 
         public Wafer() { }
         public Wafer(int loadportID, int slotID)
@@ -112,7 +105,6 @@ namespace CMP.Models.Resource
             WaferName = string.Empty;
             UpdateWaferColor();
         }
-
 
         /// <summary>
         /// 按 <see cref="WaferSequenceModels"/> 顺序：先出现的抛光步 PolishA/B 归为 A 线，PolishC/D 归为 B 线；
@@ -235,45 +227,5 @@ namespace CMP.Models.Resource
         CleanARobot2,
         CleanBRobot1,
         CleanBRobot2,
-    }
-
-
-    public class WaferSequenceModel
-    {
-        public string? ChamberName { get; set; }
-        /// <summary>
-        /// 代表Chamber所在顺序是第几步
-        /// </summary>
-        public int ChamberSequnceStep { get; set; }
-        /// <summary>
-        /// 此chamber的步骤代表值
-        /// </summary>
-        public int ChamberStepValue
-        {
-            get { return (int)Math.Pow(2, _chamber_index[ChamberName!]); }
-        }
-
-        private Dictionary<string, int> _chamber_index;
-
-        public WaferSequenceModel()
-        {
-            _chamber_index = [];
-            _chamber_index.TryAdd("PolishA", 0);
-            _chamber_index.TryAdd("PolishB", 1);
-            _chamber_index.TryAdd("PolishC", 2);
-            _chamber_index.TryAdd("PolishD", 3);
-            _chamber_index.TryAdd("RollerA1", 4);
-            _chamber_index.TryAdd("RollerA2", 5);
-            _chamber_index.TryAdd("RollerA3", 6);
-            _chamber_index.TryAdd("RollerB1", 7);
-            _chamber_index.TryAdd("RollerB2", 8);
-            _chamber_index.TryAdd("RollerB3", 9);
-            _chamber_index.TryAdd("PenA1", 10);
-            _chamber_index.TryAdd("PenA2", 11);
-            _chamber_index.TryAdd("PenB1", 12);
-            _chamber_index.TryAdd("PenB2", 13);
-            _chamber_index.TryAdd("DryA", 14);
-            _chamber_index.TryAdd("DryB", 15);
-        }
     }
 }

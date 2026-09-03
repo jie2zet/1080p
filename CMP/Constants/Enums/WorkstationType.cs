@@ -19,9 +19,7 @@ namespace CMP.Constants.Enums
         RollerB2,
         RollerB3,
         PenA1,
-        PenA2, 
         PenB1,
-        PenB2,
         DryA, 
         DryB,
     }

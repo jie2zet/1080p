@@ -53,9 +53,9 @@ public class SequenceRecipeData
     // Clean A-side pen operation settings
     [DataMember] public bool CleanASidePenOp1Checked { get; set; }
 
-    [DataMember] public SequenceType CleanASidePenOp1Type { get; set; }
+    //[DataMember] public SequenceType CleanASidePenOp1Type { get; set; }
 
-    [DataMember] public bool CleanASidePenOp2Checked { get; set; }
+    //[DataMember] public bool CleanASidePenOp2Checked { get; set; }
 
     // Clean A-side dry operation setting
     [DataMember] public bool CleanASideDryOpChecked { get; set; }
@@ -74,9 +74,9 @@ public class SequenceRecipeData
     // Clean B-side pen operation settings
     [DataMember] public bool CleanBSidePenOp1Checked { get; set; }
 
-    [DataMember] public SequenceType CleanBSidePenOp1Type { get; set; }
+    //[DataMember] public SequenceType CleanBSidePenOp1Type { get; set; }
 
-    [DataMember] public bool CleanBSidePenOp2Checked { get; set; }
+    //[DataMember] public bool CleanBSidePenOp2Checked { get; set; }
 
     // Clean B-side dry operation setting
     [DataMember] public bool CleanBSideDryOpChecked { get; set; }
