@@ -56,31 +56,7 @@ namespace CMP.Models.Operation.LoadPort
     }
     public partial class LoadPortData : BindableBase
     {
-        //// 机械手位置
-        //private Point _robotPosition = new Point(90, 10);
-        //public Point RobotPosition
-        //{
-        //    get => _robotPosition;
-        //    set => SetProperty(ref _robotPosition, value);
-        //}
-
-        //// 机械手是否可见
-        //private bool _isRobotVisible = false;
-        //public bool IsRobotVisible
-        //{
-        //    get => _isRobotVisible;
-        //    set => SetProperty(ref _isRobotVisible, value);
-        //}
-
-        //// 机械手信息
-        //private RobotInfo _robotInfo = new RobotInfo();
-        //public RobotInfo RobotInfo
-        //{
-        //    get => _robotInfo;
-        //    set => SetProperty(ref _robotInfo, value);
-        //}
-
-
+        
         // 机械手信息类
         private string _tabName;
         private string _portName;
@@ -316,7 +292,6 @@ namespace CMP.Models.Operation.LoadPort
             "COM13" => 1,
             "COM14" => 2,
             "COM15" => 3,
-            "COM16" => 4,
             _ => -1
         };
 
@@ -604,8 +579,6 @@ namespace CMP.Models.Operation.LoadPort
                         return plcService.ReadBoolVari("M2596");
                     case "COM15":
                         return plcService.ReadBoolVari("M2612");
-                    case "COM16":
-                        return plcService.ReadBoolVari("M2628");
                     default:
                         return false;
                 }
@@ -632,9 +605,7 @@ namespace CMP.Models.Operation.LoadPort
                     case "COM14":
                         return plcService.ReadBoolVari("M2599");
                     case "COM15":
-                        return plcService.ReadBoolVari("M2615");
-                    case "COM16":
-                        return plcService.ReadBoolVari("M2631");
+                        return plcService.ReadBoolVari("M2615");                    
                     default:
                         return false;
                 }
@@ -665,9 +636,6 @@ namespace CMP.Models.Operation.LoadPort
                     case "COM15":
                         plcService.WriteBoolVari("M6932", allowPlace);
                         break;
-                    case "COM16":
-                        plcService.WriteBoolVari("M6948", allowPlace);
-                        break;
                 }
             }
             catch (Exception ex)
@@ -685,7 +653,6 @@ namespace CMP.Models.Operation.LoadPort
                 case "COM13": mBase = 2580; return true;
                 case "COM14": mBase = 2596; return true;
                 case "COM15": mBase = 2612; return true;
-                case "COM16": mBase = 2628; return true;
                 default: return false;
             }
         }
@@ -1088,9 +1055,6 @@ namespace CMP.Models.Operation.LoadPort
                 case "COM15":
                     plcService.WriteBoolVari("M6927", readySignal);
                     break;
-                case "COM16":
-                    plcService.WriteBoolVari("M6943", readySignal);
-                    break;
             }
 
             // 能走到 CLDMP INF 即本口已 Load：解除恢复保护，允许 Mapping 覆盖快照
@@ -1114,9 +1078,6 @@ namespace CMP.Models.Operation.LoadPort
                     break;
                 case "COM15":
                     plcService.WriteBoolVari("M6927", readySignal);
-                    break;
-                case "COM16":
-                    plcService.WriteBoolVari("M6943", readySignal);
                     break;
             }
             
@@ -1342,10 +1303,6 @@ namespace CMP.Models.Operation.LoadPort
                 case "COM15":
                     loadportID = 3;
                     TabName = "LPort4";
-                    break;
-                case "COM16":
-                    loadportID = 4;
-                    TabName = "LPort5";
                     break;
             }
             FoupWorkflowState = LoadportFoupStatus.WaitPlace;
