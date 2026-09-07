@@ -135,19 +135,6 @@
                                     CancelCommand="{Binding JogSpeedCancelCommand}"/>
                             </StackPanel>
 
-                            <!-- PenB2 Position -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc PenB2}" VerticalAlignment="Center" Margin="0,0,5,0" />
-                            <controls:EditableNumericWithActions Grid.Row="1" Grid.Column="1"
-                                Value="{Binding PenB2Position}"
-                                Minimum="{Binding PositionMinimum}"
-                                Maximum="{Binding PositionMaximum}"
-                                DecimalPlaces="3"
-                                Increment="0.001"
-                                IsDirty="{Binding IsPenB2PositionDirty, Mode=OneWay}"
-                                SetCommand="{Binding PenB2PositionSetCommand}"
-                                CancelCommand="{Binding PenB2PositionCancelCommand}"/>
-                            <ToggleButton Grid.Row="1" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
-                                Width="55" Height="28" Margin="5,0" IsChecked="{Binding PenB2MoveToggle}" Command="{Binding PenB2MoveCommand}"/>
                             <!-- Auto Speed -->
                             <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="{lex:Loc AutoSpeed}" VerticalAlignment="Center" Margin="0,0,5,0" />

@@ -590,19 +590,6 @@
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanAPen1Recipe}"
                                           IsEnabled="{Binding CleanASidePenOp1Checked}" ItemsSource="{Binding PenRecipeItems}"/>
                             </StackPanel>
-                            <!-- Pen A2 -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Padding="5">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                            <Binding Source="{lex:Loc PenFormat}" />
-                                            <Binding Source="A2" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanAPen2Recipe}"
-                                          IsEnabled="{Binding CleanASidePenOp2Checked}" ItemsSource="{Binding PenRecipeItems}"/>
-                            </StackPanel>
                             <!-- Pen B1 -->
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Padding="5">
@@ -615,19 +602,6 @@
                                 </TextBlock>
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBPen1Recipe}"
                                           IsEnabled="{Binding CleanBSidePenOp1Checked}" ItemsSource="{Binding PenRecipeItems}"/>
-                            </StackPanel>
-                            <!-- Pen B2 -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Padding="5">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource StringFormatConverter}">
-                                            <Binding Source="{lex:Loc PenFormat}" />
-                                            <Binding Source="B2" />
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                                <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding CleanBPen2Recipe}"
-                                          IsEnabled="{Binding CleanBSidePenOp2Checked}" ItemsSource="{Binding PenRecipeItems}"/>
                             </StackPanel>
                             <!-- Dry A -->
                             <StackPanel Orientation="Horizontal">
