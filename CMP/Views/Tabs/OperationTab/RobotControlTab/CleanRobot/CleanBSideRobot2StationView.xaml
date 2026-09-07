@@ -109,23 +109,11 @@
                         <ToggleButton Content="{lex:Loc PickFromRoller3}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromRoller3Toggle, Mode=TwoWay}" Command="{Binding PickFromRoller3Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromRoller3Done}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <!-- PlaceToPen2 -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToPen2Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PlaceToPen2}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PlaceToPen2Toggle, Mode=TwoWay}" Command="{Binding PlaceToPen2Command}"/>
-                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToPen2Done}" VerticalAlignment="Center"/>
-                    </StackPanel>
                     <!-- PickFromPen1 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromPen1Active}" VerticalAlignment="Center"/>
                         <ToggleButton Content="{lex:Loc PickFromPen1}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromPen1Toggle, Mode=TwoWay}" Command="{Binding PickFromPen1Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromPen1Done}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <!-- PickFromPen2 -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromPen2Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromPen2}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromPen2Toggle, Mode=TwoWay}" Command="{Binding PickFromPen2Command}"/>
-                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromPen2Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PlaceToDry -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">

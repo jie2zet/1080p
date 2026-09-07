@@ -748,6 +748,11 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 foreach (FileInfo configFile in configFiles)
                 {
                     string configName = Path.GetFileNameWithoutExtension(configFile.Name);
+                    if (configName.StartsWith("PenA2", StringComparison.OrdinalIgnoreCase) ||
+                        configName.StartsWith("PenB2", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
                     _configTreeNodes[0].Children?.Add(new ConfigTreeNode() { Name = configName });
                     configFileNameList!.Add(configName);
 

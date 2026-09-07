@@ -335,20 +335,6 @@
                 </Border>
             </StackPanel>
 
-            <!-- Arrow Robot4 Lower -> PenA2 (Left) -->
-            <Path Data="M 420,840 L 330,840 M 335,835 L 330,840 L 335,845" Stroke="Black" StrokeThickness="3"/>
-
-            <!-- PenA2 -->
-            <StackPanel Canvas.Left="40" Canvas.Top="820" Orientation="Horizontal">
-                <TextBlock Text="{lex:Loc PenA2}" Style="{StaticResource ModuleLabelStyle}" Width="80" TextAlignment="Center"/>
-                <Border Style="{StaticResource ValueBoxStyle}">
-                    <TextBlock Text="{Binding PenA2Val1}" Style="{StaticResource ValueTextStyle}"/>
-                </Border>
-                <Border Style="{StaticResource ValueBoxStyle}">
-                    <TextBlock Text="{Binding PenA2Val2}" Style="{StaticResource ValueTextStyle}"/>
-                </Border>
-            </StackPanel>
-
         </Canvas>
     </ScrollViewer>
 </UserControl>

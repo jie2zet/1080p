@@ -123,10 +123,6 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab
             PenA1Val1 = await ReadAsync(WaferTransferInformationAddress.PenA1Val1);
             PenA1Val2 = await ReadAsync(WaferTransferInformationAddress.PenA1Val2);
 
-            // PenA2
-            PenA2Val1 = await ReadAsync(WaferTransferInformationAddress.PenA2Val1);
-            PenA2Val2 = await ReadAsync(WaferTransferInformationAddress.PenA2Val2);
-
             // Robot4 Lower
             Robot4LowerArmVal1 = await ReadAsync(WaferTransferInformationAddress.Robot4LowerArmVal1);
             Robot4LowerArmVal2 = await ReadAsync(WaferTransferInformationAddress.Robot4LowerArmVal2);
@@ -251,12 +247,6 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab
 
         private string _penA1Val2 = "0000";
         public string PenA1Val2 { get => _penA1Val2; set => SetProperty(ref _penA1Val2, value); }
-
-        private string _penA2Val1 = "0000";
-        public string PenA2Val1 { get => _penA2Val1; set => SetProperty(ref _penA2Val1, value); }
-
-        private string _penA2Val2 = "0000";
-        public string PenA2Val2 { get => _penA2Val2; set => SetProperty(ref _penA2Val2, value); }
 
         private string _robot4LowerArmVal1 = "0000";
         public string Robot4LowerArmVal1 { get => _robot4LowerArmVal1; set => SetProperty(ref _robot4LowerArmVal1, value); }

@@ -680,7 +680,6 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
             _editableItems = new List<EditableFloatItem>
             {
                 _rollerB3PositionItem,
-                _penB2PositionItem,
                 _penB1PositionItem,
                 _dryPositionItem,
                 _jogSpeedItem,
@@ -842,7 +841,6 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
             var mMoveCommandBatchItems = new List<PlcBatchReadItemBase>
             {
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.RollerB3Move, assign: v => RollerB3MoveToggle = v, addressType: PlcBatchAddressType.M),
-                new PlcBatchReadItem<bool>(CleanRobotB2Address.PenB2Move, assign: v => PenB2MoveToggle = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PenB1Move, assign: v => PenB1MoveToggle = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.DryMove, assign: v => DryMoveToggle = v, addressType: PlcBatchAddressType.M)
             };
@@ -888,14 +886,10 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.StationStoppedStatus, assign: v => StationIsStopped = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.StationModuleAlarm, assign: v => ModuleAlarm = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromRoller3ActiveStatus, assign: v => PickFromRoller3Active = v, addressType: PlcBatchAddressType.M),
-                new PlcBatchReadItem<bool>(CleanRobotB2Address.PlaceToPen2ActiveStatus, assign: v => PlaceToPen2Active = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromPen1ActiveStatus, assign: v => PickFromPen1Active = v, addressType: PlcBatchAddressType.M),
-                new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromPen2ActiveStatus, assign: v => PickFromPen2Active = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PlaceToDryActiveStatus, assign: v => PlaceToDryActive = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromRoller3DoneStatus, assign: v => PickFromRoller3Done = v, addressType: PlcBatchAddressType.M),
-                new PlcBatchReadItem<bool>(CleanRobotB2Address.PlaceToPen2DoneStatus, assign: v => PlaceToPen2Done = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromPen1DoneStatus, assign: v => PickFromPen1Done = v, addressType: PlcBatchAddressType.M),
-                new PlcBatchReadItem<bool>(CleanRobotB2Address.PickFromPen2DoneStatus, assign: v => PickFromPen2Done = v, addressType: PlcBatchAddressType.M),
                 new PlcBatchReadItem<bool>(CleanRobotB2Address.PlaceToDryDoneStatus, assign: v => PlaceToDryDone = v, addressType: PlcBatchAddressType.M)
             };
 

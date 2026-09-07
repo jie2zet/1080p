@@ -156,6 +156,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             {
                 dic = GetDefaultZoneDataDic(simpleFileName);
             }
+            dic.Remove("PenA2");
+            dic.Remove("PenB2");
             CalibModelDictionary = dic;
             BuildCalibrationDisplays();
             CaptureCalibrationSnapshot();
@@ -283,9 +285,6 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 case "PenB1":
                     assignSuccess = AssignCaliValueToPLC(8, baseAddress, arraySet, arrayRead, arrayAct, name);
                     break;
-                case "PenB2":
-                    assignSuccess = AssignCaliValueToPLC(14, baseAddress, arraySet, arrayRead, arrayAct, name);
-                    break;
                 case "Disk"://Disk
                     uint setBaseAddress = 518000;
                     assignSuccess = AssignCaliValueToPLC(0, setBaseAddress, arraySet, arrayRead, arrayAct, name);
@@ -396,9 +395,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             else if (fileName.ToLower().StartsWith("penb"))
             {
                 var penB1CalibModel = GetDefaultZoneData();
-                var penB2CalibModel = GetDefaultZoneData();
                 dic.Add("PenB1", penB1CalibModel);
-                dic.Add("PenB2", penB2CalibModel);
 
             }
             else
