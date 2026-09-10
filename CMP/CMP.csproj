@@ -10,12 +10,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="bin\**" />
       <Compile Remove="Models\ReadSV\**" />
       <Compile Remove="Services\RefreshData\**" />
+      <EmbeddedResource Remove="bin\**" />
       <EmbeddedResource Remove="Models\ReadSV\**" />
       <EmbeddedResource Remove="Services\RefreshData\**" />
+      <None Remove="bin\**" />
       <None Remove="Models\ReadSV\**" />
       <None Remove="Services\RefreshData\**" />
+      <Page Remove="bin\**" />
       <Page Remove="Models\ReadSV\**" />
       <Page Remove="Services\RefreshData\**" />
     </ItemGroup>
@@ -246,7 +250,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="bin\Debug\net8.0-windows\" />
       <Folder Include="Lang\" />
     </ItemGroup>
 

@@ -150,7 +150,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 12,
             Name = "Outer Rinse Flow",
-            Unit = "L/min",
+            Unit = "ml/min",
             Type = "float",
             Min = 0.00,
             Max = 1000.00,
