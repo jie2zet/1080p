@@ -29,6 +29,8 @@ public class PenClean
     
     // 液体控制
     public PenLiquid Liquid { get; set; } = new();
+
+    public FlashControl Flash { get; set; } = new();
 }
 
 /// <summary>
@@ -131,6 +133,26 @@ public class FlowControl : BindableBase
     }
 }
 
+/// <summary>
+/// 全纯水阀 Flash 控制
+/// </summary>
+public class FlashControl : BindableBase
+{
+    private float _openDelaySet;
+    private float _openDelayAct;
+
+    public float OpenDelaySet
+    {
+        get => _openDelaySet;
+        set => SetProperty(ref _openDelaySet, value);
+    }
+
+    public float OpenDelayAct
+    {
+        get => _openDelayAct;
+        set => SetProperty(ref _openDelayAct, value);
+    }
+}
 
 
 

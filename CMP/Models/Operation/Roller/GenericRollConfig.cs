@@ -201,6 +201,18 @@ public class GenericRollConfig : IRollerConfig
         };
     }
 
+    public (uint handle, byte[] value) GetFlashCommand(string flashCommand)
+    {
+        var flashType = _plcHandleType.GetNestedType("Flash")!;
+
+        return flashCommand switch
+        {
+            "Open" => GetCommandValue(flashType, "Open"),
+            "Close" => GetCommandValue(flashType, "Close"),
+            _ => throw new ArgumentException($"Unknown flash command: {flashCommand}")
+        };
+    }
+
     private (uint handle, byte[] value) GetCommandValue(Type type, string fieldName)
     {
         var field = type.GetField(fieldName) ?? throw new InvalidOperationException($"Field '{fieldName}' not found in type '{type.Name}'");

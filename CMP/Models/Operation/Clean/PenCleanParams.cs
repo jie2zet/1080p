@@ -14,12 +14,52 @@ public class PenCleanParams
         Cylinder = new CylinderParams(plcHandleType);
         Gas = new GasParams(plcHandleType);
         Liquid = new LiquidParams(plcHandleType);
+        Flash = new FlashParams(plcHandleType);
     }
 
     public MotorParams Motor { get; }
     public CylinderParams Cylinder { get; }
     public GasParams Gas { get; }
     public LiquidParams Liquid { get; }
+    public FlashParams Flash { get; }
+
+    public class FlashParams
+    {
+        public FlashParams(Type plcHandleType)
+        {
+            var flashType = plcHandleType.GetNestedType("Flash")!;
+            var paramType = flashType.GetNestedType("Param")!;
+            var field = paramType.GetField("OpenDelay")!;
+            var attr = field.GetCustomAttribute<ParamAttribute>()!;
+            OpenDelay = new FloatParam(attr, "Flash.Param.OpenDelay");
+        }
+
+        public FloatParam OpenDelay { get; }
+    }
+
+    public class FloatParam
+    {
+        public FloatParam(ParamAttribute attr, string name)
+        {
+            Handle = attr.Handle;
+            MinValue = attr.MinValue;
+            MaxValue = attr.MaxValue;
+            DefaultValue = attr.DefaultValue;
+            Description = attr.Description;
+            Label = attr.Label;
+            Unit = attr.Unit;
+            Name = name;
+        }
+
+        public uint Handle { get; }
+        public int MinValue { get; }
+        public int MaxValue { get; }
+        public int DefaultValue { get; }
+        public string Description { get; }
+        public string Label { get; }
+        public string Unit { get; }
+        public string Name { get; }
+    }
 
     /// <summary>
     /// Motor 参数访问类
@@ -252,4 +292,3 @@ public class PenCleanParams
         public string Name => _name;
     }
 }
-
