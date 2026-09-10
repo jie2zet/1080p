@@ -448,23 +448,24 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                 {
                     plcPenRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcPenRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
-                    plcPenRecipe.ChuckRotateVelocity[i] = GetRealVal<float>(recipeContent, "ChuckRotateVelocity", i);
-                    plcPenRecipe.PenRotateVelocity[i] = GetRealVal<float>(recipeContent, "PenRotateVelocity", i);
-                    plcPenRecipe.PenArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "PenArmSweepStartPosition", i);
-                    plcPenRecipe.PenArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "PenArmSweepEndPosition", i);
+                    plcPenRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
+                    plcPenRecipe.PenHeadRotationSpeed[i] = GetRealVal<float>(recipeContent, "PenHeadRotationSpeed", i);
+                    plcPenRecipe.PenArmSweepStartPosition[i] = GetRealVal<int>(recipeContent, "PenArmSweepStartPosition", i);
+                    plcPenRecipe.PenArmSweepEndPosition[i] = GetRealVal<int>(recipeContent, "PenArmSweepEndPosition", i);
                     plcPenRecipe.PenArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "PenArmSweepCenterVelocity", i);
                     plcPenRecipe.PenArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "PenArmSweepEdgeVelocity", i);
                     plcPenRecipe.PenArmCycle[i] = GetRealVal<short>(recipeContent, "PenArmCycle", i);
                     plcPenRecipe.PenPressure[i] = GetRealVal<float>(recipeContent, "PenPressure", i);
-                    plcPenRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceN2Flow", i);
-                    plcPenRecipe.WFUpperDIWFlow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceDIWFlow", i);
-                    plcPenRecipe.WFLowerDIWFlow[i] = GetRealVal<float>(recipeContent, "WFLowerFaceDIWFlow", i);
-                    plcPenRecipe.WFLowerN2Supply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceN2Supply", i);
-                    plcPenRecipe.WFUpperLowerChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperLowerFaceChemicalSupply", i);
-                    plcPenRecipe.WFUpperChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceChemicalSupply", i);
-                    plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceDICO2Supply", i);
+                    plcPenRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperN2Flow", i);
+                    plcPenRecipe.WFUpperDIWFlow[i] = GetRealVal<float>(recipeContent, "WFUpperDIWFlow", i);
+                    plcPenRecipe.WFLowerDIWFlow[i] = GetRealVal<float>(recipeContent, "WFLowerDIWFlow", i);
+                    plcPenRecipe.WFLowerN2Supply[i] = GetRealVal<short>(recipeContent, "WFLowerN2Supply", i);
+                    plcPenRecipe.WFUpperFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceChemicalSupply", i);
+                    plcPenRecipe.WFLowerFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceChemicalSupply", i);
+                    plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperrDICO2Supply", i);
                     plcPenRecipe.WFChemicalMixedTotalFlow[i] = GetRealVal<float>(recipeContent, "WFChemicalMixedTotalFlow", i);
-                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<float>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<short>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.PenArmType[i] = GetRealVal<short>(recipeContent, "PenArmType", i);
                 }
                 KST.stPenRecipeFormat_ToByte(ref _writeBuf, plcPenRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _varNameRecipeStruct, _writeBuf, true);      
@@ -617,23 +618,24 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                 {
                     plcPenRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcPenRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
-                    plcPenRecipe.ChuckRotateVelocity[i] = GetRealVal<float>(recipeContent, "ChuckRotateVelocity", i);
-                    plcPenRecipe.PenRotateVelocity[i] = GetRealVal<float>(recipeContent, "PenRotateVelocity", i);
-                    plcPenRecipe.PenArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "PenArmSweepStartPosition", i);
-                    plcPenRecipe.PenArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "PenArmSweepEndPosition", i);
+                    plcPenRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
+                    plcPenRecipe.PenHeadRotationSpeed[i] = GetRealVal<float>(recipeContent, "PenHeadRotationSpeed", i);
+                    plcPenRecipe.PenArmSweepStartPosition[i] = GetRealVal<int>(recipeContent, "PenArmSweepStartPosition", i);
+                    plcPenRecipe.PenArmSweepEndPosition[i] = GetRealVal<int>(recipeContent, "PenArmSweepEndPosition", i);
                     plcPenRecipe.PenArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "PenArmSweepCenterVelocity", i);
                     plcPenRecipe.PenArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "PenArmSweepEdgeVelocity", i);
                     plcPenRecipe.PenArmCycle[i] = GetRealVal<short>(recipeContent, "PenArmCycle", i);
                     plcPenRecipe.PenPressure[i] = GetRealVal<float>(recipeContent, "PenPressure", i);
-                    plcPenRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceN2Flow", i);
-                    plcPenRecipe.WFUpperDIWFlow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceDIWFlow", i);
-                    plcPenRecipe.WFLowerDIWFlow[i] = GetRealVal<float>(recipeContent, "WFLowerFaceDIWFlow", i);
-                    plcPenRecipe.WFLowerN2Supply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceN2Supply", i);
-                    plcPenRecipe.WFUpperLowerChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperLowerFaceChemicalSupply", i);
-                    plcPenRecipe.WFUpperChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceChemicalSupply", i);
-                    plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceDICO2Supply", i);
+                    plcPenRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperN2Flow", i);
+                    plcPenRecipe.WFUpperDIWFlow[i] = GetRealVal<float>(recipeContent, "WFUpperDIWFlow", i);
+                    plcPenRecipe.WFLowerDIWFlow[i] = GetRealVal<float>(recipeContent, "WFLowerDIWFlow", i);
+                    plcPenRecipe.WFLowerN2Supply[i] = GetRealVal<short>(recipeContent, "WFLowerN2Supply", i);
+                    plcPenRecipe.WFUpperFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceChemicalSupply", i);
+                    plcPenRecipe.WFLowerFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceChemicalSupply", i);
+                    plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperrDICO2Supply", i);
                     plcPenRecipe.WFChemicalMixedTotalFlow[i] = GetRealVal<float>(recipeContent, "WFChemicalMixedTotalFlow", i);
-                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<float>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<short>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.PenArmType[i] = GetRealVal<short>(recipeContent, "PenArmType", i);
                 }
                 KST.stPenRecipeFormat_ToByte(ref _writeBuf, plcPenRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _varNameRecipeStruct, _writeBuf, true);
@@ -1251,43 +1253,45 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     //    return t;
     //}
 
-    private static T? GetRealVal<T>(Recipe.Content content, string name, int stepIndex)
+    private static T? GetRealVal<T>(Recipe.Content recipeModel, string name, int stepIndex)
     {
-        Recipe.Data data = new Recipe.Data();
-        bool exists = false;
-        foreach (var item in content.Data!)
-        {
-            if (item.Name?.Replace(" ", "").Replace("_", "").Replace("-", "").Replace("&", "") == name)
-            {
-                data = item;
-                exists = true;
-                break;
+        var model = recipeModel.Data?
+            .FirstOrDefault(item => {
+                string itemName = item.Name!.Replace(" ", "")
+                            .Replace("_", "")
+                            .Replace("-", "")
+                            .Replace("&", "");
+
+                return itemName == name || (item.CompatibleName != null && item.CompatibleName.Contains(name));
             }
-        }
-        if (!exists) return default;
+                );
 
-        object result = new();
-        string value = data.Steps[stepIndex].Value;
-        data.Type = data.Type?.ToLower();
-        if (data.Type == "option" || data.Type == "list")
-        {
-            result = Convert.ToInt16(value.Split(":")[0]);
-        }
-        else if (data.Type == "int")
-        {
-            result = Convert.ToInt16(value);
-        }
-        else if (data.Type == "float" || data.Type == "text")
+        if (model == null) return default;
+        if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
 
+        var value = model.Steps[stepIndex].Value;
+        var type = model.Type?.ToLowerInvariant();
+        var targetType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
+        if (type == "option" || type == "list")
         {
-            result = Convert.ToSingle(value);
+            var arr = value.Split(':');
+            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }
-        else
+
+        try
         {
-            result = value;
+            if (targetType == typeof(string))
+                return (T)(object)value;
+
+            if (targetType.IsEnum)
+                return (T)Enum.Parse(targetType, value, ignoreCase: true);
+
+            return (T)Convert.ChangeType(value, targetType);
         }
-        T t = (T)result;
-        if (t == null) return default;
-        return t;
+        catch
+        {
+            return default;
+        }
     }
 }

@@ -44,33 +44,34 @@ namespace CMP.Models.kvsPlc.Clean
         }
 
 		public class stPenRecipeFormat {
-			 public short[] ProcessType = new short[25];
-			 public short[] Reserved = new short[25];
-			 public float[] ProcessTime = new float[25];
-			 public float[] ChuckRotateVelocity = new float[25];
-			 public float[] PenRotateVelocity = new float[25];
-			 public float[] PenArmSweepStartPosition = new float[25];
-			 public float[] PenArmSweepEndPosition = new float[25];
-			 public float[] PenArmSweepCenterVelocity = new float[25];
-			 public float[] PenArmSweepEdgeVelocity = new float[25];
-			 public float[] Reserved1 = new float[25];
-			 public short[] PenArmCycle = new short[25];
-			 public short[] Reserved2 = new short[25];
-			 public short[] Reserved3 = new short[25];
-			 public short[] Reserved4 = new short[25];
-			 public short[] Reserved5 = new short[25];
-			 public short[] Reserved6 = new short[25];
-			 public float[] PenPressure = new float[25];
-			 public float[] WFUpperN2Flow = new float[25];
-			 public float[] WFUpperDIWFlow = new float[25];
-			 public float[] WFLowerDIWFlow = new float[25];
-			 public short[] WFLowerN2Supply = new short[25];
-			 public short[] WFUpperLowerChemicalSupply = new short[25];
-			 public short[] WFUpperChemicalSupply = new short[25];
-			 public short[] WFUpperrDICO2Supply = new short[25];
-             public float[] Reserved7 = new float[25];
-             public float[] WFChemicalMixedTotalFlow = new float[25];
-             public float[] WFChemicalRatio = new float[25];
+            public short[] ProcessType = new short[25];
+            public short[] Reserved = new short[25];
+            public float[] ProcessTime = new float[25];
+            public float[] WaferRotationSpeed = new float[25];
+            public float[] PenHeadRotationSpeed = new float[25];
+            public int[] PenArmSweepStartPosition = new int[25];
+            public int[] PenArmSweepEndPosition = new int[25];
+            public float[] PenArmSweepCenterVelocity = new float[25];
+            public float[] PenArmSweepEdgeVelocity = new float[25];
+            public float[] Reserved1 = new float[25];
+            public short[] PenArmCycle = new short[25];
+            public short[] Reserved2 = new short[25];
+            public short[] Reserved3 = new short[25];
+            public short[] Reserved4 = new short[25];
+            public short[] Reserved5 = new short[25];
+            public short[] Reserved6 = new short[25];
+            public float[] PenPressure = new float[25];
+            public float[] WFUpperN2Flow = new float[25];
+            public float[] WFUpperDIWFlow = new float[25];
+            public float[] WFLowerDIWFlow = new float[25];
+            public short[] WFLowerN2Supply = new short[25];
+            public short[] WFUpperFaceChemicalSupply = new short[25];
+            public short[] WFLowerFaceChemicalSupply = new short[25];
+            public short[] WFUpperrDICO2Supply = new short[25];
+            public float[] Reserved7 = new float[25];
+            public float[] WFChemicalMixedTotalFlow = new float[25];
+            public short[] WFChemicalRatio = new short[25];
+            public short[] PenArmType = new short[25];
 
             public stPenRecipeFormat()
             {
@@ -815,10 +816,10 @@ namespace CMP.Models.kvsPlc.Clean
             ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
             ByteToShort(ref dst.Reserved, src, 25, 25 + wordOffset);
             ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
-            ByteToFloat(ref dst.ChuckRotateVelocity, src, 25, 100 + wordOffset);
-            ByteToFloat(ref dst.PenRotateVelocity, src, 25, 150 + wordOffset);
-            ByteToFloat(ref dst.PenArmSweepStartPosition, src, 25, 200 + wordOffset);
-            ByteToFloat(ref dst.PenArmSweepEndPosition, src, 25, 250 + wordOffset);
+            ByteToFloat(ref dst.WaferRotationSpeed, src, 25, 100 + wordOffset);
+            ByteToFloat(ref dst.PenHeadRotationSpeed, src, 25, 150 + wordOffset);
+            ByteToInt(ref dst.PenArmSweepStartPosition, src, 25, 200 + wordOffset);
+            ByteToInt(ref dst.PenArmSweepEndPosition, src, 25, 250 + wordOffset);
             ByteToFloat(ref dst.PenArmSweepCenterVelocity, src, 25, 300 + wordOffset);
             ByteToFloat(ref dst.PenArmSweepEdgeVelocity, src, 25, 350 + wordOffset);
             ByteToFloat(ref dst.Reserved1, src, 25, 400 + wordOffset);
@@ -833,12 +834,13 @@ namespace CMP.Models.kvsPlc.Clean
             ByteToFloat(ref dst.WFUpperDIWFlow, src, 25, 700 + wordOffset);
             ByteToFloat(ref dst.WFLowerDIWFlow, src, 25, 750 + wordOffset);
             ByteToShort(ref dst.WFLowerN2Supply, src, 25, 800 + wordOffset);
-            ByteToShort(ref dst.WFUpperLowerChemicalSupply, src, 25, 825 + wordOffset);
-            ByteToShort(ref dst.WFUpperChemicalSupply, src, 25, 850 + wordOffset);
+            ByteToShort(ref dst.WFUpperFaceChemicalSupply, src, 25, 825 + wordOffset);
+            ByteToShort(ref dst.WFLowerFaceChemicalSupply, src, 25, 850 + wordOffset);
             ByteToShort(ref dst.WFUpperrDICO2Supply, src, 25, 875 + wordOffset);
             ByteToFloat(ref dst.Reserved7, src, 25, 900 + wordOffset);
             ByteToFloat(ref dst.WFChemicalMixedTotalFlow, src, 25, 950 + wordOffset);
-            ByteToFloat(ref dst.WFChemicalRatio, src, 25, 1000 + wordOffset);
+            ByteToShort(ref dst.WFChemicalRatio, src, 25, 1000 + wordOffset);
+            ByteToShort(ref dst.PenArmType, src, 25, 1025 + wordOffset);
         }
         private static void ByteToBase_stPenRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -960,10 +962,10 @@ namespace CMP.Models.kvsPlc.Clean
             ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
             ShortToByte(ref dst, src.Reserved, 25, 25 + wordOffset);
             FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
-            FloatToByte(ref dst, src.ChuckRotateVelocity, 25, 100 + wordOffset);
-            FloatToByte(ref dst, src.PenRotateVelocity, 25, 150 + wordOffset);
-            FloatToByte(ref dst, src.PenArmSweepStartPosition, 25, 200 + wordOffset);
-            FloatToByte(ref dst, src.PenArmSweepEndPosition, 25, 250 + wordOffset);
+            FloatToByte(ref dst, src.WaferRotationSpeed, 25, 100 + wordOffset);
+            FloatToByte(ref dst, src.PenHeadRotationSpeed, 25, 150 + wordOffset);
+            IntToByte(ref dst, src.PenArmSweepStartPosition, 25, 200 + wordOffset);
+            IntToByte(ref dst, src.PenArmSweepEndPosition, 25, 250 + wordOffset);
             FloatToByte(ref dst, src.PenArmSweepCenterVelocity, 25, 300 + wordOffset);
             FloatToByte(ref dst, src.PenArmSweepEdgeVelocity, 25, 350 + wordOffset);
             FloatToByte(ref dst, src.Reserved1, 25, 400 + wordOffset);
@@ -978,12 +980,13 @@ namespace CMP.Models.kvsPlc.Clean
             FloatToByte(ref dst, src.WFUpperDIWFlow, 25, 700 + wordOffset);
             FloatToByte(ref dst, src.WFLowerDIWFlow, 25, 750 + wordOffset);
             ShortToByte(ref dst, src.WFLowerN2Supply, 25, 800 + wordOffset);
-            ShortToByte(ref dst, src.WFUpperLowerChemicalSupply, 25, 825 + wordOffset);
-            ShortToByte(ref dst, src.WFUpperChemicalSupply, 25, 850 + wordOffset);
+            ShortToByte(ref dst, src.WFUpperFaceChemicalSupply, 25, 825 + wordOffset);
+            ShortToByte(ref dst, src.WFLowerFaceChemicalSupply, 25, 850 + wordOffset);
             ShortToByte(ref dst, src.WFUpperrDICO2Supply, 25, 875 + wordOffset);
             FloatToByte(ref dst, src.Reserved7, 25, 900 + wordOffset);
             FloatToByte(ref dst, src.WFChemicalMixedTotalFlow, 25, 950 + wordOffset);
-            FloatToByte(ref dst, src.WFChemicalRatio, 25, 1000 + wordOffset);
+            ShortToByte(ref dst, src.WFChemicalRatio, 25, 1000 + wordOffset);
+            ShortToByte(ref dst, src.PenArmType, 25, 1025 + wordOffset);
         }
         private static void stPenRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
