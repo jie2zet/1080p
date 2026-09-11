@@ -7,7 +7,7 @@ namespace CMP.Models.kvsPlc.Clean
 { 
 	class KvStruct {
 		const int stDryRecipeFormat_WSIZE = 826;
-		const int stPenRecipeFormat_WSIZE = 1050;
+		const int stPenRecipeFormat_WSIZE = 1076;
         const int stDryCollectData_WSIZE = 58;
 
         public class stDryRecipeFormat {
@@ -70,7 +70,7 @@ namespace CMP.Models.kvsPlc.Clean
             public short[] WFUpperrDICO2Supply = new short[25];
             public float[] Reserved7 = new float[25];
             public float[] WFChemicalMixedTotalFlow = new float[25];
-            public short[] WFChemicalRatio = new short[25];
+            public float[] WFChemicalRatio = new float[25];
             public short[] PenArmType = new short[25];
 
             public stPenRecipeFormat()
@@ -839,8 +839,8 @@ namespace CMP.Models.kvsPlc.Clean
             ByteToShort(ref dst.WFUpperrDICO2Supply, src, 25, 875 + wordOffset);
             ByteToFloat(ref dst.Reserved7, src, 25, 900 + wordOffset);
             ByteToFloat(ref dst.WFChemicalMixedTotalFlow, src, 25, 950 + wordOffset);
-            ByteToShort(ref dst.WFChemicalRatio, src, 25, 1000 + wordOffset);
-            ByteToShort(ref dst.PenArmType, src, 25, 1025 + wordOffset);
+            ByteToFloat(ref dst.WFChemicalRatio, src, 25, 1000 + wordOffset);
+            ByteToShort(ref dst.PenArmType, src, 25, 1050 + wordOffset);
         }
         private static void ByteToBase_stPenRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -985,8 +985,8 @@ namespace CMP.Models.kvsPlc.Clean
             ShortToByte(ref dst, src.WFUpperrDICO2Supply, 25, 875 + wordOffset);
             FloatToByte(ref dst, src.Reserved7, 25, 900 + wordOffset);
             FloatToByte(ref dst, src.WFChemicalMixedTotalFlow, 25, 950 + wordOffset);
-            ShortToByte(ref dst, src.WFChemicalRatio, 25, 1000 + wordOffset);
-            ShortToByte(ref dst, src.PenArmType, 25, 1025 + wordOffset);
+            FloatToByte(ref dst, src.WFChemicalRatio, 25, 1000 + wordOffset);
+            ShortToByte(ref dst, src.PenArmType, 25, 1050 + wordOffset);
         }
         private static void stPenRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
