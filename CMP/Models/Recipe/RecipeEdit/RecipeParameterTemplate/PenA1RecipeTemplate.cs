@@ -250,7 +250,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Id = 19,
             Name = "WF Chemical Ratio",
             Unit = "",
-            Type = "int",
+            Type = "float",
             Min = 0,
             Max = 10,
             Default = "0",

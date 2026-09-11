@@ -464,7 +464,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                     plcPenRecipe.WFLowerFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceChemicalSupply", i);
                     plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperrDICO2Supply", i);
                     plcPenRecipe.WFChemicalMixedTotalFlow[i] = GetRealVal<float>(recipeContent, "WFChemicalMixedTotalFlow", i);
-                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<short>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<float>(recipeContent, "WFChemicalRatio", i);
                     plcPenRecipe.PenArmType[i] = GetRealVal<short>(recipeContent, "PenArmType", i);
                 }
                 KST.stPenRecipeFormat_ToByte(ref _writeBuf, plcPenRecipe, 1, 0);
@@ -634,7 +634,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                     plcPenRecipe.WFLowerFaceChemicalSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceChemicalSupply", i);
                     plcPenRecipe.WFUpperrDICO2Supply[i] = GetRealVal<short>(recipeContent, "WFUpperrDICO2Supply", i);
                     plcPenRecipe.WFChemicalMixedTotalFlow[i] = GetRealVal<float>(recipeContent, "WFChemicalMixedTotalFlow", i);
-                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<short>(recipeContent, "WFChemicalRatio", i);
+                    plcPenRecipe.WFChemicalRatio[i] = GetRealVal<float>(recipeContent, "WFChemicalRatio", i);
                     plcPenRecipe.PenArmType[i] = GetRealVal<short>(recipeContent, "PenArmType", i);
                 }
                 KST.stPenRecipeFormat_ToByte(ref _writeBuf, plcPenRecipe, 1, 0);
