@@ -174,6 +174,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     // 校验 Read 列是否递增，前面的数据不能比后面的数据大
                     if (models[i].Read < models[i - 1].Read)
                     {
+                        if (models[i].Read == 0 && i + 1 <= models.Count - 1 && models[i + 1].Read == 0) continue;
+                        if (models[i].Read == 0 && i == models.Count - 1) continue;
                         Growl.Warning(new GrowlInfo()
                         {
                             Message = $"{kvp.Key}, Row: {i + 1}, Read 数据必须递增，前面的数据不能比后面的数据大，请修正后再保存。",
@@ -301,6 +303,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 string.Empty,
                 result,
                 "Assign to PLC");
+
+            OnSaveZone();
         }
 
         /// <summary>
