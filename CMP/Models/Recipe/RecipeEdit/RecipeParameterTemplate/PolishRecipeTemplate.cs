@@ -20,7 +20,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Min = 1,
             Max = 2,
             Default = "1",
-            Options = ["1:Process Polish", "2:Main Polish", "-1:Recipe End"],
+            Options = ["1:Process Polish", "2:Main Polish", "-1:Recipe End","64:Pad Search"],
             CompatibleName = [],
             Steps = []
           },

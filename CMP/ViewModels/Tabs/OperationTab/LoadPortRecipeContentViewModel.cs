@@ -1,12 +1,14 @@
-﻿using CMP.Services;
-using CMP.Services.Auth;
 using CMP.Models.Operation.LoadPort;
+using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
+using CMP.Services;
+using CMP.Services.Auth;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.Services.Plc;
 using CMP.Services.Recipe;
+using CMP.Utils;
 using CMP.Validation;
 using CMP.ViewModels.Tabs.RecipeTab.Content;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -23,6 +25,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KHL = CMP.Models.kvsPlc.KvHostLink;
 
 namespace CMP.ViewModels.Tabs.OperationTab
 {
@@ -396,6 +399,24 @@ namespace CMP.ViewModels.Tabs.OperationTab
                     wafer.LoadportID = LoadportID;
                 }
 
+                #region Assign防呆
+                //在Assign Wafer的时候做一个防呆，先读B3003，如果读出来是True，则判断Sequen中的所有Polish，Process Type是否选择了64，选择了给B3003写入False，没选择64则提示不能Assign，重新选择PolishRecipe
+                if (plcComm.ReadBoolVari("B3003"))
+                {
+                    foreach (var wafer in selectedWafers)
+                    {
+                        var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{wafer.SequenceRecipe}.json");
+                        var data = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(path))!;
+
+                        if (data.PolishASideOperationAChecked && !TryValidatePolishProcessType(data, "RecipePolishA", "PolishA")) return;
+                        if (data.PolishASideOperationBChecked && !TryValidatePolishProcessType(data, "RecipePolishB", "PolishB")) return;
+                        if (data.PolishBSideOperationCChecked && !TryValidatePolishProcessType(data, "RecipePolishC", "PolishC")) return;
+                        if (data.PolishBSideOperationDChecked && !TryValidatePolishProcessType(data, "RecipePolishD", "PolishD")) return;
+                    }
+                }
+                #endregion
+
+
                 var batchWriteSuccess = await sequenceWithPLC.AssignWaferSequencesToPLCBatchAsync(selectedWafers, plcComm, plcPayload, batchCts.Token);
                 if (!batchWriteSuccess)
                 {
@@ -463,6 +484,30 @@ namespace CMP.ViewModels.Tabs.OperationTab
             {
                 wafer.LoadportID = snapshots[wafer];
             }
+        }
+
+        /// <summary>
+        /// Assign防呆：校验指定 Polish 操作所选配方的 ProcessType 是否为 64 (Pad Search)。
+        /// 校验通过时将 B3003 复位为 False；失败时设置 StatusMessage 并返回 false，调用方应中止 Assign。
+        /// </summary>
+        private bool TryValidatePolishProcessType(SequenceRecipeData data, string recipeKey, string operationName)
+        {
+            var selection = data.RecipeSelections?.Find(x => x.Key == recipeKey);
+            if (selection?.Value == null)
+            {
+                StatusMessage = $"{operationName} has no a recipe selecteds";
+                return false;
+            }
+
+            var recipe = JsonConvert.DeserializeObject<Recipe.Content>(FileUtil.ReadFile(selection.Value.ToString()!))!;
+            if (GetRealVal<short>(recipe, "ProcessType", 0) != 64)
+            {
+                StatusMessage = $"The ProcessType option for {operationName} must be set to \"64:Pad Search\"!";
+                return false;
+            }
+
+            plcComm.WriteBoolVari("B3003", false);
+            return true;
         }
 
         private void ApplyBatchWaferNameForSelectedWafers()
@@ -648,6 +693,49 @@ namespace CMP.ViewModels.Tabs.OperationTab
             {
                 Logger.Error(ex.Message);
                 throw;
+            }
+        }
+
+        private static T? GetRealVal<T>(Recipe.Content recipeModel, string name, int stepIndex)
+        {
+            var model = recipeModel.Data?
+                .FirstOrDefault(item => {
+                    string itemName = item.Name!.Replace(" ", "")
+                                .Replace("_", "")
+                                .Replace("-", "")
+                                .Replace("&", "");
+
+                    return itemName == name || (item.CompatibleName != null && item.CompatibleName.Contains(name));
+                }
+                    );
+
+            if (model == null) return default;
+            if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
+
+            var value = model.Steps[stepIndex].Value;
+            var type = model.Type?.ToLowerInvariant();
+            var targetType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
+            if (type == "option" || type == "list")
+            {
+                var arr = value.Split(':');
+                value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
+            }
+
+
+            try
+            {
+                if (targetType == typeof(string))
+                    return (T)(object)value;
+
+                if (targetType.IsEnum)
+                    return (T)Enum.Parse(targetType, value, ignoreCase: true);
+
+                return (T)Convert.ChangeType(value, targetType);
+            }
+            catch
+            {
+                return default;
             }
         }
         #endregion

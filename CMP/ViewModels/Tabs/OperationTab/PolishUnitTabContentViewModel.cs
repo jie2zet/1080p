@@ -1945,8 +1945,17 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             Thread.Sleep(50);
 
             var recipeContent = LoadRecipeContent("Polish Recipe", SelectedPolishRecipe);
+
+
             if (recipeContent != null)
             {
+                //下发Polish Recipe之前，根据Process Type的选项，给ZF10004写入0或者1，如果选择64，写1，其余写0
+                short processType = GetRealVal<short>(recipeContent, "ProcessType", 0);
+                byte[] data = new byte[256];
+                if (processType == 64) KST.IntToByte(ref data, 1);
+                else KST.IntToByte(ref data, 0);
+                var err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, 10004, 1, data);
+
                 KST.stPolishRecipeFormat PolishRecipe = new KST.stPolishRecipeFormat();
                 for (int i = 0; i < recipeContent.Data?[0].Steps.Count; i++)
                 {
