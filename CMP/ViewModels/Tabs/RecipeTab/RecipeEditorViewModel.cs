@@ -517,6 +517,16 @@ public class RecipeEditorViewModel : BindableBase
             }
         }
 
+        // 先做与写盘相同的默认值补齐，再 Diff，保证审计与落盘一致
+        CheckRecipeDefualtValue();
+
+        // 写盘前与磁盘旧文件 Diff，记录参数级变更（Step / 参数名 / 旧→新）
+        if (!string.IsNullOrEmpty(savedRecipeType) && !string.IsNullOrEmpty(savedRecipeName) && RecipeData != null)
+        {
+            var oldContent = TryLoadUnitRecipeFromDisk(savedRecipeType, savedRecipeName);
+            WriteUnitRecipeParameterChangeAudit(savedRecipeType, savedRecipeName, oldContent, RecipeData);
+        }
+
         SaveUnitRecipes();
 
         // 发布Recipe保存事件，通知其他组件
@@ -543,6 +553,82 @@ public class RecipeEditorViewModel : BindableBase
                 AuditActions.RecipeSave,
                 "Success",
                 $"{savedRecipeType}/{savedRecipeName}");
+        }
+    }
+
+    /// <summary>
+    /// 从磁盘加载当前 Unit Recipe，作为保存 Diff 的基准；不存在或解析失败返回 null。
+    /// </summary>
+    private Recipe.Content? TryLoadUnitRecipeFromDisk(string recipeType, string recipeName)
+    {
+        try
+        {
+            var jsonFile = Path.Combine(recipeBasePath, recipeType, $"{recipeName}.json");
+            if (!File.Exists(jsonFile))
+                return null;
+
+            var json = FileUtil.ReadFile(jsonFile);
+            if (string.IsNullOrWhiteSpace(json))
+                return null;
+
+            return JsonConvert.DeserializeObject<Recipe.Content>(json);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 对比 Unit Recipe 新旧数据，按「类型/名称/StepN/参数名」写入审计日志。
+    /// </summary>
+    private static void WriteUnitRecipeParameterChangeAudit(
+        string recipeType,
+        string recipeName,
+        Recipe.Content? oldContent,
+        Recipe.Content newContent)
+    {
+        var oldByName = new Dictionary<string, Data>(StringComparer.Ordinal);
+        if (oldContent?.Data != null)
+        {
+            foreach (var item in oldContent.Data)
+            {
+                if (string.IsNullOrEmpty(item.Name) || oldByName.ContainsKey(item.Name))
+                    continue;
+                oldByName[item.Name] = item;
+            }
+        }
+
+        var newData = newContent.Data;
+        if (newData == null)
+            return;
+
+        foreach (var param in newData)
+        {
+            var paramName = param.Name ?? string.Empty;
+            oldByName.TryGetValue(paramName, out var oldParam);
+            var oldSteps = oldParam?.Steps;
+            var newSteps = param.Steps;
+            var oldCount = oldSteps?.Count ?? 0;
+            var newCount = newSteps?.Count ?? 0;
+            var maxSteps = Math.Max(oldCount, newCount);
+
+            for (var i = 0; i < maxSteps; i++)
+            {
+                var oldVal = i < oldCount ? (oldSteps![i].Value ?? string.Empty) : string.Empty;
+                var newVal = i < newCount ? (newSteps![i].Value ?? string.Empty) : string.Empty;
+                if (string.Equals(oldVal, newVal, StringComparison.Ordinal))
+                    continue;
+
+                var target = $"{recipeType}/{recipeName}/Step{i + 1}/{paramName}";
+                AuditLogService.WriteChange(
+                    AuditModules.Recipe,
+                    AuditActions.RecipeSave,
+                    target,
+                    oldVal,
+                    newVal,
+                    "Success");
+            }
         }
     }
 
