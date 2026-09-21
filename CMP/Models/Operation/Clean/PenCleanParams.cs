@@ -14,24 +14,24 @@ public class PenCleanParams
         Cylinder = new CylinderParams(plcHandleType);
         Gas = new GasParams(plcHandleType);
         Liquid = new LiquidParams(plcHandleType);
-        Flash = new FlashParams(plcHandleType);
+        Flush = new FlushParams(plcHandleType);
     }
 
     public MotorParams Motor { get; }
     public CylinderParams Cylinder { get; }
     public GasParams Gas { get; }
     public LiquidParams Liquid { get; }
-    public FlashParams Flash { get; }
+    public FlushParams Flush { get; }
 
-    public class FlashParams
+    public class FlushParams
     {
-        public FlashParams(Type plcHandleType)
+        public FlushParams(Type plcHandleType)
         {
-            var flashType = plcHandleType.GetNestedType("Flash")!;
-            var paramType = flashType.GetNestedType("Param")!;
+            var flushType = plcHandleType.GetNestedType("Flush")!;
+            var paramType = flushType.GetNestedType("Param")!;
             var field = paramType.GetField("OpenDelay")!;
             var attr = field.GetCustomAttribute<ParamAttribute>()!;
-            OpenDelay = new FloatParam(attr, "Flash.Param.OpenDelay");
+            OpenDelay = new FloatParam(attr, "Flush.Param.OpenDelay");
         }
 
         public FloatParam OpenDelay { get; }

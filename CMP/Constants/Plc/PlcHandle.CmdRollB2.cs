@@ -610,7 +610,7 @@ public static partial class PlcHandle
             }
         }
 
-        public static class Flash
+        public static class Flush
         {
             [PlcHandle(Handle.CmdRollB2, "打开全纯水阀")]
             public const int Open = 11404;

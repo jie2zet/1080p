@@ -89,7 +89,7 @@ public interface IRollerConfig
     (uint handle, byte[] value) GetLiquidCommand(string liquidCommand);
 
     /// <summary>
-    /// 获取全纯水阀 Flash 控制命令
+    /// 获取全纯水阀 Flush 控制命令
     /// </summary>
-    (uint handle, byte[] value) GetFlashCommand(string flashCommand);
+    (uint handle, byte[] value) GetFlushCommand(string flushCommand);
 }

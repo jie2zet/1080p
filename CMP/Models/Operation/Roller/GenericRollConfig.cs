@@ -201,15 +201,15 @@ public class GenericRollConfig : IRollerConfig
         };
     }
 
-    public (uint handle, byte[] value) GetFlashCommand(string flashCommand)
+    public (uint handle, byte[] value) GetFlushCommand(string flushCommand)
     {
-        var flashType = _plcHandleType.GetNestedType("Flash")!;
+        var flushType = _plcHandleType.GetNestedType("Flush")!;
 
-        return flashCommand switch
+        return flushCommand switch
         {
-            "Open" => GetCommandValue(flashType, "Open"),
-            "Close" => GetCommandValue(flashType, "Close"),
-            _ => throw new ArgumentException($"Unknown flash command: {flashCommand}")
+            "Open" => GetCommandValue(flushType, "Open"),
+            "Close" => GetCommandValue(flushType, "Close"),
+            _ => throw new ArgumentException($"Unknown flush command: {flushCommand}")
         };
     }
 
