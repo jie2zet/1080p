@@ -256,31 +256,31 @@
                     </Border>
                 </GroupBox>
 
-                <!-- Flash Control -->
+                <!-- Flush Control -->
                 <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
                           Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
                     <GroupBox.Header>
                         <StackPanel>
-                            <TextBlock Padding="5" Foreground="White" Text="Flash" />
+                            <TextBlock Padding="5" Foreground="White" Text="{lex:Loc Flush}" />
                         </StackPanel>
                     </GroupBox.Header>
                     <Border Padding="10">
                         <StackPanel extensions:StackPanelHelpers.Spacing="8">
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="DIW(ALL) Open Delay Set" Width="150" VerticalAlignment="Center" />
-                                <TextBox Width="70" Text="{Binding PenClean.Flash.OpenDelaySet, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox Width="70" Text="{Binding PenClean.Flush.OpenDelaySet, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button Content="Set" Style="{StaticResource ButtonPrimary}" Width="50"
-                                        Command="{Binding FlashDelaySetCommand}" />
+                                        Command="{Binding FlushDelaySetCommand}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="DIW(ALL) Open Delay Act" Width="150" VerticalAlignment="Center" />
-                                <TextBlock Width="70" Text="{Binding PenClean.Flash.OpenDelayAct, StringFormat={}{0:F2}}" />
+                                <TextBlock Width="70" Text="{Binding PenClean.Flush.OpenDelayAct, StringFormat={}{0:F2}}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10" HorizontalAlignment="Center">
                                 <Button Content="Open" Style="{StaticResource ButtonPrimary}" Width="70"
-                                        Command="{Binding FlashCommand}" CommandParameter="Open" />
+                                        Command="{Binding FlushCommand}" CommandParameter="Open" />
                                 <Button Content="Close" Style="{StaticResource ButtonDanger}" Width="70"
-                                        Command="{Binding FlashCommand}" CommandParameter="Close" />
+                                        Command="{Binding FlushCommand}" CommandParameter="Close" />
                             </StackPanel>
                         </StackPanel>
                     </Border>

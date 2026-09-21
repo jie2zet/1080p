@@ -47,7 +47,7 @@ public class RollViewPoco
     public LiquidControl PillarWash { get; set; } = new();
     public LiquidControl CoolingWaterCirculation { get; set; } = new();
 
-    public FlashControl Flash { get; set; } = new();
+    public FlushControl Flush { get; set; } = new();
 
 
     public class Cylinder
@@ -88,7 +88,7 @@ public class RollViewPoco
         public bool IsCalibrated { get; set; }
     }
 
-    public class FlashControl : BindableBase
+    public class FlushControl : BindableBase
     {
         private float _openDelaySet;
         private float _openDelayAct;

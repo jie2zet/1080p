@@ -109,8 +109,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     public DelegateCommand<string> CylinderCommand { get; private set; } = null!;
     public DelegateCommand<string> PressureCommand { get; private set; } = null!;
     public DelegateCommand<string> LiquidCommand { get; private set; } = null!;
-    public DelegateCommand<string> FlashCommand { get; private set; } = null!;
-    public DelegateCommand FlashDelaySetCommand { get; private set; } = null!;
+    public DelegateCommand<string> FlushCommand { get; private set; } = null!;
+    public DelegateCommand FlushDelaySetCommand { get; private set; } = null!;
 
     // Servo button text properties
     public string WfLeftPillarRotateMotorServoText => RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn ? Resources.Off : Resources.On;
@@ -248,8 +248,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         CylinderCommand = OperationAudit.Create<string>("Cylinder", CylinderCommandExecute, () => TabTitle ?? string.Empty);
         PressureCommand = OperationAudit.Create<string>("Pressure", PressureCommandExecute, () => TabTitle ?? string.Empty);
         LiquidCommand = OperationAudit.Create<string>("Liquid", LiquidCommandExecute, () => TabTitle ?? string.Empty);
-        FlashCommand = OperationAudit.Create<string>("Flash", FlashCommandExecute, () => TabTitle ?? string.Empty);
-        FlashDelaySetCommand = OperationAudit.Create("FlashDelaySet", FlashDelaySetCommandExecute, () => TabTitle ?? string.Empty);
+        FlushCommand = OperationAudit.Create<string>("Flush", FlushCommandExecute, () => TabTitle ?? string.Empty);
+        FlushDelaySetCommand = OperationAudit.Create("FlushDelaySet", FlushDelaySetCommandExecute, () => TabTitle ?? string.Empty);
     }
 
     private async Task MonitorLoopAsync()
@@ -860,32 +860,32 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private void FlashCommandExecute(string obj)
+    private void FlushCommandExecute(string obj)
     {
         try
         {
-            var (handle, value) = _rollerConfig.GetFlashCommand(obj);
+            var (handle, value) = _rollerConfig.GetFlushCommand(obj);
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
             if (_err != 0)
             {
-                Growl.ErrorGlobal($"Flash Command {obj} Error: {_err}");
+                Growl.ErrorGlobal($"Flush Command {obj} Error: {_err}");
             }
             else
             {
-                Growl.SuccessGlobal($"{_rollerConfig.RollType} Flash Command: {obj}");
+                Growl.SuccessGlobal($"{_rollerConfig.RollType} Flush Command: {obj}");
             }
         }
         catch (ArgumentException ex)
         {
-            Growl.ErrorGlobal($"Flash Command Error: {ex.Message}");
+            Growl.ErrorGlobal($"Flush Command Error: {ex.Message}");
         }
     }
 
-    private void FlashDelaySetCommandExecute()
+    private void FlushDelaySetCommandExecute()
     {
-        var value = RollerViewPoco.Flash.OpenDelaySet;
-        var parameter = _rollerConfig.Params.Flash.OpenDelay;
+        var value = RollerViewPoco.Flush.OpenDelaySet;
+        var parameter = _rollerConfig.Params.Flush.OpenDelay;
         if (float.IsNaN(value) || float.IsInfinity(value) || value < parameter.MinValue || value > parameter.MaxValue)
         {
             Growl.ErrorGlobal($"DIW(ALL) Open Delay 范围必须为 {parameter.MinValue:0.00}–{parameter.MaxValue:0.00}");
@@ -1143,7 +1143,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         
         RollerViewPoco.UpperRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerRotationSpeedAct).Replace("_1", ""));
         RollerViewPoco.LowerRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerRotationSpeedAct).Replace("_1", ""));
-        RollerViewPoco.Flash.OpenDelayAct = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
+        RollerViewPoco.Flush.OpenDelayAct = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
 
 
         RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarMotorServoOn).Replace("_1", ""));

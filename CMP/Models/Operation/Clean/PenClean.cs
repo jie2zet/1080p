@@ -30,7 +30,7 @@ public class PenClean
     // 液体控制
     public PenLiquid Liquid { get; set; } = new();
 
-    public FlashControl Flash { get; set; } = new();
+    public FlushControl Flush { get; set; } = new();
 }
 
 /// <summary>
@@ -134,9 +134,9 @@ public class FlowControl : BindableBase
 }
 
 /// <summary>
-/// 全纯水阀 Flash 控制
+/// 全纯水阀 Flush 控制
 /// </summary>
-public class FlashControl : BindableBase
+public class FlushControl : BindableBase
 {
     private float _openDelaySet;
     private float _openDelayAct;

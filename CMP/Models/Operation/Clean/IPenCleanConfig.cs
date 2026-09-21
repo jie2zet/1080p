@@ -34,8 +34,8 @@ public interface IPenCleanConfig
     // 液体控制命令
     (uint handle, byte[] value) GetLiquidCommand(string liquidCommand);
 
-    // 全纯水阀 Flash 控制命令
-    (uint handle, byte[] value) GetFlashCommand(string flashCommand);
+    // 全纯水阀 Flush 控制命令
+    (uint handle, byte[] value) GetFlushCommand(string flushCommand);
 
     // 气体控制命令
     (uint handle, byte[] value) GetGasCommand(string gasCommand);
