@@ -38,14 +38,13 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             new()
           {
             Id = 3,
-            Name = "Wafer Rotation Speed",
+            Name = "Chuck Rotate Velocity",
             Unit = "r/min",
             Type = "float",
-            Min = 0.00,
-            Max = 1800.00,
-            Default = "300.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
-            CompatibleName = ["ChuckRotateVelocity","WaferRotationSpeed"],
             Steps = []
           },
             new()
@@ -54,9 +53,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "IPA Arm  Sweep Start Position",
             Unit = "deg",
             Type = "float",
-            Min = 1.00,
-            Max = 5.00,
-            Default = "1.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
@@ -66,151 +65,132 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "IPA Arm  Sweep End Position",
             Unit = "deg",
             Type = "float",
-            Min = 1.00,
-            Max = 5.00,
-            Default = "1.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
             new()
           {
             Id = 6,
-            Name = "IPA Arm Sweep Center Velocity",
+            Name = "IPA Arm  Sweep Center Velocity",
             Unit = "deg/s",
             Type = "float",
-            Min = 1.00,
-            Max = 60.00,
-            Default = "3.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
             new()
           {
             Id = 7,
-            Name = "IPA Arm Sweep Edge Velocity",
+            Name = "IPA Arm  Sweep Edge Velocity",
             Unit = "deg/s",
             Type = "float",
-            Min = 1.00,
-            Max = 60.00,
-            Default = "3.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
-             new()
+            new()
           {
             Id = 8,
-            Name = "IPA Arm Sweep Speed",
-            Unit = "",
+            Name = "IPA Arm  Cycle",
+            Unit = "Times",
             Type = "int",
-            Min = 0.00,
-            Max = 2.00,
-            Default = "0.24",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
             new()
           {
             Id = 9,
-            Name = "IPA Arm Cycle",
-            Unit = "Times",
-            Type = "int",
+            Name = "WF Upper Face N2 Flow",
+            Unit = "L/min",
+            Type = "float",
             Min = 0,
-            Max = 2,
-            Default = "0.237",
+            Max = 0,
+            Default = "0",
             Options = [],
             Steps = []
           },
             new()
           {
             Id = 10,
-            Name = "Dilution N2 Gas Flow",
+            Name = "WF Lower Face N2 Flow 1",
             Unit = "L/min",
             Type = "float",
-            Min = 0.00,
-            Max = 10.00,
-            Default = "4.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
-            CompatibleName = ["WFUpperFaceN2Flow","DilutionN2GasFlow"],
             Steps = []
           },
             new()
           {
             Id = 11,
-            Name = "N2 For WF Backside Flow",
+            Name = "WF Upper Face DIW Flow 2",
             Unit = "L/min",
             Type = "float",
-            Min = 2.00,
-            Max = 100.00,
-            Default = "50.00",
+            Min = 0,
+            Max = 0,
+            Default = "0",
             Options = [],
-            CompatibleName = ["WFLowerFaceN2Flow1", "N2ForWFBacksideFlow"],
             Steps = []
           },
             new()
           {
             Id = 12,
-            Name = "Outer Rinse Flow",
-            Unit = "ml/min",
-            Type = "float",
-            Min = 0.00,
-            Max = 1000.00,
-            Default = "100.00",
-            Options = [],
-            CompatibleName = ["WFUpperFaceDIWFlow2", "OuterRinseFlow"],
+            Name = "WF Upper Face IPA Supply",
+            Unit = "",
+            Type = "option",
+            Min = 0,
+            Max = 1,
+            Default = "1",
+            Options = ["0:Disabled", "1:Enabled"],
             Steps = []
           },
-            new()
+             new()
           {
             Id = 13,
-            Name = "Bubbling N2 Gas Flow",
-            Unit = "L/min",
-            Type = "float",
-            Min = 0.00,
-            Max = 10.00,
-            Default = "0.5",
-            Options = [],
-            CompatibleName = ["WFUpperFaceIPASupply", "BubblingN2GasFlow"],
+            Name = "WF Lower Face N2 Supply 2",
+            Unit = "",
+            Type = "option",
+            Min = 0,
+            Max = 1,
+            Default = "1",
+            Options = ["0:Disabled", "1:Enabled"],
             Steps = []
           },
              new()
           {
             Id = 14,
-            Name = "Upper Rinse Supply",
+            Name = "WF Upper Face DIW Supply 1",
             Unit = "",
             Type = "option",
             Min = 0,
             Max = 1,
             Default = "1",
             Options = ["0:Disabled", "1:Enabled"],
-            CompatibleName = ["WFLowerFaceN2Supply2", "UpperRinseSupply"],
             Steps = []
           },
              new()
           {
             Id = 15,
-            Name = "Lower Rinse Supply",
+            Name = "WF Lower Face DIW Supply",
             Unit = "",
             Type = "option",
             Min = 0,
             Max = 1,
             Default = "1",
             Options = ["0:Disabled", "1:Enabled"],
-            CompatibleName = ["WFUpperFaceDIWSupply1", "LowerRinseSupply"],
             Steps = []
-          },
-            new()
-          {
-            Id = 16,
-            Name = "Wafer Rotation Acceleration",
-            Unit = "",
-            Type = "int",
-            Min = 0,
-            Max = 2000,
-            Default = "100",
-            Options = [],
-            CompatibleName = ["WFLowerFaceDIWSupply", "WaferRotationAcceleration"],
-            Steps = []
-          },
+          },            
         ];
     }
 }

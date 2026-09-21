@@ -4,9 +4,8 @@ using System;
 using System.Runtime.InteropServices;
 
 namespace CMP.Models.kvsPlc.Dry { 
-	class KvStructDry
-    {
-        const int stDryRecipeFormat_WSIZE = 826;
+	class KvStructDry {
+		const int stDryRecipeFormat_WSIZE = 800;
 
 
         public class stDryRecipeFormat
@@ -14,843 +13,676 @@ namespace CMP.Models.kvsPlc.Dry {
             public short[] ProcessType = new short[25];
             public short[] Reserved = new short[25];
             public float[] ProcessTime = new float[25];
-            public float[] WaferRotationSpeed = new float[25];
+            public float[] ChuckRotateVelocity = new float[25];
             public float[] IPAArmSweepStartPosition = new float[25];
             public float[] IPAArmSweepEndPosition = new float[25];
             public float[] IPAArmSweepCenterVelocity = new float[25];
             public float[] IPAArmSweepEdgeVelocity = new float[25];
-            public float[] IPAArmSweepSpeed = new float[25];
+            public float[] Reserved1 = new float[25];
             public short[] IPAArmCycle = new short[25];
             public short[] Reserved2 = new short[25];
             public short[] Reserved3 = new short[25];
             public short[] Reserved4 = new short[25];
             public short[] Reserved5 = new short[25];
             public short[] Reserved6 = new short[25];
-            public float[] DilutionN2GasFlow = new float[25];
-            public float[] N2ForWFBacksideFlow = new float[25];
-            public float[] OuterRinseFlow = new float[25];
-            public float[] BubblingN2GasFlow = new float[25];
-            public short[] UpperRinseSupply = new short[25];
-            public short[] LowerRinseSupply = new short[25];
-            public short[] WaferRotationAcceleration = new short[25];
-        }
+            public float[] WFUpperN2Flow = new float[25];
+            public float[] WFLowerN2Flow1 = new float[25];
+            public float[] WFUpperDIWFlow2 = new float[25];
+            public short[] WFUpperIPASupply = new short[25];
+            public short[] WFLowerN2Supply2 = new short[25];
+            public short[] WFUpperDIWSupply1 = new short[25];
+            public short[] WFLowerDIWSupply = new short[25];
 
-        public static int[] NewIndices(Array target)
-        {
-            int rank = target.Rank;
-            int[] indices = new int[rank];
-            Array.Clear(indices, 0, rank);
-            indices[rank - 1]--;
-            return indices;
-        }
-
-        public static void NextIndices(Array target, int[] indices)
-        {
-            int rank = target.Rank;
-            indices[rank - 1]++;
-            for (int dim = rank - 1; dim >= 0; dim--)
+            public stDryRecipeFormat()
             {
-                if (indices[dim] > target.GetUpperBound(dim))
+                for (int i = 0; i < ProcessType.Length; i++)
                 {
-                    if (dim == 0) break;
-                    for (int j = dim; j < rank; j++) indices[j] = target.GetLowerBound(j);
-                    indices[dim - 1]++;
+                    ProcessType[i] = -1;
                 }
             }
         }
 
-        public static Array CreateClassInstanceArray<T>(int[] sizes)
-        {
-            Array entity = Array.CreateInstance(typeof(T), sizes);
-            int[] indices = NewIndices(entity);
-            for (int i = 0; i < entity.Length; i++)
-            {
-                NextIndices(entity, indices);
-                entity.SetValue(Activator.CreateInstance(typeof(T)), indices);
-            }
-            return entity;
-        }
+        public static int[] NewIndices(Array target) {
+			int rank = target.Rank;
+			int[] indices = new int[rank];
+			Array.Clear(indices, 0, rank);
+			indices[rank - 1]--;
+			return indices;
+		}
 
-        private static void SwapBytes(byte[] tgt, int byteSize, int byteOffset = 0)
-        {
-            byte tmpByte;
-            for (int i = 0; i < byteSize / 2; i++)
-            {
-                tmpByte = tgt[i * 2 + byteOffset];
-                tgt[i * 2 + byteOffset] = tgt[i * 2 + 1 + byteOffset];
-                tgt[i * 2 + 1 + byteOffset] = tmpByte;
-            }
-        }
+		public static void NextIndices(Array target, int[] indices) {
+			int rank = target.Rank;
+			indices[rank - 1]++;
+			for (int dim = rank - 1; dim >= 0; dim--) {
+				if (indices[dim] > target.GetUpperBound(dim)) {
+					if (dim == 0) break;
+					for (int j = dim; j < rank; j++) indices[j] = target.GetLowerBound(j);
+					indices[dim - 1]++;
+				}
+			}
+		}
 
-        public static void ByteToBoolBase(Array dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            int byteOffset = (wordOffset * 2) + (bitOffset / 8);
-            int byteBitOffset = bitOffset % 8;
-            int[] indices = NewIndices(src);
-            for (int i = 0; i < len; i++)
-            {
-                NextIndices(src, indices);
-                dst.SetValue((src[((i + byteBitOffset) / 8) + byteOffset] & (1 << (i + byteBitOffset) % 8)) != 0, indices);
-            }
-        }
+		public static Array CreateClassInstanceArray<T>(int[] sizes) {
+			Array entity = Array.CreateInstance(typeof(T), sizes);
+			int[] indices = NewIndices(entity);
+			for (int i = 0; i < entity.Length; i++) {
+				NextIndices(entity, indices);
+				entity.SetValue(Activator.CreateInstance(typeof(T)), indices);
+			}
+			return entity;
+		}
 
-        public static void ByteToBool(ref bool dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            int byteOffset = (wordOffset * 2) + (bitOffset / 8);
-            int byteBitOffset = bitOffset % 8;
-            dst = (src[byteOffset] & 1 << byteBitOffset) != 0;
-        }
+		private static void SwapBytes(byte[] tgt, int byteSize, int byteOffset = 0) {
+			byte tmpByte;
+			for (int i = 0; i < byteSize / 2; i++) {
+				tmpByte = tgt[i * 2 + byteOffset];
+				tgt[i * 2 + byteOffset] = tgt[i * 2 + 1 + byteOffset];
+				tgt[i * 2 + 1 + byteOffset] = tmpByte;
+			}
+		}
 
-        public static void ByteToBool(ref bool[] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
-        public static void ByteToBool(ref bool[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
-        }
+		public static void ByteToBoolBase(Array dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+				int byteOffset = (wordOffset * 2) + (bitOffset / 8);
+				int byteBitOffset = bitOffset % 8;
+				int[] indices = NewIndices(src);
+				for (int i = 0; i < len; i++) {
+					NextIndices(src, indices);
+					dst.SetValue((src[((i + byteBitOffset) / 8) + byteOffset] & (1 << (i + byteBitOffset) % 8)) != 0, indices);
+				}
+		}
 
-        public static void ByteToShort(ref short dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToInt16(src, wordOffset * 2);
-        }
+		public static void ByteToBool(ref bool dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			int byteOffset = (wordOffset * 2) + (bitOffset / 8);
+			int byteBitOffset = bitOffset % 8;
+			dst = (src[byteOffset] & 1 << byteBitOffset) != 0;
+		}
 
-        public static void ByteToShort(ref short[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
-        public static void ByteToShort(ref short[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
-        }
+		public static void ByteToBool(ref bool[] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
+		public static void ByteToBool(ref bool[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			ByteToBoolBase(dst, src, len, wordOffset, bitOffset);
+		}
 
-        public static void ByteToUshort(ref ushort dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToUInt16(src, wordOffset * 2);
-        }
+		public static void ByteToShort(ref short dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToInt16(src, wordOffset * 2);
+		}
 
-        public static void ByteToUshort(ref ushort[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
-        public static void ByteToUshort(ref ushort[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
-        }
+		public static void ByteToShort(ref short[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
+		public static void ByteToShort(ref short[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(short));
+		}
 
-        public static void ByteToInt(ref int dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToInt32(src, wordOffset * 2);
-        }
+		public static void ByteToUshort(ref ushort dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToUInt16(src, wordOffset * 2);
+		}
 
-        public static void ByteToInt(ref int[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
-        public static void ByteToInt(ref int[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
-        }
+		public static void ByteToUshort(ref ushort[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
+		public static void ByteToUshort(ref ushort[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(ushort));
+		}
 
-        public static void ByteToUint(ref uint dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToUInt32(src, wordOffset * 2);
-        }
+		public static void ByteToInt(ref int dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToInt32(src, wordOffset * 2);
+		}
 
-        public static void ByteToUint(ref uint[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
-        public static void ByteToUint(ref uint[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
-        }
+		public static void ByteToInt(ref int[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
+		public static void ByteToInt(ref int[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(int));
+		}
 
-        public static void ByteToFloat(ref float dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToSingle(src, wordOffset * 2);
-        }
+		public static void ByteToUint(ref uint dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToUInt32(src, wordOffset * 2);
+		}
 
-        public static void ByteToFloat(ref float[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
-        public static void ByteToFloat(ref float[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
-        }
+		public static void ByteToUint(ref uint[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
+		public static void ByteToUint(ref uint[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(uint));
+		}
 
-        public static void ByteToDouble(ref double dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToDouble(src, wordOffset * 2);
-        }
+		public static void ByteToFloat(ref float dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToSingle(src, wordOffset * 2);
+		}
 
-        public static void ByteToDouble(ref double[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
-        public static void ByteToDouble(ref double[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
-        }
+		public static void ByteToFloat(ref float[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
+		public static void ByteToFloat(ref float[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(float));
+		}
 
-        public static void ByteToTime(ref long dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            dst = BitConverter.ToInt64(src, wordOffset * 2);
-        }
+		public static void ByteToDouble(ref double dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToDouble(src, wordOffset * 2);
+		}
 
-        public static void ByteToTime(ref long[] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
-        public static void ByteToTime(ref long[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
-        }
+		public static void ByteToDouble(ref double[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
+		public static void ByteToDouble(ref double[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(double));
+		}
 
-        public static void ByteToString(ref byte[] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
-        public static void ByteToString(ref byte[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            byte[] strTmp = new byte[len * stringSize];
-            Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
-            SwapBytes(strTmp, len * stringSize);
-            Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
-        }
+		public static void ByteToTime(ref long dst, byte[] src, int len = 1, int wordOffset = 0) {
+			dst = BitConverter.ToInt64(src, wordOffset * 2);
+		}
 
-        public static void BoolToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            int[] indices = NewIndices(dst);
-            for (int i = 0; i < len; i++)
-            {
-                NextIndices(dst, indices);
-                BoolToByte(ref dst, (bool)src.GetValue(indices), 1, wordOffset, bitOffset);
-                bitOffset++;
-                if (bitOffset >= 16)
-                {
-                    bitOffset = 0;
-                    wordOffset++;
-                }
-            }
-        }
+		public static void ByteToTime(ref long[] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
+		public static void ByteToTime(ref long[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, wordOffset * 2, dst, 0, len * sizeof(long));
+		}
 
-        public static void BoolToByte(ref byte[] dst, bool src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            int byteOffset = (wordOffset * 2) + (bitOffset / 8);
-            int byteBitOffset = bitOffset % 8;
-            if (src)
-            {
-                dst[byteOffset] |= (byte)(1 << byteBitOffset);
-            }
-            else
-            {
-                dst[byteOffset] &= (byte)~(1 << byteBitOffset);
-            }
-        }
+		public static void ByteToString(ref byte[] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
+		public static void ByteToString(ref byte[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			byte[] strTmp = new byte[len * stringSize];
+			Array.Copy(src, wordOffset * 2, strTmp, 0, len * stringSize);
+			SwapBytes(strTmp, len * stringSize);
+			Buffer.BlockCopy(strTmp, 0, dst, 0, len * stringSize);
+		}
 
-        public static void BoolToByte(ref byte[] dst, bool[] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
-        public static void BoolToByte(ref byte[] dst, bool[,,,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0)
-        {
-            BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
-        }
+		public static void BoolToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			int[] indices = NewIndices(dst);
+			for (int i = 0; i < len; i++) {
+				NextIndices(dst, indices);
+				BoolToByte(ref dst, (bool)src.GetValue(indices), 1, wordOffset, bitOffset);
+				bitOffset++;
+				if (bitOffset >= 16) {
+					bitOffset = 0;
+					wordOffset++;
+				}
+			}
+		}
 
-        public static void ShortToByte(ref byte[] dst, short src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(short));
-        }
+		public static void BoolToByte(ref byte[] dst, bool src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			int byteOffset = (wordOffset * 2) + (bitOffset / 8);
+			int byteBitOffset = bitOffset % 8;
+			if (src) {
+				dst[byteOffset] |= (byte)(1 << byteBitOffset);
+			}
+			else {
+				dst[byteOffset] &= (byte)~(1 << byteBitOffset);
+			}
+		}
 
-        public static void ShortToByte(ref byte[] dst, short[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
-        public static void ShortToByte(ref byte[] dst, short[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
-        }
+		public static void BoolToByte(ref byte[] dst, bool[] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
+		public static void BoolToByte(ref byte[] dst, bool[,,,,,,,] src, int len = 1, int wordOffset = 0, int bitOffset = 0) {
+			BoolToByteBase(ref dst, src, len, wordOffset, bitOffset);
+		}
 
-        public static void UshortToByte(ref byte[] dst, ushort src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
+		public static void ShortToByte(ref byte[] dst, short src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(short));
+		}
 
-        public static void UshortToByte(ref byte[] dst, ushort[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
-        public static void UshortToByte(ref byte[] dst, ushort[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
-        }
+		public static void ShortToByte(ref byte[] dst, short[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
+		public static void ShortToByte(ref byte[] dst, short[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(short));
+		}
 
-        public static void IntToByte(ref byte[] dst, int src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(int));
-        }
+		public static void UshortToByte(ref byte[] dst, ushort src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
 
-        public static void IntToByte(ref byte[] dst, int[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
-        public static void IntToByte(ref byte[] dst, int[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
-        }
+		public static void UshortToByte(ref byte[] dst, ushort[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
+		public static void UshortToByte(ref byte[] dst, ushort[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(ushort));
+		}
 
-        public static void UintToByte(ref byte[] dst, uint src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
+		public static void IntToByte(ref byte[] dst, int src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(int));
+		}
 
-        public static void UintToByte(ref byte[] dst, uint[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
-        public static void UintToByte(ref byte[] dst, uint[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
-        }
+		public static void IntToByte(ref byte[] dst, int[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
+		public static void IntToByte(ref byte[] dst, int[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(int));
+		}
 
-        public static void FloatToByte(ref byte[] dst, float src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(float));
-        }
+		public static void UintToByte(ref byte[] dst, uint src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
 
-        public static void FloatToByte(ref byte[] dst, float[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
-        public static void FloatToByte(ref byte[] dst, float[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
-        }
+		public static void UintToByte(ref byte[] dst, uint[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
+		public static void UintToByte(ref byte[] dst, uint[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(uint));
+		}
 
-        public static void DoubleToByte(ref byte[] dst, double src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(double));
-        }
+		public static void FloatToByte(ref byte[] dst, float src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(float));
+		}
 
-        public static void DoubleToByte(ref byte[] dst, double[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
-        public static void DoubleToByte(ref byte[] dst, double[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
-        }
+		public static void FloatToByte(ref byte[] dst, float[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
+		public static void FloatToByte(ref byte[] dst, float[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(float));
+		}
 
-        public static void TimeToByte(ref byte[] dst, long src, int len = 1, int wordOffset = 0)
-        {
-            Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(long));
-        }
+		public static void DoubleToByte(ref byte[] dst, double src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(double));
+		}
 
-        public static void TimeToByte(ref byte[] dst, long[] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
-        public static void TimeToByte(ref byte[] dst, long[,,,,,,,] src, int len = 1, int wordOffset = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
-        }
+		public static void DoubleToByte(ref byte[] dst, double[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
+		public static void DoubleToByte(ref byte[] dst, double[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(double));
+		}
 
-        public static void StringToByte(ref byte[] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
-        public static void StringToByte(ref byte[] dst, byte[,,,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0)
-        {
-            Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
-            SwapBytes(dst, len * stringSize, wordOffset * 2);
-        }
+		public static void TimeToByte(ref byte[] dst, long src, int len = 1, int wordOffset = 0) {
+			Array.Copy(BitConverter.GetBytes(src), 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+
+		public static void TimeToByte(ref byte[] dst, long[] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+		public static void TimeToByte(ref byte[] dst, long[,,,,,,,] src, int len = 1, int wordOffset = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * sizeof(long));
+		}
+
+		public static void StringToByte(ref byte[] dst, byte[] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
+		public static void StringToByte(ref byte[] dst, byte[,,,,,,,] src, int len = 1, int wordOffset = 0, int stringSize = 0) {
+			Buffer.BlockCopy(src, 0, dst, wordOffset * 2, len * stringSize);
+			SwapBytes(dst, len * stringSize, wordOffset * 2);
+		}
 
         public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
         {
             ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
             ByteToShort(ref dst.Reserved, src, 25, 25 + wordOffset);
             ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
-            ByteToFloat(ref dst.WaferRotationSpeed, src, 25, 100 + wordOffset);
+            ByteToFloat(ref dst.ChuckRotateVelocity, src, 25, 100 + wordOffset);
             ByteToFloat(ref dst.IPAArmSweepStartPosition, src, 25, 150 + wordOffset);
             ByteToFloat(ref dst.IPAArmSweepEndPosition, src, 25, 200 + wordOffset);
             ByteToFloat(ref dst.IPAArmSweepCenterVelocity, src, 25, 250 + wordOffset);
             ByteToFloat(ref dst.IPAArmSweepEdgeVelocity, src, 25, 300 + wordOffset);
-            ByteToFloat(ref dst.IPAArmSweepSpeed, src, 25, 350 + wordOffset);
+            ByteToFloat(ref dst.Reserved1, src, 25, 350 + wordOffset);
             ByteToShort(ref dst.IPAArmCycle, src, 25, 400 + wordOffset);
             ByteToShort(ref dst.Reserved2, src, 25, 425 + wordOffset);
             ByteToShort(ref dst.Reserved3, src, 25, 450 + wordOffset);
             ByteToShort(ref dst.Reserved4, src, 25, 475 + wordOffset);
             ByteToShort(ref dst.Reserved5, src, 25, 500 + wordOffset);
             ByteToShort(ref dst.Reserved6, src, 25, 525 + wordOffset);
-            ByteToFloat(ref dst.DilutionN2GasFlow, src, 25, 550 + wordOffset);
-            ByteToFloat(ref dst.N2ForWFBacksideFlow, src, 25, 600 + wordOffset);
-            ByteToFloat(ref dst.OuterRinseFlow, src, 25, 650 + wordOffset);
-            ByteToFloat(ref dst.BubblingN2GasFlow, src, 25, 700 + wordOffset);
-            ByteToShort(ref dst.UpperRinseSupply, src, 25, 750 + wordOffset);
-            ByteToShort(ref dst.LowerRinseSupply, src, 25, 775 + wordOffset);
-            ByteToShort(ref dst.WaferRotationAcceleration, src, 25, 800 + wordOffset);
+            ByteToFloat(ref dst.WFUpperN2Flow, src, 25, 550 + wordOffset);
+            ByteToFloat(ref dst.WFLowerN2Flow1, src, 25, 600 + wordOffset);
+            ByteToFloat(ref dst.WFUpperDIWFlow2, src, 25, 650 + wordOffset);
+            ByteToShort(ref dst.WFUpperIPASupply, src, 25, 700 + wordOffset);
+            ByteToShort(ref dst.WFLowerN2Supply2, src, 25, 725 + wordOffset);
+            ByteToShort(ref dst.WFUpperDIWSupply1, src, 25, 750 + wordOffset);
+            ByteToShort(ref dst.WFLowerDIWSupply, src, 25, 775 + wordOffset);
         }
         private static void ByteToBase_stDryRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -903,25 +735,25 @@ namespace CMP.Models.kvsPlc.Dry {
             ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
             ShortToByte(ref dst, src.Reserved, 25, 25 + wordOffset);
             FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
-            FloatToByte(ref dst, src.WaferRotationSpeed, 25, 100 + wordOffset);
+            FloatToByte(ref dst, src.ChuckRotateVelocity, 25, 100 + wordOffset);
             FloatToByte(ref dst, src.IPAArmSweepStartPosition, 25, 150 + wordOffset);
             FloatToByte(ref dst, src.IPAArmSweepEndPosition, 25, 200 + wordOffset);
             FloatToByte(ref dst, src.IPAArmSweepCenterVelocity, 25, 250 + wordOffset);
             FloatToByte(ref dst, src.IPAArmSweepEdgeVelocity, 25, 300 + wordOffset);
-            FloatToByte(ref dst, src.IPAArmSweepSpeed, 25, 350 + wordOffset);
+            FloatToByte(ref dst, src.Reserved1, 25, 350 + wordOffset);
             ShortToByte(ref dst, src.IPAArmCycle, 25, 400 + wordOffset);
             ShortToByte(ref dst, src.Reserved2, 25, 425 + wordOffset);
             ShortToByte(ref dst, src.Reserved3, 25, 450 + wordOffset);
             ShortToByte(ref dst, src.Reserved4, 25, 475 + wordOffset);
             ShortToByte(ref dst, src.Reserved5, 25, 500 + wordOffset);
             ShortToByte(ref dst, src.Reserved6, 25, 525 + wordOffset);
-            FloatToByte(ref dst, src.DilutionN2GasFlow, 25, 550 + wordOffset);
-            FloatToByte(ref dst, src.N2ForWFBacksideFlow, 25, 600 + wordOffset);
-            FloatToByte(ref dst, src.OuterRinseFlow, 25, 650 + wordOffset);
-            FloatToByte(ref dst, src.BubblingN2GasFlow, 25, 700 + wordOffset);
-            ShortToByte(ref dst, src.UpperRinseSupply, 25, 750 + wordOffset);
-            ShortToByte(ref dst, src.LowerRinseSupply, 25, 775 + wordOffset);
-            ShortToByte(ref dst, src.WaferRotationAcceleration, 25, 800 + wordOffset);
+            FloatToByte(ref dst, src.WFUpperN2Flow, 25, 550 + wordOffset);
+            FloatToByte(ref dst, src.WFLowerN2Flow1, 25, 600 + wordOffset);
+            FloatToByte(ref dst, src.WFUpperDIWFlow2, 25, 650 + wordOffset);
+            ShortToByte(ref dst, src.WFUpperIPASupply, 25, 700 + wordOffset);
+            ShortToByte(ref dst, src.WFLowerN2Supply2, 25, 725 + wordOffset);
+            ShortToByte(ref dst, src.WFUpperDIWSupply1, 25, 750 + wordOffset);
+            ShortToByte(ref dst, src.WFLowerDIWSupply, 25, 775 + wordOffset);
         }
         private static void stDryRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
