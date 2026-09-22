@@ -20,7 +20,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Min = 0,
             Max = 2,
             Default = "0",
-            Options = ["1:Fix", "2:Traverse"], 
+            Options = ["1:Fix","2:Traverse"], 
             CompatibleName = [],
             Steps = []
           },
@@ -31,8 +31,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "count/min",
             Type = "int",
             Min = 0,
-            Max = 100,
-            Default = "10",
+            Max = 20,
+            Default = "0",
             Options = [],
             CompatibleName = [],
             Steps = []

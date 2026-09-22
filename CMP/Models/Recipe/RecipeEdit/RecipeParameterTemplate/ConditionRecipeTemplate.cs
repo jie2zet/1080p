@@ -32,7 +32,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Type = "float",
             Min = 0,
             Max = 9999,
-            Default = "5.00",
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -57,20 +57,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "r/min",
             Type = "float",
             Min = 0,
-            Max = 3000,
-            Default = "300",
-            Options = [],
-            CompatibleName = [],
-            Steps = []
-          },
-            new()
-          {
-            Id = 5,
-            Name = "Condition Head Rotation",
-            Unit = "r/min",
-            Type = "float",
-            Min = 0,
-            Max = 100,
+            Max = 180,
             Default = "10.00",
             Options = [],
             CompatibleName = [],
@@ -78,9 +65,25 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
+            Id = 5,
+            Name = "Conditioner Head Rotation",
+            Unit = "r/min",
+            Type = "float",
+            Min = 0,
+            Max = 100,
+            Default = "10.00",
+            Options = [],
+            CompatibleName = [
+              "ConditionHeadRotation",
+              "ConditionerHeadRotation"
+            ],
+            Steps = []
+          },
+            new()
+          {
             Id = 6,
             Name = "Condition Pressure",
-            Unit = "Kpa",
+            Unit = "kPa",
             Type = "float",
             Min = 3,
             Max = 78,
@@ -92,7 +95,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             new()
           {
             Id = 7,
-            Name = "Condition Sweep Recipe",
+            Name = "Condition Recipe",
             Unit = "",
             Type = "list",
             Min = 0,
@@ -100,13 +103,16 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Default = "0",
             Options = [
               "0:None",
-              "1:Condition Repice1",
-              "2:Condition Repice2",
-              "3:Condition Repice3",
-              "4:Condition Repice4",
-              "5:Condition Repice5"
+              "1:Condition Recipe1",
+              "2:Condition Recipe2",
+              "3:Condition Recipe3",
+              "4:Condition Recipe4",
+              "5:Condition Recipe5"
             ],
-            CompatibleName = [],
+            CompatibleName = [
+              "ConditionSweepRecipe",
+              "ConditionRecipe"
+            ],
             Steps = []
           },
             new()
@@ -183,8 +189,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "mL/min",
             Type = "float",
             Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Max = 500,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -196,8 +202,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "mL/min",
             Type = "float",
             Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Max = 500,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -209,8 +215,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "mL/min",
             Type = "float",
             Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Max = 500,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
