@@ -624,6 +624,20 @@ public static partial class PlcHandle
                 public const int Close = 1361;
             }
         }
+
+        public static class Flush
+        {
+            [PlcHandle(Handle.CmdPenA1, "打开全纯水阀")]
+            public const int Open = 1370;
+
+            [PlcHandle(Handle.CmdPenA1, "关闭全纯水阀")]
+            public const int Close = 1371;
+
+            public static class Param
+            {
+                [Param(10030, 0, 0, 999, "全纯水阀打开延时", "DIW(ALL) Open Delay", "s")]
+                public static int OpenDelay = 0;
+            }
+        }
     }
 }
-

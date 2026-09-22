@@ -47,6 +47,8 @@ public class RollViewPoco
     public LiquidControl PillarWash { get; set; } = new();
     public LiquidControl CoolingWaterCirculation { get; set; } = new();
 
+    public FlushControl Flush { get; set; } = new();
+
 
     public class Cylinder
     {
@@ -84,5 +86,23 @@ public class RollViewPoco
         public double ActFlowrate { get; set; }
         public bool IsReset { get; set; }
         public bool IsCalibrated { get; set; }
+    }
+
+    public class FlushControl : BindableBase
+    {
+        private float _openDelaySet;
+        private float _openDelayAct;
+
+        public float OpenDelaySet
+        {
+            get => _openDelaySet;
+            set => SetProperty(ref _openDelaySet, value);
+        }
+
+        public float OpenDelayAct
+        {
+            get => _openDelayAct;
+            set => SetProperty(ref _openDelayAct, value);
+        }
     }
 }

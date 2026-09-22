@@ -767,11 +767,11 @@ namespace CMP.Models.Operation.LoadPort
             {
                 WaferSequenceTrackSide.A => trackAReady,
                 WaferSequenceTrackSide.B => trackBReady,
-                _ => trackAReady && trackBReady
+                _ => trackAReady || trackBReady
             };
 
         /// <summary>
-        /// 在队列顺序下选出下一片：须满足 FOUP 条件且该侧 PLC 就绪；在有多片可选时优先与上一片侧别交替。
+        /// 仅一侧就绪则走该侧；两侧都就绪则与上一片交替。Either（Unknown）片在选中时钉到本次目标侧。
         /// </summary>
         private static Wafer? SelectNextPickWaferFromOrderedList(IReadOnlyList<Wafer> ordered, bool trackAReady, bool trackBReady)
         {
@@ -781,30 +781,52 @@ namespace CMP.Models.Operation.LoadPort
             if (candidates.Count == 0)
                 return null;
 
-            if (_lastCompletedPickTrackSide == WaferSequenceTrackSide.A)
+            var target = ResolvePickTargetSide(trackAReady, trackBReady);
+            if (target == null)
+                return null;
+
+            var match = candidates.FirstOrDefault(w => CanWaferGoSide(w.SequenceTrackSide, target.Value));
+            if (match == null)
             {
-                var preferB = candidates.FirstOrDefault(w => w.SequenceTrackSide == WaferSequenceTrackSide.B);
-                if (preferB != null)
-                    return preferB;
-                var onlyA = candidates.FirstOrDefault(w => w.SequenceTrackSide == WaferSequenceTrackSide.A);
-                if (onlyA != null)
-                    return onlyA;
-                return candidates[0];
+                var fallback = target == WaferSequenceTrackSide.A && trackBReady
+                    ? WaferSequenceTrackSide.B
+                    : target == WaferSequenceTrackSide.B && trackAReady
+                        ? WaferSequenceTrackSide.A
+                        : (WaferSequenceTrackSide?)null;
+                if (fallback != null)
+                {
+                    target = fallback;
+                    match = candidates.FirstOrDefault(w => CanWaferGoSide(w.SequenceTrackSide, fallback.Value));
+                }
             }
 
-            if (_lastCompletedPickTrackSide == WaferSequenceTrackSide.B)
-            {
-                var preferA = candidates.FirstOrDefault(w => w.SequenceTrackSide == WaferSequenceTrackSide.A);
-                if (preferA != null)
-                    return preferA;
-                var onlyB = candidates.FirstOrDefault(w => w.SequenceTrackSide == WaferSequenceTrackSide.B);
-                if (onlyB != null)
-                    return onlyB;
-                return candidates[0];
-            }
+            if (match == null)
+                return null;
 
-            return candidates[0];
+            if (match.SequenceTrackSide == WaferSequenceTrackSide.Unknown)
+                match.SequenceTrackSide = target.Value;
+
+            return match;
         }
+
+        private static WaferSequenceTrackSide? ResolvePickTargetSide(bool trackAReady, bool trackBReady)
+        {
+            if (trackAReady && !trackBReady)
+                return WaferSequenceTrackSide.A;
+            if (trackBReady && !trackAReady)
+                return WaferSequenceTrackSide.B;
+            if (trackAReady && trackBReady)
+            {
+                return _lastCompletedPickTrackSide == WaferSequenceTrackSide.A
+                    ? WaferSequenceTrackSide.B
+                    : WaferSequenceTrackSide.A;
+            }
+
+            return null;
+        }
+
+        private static bool CanWaferGoSide(WaferSequenceTrackSide waferSide, WaferSequenceTrackSide target) =>
+            waferSide == WaferSequenceTrackSide.Unknown || waferSide == target;
 
         private static void OnPickCompletedUpdateLastTrackSide(Wafer w)
         {
@@ -1149,43 +1171,42 @@ namespace CMP.Models.Operation.LoadPort
         {
             try
             {
-                Application.Current.Dispatcher?.BeginInvoke(new Action(() =>
+                void ResetCore()
                 {
                     foreach (var wafer in wafers)
                     {
-                        // 机内片（非 Loadport）不能随 FOUP Unload 清成空槽
-                        if (wafer.CurrentStation != CurrentStation.Loadport)
+                        wafer.CurrentStation = CurrentStation.Loadport;
+                        wafer.IsSelected = false;
+
+                        var index = wafer.LoadportID * 25 + (wafer.SlotID + 1);
+                        if (GlobalService.dicWaferIndex.ContainsKey(index))
+                            GlobalService.dicWaferIndex.Remove(index);
+
+                        WaferPickQueue.RemoveWafer(wafer);
+
+                        if (IsCycle && !IsStopLoad && !string.IsNullOrEmpty(wafer.SequenceRecipe))
                         {
+                            wafer.SequenceTrackSide = Wafer.ResolveSequenceTrackSide(wafer.WaferSequenceModels);
                             continue;
                         }
 
-                        // 将wafer状态重置为初始状态
-                        if (wafer.WaferStatus != WaferStatus.NonWafer)
-                        {
-                            //wafer.WaferStatus = WaferStatus.NonWafer;
-                            if (!IsCycle)
-                            {
-                                wafer.WaferStatus = WaferStatus.NonWafer;
-                                wafer.WaferName = string.Empty;
-                                wafer.SequenceRecipe = string.Empty;
-                                wafer.IsSelected = false;
-                            }
-                            wafer.CurrentStation = CurrentStation.Loadport;
-                            // 重置其他相关属性到初始状态
-                            
-                            var index = wafer.LoadportID * 25 + (wafer.SlotID + 1);
-                            if (GlobalService.dicWaferIndex.ContainsKey(index))
-                            {
-                                GlobalService.dicWaferIndex.Remove(index);
-                            }
-
-                            WaferPickQueue.RemoveWafer(wafer);
-                        }
+                        wafer.WaferStatus = WaferStatus.NonWafer;
+                        wafer.WaferName = string.Empty;
+                        wafer.SequenceRecipe = string.Empty;
+                        wafer.SequenceTrackSide = WaferSequenceTrackSide.Unknown;
+                        wafer.WaferSequenceModels = [];
+                        wafer.SequnceValue = new int[16];
                     }
 
                     AddLogMessage($"Reset all wafers to initial state for LoadPort {PortNumber}");
                     WaferRuntimeStore.Instance.RequestSave();
-                }));
+                }
+
+                var dispatcher = Application.Current?.Dispatcher;
+                if (dispatcher == null || dispatcher.CheckAccess())
+                    ResetCore();
+                else
+                    dispatcher.BeginInvoke(ResetCore);
             }
             catch (Exception ex)
             {
@@ -2031,6 +2052,13 @@ namespace CMP.Models.Operation.LoadPort
                     }
                     _loadPortService.SendMoveCommandAsync(parameter, _serialPort);
                     AddLogMessage($"MOV command '{parameter}' executed for LoadPort {_portName}");
+
+                    if (parameter == "CULOD")
+                    {
+                        ResetWafersToInitialState(WaferList.ToList());
+                        if (!IsCycle || IsStopLoad)
+                            ClearStopLoad();
+                    }
 
                     // 当执行 CLDMP 命令时增加 Cycle 计数
                     if (parameter == "CLDMP" && IsCycle)

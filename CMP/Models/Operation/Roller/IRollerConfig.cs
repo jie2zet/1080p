@@ -87,4 +87,9 @@ public interface IRollerConfig
     /// </summary>
     /// <param name="liquidCommand">液体命令</param>
     (uint handle, byte[] value) GetLiquidCommand(string liquidCommand);
+
+    /// <summary>
+    /// 获取全纯水阀 Flush 控制命令
+    /// </summary>
+    (uint handle, byte[] value) GetFlushCommand(string flushCommand);
 }

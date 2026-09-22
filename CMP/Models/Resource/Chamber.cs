@@ -446,6 +446,7 @@ public class Chamber : BindableBase
         var dataLogger = new DataLogger(_name);
         var dataLoggerHelper = new DataLoggerHelper(dataLogger, _name);
         DateTime? last = DateTime.Now;
+        var nextRowErrorWarnUtc = DateTime.MinValue;
 
         try
         {
@@ -466,7 +467,19 @@ public class Chamber : BindableBase
 
                 var now = DateTime.Now;
                 var timeSpan = last.HasValue ? (now - last.Value).TotalSeconds : 0.0;
-                logAction(dataLoggerHelper, temporaryWaferName, now.ToString("yyyy-MM-dd HH:mm:ss:fff"), timeSpan.ToString("F3"));
+                try
+                {
+                    logAction(dataLoggerHelper, temporaryWaferName, now.ToString("yyyy-MM-dd HH:mm:ss:fff"), timeSpan.ToString("F3"));
+                }
+                catch (Exception ex)
+                {
+                    // 一行写失败（例如键冲突、文件被占用）不能让整个腔体的数据记录任务退出。
+                    if (DateTime.UtcNow >= nextRowErrorWarnUtc)
+                    {
+                        nextRowErrorWarnUtc = DateTime.UtcNow.AddSeconds(10);
+                        Logger.Warn($"Failed to append a data log row for {_name}: {ex.Message}");
+                    }
+                }
 
                 try
                 {
@@ -1463,6 +1476,10 @@ public class DataLoggerHelper
     private readonly string _name;
     private readonly Dictionary<CollectDataChamber, Dictionary<string, SV>> _metadataIndexes = new();
 
+    // 每个键只告警一次，避免 100ms 一行刷屏。
+    private readonly HashSet<string> _unresolvedKeys = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _missingValueKeys = new(StringComparer.Ordinal);
+
     public DataLoggerHelper(DataLogger dataLogger, string name)
     {
         _dataLogger = dataLogger;
@@ -1480,17 +1497,37 @@ public class DataLoggerHelper
 
     private void AddSvField(List<DataLogField> fields, CollectDataChamber chamber, string runtimeKey)
     {
-        var value = chamber.GetSv(runtimeKey)?.Value.toString();
+        var sv = chamber.GetSv(runtimeKey);
         var metadata = ResolveSvMetadata(chamber, runtimeKey);
-        fields.Add(new DataLogField(runtimeKey, DataLogFormatting.FormatSvHeader(metadata), value));
+        if (metadata == null)
+        {
+            // SV 变量表里没有这个运行期键 -> 该列被丢掉。以前是静默丢弃，很难发现。
+            WarnOnce(_unresolvedKeys, runtimeKey, "has no matching SV row and is dropped from the CSV log");
+            return;
+        }
+
+        if (sv?.Value == null)
+        {
+            // 有 SV 变量但采集端从未 SetSv -> CSV 里是一列空白。
+            WarnOnce(_missingValueKeys, runtimeKey, "has an SV row but no collected value (the CSV cell will be empty)");
+        }
+
+        fields.Add(new DataLogField(runtimeKey, DataLogFormatting.FormatSvHeader(metadata), sv?.Value.toString()));
+    }
+
+    private void WarnOnce(HashSet<string> warnedKeys, string runtimeKey, string reason)
+    {
+        if (!warnedKeys.Add(runtimeKey))
+        {
+            return;
+        }
+
+        Logger.For(Logger.Category.Logging).Warn($"Chamber {_name}: runtime key '{runtimeKey}' {reason}.");
     }
 
     private static void AddUnresolvedField(List<DataLogField> fields, string runtimeKey)
     {
-        if (fields.All(field => !string.Equals(field.Key, runtimeKey, StringComparison.Ordinal)))
-        {
-            fields.Add(new DataLogField(runtimeKey, "_", null));
-        }
+        // Unconfigured structure members are omitted from the CSV log.
     }
 
     private SV? ResolveSvMetadata(CollectDataChamber chamber, string runtimeKey)
@@ -1577,7 +1614,7 @@ public class DataLoggerHelper
         // collectData
         foreach (var field in polishData.collectDataFields)
         {
-            var propertyName = polishData.polishName + field.Name;
+            var propertyName = polishData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1592,7 +1629,7 @@ public class DataLoggerHelper
         // ioData
         foreach (var field in polishData.ioDataFields)
         {
-            var propertyName = polishData.polishName + field.Name;
+            var propertyName = polishData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1608,14 +1645,21 @@ public class DataLoggerHelper
 
     private void LogPolishData(string waferName, int index, string logTime, string timeSpan)
     {
-
         var polishData = GlobalService.DataCenter.listPolish[index];
+        _dataLogger.AppendData(waferName, BuildPolishRow(polishData, logTime, timeSpan));
+    }
+
+    /// <summary>
+    /// 组装一行 Polish 数据（键与 Polish.CollectData 的 SetSv 键一致，测试可直接喂一个采集过的对象）。
+    /// </summary>
+    internal List<DataLogField> BuildPolishRow(Polish polishData, string logTime, string timeSpan)
+    {
         var data = CreateDataLogRow(logTime, timeSpan);
 
         // collectData
         foreach (var field in polishData.collectDataFields)
         {
-            var propertyName = polishData.polishName + field.Name;
+            var propertyName = polishData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1631,7 +1675,7 @@ public class DataLoggerHelper
         // ioData
         foreach (var field in polishData.ioDataFields)
         {
-            var propertyName = polishData.polishName + field.Name;
+            var propertyName = polishData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1644,7 +1688,7 @@ public class DataLoggerHelper
             }
         }
 
-        _dataLogger.AppendData(waferName, data);
+        return data;
     }
 
     private void LogRollerData(string waferName, int rollerIndex, string logTime, string timeSpan)
@@ -1656,6 +1700,20 @@ public class DataLoggerHelper
             _ => null
         };
 
+        if (rollerData == null)
+        {
+            return;
+        }
+
+        _dataLogger.AppendData(waferName, BuildRollerRow(rollerData, rollerIndex, logTime, timeSpan));
+    }
+
+    /// <summary>
+    /// 组装一行 Roller 数据。键与 Roller.CollectData 的 SetSv 键必须一致；
+    /// 这里拆出来是为了让测试可以直接喂一个采集过的 Roller 对象验证“键能不能对上”。
+    /// </summary>
+    internal List<DataLogField> BuildRollerRow(Roller rollerData, int rollerIndex, string logTime, string timeSpan)
+    {
         var keyPrefix = rollerIndex switch
         {
             0 => "_1",
@@ -1672,7 +1730,7 @@ public class DataLoggerHelper
         // collectData
         foreach (var field in rollerData.collectDataFields)
         {
-            var propertyName = rollerData.rollerName + field.Name;
+            var propertyName = rollerData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1688,11 +1746,17 @@ public class DataLoggerHelper
         // ioData
         foreach (var field in rollerData.ioDataFields)
         {
-            var propertyName = rollerData.rollerName + field.Name;
+            // Roller IO data is read from the shared IOData1/2/3 structures.
+            // The structure fields themselves do not contain the roller index;
+            // CollectData prefixes the runtime key with _1, _2 or _3 when it
+            // stores the value.  Keep the same index-specific lookup here.
+            var propertyName = rollerData.BuildRuntimeKey(keyPrefix, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
-                if (!field.Name.StartsWith(keyPrefix, StringComparison.Ordinal)) continue;
+                // Member* fields are padding placeholders in the shared IO
+                // structure and do not have SV rows.
+                if (CollectDataChamber.IsPaddingField(field.Name)) continue;
                 AddSvField(data, rollerData, propertyName);
             }
             catch
@@ -1701,9 +1765,7 @@ public class DataLoggerHelper
             }
         }
 
-
-
-        _dataLogger.AppendData(waferName, data);
+        return data;
     }
 
     private void LogPenData(string waferName, int penIndex, string logTime, string timeSpan)
@@ -1715,6 +1777,20 @@ public class DataLoggerHelper
             _ => null
         };
 
+        if (penData == null)
+        {
+            return;
+        }
+
+        _dataLogger.AppendData(waferName, BuildPenRow(penData, penIndex, logTime, timeSpan));
+    }
+
+    /// <summary>
+    /// 组装一行 Pen 数据。键与 Pen.CollectData 的 SetSv 键必须一致；
+    /// 这里拆出来是为了让测试可以直接喂一个采集过的 Pen 对象验证“键能不能对上”。
+    /// </summary>
+    internal List<DataLogField> BuildPenRow(Pen penData, int penIndex, string logTime, string timeSpan)
+    {
         var keyPrefix = penIndex switch
         {
             0 => "_1",
@@ -1729,7 +1805,7 @@ public class DataLoggerHelper
         // collectData
         foreach (var field in penData.collectDataFields)
         {
-            var propertyName = penData.penName + field.Name;
+            var propertyName = penData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1745,11 +1821,13 @@ public class DataLoggerHelper
         // ioData
         foreach (var field in penData.ioDataFields)
         {
-            var propertyName = penData.penName + field.Name;
+            // 单支笔的 IO 结构体（KHSTPenIOData.stPenIOData）字段名不带 _1/_2 序号，
+            // 工位号由键补上；这与 Pen.CollectIOData 里 SetSv 的键完全一致。
+            var propertyName = penData.BuildRuntimeKey(keyPrefix, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
-                if (!field.Name.StartsWith(keyPrefix, StringComparison.Ordinal)) continue;
+                if (CollectDataChamber.IsPaddingField(field.Name)) continue;
                 AddSvField(data, penData, propertyName);
             }
             catch
@@ -1758,7 +1836,7 @@ public class DataLoggerHelper
             }
         }
 
-        _dataLogger.AppendData(waferName, data);
+        return data;
     }
 
     private void LogDryData(string waferName, int dryIndex, string logTime, string timeSpan)
@@ -1770,12 +1848,25 @@ public class DataLoggerHelper
             _ => null
         };
 
+        if (dryData == null)
+        {
+            return;
+        }
+
+        _dataLogger.AppendData(waferName, BuildDryRow(dryData, logTime, timeSpan));
+    }
+
+    /// <summary>
+    /// 组装一行 Dry 数据（键与 Dry.CollectData 的 SetSv 键一致，测试可直接喂一个采集过的对象）。
+    /// </summary>
+    internal List<DataLogField> BuildDryRow(Dry dryData, string logTime, string timeSpan)
+    {
         var data = CreateDataLogRow(logTime, timeSpan);
 
         // collectData
         foreach (var field in dryData.collectDataFields)
         {
-            var propertyName = dryData.dryName + field.Name;
+            var propertyName = dryData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1790,7 +1881,7 @@ public class DataLoggerHelper
         // ioData
         foreach (var field in dryData.ioDataFields)
         {
-            var propertyName = dryData.dryName + field.Name;
+            var propertyName = dryData.BuildRuntimeKey(null, field.Name);
             try
             {
                 if (field.Name.Contains("Void")) continue;
@@ -1802,7 +1893,7 @@ public class DataLoggerHelper
             }
         }
 
-        _dataLogger.AppendData(waferName, data);
+        return data;
     }
 
     private void LogPolishAData(string waferName, string logTime, string timeSpan)

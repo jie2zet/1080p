@@ -41,10 +41,10 @@ namespace CMP.Extensions
         /// <summary>串口名，如 COM12。</summary>
         public string PortName { get; init; } = string.Empty;
 
-        /// <summary>界面显示序号，COM12–COM16 对应 1–5。</summary>
+        /// <summary>界面显示序号，COM12–COM15 对应 1–4。</summary>
         public int DisplayNumber { get; init; }
 
-        /// <summary>LoadPort 索引，0–4。</summary>
+        /// <summary>LoadPort 索引，0–3。</summary>
         public int LoadportId { get; init; }
 
         /// <summary>上一帧流程状态。</summary>

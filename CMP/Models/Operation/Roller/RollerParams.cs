@@ -13,11 +13,51 @@ public class RollerParams
         Motor = new MotorParams(plcHandleType);
         Liquid = new LiquidParams(plcHandleType);
         Pressure = new PressureParams(plcHandleType);
+        Flush = new FlushParams(plcHandleType);
     }
 
     public MotorParams Motor { get; }
     public LiquidParams Liquid { get; }
     public PressureParams Pressure { get; }
+    public FlushParams Flush { get; }
+
+    public class FlushParams
+    {
+        public FlushParams(Type plcHandleType)
+        {
+            var flushType = plcHandleType.GetNestedType("Flush")!;
+            var paramType = flushType.GetNestedType("Param")!;
+            var field = paramType.GetField("OpenDelay")!;
+            var attr = field.GetCustomAttribute<ParamAttribute>()!;
+            OpenDelay = new FloatParam(attr, "Flush.Param.OpenDelay");
+        }
+
+        public FloatParam OpenDelay { get; }
+    }
+
+    public class FloatParam
+    {
+        public FloatParam(ParamAttribute attr, string name)
+        {
+            Handle = attr.Handle;
+            MinValue = attr.MinValue;
+            MaxValue = attr.MaxValue;
+            DefaultValue = attr.DefaultValue;
+            Description = attr.Description;
+            Label = attr.Label;
+            Unit = attr.Unit;
+            Name = name;
+        }
+
+        public uint Handle { get; }
+        public int MinValue { get; }
+        public int MaxValue { get; }
+        public int DefaultValue { get; }
+        public string Description { get; }
+        public string Label { get; }
+        public string Unit { get; }
+        public string Name { get; }
+    }
 
     /// <summary>
     /// Motor 参数访问类
@@ -212,4 +252,3 @@ public class RollerParams
         public string Name => _name;
     }
 }
-

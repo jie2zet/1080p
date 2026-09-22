@@ -74,6 +74,12 @@ public partial class App
         moduleCatalog.AddModule<MainModule>();
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _ = Container.Resolve<ILoadPortService>();
+    }
+
     private Stopwatch? _startupStopwatch;
     private Mutex? _singleInstanceMutex;
 

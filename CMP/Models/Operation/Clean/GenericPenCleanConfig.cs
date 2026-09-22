@@ -207,6 +207,18 @@ public class GenericPenCleanConfig : IPenCleanConfig
         };
     }
 
+    public (uint handle, byte[] value) GetFlushCommand(string flushCommand)
+    {
+        var flushType = _plcHandleType.GetNestedType("Flush")!;
+
+        return flushCommand switch
+        {
+            "Open" => GetCommandValue(flushType, "Open"),
+            "Close" => GetCommandValue(flushType, "Close"),
+            _ => throw new ArgumentException($"Unknown flush command: {flushCommand}")
+        };
+    }
+
     public (uint handle, byte[] value) GetGasCommand(string gasCommand)
     {
         var gasType = _plcHandleType.GetNestedType("Gas")!;
@@ -250,4 +262,3 @@ public static class PenCleanConfigFactory
     public static GenericPenCleanConfig CreatePenB2Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
         => new("Pen B2", Handle.CmdPenB2, plcAddress, plcPort);
 }
-

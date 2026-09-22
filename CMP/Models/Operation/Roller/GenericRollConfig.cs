@@ -201,6 +201,18 @@ public class GenericRollConfig : IRollerConfig
         };
     }
 
+    public (uint handle, byte[] value) GetFlushCommand(string flushCommand)
+    {
+        var flushType = _plcHandleType.GetNestedType("Flush")!;
+
+        return flushCommand switch
+        {
+            "Open" => GetCommandValue(flushType, "Open"),
+            "Close" => GetCommandValue(flushType, "Close"),
+            _ => throw new ArgumentException($"Unknown flush command: {flushCommand}")
+        };
+    }
+
     private (uint handle, byte[] value) GetCommandValue(Type type, string fieldName)
     {
         var field = type.GetField(fieldName) ?? throw new InvalidOperationException($"Field '{fieldName}' not found in type '{type.Name}'");

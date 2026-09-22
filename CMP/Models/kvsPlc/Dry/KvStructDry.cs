@@ -8,32 +8,41 @@ namespace CMP.Models.kvsPlc.Dry {
 		const int stDryRecipeFormat_WSIZE = 800;
 
 
-		public class stDryRecipeFormat {
-			 public short[] ProcessType = new short[25];
-			 public short[] Reserved1 = new short[25];
-			 public float[] ProcessTime = new float[25];
-			 public float[] ChuckRotateVelocity = new float[25];
-			 public float[] IPAArmSweepStartPosition = new float[25];
-			 public float[] IPAArmSweepEndPosition = new float[25];
-			 public float[] IPAArmSweepCenterVelocity = new float[25];
-			 public float[] IPAArmSweepEdgeVelocity = new float[25];
-			 public float[] Reserved2 = new float[25];
-			 public short[] IPAArmCycle = new short[25];
-			 public short[] Reserved3 = new short[25];
-			 public short[] Reserved4 = new short[25];
-			 public short[] Reserved5 = new short[25];
-			 public short[] Reserved6 = new short[25];
-			 public short[] Reserved7 = new short[25];
-			 public float[] WFUpperFaceN2Flow = new float[25];
-			 public float[] WFLowerFaceN2Flow1 = new float[25];
-			 public float[] WFUpperFaceDIWFlow2 = new float[25];
-			 public short[] WFUpperFaceIPASupply = new short[25];
-			 public short[] WFLowerFaceN2Supply2 = new short[25];
-			 public short[] WFUpperFaceDIWSupply1 = new short[25];
-			 public short[] WFLowerFaceDIWSupply = new short[25];
-		}
+        public class stDryRecipeFormat
+        {
+            public short[] ProcessType = new short[25];
+            public short[] Reserved = new short[25];
+            public float[] ProcessTime = new float[25];
+            public float[] ChuckRotateVelocity = new float[25];
+            public float[] IPAArmSweepStartPosition = new float[25];
+            public float[] IPAArmSweepEndPosition = new float[25];
+            public float[] IPAArmSweepCenterVelocity = new float[25];
+            public float[] IPAArmSweepEdgeVelocity = new float[25];
+            public float[] Reserved1 = new float[25];
+            public short[] IPAArmCycle = new short[25];
+            public short[] Reserved2 = new short[25];
+            public short[] Reserved3 = new short[25];
+            public short[] Reserved4 = new short[25];
+            public short[] Reserved5 = new short[25];
+            public short[] Reserved6 = new short[25];
+            public float[] WFUpperN2Flow = new float[25];
+            public float[] WFLowerN2Flow1 = new float[25];
+            public float[] WFUpperDIWFlow2 = new float[25];
+            public short[] WFUpperIPASupply = new short[25];
+            public short[] WFLowerN2Supply2 = new short[25];
+            public short[] WFUpperDIWSupply1 = new short[25];
+            public short[] WFLowerDIWSupply = new short[25];
 
-		public static int[] NewIndices(Array target) {
+            public stDryRecipeFormat()
+            {
+                for (int i = 0; i < ProcessType.Length; i++)
+                {
+                    ProcessType[i] = -1;
+                }
+            }
+        }
+
+        public static int[] NewIndices(Array target) {
 			int rank = target.Rank;
 			int[] indices = new int[rank];
 			Array.Clear(indices, 0, rank);
@@ -650,123 +659,145 @@ namespace CMP.Models.kvsPlc.Dry {
 			SwapBytes(dst, len * stringSize, wordOffset * 2);
 		}
 
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
-			ByteToShort(ref dst.Reserved1, src, 25, 25 + wordOffset);
-			ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
-			ByteToFloat(ref dst.ChuckRotateVelocity, src, 25, 100 + wordOffset);
-			ByteToFloat(ref dst.IPAArmSweepStartPosition, src, 25, 150 + wordOffset);
-			ByteToFloat(ref dst.IPAArmSweepEndPosition, src, 25, 200 + wordOffset);
-			ByteToFloat(ref dst.IPAArmSweepCenterVelocity, src, 25, 250 + wordOffset);
-			ByteToFloat(ref dst.IPAArmSweepEdgeVelocity, src, 25, 300 + wordOffset);
-			ByteToFloat(ref dst.Reserved2, src, 25, 350 + wordOffset);
-			ByteToShort(ref dst.IPAArmCycle, src, 25, 400 + wordOffset);
-			ByteToShort(ref dst.Reserved3, src, 25, 425 + wordOffset);
-			ByteToShort(ref dst.Reserved4, src, 25, 450 + wordOffset);
-			ByteToShort(ref dst.Reserved5, src, 25, 475 + wordOffset);
-			ByteToShort(ref dst.Reserved6, src, 25, 500 + wordOffset);
-			ByteToShort(ref dst.Reserved7, src, 25, 525 + wordOffset);
-			ByteToFloat(ref dst.WFUpperFaceN2Flow, src, 25, 550 + wordOffset);
-			ByteToFloat(ref dst.WFLowerFaceN2Flow1, src, 25, 600 + wordOffset);
-			ByteToFloat(ref dst.WFUpperFaceDIWFlow2, src, 25, 650 + wordOffset);
-			ByteToShort(ref dst.WFUpperFaceIPASupply, src, 25, 700 + wordOffset);
-			ByteToShort(ref dst.WFLowerFaceN2Supply2, src, 25, 725 + wordOffset);
-			ByteToShort(ref dst.WFUpperFaceDIWSupply1, src, 25, 750 + wordOffset);
-			ByteToShort(ref dst.WFLowerFaceDIWSupply, src, 25, 775 + wordOffset);
-		}
-		private static void ByteToBase_stDryRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0) {
-			int[] indices = NewIndices(dst);
-			int offset = wordOffset;
-			for (int i = 0; i < len; i++) {
-				stDryRecipeFormat elemTmp = new stDryRecipeFormat();
-				NextIndices(dst, indices);
-				ByteTo_stDryRecipeFormat(ref elemTmp, src, len, wordOffset);
-				dst.SetValue(elemTmp, indices);
-				wordOffset += stDryRecipeFormat_WSIZE;
-			}
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
-		}
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
+            ByteToShort(ref dst.Reserved, src, 25, 25 + wordOffset);
+            ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
+            ByteToFloat(ref dst.ChuckRotateVelocity, src, 25, 100 + wordOffset);
+            ByteToFloat(ref dst.IPAArmSweepStartPosition, src, 25, 150 + wordOffset);
+            ByteToFloat(ref dst.IPAArmSweepEndPosition, src, 25, 200 + wordOffset);
+            ByteToFloat(ref dst.IPAArmSweepCenterVelocity, src, 25, 250 + wordOffset);
+            ByteToFloat(ref dst.IPAArmSweepEdgeVelocity, src, 25, 300 + wordOffset);
+            ByteToFloat(ref dst.Reserved1, src, 25, 350 + wordOffset);
+            ByteToShort(ref dst.IPAArmCycle, src, 25, 400 + wordOffset);
+            ByteToShort(ref dst.Reserved2, src, 25, 425 + wordOffset);
+            ByteToShort(ref dst.Reserved3, src, 25, 450 + wordOffset);
+            ByteToShort(ref dst.Reserved4, src, 25, 475 + wordOffset);
+            ByteToShort(ref dst.Reserved5, src, 25, 500 + wordOffset);
+            ByteToShort(ref dst.Reserved6, src, 25, 525 + wordOffset);
+            ByteToFloat(ref dst.WFUpperN2Flow, src, 25, 550 + wordOffset);
+            ByteToFloat(ref dst.WFLowerN2Flow1, src, 25, 600 + wordOffset);
+            ByteToFloat(ref dst.WFUpperDIWFlow2, src, 25, 650 + wordOffset);
+            ByteToShort(ref dst.WFUpperIPASupply, src, 25, 700 + wordOffset);
+            ByteToShort(ref dst.WFLowerN2Supply2, src, 25, 725 + wordOffset);
+            ByteToShort(ref dst.WFUpperDIWSupply1, src, 25, 750 + wordOffset);
+            ByteToShort(ref dst.WFLowerDIWSupply, src, 25, 775 + wordOffset);
+        }
+        private static void ByteToBase_stDryRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            int[] indices = NewIndices(dst);
+            int offset = wordOffset;
+            for (int i = 0; i < len; i++)
+            {
+                stDryRecipeFormat elemTmp = new stDryRecipeFormat();
+                NextIndices(dst, indices);
+                ByteTo_stDryRecipeFormat(ref elemTmp, src, len, wordOffset);
+                dst.SetValue(elemTmp, indices);
+                wordOffset += stDryRecipeFormat_WSIZE;
+            }
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stDryRecipeFormat(ref stDryRecipeFormat[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stDryRecipeFormat(dst, src, len, wordOffset);
+        }
 
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat src, int len = 1, int wordOffset = 0) {
-			ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
-			ShortToByte(ref dst, src.Reserved1, 25, 25 + wordOffset);
-			FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
-			FloatToByte(ref dst, src.ChuckRotateVelocity, 25, 100 + wordOffset);
-			FloatToByte(ref dst, src.IPAArmSweepStartPosition, 25, 150 + wordOffset);
-			FloatToByte(ref dst, src.IPAArmSweepEndPosition, 25, 200 + wordOffset);
-			FloatToByte(ref dst, src.IPAArmSweepCenterVelocity, 25, 250 + wordOffset);
-			FloatToByte(ref dst, src.IPAArmSweepEdgeVelocity, 25, 300 + wordOffset);
-			FloatToByte(ref dst, src.Reserved2, 25, 350 + wordOffset);
-			ShortToByte(ref dst, src.IPAArmCycle, 25, 400 + wordOffset);
-			ShortToByte(ref dst, src.Reserved3, 25, 425 + wordOffset);
-			ShortToByte(ref dst, src.Reserved4, 25, 450 + wordOffset);
-			ShortToByte(ref dst, src.Reserved5, 25, 475 + wordOffset);
-			ShortToByte(ref dst, src.Reserved6, 25, 500 + wordOffset);
-			ShortToByte(ref dst, src.Reserved7, 25, 525 + wordOffset);
-			FloatToByte(ref dst, src.WFUpperFaceN2Flow, 25, 550 + wordOffset);
-			FloatToByte(ref dst, src.WFLowerFaceN2Flow1, 25, 600 + wordOffset);
-			FloatToByte(ref dst, src.WFUpperFaceDIWFlow2, 25, 650 + wordOffset);
-			ShortToByte(ref dst, src.WFUpperFaceIPASupply, 25, 700 + wordOffset);
-			ShortToByte(ref dst, src.WFLowerFaceN2Supply2, 25, 725 + wordOffset);
-			ShortToByte(ref dst, src.WFUpperFaceDIWSupply1, 25, 750 + wordOffset);
-			ShortToByte(ref dst, src.WFLowerFaceDIWSupply, 25, 775 + wordOffset);
-		}
-		private static void stDryRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0) {
-			int[] indices = NewIndices(src);
-			int offset = wordOffset;
-			for (int i = 0; i < len; i++) {
-				NextIndices(src, indices);
-				stDryRecipeFormat_ToByte(ref dst, (stDryRecipeFormat)src.GetValue(indices), len, wordOffset);
-				wordOffset += stDryRecipeFormat_WSIZE;
-			}
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,,,] src, int len = 1, int wordOffset = 0) {
-			stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat src, int len = 1, int wordOffset = 0)
+        {
+            ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
+            ShortToByte(ref dst, src.Reserved, 25, 25 + wordOffset);
+            FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
+            FloatToByte(ref dst, src.ChuckRotateVelocity, 25, 100 + wordOffset);
+            FloatToByte(ref dst, src.IPAArmSweepStartPosition, 25, 150 + wordOffset);
+            FloatToByte(ref dst, src.IPAArmSweepEndPosition, 25, 200 + wordOffset);
+            FloatToByte(ref dst, src.IPAArmSweepCenterVelocity, 25, 250 + wordOffset);
+            FloatToByte(ref dst, src.IPAArmSweepEdgeVelocity, 25, 300 + wordOffset);
+            FloatToByte(ref dst, src.Reserved1, 25, 350 + wordOffset);
+            ShortToByte(ref dst, src.IPAArmCycle, 25, 400 + wordOffset);
+            ShortToByte(ref dst, src.Reserved2, 25, 425 + wordOffset);
+            ShortToByte(ref dst, src.Reserved3, 25, 450 + wordOffset);
+            ShortToByte(ref dst, src.Reserved4, 25, 475 + wordOffset);
+            ShortToByte(ref dst, src.Reserved5, 25, 500 + wordOffset);
+            ShortToByte(ref dst, src.Reserved6, 25, 525 + wordOffset);
+            FloatToByte(ref dst, src.WFUpperN2Flow, 25, 550 + wordOffset);
+            FloatToByte(ref dst, src.WFLowerN2Flow1, 25, 600 + wordOffset);
+            FloatToByte(ref dst, src.WFUpperDIWFlow2, 25, 650 + wordOffset);
+            ShortToByte(ref dst, src.WFUpperIPASupply, 25, 700 + wordOffset);
+            ShortToByte(ref dst, src.WFLowerN2Supply2, 25, 725 + wordOffset);
+            ShortToByte(ref dst, src.WFUpperDIWSupply1, 25, 750 + wordOffset);
+            ShortToByte(ref dst, src.WFLowerDIWSupply, 25, 775 + wordOffset);
+        }
+        private static void stDryRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
+        {
+            int[] indices = NewIndices(src);
+            int offset = wordOffset;
+            for (int i = 0; i < len; i++)
+            {
+                NextIndices(src, indices);
+                stDryRecipeFormat_ToByte(ref dst, (stDryRecipeFormat)src.GetValue(indices), len, wordOffset);
+                wordOffset += stDryRecipeFormat_WSIZE;
+            }
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stDryRecipeFormat_ToByte(ref byte[] dst, stDryRecipeFormat[,,,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stDryRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
 
-	}
+    }
 }

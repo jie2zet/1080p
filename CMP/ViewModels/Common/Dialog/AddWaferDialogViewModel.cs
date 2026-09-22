@@ -169,6 +169,7 @@ namespace CMP.ViewModels.Common.Dialog
                 var waferSequencePlan = WaferSequencePlanner.BuildPlan(data);
                 Array.Copy(waferSequencePlan.SequnceValue, wafer.SequnceValue, waferSequencePlan.SequnceValue.Length);
                 wafer.WaferSequenceModels = waferSequencePlan.WaferSequenceModels;
+                wafer.SequenceTrackSide = Wafer.ResolveSequenceTrackSide(wafer.WaferSequenceModels);
             }
             catch (Exception ex)
             {

@@ -5,10 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace CMP.Models.kvsPlc.Roll
 {
-    class KvsStructRoll
+    class KvsStructRollerRecipe
     {
         const int stRollerRecipeFormat_WSIZE = 750;
-
 
         public class stRollerRecipeFormat
         {
@@ -31,6 +30,14 @@ namespace CMP.Models.kvsPlc.Roll
             public float[] ChemicalRatio = new float[25];
             public short[] UpperRollInnerRinseSupply = new short[25];
             public short[] DownRollInnerRinseSupply = new short[25];
+
+            public stRollerRecipeFormat()
+            {
+                for (int i = 0; i < ProcessType.Length; i++)
+                {
+                    ProcessType[i] = -1;
+                }
+            }
         }
 
         public static int[] NewIndices(Array target)
@@ -958,6 +965,5 @@ namespace CMP.Models.kvsPlc.Roll
         {
             stRollerRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
         }
-
     }
 }
