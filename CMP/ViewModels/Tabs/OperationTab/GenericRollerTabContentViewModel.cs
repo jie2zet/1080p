@@ -1048,43 +1048,86 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private static T? GetRealVal<T>(Recipe.Content content, string name, int stepIndex)
-    {
-        Recipe.Data data = new Recipe.Data();
-        bool exists = false;
-        foreach (var item in content.Data!)
-        {
-            if (item.Name?.Replace(" ", "").Replace("_", "").Replace("-", "").Replace("&", "") == name)
-            {
-                data = item;
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) return default;
+    //private static T? GetRealVal<T>(Recipe.Content content, string name, int stepIndex)
+    //{
+    //    Recipe.Data data = new Recipe.Data();
+    //    bool exists = false;
+    //    foreach (var item in content.Data!)
+    //    {
+    //        if (item.Name?.Replace(" ", "").Replace("_", "").Replace("-", "").Replace("&", "") == name)
+    //        {
+    //            data = item;
+    //            exists = true;
+    //            break;
+    //        }
+    //    }
+    //    if (!exists) return default;
 
-        object result = new();
-        string value = data.Steps[stepIndex].Value;
-        data.Type = data.Type?.ToLower();
-        if (data.Type == "option" || data.Type == "list")
+    //    object result = new();
+    //    string value = data.Steps[stepIndex].Value;
+    //    data.Type = data.Type?.ToLower();
+    //    if (data.Type == "option" || data.Type == "list")
+    //    {
+    //        result = Convert.ToInt16(value.Split(":")[0]);
+    //    }
+    //    else if (data.Type == "int")
+    //    {
+    //        result = Convert.ToInt16(value);
+    //    }
+    //    else if (data.Type == "float" || data.Type == "text")
+    //    {
+    //        result = Convert.ToSingle(value);
+    //    }
+    //    else
+    //    {
+    //        result = value;
+    //    }
+    //    T t = (T)result;
+    //    if (t == null) return default;
+    //    return t;
+    //}
+
+    private static T? GetRealVal<T>(Recipe.Content recipeModel, string name, int stepIndex)
+    {
+        var model = recipeModel.Data?
+            .FirstOrDefault(item => {
+                string itemName = item.Name!.Replace(" ", "")
+                            .Replace("_", "")
+                            .Replace("-", "")
+                            .Replace("&", "");
+
+                return itemName == name || (item.CompatibleName != null && item.CompatibleName.Contains(name));
+            }
+                );
+
+        if (model == null) return default;
+        if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
+
+        var value = model.Steps[stepIndex].Value;
+        var type = model.Type?.ToLowerInvariant();
+        var targetType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
+        if (type == "option" || type == "list")
         {
-            result = Convert.ToInt16(value.Split(":")[0]);
+            var arr = value.Split(':');
+            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }
-        else if (data.Type == "int")
+
+
+        try
         {
-            result = Convert.ToInt16(value);
+            if (targetType == typeof(string))
+                return (T)(object)value;
+
+            if (targetType.IsEnum)
+                return (T)Enum.Parse(targetType, value, ignoreCase: true);
+
+            return (T)Convert.ChangeType(value, targetType);
         }
-        else if (data.Type == "float" || data.Type == "text")
+        catch
         {
-            result = Convert.ToSingle(value);
+            return default;
         }
-        else
-        {
-            result = value;
-        }
-        T t = (T)result;
-        if (t == null) return default;
-        return t;
     }
 
     /// <summary>
