@@ -1334,7 +1334,7 @@ namespace CMP.Models.Operation.LoadPort
                 WaferList.Add(new Wafer
                 {   LoadportID = loadportID,
                     SlotID = i,
-                    WaferStatus =WaferStatus.NonWafer,
+                    WaferStatus =WaferStatus.NormalExistence,
                     CurrentStation = CurrentStation.Loadport
                     
                 });
@@ -1366,6 +1366,7 @@ namespace CMP.Models.Operation.LoadPort
 
             initLoadPortRecipe();
             InitStopLoadCommand();
+            RefreshControlStatusItems();
 
             //PlcIsConnected = _plcService.IsConnected;
             // 启动PLC操作处理任务
@@ -1963,6 +1964,7 @@ namespace CMP.Models.Operation.LoadPort
                         OnFoupUnloadClearPlcPickAllow();
 
                     TryPublishStatusChanged(LoadPortStatus, prevWorkflow, nextWorkflow);
+                    RefreshControlStatusItems();
                 }
             }
             catch (Exception ex)

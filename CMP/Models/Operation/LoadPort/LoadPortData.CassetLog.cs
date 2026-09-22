@@ -264,6 +264,11 @@ public partial class LoadPortData
 
     private string GetCassetteIdForLog()
     {
+        if (!string.IsNullOrWhiteSpace(CarrierId))
+        {
+            return CarrierId;
+        }
+
         return PortNumber switch
         {
             "COM12" => "C1",

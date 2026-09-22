@@ -33,7 +33,7 @@
                                 <TextBlock Text="Load Port Control Status" HorizontalAlignment="Left" Foreground="Black"/>
                             </StackPanel>
                             <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left">
-                                <ItemsControl ItemsSource="{Binding DataContext.StatusList, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                <ItemsControl ItemsSource="{Binding ControlStatusItems}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal" MaxWidth="80" />
@@ -68,7 +68,7 @@
                                     <StackPanel>
                                         <TextBlock Text="Carrier Verification"/>
                                         <TextBlock Text=" no verification needed" Foreground="LightGray" Padding="5,0,0,0"/>
-                                        <TextBlock Text=" LP10000001" Padding="10,0,0,0"/>
+                                        <TextBlock Text="{Binding CarrierIdDisplay}" Padding="10,0,0,0"/>
                                         <StackPanel Orientation="Horizontal">
                                             <Button Content="Load" Margin="0,0,5,0" 
                                                     IsEnabled="{Binding LoadPortStatus.FoupDockStatus, Converter={StaticResource FoupDockStatusToIsEnabledConverter}}"
