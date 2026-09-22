@@ -6,7 +6,7 @@ namespace CMP.Services.Rfid;
 
 public class RfidConfig
 {
-    public const string DefaultPath = @"D:\CMP\Configuration\Configs\RfidConfig.json";
+    public const string DefaultPath = @"D:\CMP\Configuration\RFID\RfidConfig.json";
 
     public bool Enabled { get; set; } = true;
     public int BaudRate { get; set; } = 9600;
