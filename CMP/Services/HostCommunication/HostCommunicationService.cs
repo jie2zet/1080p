@@ -207,43 +207,46 @@ namespace CMP.Services.HostCommunication
             Logger.Info($"HostCommunicationService Receive {message}");
             if (message.HardwareStatus == null) return;
 
+            int portTransferStatus = (int)message.PortTransferStatus;
+            int carrierId = Convert.ToInt16(message.CarrierId);
+
             switch (message.HardwareStatus.LoadportStatus)
             {
                 case LoadportActionStatus.None:
-                    SendEventToHost("LoadPortInitialized", message.LoadportId, 0,0);
+                    SendEventToHost("LoadPortInitialized", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    SendEventToHost("LoadPortInService", message.LoadportId, 1, 1);
+                    SendEventToHost("LoadPortInService", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.FoupArrived:
-                    SendEventToHost("LoadPortOutOfService", message.LoadportId, 2, 2);
+                    SendEventToHost("LoadPortOutOfService", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Clamp:
-                    SendEventToHost("TransferReadyStateEntered", message.LoadportId, 3, 3);
+                    SendEventToHost("TransferReadyStateEntered", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Dock:
-                    SendEventToHost("TransferBlockedStateEntered", message.LoadportId, 0, 4);
+                    SendEventToHost("TransferBlockedStateEntered", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Load:
-                    SendEventToHost("ReadyToLoadEntered", message.LoadportId, 1, 5);
+                    SendEventToHost("ReadyToLoadEntered", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.DoorOpen:
-                    SendEventToHost("ReadyToUnloadEntered", message.LoadportId, 2, 0);
+                    SendEventToHost("ReadyToUnloadEntered", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Scan:
-                    SendEventToHost("TransferBlockedFromReadyToLoad", message.LoadportId, 3, 1);
+                    SendEventToHost("TransferBlockedFromReadyToLoad", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Undock:
-                    SendEventToHost("TransferBlockedFromReadyToUnload", message.LoadportId, 0, 2);
+                    SendEventToHost("TransferBlockedFromReadyToUnload", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Unload:
-                    SendEventToHost("ReadyToLoadEnteredFromTransferBlocked", message.LoadportId, 1, 3);
+                    SendEventToHost("ReadyToLoadEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Release:
-                    SendEventToHost("ReadyToUnloadEnteredFromTransferBlocked", message.LoadportId, 2, 4);
+                    SendEventToHost("ReadyToUnloadEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.WaitFoupLeave:
-                    SendEventToHost("TransferReadyEnteredFromTransferBlocked", message.LoadportId, 3, 5);
+                    SendEventToHost("TransferReadyEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
                     break;
             }
 
