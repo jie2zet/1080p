@@ -20,7 +20,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Min = 1,
             Max = 2,
             Default = "1",
-            Options = ["1:InsituCondition", "25:ExcituCondition", "-1:Recipe End"],
+            Options = ["1:InsituCondition", "25:ExsituCondition", "-1:Recipe End"],
             CompatibleName = [],
             Steps = []
           },
