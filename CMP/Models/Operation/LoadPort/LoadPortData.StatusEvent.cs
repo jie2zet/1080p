@@ -123,11 +123,31 @@ public partial class LoadPortData
             PreviousWorkflow = previousWorkflow,
             CurrentWorkflow = currentWorkflow,
             HardwareStatus = hardwareStatus,
+            CarrierId = CarrierId,
+            PortTransferStatus = currentWorkflow,
             ChangedFields = changedFields,
             Timestamp = DateTime.Now
         });
 
         _lastHardwareSnapshot = currentSnapshot;
+    }
+
+    private void PublishCarrierIdChanged()
+    {
+        var workflow = FoupWorkflowState;
+        PublishStatusChanged(new LoadPortStatusChangedEventArgs
+        {
+            PortName = _portName,
+            DisplayNumber = DisplayNumber,
+            LoadportId = GetLoadportId(),
+            PreviousWorkflow = workflow,
+            CurrentWorkflow = workflow,
+            HardwareStatus = LoadPortStatus,
+            CarrierId = CarrierId,
+            PortTransferStatus = workflow,
+            ChangedFields = [nameof(CarrierId)],
+            Timestamp = DateTime.Now
+        });
     }
 
     private void PublishStatusChanged(LoadPortStatusChangedEventArgs args)

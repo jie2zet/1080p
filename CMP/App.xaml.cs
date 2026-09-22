@@ -7,6 +7,7 @@ using CMP.Services.HostCommunication;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.Services.Plc;
+using CMP.Services.Rfid;
 using CMP.Services.Tracking;
 using CMP.Utils;
 using CMP.ViewModels.Common.Dialog;
@@ -53,6 +54,7 @@ public partial class App
         containerRegistry.RegisterSingleton<ILoadPortService, LoadPortService>();
         //主机通信模块
         containerRegistry.RegisterSingleton<IHostCommunicationService, HostCommunicationService>();
+        containerRegistry.RegisterSingleton<IRfidReaderService, RfidReaderService>();
     }
 
     protected override void ConfigureRegionAdapterMappings(RegionAdapterMappings regionAdapterMappings)
@@ -116,6 +118,15 @@ public partial class App
         catch
         {
             // 退出时落盘失败不阻断关闭
+        }
+
+        try
+        {
+            Container.Resolve<IRfidReaderService>().Stop();
+        }
+        catch
+        {
+            // 退出时关闭 RFID 串口失败不阻断关闭
         }
 
         base.OnExit(e);

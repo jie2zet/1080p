@@ -5,8 +5,10 @@ using CMP.Services;
 using CMP.Services.Auth;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
+using CMP.Services.Rfid;
 using CMP.ViewModels.Login;
 using CMP.Views;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace CMP.ViewModels;
@@ -15,6 +17,7 @@ public class MainViewModel : BindableBase
 {
     private readonly IRegionManager _regionManager;
     private readonly ILoadPortService _loadPortService;
+    private readonly IRfidReaderService _rfidReaderService;
     private readonly NavigationGate _navigationGate;
     private readonly IEventAggregator _eventAggregator;
     private string _title = "Chemical mechanical polishing";
@@ -24,12 +27,14 @@ public class MainViewModel : BindableBase
     public MainViewModel(
         IRegionManager regionManager,
         ILoadPortService loadPortService,
+        IRfidReaderService rfidReaderService,
         LoginViewModel loginViewModel,
         NavigationGate navigationGate,
         IEventAggregator eventAggregator)
     {
         _regionManager = regionManager;
         _loadPortService = loadPortService;
+        _rfidReaderService = rfidReaderService;
         _navigationGate = navigationGate;
         _eventAggregator = eventAggregator;
         Login = loginViewModel;
@@ -82,6 +87,17 @@ public class MainViewModel : BindableBase
         finally
         {
             _eventAggregator.GetEvent<LoadPortsReadyEvent>().Publish();
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    _rfidReaderService.Start();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Failed to start RFID: {ex.Message}", ex, "RFID", 0);
+                }
+            });
         }
     }
 

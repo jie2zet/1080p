@@ -55,6 +55,12 @@ namespace CMP.Extensions
         /// <summary>当前硬件状态快照；尚未收到 STATE 响应时可能为 null。</summary>
         public LoadPortStatus? HardwareStatus { get; init; }
 
+        /// <summary>RFID 读到的 CarrierId；未读到或 FOUP 移走后为空。</summary>
+        public string CarrierId { get; init; } = string.Empty;
+
+        /// <summary>端口搬送状态，对应 FOUP 流程 <see cref="LoadportFoupStatus"/>。</summary>
+        public LoadportFoupStatus PortTransferStatus { get; init; }
+
         /// <summary>相对上一帧发生变化的字段名。</summary>
         public IReadOnlyList<string> ChangedFields { get; init; } = Array.Empty<string>();
 
