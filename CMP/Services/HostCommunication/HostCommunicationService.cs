@@ -1,33 +1,11 @@
 ﻿using CMP.Extensions;
-using CMP.Models.Operation.LoadPort;
-using CMP.Services.Auth;
 using CMP.Services.LoadPort;
 using FabConnect;
 using FabConnect.SecsGemInterface.Application.MessageServices;
-using FabConnect.SecsGemInterface.Application.MessageServices;
 using FabConnect.SecsGemInterface.Common;
-using FabConnect.SecsGemInterface.Common;
-using FabConnect.SecsGemInterface.Common.ToolModel;
 using FabConnect.SecsGemInterface.Common.ToolModel;
 using FabConnect.SecsGemInterface.GemModel;
-using HslCommunication.Secs;
-//using FACore;
-//using FACore.E87FA;
-//using MECF.Framework.Common.Equipment;
-//using MECF.Framework.Common.Log;
-//using MECF.Framework.FA.Core.E40FA;
-//using MECF.Framework.FA.Core.E87FA;
-//using MECF.Framework.FA.Core.E94FA;
-//using MECF.Framework.FA.Core.FAInterface;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using CMP.Services.Log;
 using Logger = CMP.Services.Log.Logger;
 
 namespace CMP.Services.HostCommunication
@@ -128,6 +106,8 @@ namespace CMP.Services.HostCommunication
         private   PeriodicJob _faMonitorThread;
 
         private readonly IEventAggregator _eventAggregator;
+
+       // private LoadPortStatus status = new LoadPortStatus();
         public HostCommunicationService(IEventAggregator eventAggregator) 
         {
             _eventAggregator = eventAggregator;
@@ -188,11 +168,9 @@ namespace CMP.Services.HostCommunication
 
                 _lastSendMsgTime = DateTime.Now;
 
-                //todo: 延时发送FA工作模式
-                Thread.Sleep(500);
                 SetFAOperativeMode();
 
-
+               // status.LoadportStatus = LoadportActionStatus.None;
 
             }
             catch (Exception ex)
@@ -211,6 +189,8 @@ namespace CMP.Services.HostCommunication
 
         private void SetFAOperativeMode()
         {
+            //todo: 延时发送FA工作模式
+            Thread.Sleep(500);
             _gem.SetEnable();
             _gem.SetOnline();
             _gem.SetRemote();
@@ -221,7 +201,7 @@ namespace CMP.Services.HostCommunication
         /// 接收到LoadPortStatus改变消息
         /// </summary>
         /// <param name="message"></param>
-        private void OnLoadPortStatusMessageReceived(LoadPortStatusChangedEventArgs  message)
+       private  void OnLoadPortStatusMessageReceived(LoadPortStatusChangedEventArgs  message)
         {
           
             Logger.Info($"HostCommunicationService Receive {message}");
@@ -230,40 +210,40 @@ namespace CMP.Services.HostCommunication
             switch (message.HardwareStatus.LoadportStatus)
             {
                 case LoadportActionStatus.None:
-                    SendEventToHost("LoadPortInitialized",0,0,0);
+                    SendEventToHost("LoadPortInitialized", message.LoadportId, 0,0);
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    SendEventToHost("LoadPortInService", 0, 0, 0);
+                    SendEventToHost("LoadPortInService", message.LoadportId, 1, 1);
                     break;
                 case LoadportActionStatus.FoupArrived:
-                    SendEventToHost("LoadPortOutOfService", 0, 0, 0);
+                    SendEventToHost("LoadPortOutOfService", message.LoadportId, 2, 2);
                     break;
                 case LoadportActionStatus.Clamp:
-                    SendEventToHost("TransferReadyStateEntered", 0, 0, 0);
+                    SendEventToHost("TransferReadyStateEntered", message.LoadportId, 3, 3);
                     break;
                 case LoadportActionStatus.Dock:
-                    SendEventToHost("TransferBlockedStateEntered", 0, 0, 0);
+                    SendEventToHost("TransferBlockedStateEntered", message.LoadportId, 0, 4);
                     break;
                 case LoadportActionStatus.Load:
-                    SendEventToHost("ReadyToLoadEntered", 0, 0, 0);
+                    SendEventToHost("ReadyToLoadEntered", message.LoadportId, 1, 5);
                     break;
                 case LoadportActionStatus.DoorOpen:
-                    SendEventToHost("ReadyToUnloadEntered", 0, 0, 0);
+                    SendEventToHost("ReadyToUnloadEntered", message.LoadportId, 2, 0);
                     break;
                 case LoadportActionStatus.Scan:
-                    SendEventToHost("TransferBlockedFromReadyToLoad", 0, 0, 0);
+                    SendEventToHost("TransferBlockedFromReadyToLoad", message.LoadportId, 3, 1);
                     break;
                 case LoadportActionStatus.Undock:
-                    SendEventToHost("TransferBlockedFromReadyToUnload", 0, 0, 0);
+                    SendEventToHost("TransferBlockedFromReadyToUnload", message.LoadportId, 0, 2);
                     break;
                 case LoadportActionStatus.Unload:
-                    SendEventToHost("ReadyToLoadEnteredFromTransferBlocked", 0, 0, 0);
+                    SendEventToHost("ReadyToLoadEnteredFromTransferBlocked", message.LoadportId, 1, 3);
                     break;
                 case LoadportActionStatus.Release:
-                    SendEventToHost("ReadyToUnloadEnteredFromTransferBlocked", 0, 0, 0);
+                    SendEventToHost("ReadyToUnloadEnteredFromTransferBlocked", message.LoadportId, 2, 4);
                     break;
                 case LoadportActionStatus.WaitFoupLeave:
-                    SendEventToHost("TransferReadyEnteredFromTransferBlocked", 0, 0, 0);
+                    SendEventToHost("TransferReadyEnteredFromTransferBlocked", message.LoadportId, 3, 5);
                     break;
             }
 
@@ -3456,6 +3436,63 @@ namespace CMP.Services.HostCommunication
 
         public bool MonitorFaTask()
         {
+
+            return true;
+
+            //LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
+            //{
+
+            //    LoadportId = 1,
+            //    HardwareStatus = status,
+
+            //};
+
+
+            //OnLoadPortStatusMessageReceived(arg);
+
+            //switch (status.LoadportStatus)
+            //{
+            //    case LoadportActionStatus.None:
+            //        status.LoadportStatus = LoadportActionStatus.WaitFoupArrive;
+            //        break;
+            //    case LoadportActionStatus.WaitFoupArrive:
+            //        status.LoadportStatus = LoadportActionStatus.FoupArrived;
+            //        break;
+            //    case LoadportActionStatus.FoupArrived:
+            //        status.LoadportStatus = LoadportActionStatus.Clamp;
+            //        break;
+            //    case LoadportActionStatus.Clamp:
+            //        status.LoadportStatus = LoadportActionStatus.Dock;
+            //        break;
+            //    case LoadportActionStatus.Dock:
+            //        status.LoadportStatus = LoadportActionStatus.Load;
+            //        break;
+            //    case LoadportActionStatus.Load:
+            //        status.LoadportStatus = LoadportActionStatus.DoorOpen;
+            //        break;
+            //    case LoadportActionStatus.DoorOpen:
+            //        status.LoadportStatus = LoadportActionStatus.Scan;
+            //        break;
+            //    case LoadportActionStatus.Scan:
+            //        status.LoadportStatus = LoadportActionStatus.Undock;
+            //        break;
+            //    case LoadportActionStatus.Undock:
+            //        status.LoadportStatus = LoadportActionStatus.Unload;
+            //        break;
+            //    case LoadportActionStatus.Unload:
+            //        status.LoadportStatus = LoadportActionStatus.Release;
+            //        break;
+            //    case LoadportActionStatus.Release:
+            //        status.LoadportStatus = LoadportActionStatus.WaitFoupLeave;
+            //        break;
+            //    case LoadportActionStatus.WaitFoupLeave:
+            //        status.LoadportStatus = LoadportActionStatus.None;
+            //        break;
+            //}
+
+
+            //Thread.Sleep(5000);
+
             //try
             //{
             //    SynchronizeECIDValue();
