@@ -18,9 +18,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "",
             Type = "option",
             Min = 0,
-            Max = 1,
+            Max = 5,
             Default = "1",
-            Options = ["1: Roll", "0: Disabled", "-1: Recipe End"],
+            Options = ["1: Roll", "5: Rinse", "0: Disabled", "-1: Recipe End"],
             Steps = []
           },
             new()
@@ -38,37 +38,40 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             new()
           {
             Id = 3,
-            Name = "Upper Roller Rotate Velocity",
+            Name = "Upper Roller Rotate Speed",
             Unit = "r/min",
             Type = "float",
             Min = 50,
             Max = 600,
             Default = "50",
             Options = [],
+            CompatibleName = ["UpperRollerRotateVelocity", "UpperRollerRotateSpeed"],
             Steps = []
           },
             new()
           {
             Id = 4,
-            Name = "Lower Roller Rotate Velocity",
+            Name = "Lower Roller Rotate Speed",
             Unit = "r/min",
             Type = "float",
             Min = 50,
-            Max = 600,
+            Max = 300,
             Default = "50",
             Options = [],
+            CompatibleName = ["LowerRollerRotateVelocity", "LowerRollerRotateSpeed"],
             Steps = []
           },
             new()
           {
             Id = 5,
-            Name = "Pillar  Rotate Velocity",
+            Name = "Wafer Rotation",
             Unit = "r/min",
             Type = "float",
             Min = 50,
-            Max = 600,
+            Max = 250,
             Default = "50",
             Options = [],
+            CompatibleName = ["PillarRotateVelocity", "WaferRotation"],
             Steps = []
           },
             new()
@@ -77,9 +80,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Upper Roller Pressure",
             Unit = "N",
             Type = "float",
-            Min = 0,
-            Max = 500,
-            Default = "30",
+            Min = 2,
+            Max = 12,
+            Default = "6",
             Options = [],
             Steps = []
           },
@@ -89,9 +92,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Lower Roller Pressure",
             Unit = "N",
             Type = "float",
-            Min = 0,
-            Max = 500,
-            Default = "30",
+            Min = 2,
+            Max = 12,
+            Default = "6",
             Options = [],
             Steps = []
           },
@@ -101,8 +104,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "WF Upper Face DIW Flowrate",
             Unit = "mL/min",
             Type = "float",
-            Min = 100,
-            Max = 1000,
+            Min = 0,
+            Max = 2000,
             Default = "1000",
             Options = [],
             Steps = []
@@ -113,8 +116,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "WF Lower Face DIW Flowrate",
             Unit = "mL/min",
             Type = "float",
-            Min = 100,
-            Max = 1000,
+            Min = 0,
+            Max = 2000,
             Default = "1000",
             Options = [],
             Steps = []
@@ -158,25 +161,27 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             new()
           {
             Id = 13,
-            Name = "Chemical Mixed Total Flowrate",
+            Name = "Total Diluted Chemical Flow Rate",
             Unit = "",
             Type = "float",
             Min = 10,
             Max = 3500,
             Default = "800.00",
             Options = [],
+            CompatibleName = ["ChemicalMixedTotalFlowrate","TotalDilutedChemicalFlowRate"],
             Steps = []
           },
             new()
           {
             Id = 14,
-            Name = "Chemical Ratio",
+            Name = "Chemical Dilution Ratio",
             Unit = "",
             Type = "float",
             Min = 1,
             Max = 99,
             Default = "8.00",
             Options = [],
+            CompatibleName = ["ChemicalRatio","ChemicalDilutionRatio"],
             Steps = []
           },
             new()

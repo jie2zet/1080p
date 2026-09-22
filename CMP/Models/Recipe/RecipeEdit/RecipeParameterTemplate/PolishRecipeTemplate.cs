@@ -285,7 +285,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 16,
             Name = "Zone 1 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -298,7 +298,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 17,
             Name = "Zone 2 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -311,7 +311,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 18,
             Name = "Zone 3 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -324,7 +324,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 19,
             Name = "Zone 4 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -337,7 +337,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 20,
             Name = "Zone 5 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -350,7 +350,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 21,
             Name = "Zone 6 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -363,7 +363,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 22,
             Name = "Zone 7 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -376,7 +376,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 23,
             Name = "Zone 8 Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -389,7 +389,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 24,
             Name = "Retainer Ring Pressure",
-            Unit = "KPa",
+            Unit = "kPa",
             Type = "float",
             Min = 0,
             Max = 50,
@@ -615,9 +615,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Slurry Nozzle End Position",
             Unit = "deg",
             Type = "float",
-            Min = 10,
+            Min = 0,
             Max = 46,
-            Default = "10.00",
+            Default = "0.00",
             Options = [],
             CompatibleName = [
               "SlurryEndPosition",
@@ -633,7 +633,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Type = "float",
             Min = 0,
             Max = 50,
-            Default = "9.20",
+            Default = "0.00",
             Options = [],
             CompatibleName = [
               "SlurrySweepVelocity",
