@@ -27,6 +27,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
+using KST = CMP.Models.kvsPlc.Clean.KvStruct;
 
 namespace CMP.ViewModels.Tabs.OperationTab
 {
@@ -404,7 +405,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 //在Assign Wafer的时候做一个防呆，先读B3003，如果读出来是True，则判断Sequen中的所有Polish，Process Type是否选择了64，选择了给B3003写入False，没选择64则提示不能Assign，重新选择PolishRecipe                
                 foreach (var wafer in selectedWafers)
                 {
-                    var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{wafer.SequenceRecipe}.json");
+                    var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{SelectedSequence.Name}.json");
                     var recipeData = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(path))!;
 
                     if (recipeData.PolishASideOperationAChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishA.sock ,"RecipePolishA", "PolishA")) return;
@@ -491,9 +492,12 @@ namespace CMP.ViewModels.Tabs.OperationTab
         /// </summary>
         private bool TryValidatePolishProcessType(SequenceRecipeData recipeData, int sock, string recipeKey, string operationName)
         {
+            string variableName = "PadSearchFinished";
             byte[] data = new byte[256];
-            int err = KHL.KHLReadDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, data);
-            int b3003Value = BitConverter.ToUInt16(data, 0);
+            //int err = KHL.KHLReadDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, data);
+            int err = KHL.KHLReadVariable(sock, variableName, data, true);
+            bool b3003Value = false;
+            KST.ByteToBool(ref b3003Value, data);
 
             if (err != (int)KHLUserError.KHL_ERR_NONE)
             {
@@ -501,9 +505,9 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 return false;
             }
 
-            if (err == (int)KHLUserError.KHL_ERR_NONE && b3003Value == 1)
+            if (b3003Value)
             {
-                var selection = recipeData.RecipeSelections?.Find(x => x.Key == recipeKey);
+                var selection = recipeData.RecipeSelections?.Find(x => x?.Key == recipeKey);
                 if (selection?.Value == null)
                 {
                     StatusMessage = $"{operationName} has no a recipe selecteds";
@@ -517,7 +521,8 @@ namespace CMP.ViewModels.Tabs.OperationTab
                     return false;
                 }
 
-                int v = KHL.KHLWriteDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, [0]);
+                //int v = KHL.KHLWriteDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, [0]);
+                int v = KHL.KHLWriteVariable(sock, variableName, [0], true);
                 return true;
             }
             return true;
