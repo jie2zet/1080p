@@ -1,5 +1,6 @@
 ﻿using CMP.Extensions;
 using CMP.Services.LoadPort;
+using Dm.util;
 using FabConnect;
 using FabConnect.SecsGemInterface.Application.MessageServices;
 using FabConnect.SecsGemInterface.Common;
@@ -103,11 +104,11 @@ namespace CMP.Services.HostCommunication
 
         private Stopwatch _monitorLinkTest = new Stopwatch();
 
-        private   PeriodicJob _faMonitorThread;
+       // private   PeriodicJob _faMonitorThread;
 
         private readonly IEventAggregator _eventAggregator;
 
-       // private LoadPortStatus status = new LoadPortStatus();
+        //private LoadPortStatus status = new LoadPortStatus();
         public HostCommunicationService(IEventAggregator eventAggregator) 
         {
             _eventAggregator = eventAggregator;
@@ -158,7 +159,7 @@ namespace CMP.Services.HostCommunication
                 _systemBuildInVariables.Add("SpoolSubstate");
 
                 ServiceManager = _gem.Services;
-                _faMonitorThread = new PeriodicJob(200, MonitorFaTask, "Monitor FA Thread", true);
+               // _faMonitorThread = new PeriodicJob(200, MonitorFaTask, "Monitor FA Thread", true);
 
 
                 if (!_gem.IsInitialized)
@@ -208,45 +209,49 @@ namespace CMP.Services.HostCommunication
             if (message.HardwareStatus == null) return;
 
             int portTransferStatus = (int)message.PortTransferStatus;
-            int carrierId = Convert.ToInt16(message.CarrierId);
+            int carrierId = 0;
+            if (!string.IsNullOrEmpty(message.CarrierId))
+            {
+                 carrierId = Convert.ToInt16(message.CarrierId);
+            }  
 
             switch (message.HardwareStatus.LoadportStatus)
             {
                 case LoadportActionStatus.None:
-                    SendEventToHost("LoadPortInitialized", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortInitialized.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    SendEventToHost("LoadPortInService", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.FoupArrived:
-                    SendEventToHost("LoadPortOutOfService", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortOutOfService.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Clamp:
-                    SendEventToHost("TransferReadyStateEntered", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferReadyStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Dock:
-                    SendEventToHost("TransferBlockedStateEntered", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Load:
-                    SendEventToHost("ReadyToLoadEntered", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToLoadEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.DoorOpen:
-                    SendEventToHost("ReadyToUnloadEntered", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Scan:
-                    SendEventToHost("TransferBlockedFromReadyToLoad", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Undock:
-                    SendEventToHost("TransferBlockedFromReadyToUnload", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToUnload.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Unload:
-                    SendEventToHost("ReadyToLoadEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToLoadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.Release:
-                    SendEventToHost("ReadyToUnloadEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
                 case LoadportActionStatus.WaitFoupLeave:
-                    SendEventToHost("TransferReadyEnteredFromTransferBlocked", message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferReadyEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
                     break;
             }
 
@@ -3440,7 +3445,7 @@ namespace CMP.Services.HostCommunication
         public bool MonitorFaTask()
         {
 
-            return true;
+             return true;
 
             //LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
             //{
@@ -3493,99 +3498,10 @@ namespace CMP.Services.HostCommunication
             //        break;
             //}
 
-
             //Thread.Sleep(5000);
 
-            //try
-            //{
-            //    SynchronizeECIDValue();
 
-            //    FAEventItemDemo ev;
-            //    if (_lstEvent.TryDequeue(out ev) &&
-            //        _gem.CommunicationState == CommunicationState.EnabledCommunicating)
-            //    {
-            //        if (ev.IsAlarm && ev.objDvid != null && ev.objDvid.ContainsKey("AlarmDescription"))
-            //        {
-            //            if (_gem.EquipmentModel.Alarms.ALIDCollection[ev.EventName] != null)
-            //                _gem.EquipmentModel.Alarms.ALIDCollection[ev.EventName].description = ev.objDvid["AlarmDescription"].ToString();
-            //        }
-
-            //        if (ev.objDvid != null)
-            //        {
-            //            foreach (var dvid in ev.objDvid)
-            //            {
-            //                SetDVIDValue(dvid.Key, dvid.Value);
-            //            }
-            //        }
-
-
-            //        SetDVIDValue(DVIDName.EVENT_NAME, ev.EventName);
-
-            //        List<Account> account = AccountManager.GetLoginUserList();
-            //        if (account.Count > 0)
-            //        {
-            //            SetDVIDValue(DVIDName.OPERATOR_ID, account[0].AccountId);
-            //        }
-
-            //        SynchronizeSVIDValue();
-            //        if (ev.IsAlarm)
-            //        {
-            //            SetAlarm(ev.EventName);
-            //        }
-            //        else
-            //        {
-            //            SendEventToHost(ev.EventName);
-            //        }
-
-            //    }
-
-            //    SECsMessage sMsg;
-            //    while (_lstToBeSendMsg.TryDequeue(out sMsg))
-            //    {
-            //        if (_gem.CommunicationState != CommunicationState.EnabledCommunicating ||
-            //        _gem.ControlState == ControlState.HostOffline ||
-            //        _gem.ControlState != ControlState.EquipmentOffline)
-            //            continue;
-
-            //        lock (_locker)
-            //        {
-            //            LOG.Write("FAMessage: " + sMsg.ToString() + " is start senting.");
-            //            _gem.Send(sMsg);
-            //            LOG.Write("FAMessage: " + sMsg.ToString() + " is sent successfully.");
-
-            //        }
-            //    }
-
-            //    SynchronizeSVIDValue();
-
-            //    if (_gem.CommunicationState == CommunicationState.EnabledCommunicating &&
-            //        _gem.ControlState != ControlState.EquipmentOffline &&
-            //        _gem.ControlState != ControlState.HostOffline)
-            //    {
-            //        if (_gem.EquipmentModel.GemConnection.HSMS.linktestInterval > 0)
-            //        {
-            //            if (_monitorLinkTest.IsRunning && _monitorLinkTest.ElapsedMilliseconds >= _gem.EquipmentModel.GemConnection.HSMS.linktestInterval * 1000)
-            //            {
-            //                _monitorLinkTest.Restart();
-            //                //SendUDMsg();
-
-            //            }
-
-
-
-
-            //        }
-
-            //    }
-
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    System.Diagnostics.Trace.WriteLine(ex);
-            //}
-
-            return true;
+            //return true;
         }
 
 

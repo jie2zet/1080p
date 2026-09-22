@@ -80,6 +80,7 @@ public partial class App
     {
         base.OnInitialized();
         _ = Container.Resolve<ILoadPortService>();
+        _ = Container.Resolve<IHostCommunicationService>();
     }
 
     private Stopwatch? _startupStopwatch;
@@ -134,10 +135,5 @@ public partial class App
         _singleInstanceMutex?.Dispose();
     }
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        _ = Container.Resolve<IHostCommunicationService>();
-    }
 
 }
