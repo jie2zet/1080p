@@ -478,28 +478,20 @@ namespace CMP.Models.Resource
         private void CollectIOData()
         {
             byte[] _readBuf = new byte[2048];
-            err = KHT.KHLReadVariable(kvLink.sock, "IOData1", _readBuf, true);
+            err = KHT.KHLReadVariable(kvLink.sock, "IOData", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 ApplyIoData(_readBuf, 1);
             }
             else
             {
-                WarnOnReadFailure("IOData1");
-            }
-            err = KHT.KHLReadVariable(kvLink.sock, "IOData2", _readBuf, true);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
-            {
-                ApplyIoData(_readBuf, 2);
-            }
-            else
-            {
-                WarnOnReadFailure("IOData2");
+                WarnOnReadFailure("IOData");
             }
         }
 
         /// <summary>
-        /// 把一段 IOData 结构体字节流（PLC 变量 IOData1/IOData2，每个工位一块）解析成运行期 SV。
+        /// 把 PenA/PenB 各自 PLC 的 IOData 结构体字节流解析成运行期 SV。
+        /// 每台 PLC 只有一个 IOData 变量，当前对应各自的第一个 Pen 工位。
         /// 结构体是 8bc7821 拆出来的单支笔结构体 KHSTPenIOData.stPenIOData（字段名不带 _1/_2 序号），
         /// 所以站号必须由键补上：KeyPrefix + "_" + 工位号 + 字段名，正好对应 SV 变量表里的
         /// “PenA1 Pen Up Position Sensor” 这类名字，也与 DataLoggerHelper.LogPenData 的查找键一致。
