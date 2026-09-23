@@ -182,7 +182,7 @@ namespace CMP.Services.HostCommunication
 
 
 
-            //接收LoadPort状态改变
+            //监听LoadPort状态改变通知
             _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
 
 
@@ -218,40 +218,40 @@ namespace CMP.Services.HostCommunication
             switch (message.HardwareStatus.LoadportStatus)
             {
                 case LoadportActionStatus.None:
-                    SendEventToHost(LoadPortTransferState.LoadPortInitialized.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortInitialized.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    SendEventToHost(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.FoupArrived:
-                    SendEventToHost(LoadPortTransferState.LoadPortOutOfService.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.LoadPortOutOfService.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.Clamp:
-                    SendEventToHost(LoadPortTransferState.TransferReadyStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferReadyStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.Dock:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
                     break;
                 case LoadportActionStatus.Load:
-                    SendEventToHost(LoadPortTransferState.ReadyToLoadEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToLoadEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
                     break;
                 case LoadportActionStatus.DoorOpen:
-                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
                     break;
                 case LoadportActionStatus.Scan:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId,true);
                     break;
                 case LoadportActionStatus.Undock:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToUnload.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToUnload.toString(), message.LoadportId, portTransferStatus, carrierId,true);
                     break;
                 case LoadportActionStatus.Unload:
-                    SendEventToHost(LoadPortTransferState.ReadyToLoadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToLoadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.Release:
-                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
                 case LoadportActionStatus.WaitFoupLeave:
-                    SendEventToHost(LoadPortTransferState.TransferReadyEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId);
+                    SendEventToHost(LoadPortTransferState.TransferReadyEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
                     break;
             }
 
@@ -259,10 +259,14 @@ namespace CMP.Services.HostCommunication
         }
 
         /// <summary>
-        /// 发送事件到主机
+        /// 通知主机事件
         /// </summary>
         /// <param name="eventName"></param>
-        private void SendEventToHost(string eventName, int loadportId, int portTransFerState, int carrierID)
+        /// <param name="loadportId"></param>
+        /// <param name="portTransFerState"></param>
+        /// <param name="carrierID"></param>
+        /// <param name="isSendCarrierID"></param>
+        private void SendEventToHost(string eventName, int loadportId, int portTransFerState, int carrierID, bool isSendCarrierID)
         {
 
             var allEvents = _gem.GetAllEnabledEvents();
@@ -270,7 +274,7 @@ namespace CMP.Services.HostCommunication
 
             _gem.SetAttribute("PortID", AttributeType.DV, Convert.ToString(loadportId));
             _gem.SetAttribute("PortTransFerState", AttributeType.DV, Convert.ToString(portTransFerState));
-            if (carrierID > 0)
+            if (isSendCarrierID)
             {
                 _gem.SetAttribute("CarrierID", AttributeType.DV, Convert.ToString(carrierID));
             }
