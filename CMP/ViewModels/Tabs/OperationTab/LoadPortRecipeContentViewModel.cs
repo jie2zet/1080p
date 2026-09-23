@@ -403,17 +403,13 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
                 #region Assign防呆
                 //在Assign Wafer的时候做一个防呆，先读B3003，如果读出来是True，则判断Sequen中的所有Polish，Process Type是否选择了64，选择了给B3003写入False，没选择64则提示不能Assign，重新选择PolishRecipe                
-                foreach (var wafer in selectedWafers)
-                {
-                    var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{SelectedSequence.Name}.json");
-                    var recipeData = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(path))!;
+                var path = Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence", $"{SelectedSequence.Name}.json");
+                var recipeData = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(path))!;
 
-                    if (recipeData.PolishASideOperationAChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishA.sock ,"RecipePolishA", "PolishA")) return;
-                    if (recipeData.PolishASideOperationBChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishB.sock, "RecipePolishB", "PolishB")) return;
-                    if (recipeData.PolishBSideOperationCChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishC.sock, "RecipePolishC", "PolishC")) return;
-                    if (recipeData.PolishBSideOperationDChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishD.sock, "RecipePolishD", "PolishD")) return;
-                }
-
+                if (recipeData.PolishASideOperationAChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishA.sock, "RecipePolishA", "PolishA")) return;
+                if (recipeData.PolishASideOperationBChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishB.sock, "RecipePolishB", "PolishB")) return;
+                if (recipeData.PolishBSideOperationCChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishC.sock, "RecipePolishC", "PolishC")) return;
+                if (recipeData.PolishBSideOperationDChecked && !TryValidatePolishProcessType(recipeData, GlobalService.kvHostLinkInit.kvLinkPolishD.sock, "RecipePolishD", "PolishD")) return;
                 #endregion
 
 
