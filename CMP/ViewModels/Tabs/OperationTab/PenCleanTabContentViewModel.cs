@@ -1275,6 +1275,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
+            value.Replace("：", ":");
             var arr = value.Split(':');
             value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }
