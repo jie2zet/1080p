@@ -25,7 +25,7 @@ public sealed class IoContentViewModel : BindableBase
 
     public IoContentViewModel()
     {
-        var dataCenter = DataCenter.Instance;
+        var dataCenter = GlobalService.DataCenter;
         BuildGroups(Polish, dataCenter.listPolish, string.Empty, "Polish");
         foreach (var chamber in dataCenter.listRoller)
         {
@@ -55,13 +55,14 @@ public sealed class IoContentViewModel : BindableBase
 
     private static void AddGroup(ObservableCollection<IoGroupViewModel> target, CollectDataChamber chamber, string stationPrefix, string title)
     {
+        var metadataIndex = DataLogFormatting.BuildMetadataIndex(chamber.ListSV.Values);
         var metadata = chamber.ListSV.Values
             .Where(sv => string.Equals(sv.Descripition?.Trim(), "DI", StringComparison.OrdinalIgnoreCase)
                       || string.Equals(sv.Descripition?.Trim(), "DO", StringComparison.OrdinalIgnoreCase))
             .GroupBy(sv => DataLogFormatting.NormalizeSvKey(sv.Name), StringComparer.Ordinal)
             .Select(group => group.First())
             .Where(sv => IsForStation(chamber, stationPrefix, sv.Name))
-            .Select(sv => CreateItem(chamber, stationPrefix, sv))
+            .Select(sv => CreateItem(chamber, stationPrefix, sv, metadataIndex))
             .Where(item => item != null)
             .Cast<IoItemViewModel>()
             .ToList();
@@ -88,14 +89,18 @@ public sealed class IoContentViewModel : BindableBase
         return normalized.StartsWith(prefix + station, StringComparison.Ordinal);
     }
 
-    private static IoItemViewModel? CreateItem(CollectDataChamber chamber, string stationPrefix, SV metadata)
+    private static IoItemViewModel? CreateItem(
+        CollectDataChamber chamber,
+        string stationPrefix,
+        SV metadata,
+        IReadOnlyDictionary<string, SV> metadataIndex)
     {
         string? fieldName = null;
         foreach (var field in chamber.ioDataFields.Where(f => f.FieldType == typeof(bool)))
         {
             var runtimeKey = chamber.BuildRuntimeKey(stationPrefix, field.Name);
             var resolved = DataLogFormatting.ResolveSvMetadata(
-                DataLogFormatting.BuildMetadataIndex(chamber.ListSV.Values), runtimeKey, chamber.Name);
+                metadataIndex, runtimeKey, chamber.Name);
             if (resolved != null && DataLogFormatting.NormalizeSvKey(resolved.Name) == DataLogFormatting.NormalizeSvKey(metadata.Name))
             {
                 fieldName = field.Name;
