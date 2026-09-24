@@ -255,7 +255,7 @@
 
     <ItemGroup>
       <Reference Include="FabConnect">
-        <HintPath>..\..\..\制造设备通信与控制通用模型\FA.dll\FabConnect.dll</HintPath>
+        <HintPath>..\vendor\dll\FabConnect.dll</HintPath>
       </Reference>
     </ItemGroup>
 

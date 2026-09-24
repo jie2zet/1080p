@@ -729,36 +729,37 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     private void RefreshHMI()
     {
         stPolishCollectData stCollectData;
-        PolishUnit.PlatenMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.PlatenRotationSpeedAct));
-        PolishUnit.HeadRotateMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadRotationSpeedAct));
-        PolishUnit.HeadSweepMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadSweepSpeedAct));
-        PolishUnit.HeadSweepMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadSweepPositionAct));
-        PolishUnit.HeadLiftMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadZ_AxisSpeedAct));
-        PolishUnit.HeadLiftMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadZ_AxisPositionAct));
-        PolishUnit.DiskRotateMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionRotationSpeedAct));
-        PolishUnit.ConditionSweepMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionArmSweepSpeedAct));
-        PolishUnit.ConditionSweepMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionArmSweepPositionAct));
+        string Key(string fieldName) => polishData.BuildRuntimeKey(null, fieldName);
+        PolishUnit.PlatenMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.PlatenRotationSpeedAct)));
+        PolishUnit.HeadRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadRotationSpeedAct)));
+        PolishUnit.HeadSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepSpeedAct)));
+        PolishUnit.HeadSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepPositionAct)));
+        PolishUnit.HeadLiftMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisSpeedAct)));
+        PolishUnit.HeadLiftMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisPositionAct)));
+        PolishUnit.DiskRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionRotationSpeedAct)));
+        PolishUnit.ConditionSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepSpeedAct)));
+        PolishUnit.ConditionSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepPositionAct)));
 
-        PolishUnit.Zone1.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone1PressureAct));
-        PolishUnit.Zone2.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone2PressureAct));
-        PolishUnit.Zone3.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone3PressureAct));
-        PolishUnit.Zone4.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone4PressureAct));
-        PolishUnit.Zone5.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone5PressureAct));
-        PolishUnit.Zone6.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone6PressureAct));
-        PolishUnit.Zone7.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone7PressureAct));
-        PolishUnit.Zone8.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone8PressureAct));
-        PolishUnit.Slurry.Slurry1Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry1OrDIWFlowrateAct));
-        PolishUnit.Slurry.Slurry2Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry2OrDIWFlowrateAct));
-        PolishUnit.Slurry.Slurry3Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry3OrDIWFlowrateAct));
+        PolishUnit.Zone1.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone1PressureAct)));
+        PolishUnit.Zone2.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone2PressureAct)));
+        PolishUnit.Zone3.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone3PressureAct)));
+        PolishUnit.Zone4.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone4PressureAct)));
+        PolishUnit.Zone5.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone5PressureAct)));
+        PolishUnit.Zone6.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone6PressureAct)));
+        PolishUnit.Zone7.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone7PressureAct)));
+        PolishUnit.Zone8.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone8PressureAct)));
+        PolishUnit.Slurry.Slurry1Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry1OrDIWFlowrateAct)));
+        PolishUnit.Slurry.Slurry2Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry2OrDIWFlowrateAct)));
+        PolishUnit.Slurry.Slurry3Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry3OrDIWFlowrateAct)));
 
 
-        PolishUnit.PlatenMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.PlatenRotationMotorServoOn));
-        PolishUnit.HeadRotateMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadRotationMotorServoOn));
-        PolishUnit.HeadSweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadSweepMotorServoOn));
-        PolishUnit.HeadLiftMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadUpDownMotorServoOn));
-        PolishUnit.DiskRotateMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.ConditionHeadRotationMotorServoOn));
-        PolishUnit.ConditionSweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.ConditionSweepMotorServoOn));
-        PolishUnit.SlurrySweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.SlurrySweepMotorServoOn));
+        PolishUnit.PlatenMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.PlatenRotationMotorServoOn)));
+        PolishUnit.HeadRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadRotationMotorServoOn)));
+        PolishUnit.HeadSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadSweepMotorServoOn)));
+        PolishUnit.HeadLiftMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadUpDownMotorServoOn)));
+        PolishUnit.DiskRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionHeadRotationMotorServoOn)));
+        PolishUnit.ConditionSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionSweepMotorServoOn)));
+        PolishUnit.SlurrySweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.SlurrySweepMotorServoOn)));
 
 
         RaisePropertyChanged(nameof(PlatenMotorServoText));

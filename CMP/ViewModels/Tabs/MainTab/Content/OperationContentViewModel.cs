@@ -12,6 +12,8 @@ namespace CMP.ViewModels.Tabs.MainTab.Content;
 
 public class OperationContentViewModel:BindableBase
 {
+    public IoContentViewModel Io { get; }
+    public ObservableCollection<IoCategoryViewModel> IoTabs => Io.Tabs;
     private ObservableCollection<TabContentViewModelBase> _polishUnitTabItems = [];
     public ObservableCollection<TabContentViewModelBase> PolishUnitTabItems
     {
@@ -28,6 +30,7 @@ public class OperationContentViewModel:BindableBase
 
     public OperationContentViewModel(IRegionManager regionManager, IEventAggregator eventAggregator)
     {
+        Io = new IoContentViewModel();
         Task.Run(() =>
         {
             ObservableCollection<TabContentViewModelBase> tabContentViewModelBaseList = new ObservableCollection<TabContentViewModelBase>();
