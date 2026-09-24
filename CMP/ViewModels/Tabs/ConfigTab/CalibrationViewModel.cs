@@ -1,10 +1,10 @@
-﻿using CMP.Services.Auth;
-using CMP.Extensions;
+﻿using CMP.Extensions;
 using CMP.Models.Config;
 using CMP.Models.kvsPlc;
 using CMP.Models.Operation.Bot;
 using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Resource;
+using CMP.Services.Auth;
 using CMP.Utils;
 using CMP.ViewModels.Common.Dialog;
 using CMP.ViewModels.Tabs.RecipeTab;
@@ -24,8 +24,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
+using static CMP.Models.kvsPlc.SV.KvStruct;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
+using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
 using KST = CMP.Models.kvsPlc.Polish.KvStruct;
 
 namespace CMP.ViewModels.Tabs.ConfigTab
@@ -81,6 +82,10 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         //事件聚合器
         private IEventAggregator _eventAggregator;
 
+        KHSTSV.stPolishCollectData _stPolishCollectData = new();
+
+        Task task;
+
         public CalibrationViewModel(IDialogService dialogService, IEventAggregator eventAggregator)
         {
             _isInitialized = false;
@@ -92,6 +97,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             _calibrationDisplayInfos = [];
             _dialogService = dialogService;
             _eventAggregator = eventAggregator;
+            task = Task.Run(() => RunTimeTask());
         }
 
 
@@ -452,63 +458,6 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 })
             );
             if (!_polishIdentifier.StartsWith("Polish")) return;
-            new Task(() => {
-                KHSTSV.stPolishCollectData stPolishCollectData = new();
-                byte[] _readBuf = new byte[2048];
-                var err = KHL.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
-                if (err == (int)KHLUserError.KHL_ERR_NONE)
-                {
-                    KHSTSV.ByteTo_stPolishCollectData(ref stPolishCollectData, _readBuf);
-                    //读取Inline和Sensor的值
-                    foreach (var displayInfo in CalibrationDisplayInfos)
-                    {
-                        switch (displayInfo.Name)
-                        {
-                            case "Zone1":
-                                displayInfo.Inline = stPolishCollectData.Zone1PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone1PressureSet;
-                                break;
-                            case "Zone2":
-                                displayInfo.Inline = stPolishCollectData.Zone2PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone2PressureSet;
-                                break;
-                            case "Zone3":
-                                displayInfo.Inline = stPolishCollectData.Zone3PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone3PressureSet;
-                                break;
-                            case "Zone4":
-                                displayInfo.Inline = stPolishCollectData.Zone4PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone4PressureSet;
-                                break;
-                            case "Zone5":
-                                displayInfo.Inline = stPolishCollectData.Zone5PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone5PressureSet;
-                                break;
-                            case "Zone6":
-                                displayInfo.Inline = stPolishCollectData.Zone6PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone6PressureSet;
-                                break;
-                            case "Zone7":
-                                displayInfo.Inline = stPolishCollectData.Zone7PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone7PressureSet;
-                                break;
-                            case "Zone8":
-                                displayInfo.Inline = stPolishCollectData.Zone8PressureAct;
-                                displayInfo.Sensor = stPolishCollectData.Zone8PressureSet;
-                                break;
-                            case "RRing":
-                                displayInfo.Inline = stPolishCollectData.RetainerRingAirBagPressureAct;
-                                displayInfo.Sensor = stPolishCollectData.RetainerRingAirBagPressureSet;
-                                break;
-                            case "Disk":
-                                displayInfo.Inline = stPolishCollectData.ConditionDownForcePressureAct;
-                                displayInfo.Sensor = stPolishCollectData.ConditionDownForcePressureSet;
-                                break;
-                        }
-                    }
-                }
-            }).Start();
-            
         }
 
         private void CaptureCalibrationSnapshot()
@@ -605,15 +554,77 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
         public void OnNavigatedFrom(NavigationContext navigationContext) { }
+
+        private async void RunTimeTask()
+        {
+            await Task.Delay(1000);
+            while (true)
+            {
+                await Task.Delay(1000);
+                _stPolishCollectData = new();
+                byte[] _readBuf = new byte[2048];
+                var err = KHL.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
+                if (err == (int)KHLUserError.KHL_ERR_NONE)
+                {
+                    KHSTSV.ByteTo_stPolishCollectData(ref _stPolishCollectData, _readBuf);
+                    foreach (var displayInfo in CalibrationDisplayInfos)
+                    {
+                        switch (displayInfo.Name)
+                        {
+                            case "Zone1":
+                                displayInfo.Act = _stPolishCollectData.Zone1PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone1PressureInlineAct;
+                                break;
+                            case "Zone2":
+                                displayInfo.Act = _stPolishCollectData.Zone2PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone2PressureInlineAct;
+                                break;
+                            case "Zone3":
+                                displayInfo.Act = _stPolishCollectData.Zone3PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone3PressureInlineAct;
+                                break;
+                            case "Zone4":
+                                displayInfo.Act = _stPolishCollectData.Zone4PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone4PressureInlineAct;
+                                break;
+                            case "Zone5":
+                                displayInfo.Act = _stPolishCollectData.Zone5PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone5PressureInlineAct;
+                                break;
+                            case "Zone6":
+                                displayInfo.Act = _stPolishCollectData.Zone6PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone6PressureInlineAct;
+                                break;
+                            case "Zone7":
+                                displayInfo.Act = _stPolishCollectData.Zone7PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone7PressureInlineAct;
+                                break;
+                            case "Zone8":
+                                displayInfo.Act = _stPolishCollectData.Zone8PressureAct;
+                                displayInfo.Inline = _stPolishCollectData.Zone8PressureInlineAct;
+                                break;
+                            case "RRing":
+                                displayInfo.Act = _stPolishCollectData.RetainerRingAirBagPressureAct;
+                                displayInfo.Inline = _stPolishCollectData.RetainerRingAirBagPressureInlineAct;
+                                break;
+                            case "Disk":
+                                displayInfo.Act = _stPolishCollectData.ConditionDownForcePressureAct;
+                                displayInfo.Inline = _stPolishCollectData.ConditionDownForcePressureInlineAct;
+                                break;
+                        }
+                    }
+                }
+            }            
+        }
     }
 
     public class CalibrationDisplayInfo
     {
         public string? Name { get; set; }
 
-        public float Inline { get; set; }
+        public float Act { get; set; }
 
-        public float Sensor { get; set; }
+        public float Inline { get; set; }
 
         public ObservableCollection<CalibrationModel>? Models { get; set; }
     }
