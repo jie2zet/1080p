@@ -109,10 +109,11 @@ namespace CMP.Services.HostCommunication
 
         private static Timer _timer;
 
-       // private PeriodicJob _faMonitorThread;
+        private PeriodicJob _faMonitorThread;
         private readonly IEventAggregator _eventAggregator;
 
         private ConcurrentQueue<SendEventModel> queue = new ConcurrentQueue<SendEventModel>();
+        private bool _isOnline = false;
 
         private LoadPortStatus status = new LoadPortStatus();
         public HostCommunicationService(IEventAggregator eventAggregator)
@@ -165,7 +166,7 @@ namespace CMP.Services.HostCommunication
                 _systemBuildInVariables.Add("SpoolSubstate");
 
                 ServiceManager = _gem.Services;
-                //_faMonitorThread = new PeriodicJob(100, MonitorFaTask, "Monitor FA Thread", true);
+                _faMonitorThread = new PeriodicJob(100, MonitorFaTask, "Monitor FA Thread", true);
 
 
                 if (!_gem.IsInitialized)
@@ -196,7 +197,7 @@ namespace CMP.Services.HostCommunication
             callback: ProcessSendEventsTask,
             state: null,
             dueTime: 1000,
-            period: 2000);
+            period: 50);
            
 
 
@@ -207,8 +208,7 @@ namespace CMP.Services.HostCommunication
             //todo: 延时发送FA工作模式
             Thread.Sleep(500);
             _gem.SetEnable();
-            _gem.SetOnline();
-            _gem.SetRemote();
+           
         }
 
 
@@ -236,10 +236,10 @@ namespace CMP.Services.HostCommunication
                     queue.Enqueue(new SendEventModel(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    queue.Enqueue(new SendEventModel(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId, false));
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.ReadyToLoadEntered.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
                 case LoadportActionStatus.FoupArrived: //LoadPort上有foup可以    
-                    queue.Enqueue(new SendEventModel(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId, true));
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId, true));
 
                     break;
                 case LoadportActionStatus.Clamp:
@@ -3476,8 +3476,14 @@ namespace CMP.Services.HostCommunication
 
         public bool MonitorFaTask()
         {
+            if (_gem.CommunicationState == CommunicationState.EnabledCommunicating && _isOnline == false)
+            {
+                _gem.SetOnline();
+                _gem.SetRemote();
+                _isOnline = true;
+            }
 
-             return true;
+            return true;
 
 
             //LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
