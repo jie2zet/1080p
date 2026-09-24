@@ -4,7 +4,7 @@ using System;
 using System.Runtime.InteropServices;
 
 namespace CMP.Models.kvsPlc.Pen { 
-	class KvsStructPenIOData
+	public class KvsStructPenIOData
 	{
 		const int stPenIOData_WSIZE = 7;
 

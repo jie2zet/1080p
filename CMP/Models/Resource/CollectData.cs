@@ -34,6 +34,10 @@ namespace CMP.Models.Resource
         public KVLink kvLink;
         public byte[] readBuf;
         public int err;
+        protected readonly object IoDataSync = new();
+        internal object IoDataLock => IoDataSync;
+
+        public string Name => name;
 
         /// <summary>
         /// 运行期键前缀（PolishA / RollerA / PenA / DryA …）。
@@ -186,6 +190,12 @@ namespace CMP.Models.Resource
             return ListSV.GetValueOrDefault(key);
         }
 
+        /// <summary>
+        /// 读取缓存中指定运行期字段的 bool 值。stationPrefix 对 Roller/Pen 使用
+        /// "_1"/"_2"/"_3"，Polish/Dry 传空字符串。
+        /// </summary>
+        public abstract bool TryGetIoValue(string stationPrefix, string fieldName, out bool value);
+
         public abstract void CollectData();
     }
 
@@ -197,11 +207,19 @@ namespace CMP.Models.Resource
 
         KHST.stCollectData _stCollectData;
         KHST.stIOData _stIOData;
+        private KHSTIO.stPolishIOData _ioData;
+
+        /// <summary>最近一次成功读取的 Polish IO 结构体。</summary>
+        public KHSTIO.stPolishIOData IoData
+        {
+            get { lock (IoDataSync) return _ioData; }
+        }
 
         public Polish(string name, KVLink link) : base(name, link)
         {
             _stCollectData = new KHST.stCollectData();
             _stIOData = new KHST.stIOData();
+            _ioData = new KHSTIO.stPolishIOData();
             collectDataFields = typeof(KHSTSV.stPolishCollectData).GetFields();
             ioDataFields = typeof(KHSTIO.stPolishIOData).GetFields();
             polishName = name;
@@ -257,12 +275,32 @@ namespace CMP.Models.Resource
                 KHSTIO.ByteTo_stPolishIOData(ref _stPolishIOData, _readBuf);
                 if (_stPolishIOData != null)
                 {
+                    lock (IoDataSync)
+                    {
+                        _ioData = _stPolishIOData;
+                    }
                     CompiledFieldAccessor<stPolishIOData>.ProcessAllFields(_stPolishIOData, (name, value) =>
                     {
                         SetSv(BuildRuntimeKey(null, name), value);
                     });
                 }
             }
+        }
+
+        public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
+        {
+            lock (IoDataSync)
+            {
+                var field = typeof(KHSTIO.stPolishIOData).GetField(fieldName);
+                if (field?.FieldType == typeof(bool) && field.GetValue(_ioData) is bool boolValue)
+                {
+                    value = boolValue;
+                    return true;
+                }
+            }
+
+            value = false;
+            return false;
         }
 
         private void CollectMotorServoStatus()
@@ -291,6 +329,8 @@ namespace CMP.Models.Resource
     public class Roller:CollectDataChamber
     {
         KHSTRollerCollectData.stRollerCollectData _stRollerCollectData;
+        private readonly KHSTRollerIOData.stRollerIOData[] _ioData =
+            [new(), new(), new()];
         public string rollerName = string.Empty;
 
         public Roller(string name, KVLink link) : base(name, link)
@@ -302,6 +342,31 @@ namespace CMP.Models.Resource
             ioDataFields = typeof(KHSTRollerIOData.stRollerIOData).GetFields();
             WarnIfMotorServoMappingIncomplete();
         }
+
+        public KHSTRollerIOData.stRollerIOData GetIoData(int station)
+        {
+            lock (IoDataSync) return _ioData[station - 1];
+        }
+
+        public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
+        {
+            var station = ParseStation(stationPrefix);
+            lock (IoDataSync)
+            {
+                var field = typeof(KHSTRollerIOData.stRollerIOData).GetField(fieldName);
+                if (station is >= 1 and <= 3 && field?.FieldType == typeof(bool)
+                    && field.GetValue(_ioData[station - 1]) is bool boolValue)
+                {
+                    value = boolValue;
+                    return true;
+                }
+            }
+            value = false;
+            return false;
+        }
+
+        private static int ParseStation(string stationPrefix) =>
+            int.TryParse(stationPrefix.TrimStart('_'), out var result) ? result : 0;
 
         /// <summary>M534/M535 位顺序：WF 左柱、WF 右柱、上辊、下辊。</summary>
         internal override IReadOnlyList<string> MotorServoSuffixes =>
@@ -386,6 +451,10 @@ namespace CMP.Models.Resource
             var indexPrefix = $"_{rollerIndex}";
             var ioData = new KHSTRollerIOData.stRollerIOData();
             KHSTRollerIOData.ByteTo_stRollerIOData(ref ioData, buffer);
+            lock (IoDataSync)
+            {
+                _ioData[rollerIndex - 1] = ioData;
+            }
             CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
                 if (IsPaddingField(fieldName))
@@ -425,6 +494,7 @@ namespace CMP.Models.Resource
     public class Pen:CollectDataChamber
     {
         KHSTPenCollectData.stPenCollectData _stPenCollectData;
+        private KHSTPenIOData.stPenIOData _ioData = new();
         public string penName = string.Empty;
 
         public Pen(string name, KVLink link) : base(name, link)
@@ -435,6 +505,32 @@ namespace CMP.Models.Resource
             KeyPrefix = name;
             ioDataFields = typeof(KHSTPenIOData.stPenIOData).GetFields();
             WarnIfMotorServoMappingIncomplete();
+        }
+
+        public KHSTPenIOData.stPenIOData IoData
+        {
+            get { lock (IoDataSync) return _ioData; }
+        }
+
+        public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
+        {
+            if (!string.Equals(stationPrefix, "_1", StringComparison.Ordinal))
+            {
+                value = false;
+                return false;
+            }
+            lock (IoDataSync)
+            {
+                var actualName = fieldName.TrimStart('_');
+                var field = typeof(KHSTPenIOData.stPenIOData).GetField(actualName);
+                if (field?.FieldType == typeof(bool) && field.GetValue(_ioData) is bool boolValue)
+                {
+                    value = boolValue;
+                    return true;
+                }
+            }
+            value = false;
+            return false;
         }
 
         /// <summary>M537 位顺序：Chuck、Pen Arm Sweep、Pen Rotation。</summary>
@@ -503,6 +599,10 @@ namespace CMP.Models.Resource
             var indexPrefix = $"_{penIndex}";
             var ioData = new KHSTPenIOData.stPenIOData();
             KHSTPenIOData.ByteTo_stPenIOData(ref ioData, buffer);
+            lock (IoDataSync)
+            {
+                _ioData = ioData;
+            }
             CompiledFieldAccessor<KHSTPenIOData.stPenIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
                 if (IsPaddingField(fieldName))
@@ -536,6 +636,7 @@ namespace CMP.Models.Resource
     public class Dry:CollectDataChamber
     {
         public string dryName = string.Empty;
+        private KHSTIO.stDryIOData _ioData = new();
 
         public Dry(string name, KVLink link) : base(name, link)
         {
@@ -544,6 +645,26 @@ namespace CMP.Models.Resource
             KeyPrefix = name;
             ioDataFields = typeof(KHSTIO.stDryIOData).GetFields();
             WarnIfMotorServoMappingIncomplete();
+        }
+
+        public KHSTIO.stDryIOData IoData
+        {
+            get { lock (IoDataSync) return _ioData; }
+        }
+
+        public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
+        {
+            lock (IoDataSync)
+            {
+                var field = typeof(KHSTIO.stDryIOData).GetField(fieldName);
+                if (field?.FieldType == typeof(bool) && field.GetValue(_ioData) is bool boolValue)
+                {
+                    value = boolValue;
+                    return true;
+                }
+            }
+            value = false;
+            return false;
         }
 
         /// <summary>M539 位顺序：Chuck、Arm Sweep。</summary>
@@ -588,6 +709,10 @@ namespace CMP.Models.Resource
                 KHSTIO.ByteTo_stDryIOData(ref _stDryIOData, _readBuf);
                 if (_stDryIOData != null)
                 {
+                    lock (IoDataSync)
+                    {
+                        _ioData = _stDryIOData;
+                    }
                     CompiledFieldAccessor<stDryIOData>.ProcessAllFields(_stDryIOData, (name, value) =>
                     {
                         SetSv(BuildRuntimeKey(null, name), value);
