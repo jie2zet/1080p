@@ -120,9 +120,9 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Inline:" FontSize="10" BorderBrush="Transparent"/>
+                                <Label Content="Act:" FontSize="10" BorderBrush="Transparent"/>
                                 <TextBlock Text="{Binding Inline, StringFormat='0.00'}" Foreground="Black" FontSize="10" TextAlignment="Left" VerticalAlignment="Center"/>
-                                <Label Content="Sensor:" FontSize="10" BorderBrush="Transparent"/>
+                                <Label Content="Inline:" FontSize="10" BorderBrush="Transparent"/>
                                 <TextBlock Text="{Binding Sensor, StringFormat='0.00'}" Foreground="Black" FontSize="10" TextAlignment="Left" VerticalAlignment="Center"/>
                             </StackPanel>
                             <ContentControl ContentTemplate="{StaticResource CalibDataGridTemplate}" 

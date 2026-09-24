@@ -2464,7 +2464,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 KST.stHeadSweepRecipeFormat headSweepRecipe = new KST.stHeadSweepRecipeFormat();
                 headSweepRecipe.HeadSweepType = GetRealVal<short>(recipeContent, "HeadSweepType", 0);
-                headSweepRecipe.HeadSweepCount = GetRealVal<short>(recipeContent, "HeadSweepCount", 0);
+                headSweepRecipe.HeadSweepCount = GetRealVal<float>(recipeContent, "HeadSweepCount", 0);
                 headSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
                 headSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
                 headSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
@@ -2576,42 +2576,69 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             listConditionSweepRecipe.Add(conditionSweepRecipeName);
             var recipeContent = LoadRecipeContent("Condition Sweep Recipe", conditionSweepRecipeName);
             if (recipeContent != null)
-            {
-                KST.stConditionSweepRecipeFormat conditionSweepRecipe = new KST.stConditionSweepRecipeFormat();
-                conditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
-                conditionSweepRecipe.ConditionSweepCount = GetRealVal<short>(recipeContent, "ConditionSweepCount", 0);
-                conditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
-                conditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
-                conditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
-                conditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
-                conditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
-                conditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
-                conditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
-                conditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
-                conditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
-                conditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
-                conditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
-                conditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
-                conditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
-                conditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
-                conditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
-                conditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
-                conditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
-                conditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
-                conditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
-                conditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
-                conditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
-                conditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
-                conditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
-                KST.stConditionSweepRecipeFormat_ToByte(ref writeBuf, conditionSweepRecipe, 1, 0);
+            {                
                 string variableName = string.Empty;
                 if (type == "Insitu")
                 {
+                    KST.stInsituConditionSweepRecipeFormat insituConditionSweepRecipe = new KST.stInsituConditionSweepRecipeFormat();
+                    insituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                    insituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                    insituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                    insituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                    insituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                    insituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                    insituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                    insituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                    insituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                    insituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                    insituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                    insituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                    insituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                    insituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                    insituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                    insituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                    insituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                    insituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                    insituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                    insituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                    insituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                    insituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                    insituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                    insituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                    insituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                    KST.stInsituConditionSweepRecipeFormat_ToByte(ref writeBuf, insituConditionSweepRecipe, 1, 0);
                     variableName =
                         $"structConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
                 }
                 else
                 {
+                    KST.stExsituConditionSweepRecipeFormat exsituConditionSweepRecipe = new KST.stExsituConditionSweepRecipeFormat();
+                    exsituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                    exsituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                    exsituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                    exsituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                    exsituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                    exsituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                    exsituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                    exsituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                    exsituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                    exsituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                    exsituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                    exsituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                    exsituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                    exsituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                    exsituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                    exsituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                    exsituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                    exsituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                    exsituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                    exsituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                    exsituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                    exsituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                    exsituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                    exsituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                    exsituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                    KST.stExsituConditionSweepRecipeFormat_ToByte(ref writeBuf, exsituConditionSweepRecipe, 1, 0);
                     variableName =
                         $"structExsituConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
                 }
