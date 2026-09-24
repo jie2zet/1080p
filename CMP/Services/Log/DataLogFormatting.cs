@@ -1,5 +1,8 @@
 using CMP.Models.DataCenter;
+using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace CMP.Services.Log;
 
@@ -44,6 +47,67 @@ internal static class DataLogFormatting
             ? $"({waferId})"
             : $"{wafer.WaferName}({waferId})";
         return true;
+    }
+
+    /// <summary>
+    /// Resolves the Unit Recipe that a Polish chamber is executing for a wafer.
+    /// The sequence recipe stores the selected Polish recipe as a file path, so
+    /// only the file name is returned for use in a log file name.
+    /// </summary>
+    internal static bool TryGetPolishRecipeName(
+        Wafer? wafer,
+        string chamberName,
+        out string recipeName,
+        string sequenceRecipeDirectory = @"D:\CMP\Configuration\Recipes\Sequence")
+    {
+        recipeName = string.Empty;
+
+        var selectionKey = chamberName switch
+        {
+            "PolishA" => "RecipePolishA",
+            "PolishB" => "RecipePolishB",
+            "PolishC" => "RecipePolishC",
+            "PolishD" => "RecipePolishD",
+            _ => null
+        };
+
+        if (selectionKey == null || wafer == null || string.IsNullOrWhiteSpace(wafer.SequenceRecipe))
+        {
+            return false;
+        }
+
+        try
+        {
+            var sequenceName = Path.GetFileNameWithoutExtension(wafer.SequenceRecipe);
+            if (string.IsNullOrWhiteSpace(sequenceName))
+            {
+                return false;
+            }
+
+            var sequencePath = Path.Combine(sequenceRecipeDirectory, $"{sequenceName}.json");
+            if (!File.Exists(sequencePath))
+            {
+                return false;
+            }
+
+            var sequence = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(sequencePath));
+            var selectedRecipe = sequence?.RecipeSelections?
+                .FirstOrDefault(selection => string.Equals(selection?.Key, selectionKey, StringComparison.Ordinal))
+                ?.Value?.ToString();
+            if (string.IsNullOrWhiteSpace(selectedRecipe))
+            {
+                return false;
+            }
+
+            recipeName = Path.GetFileNameWithoutExtension(selectedRecipe.Trim());
+            return !string.IsNullOrWhiteSpace(recipeName);
+        }
+        catch
+        {
+            // A missing or malformed sequence recipe must not stop data logging.
+            recipeName = string.Empty;
+            return false;
+        }
     }
 
     internal static string FormatSvHeader(SV? sv)

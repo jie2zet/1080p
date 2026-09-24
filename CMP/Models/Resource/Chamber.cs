@@ -503,7 +503,11 @@ public class Chamber : BindableBase
 
             try
             {
-                dataLogger.RenameWaferFile(temporaryWaferName, resolvedWaferLogName, isExsitu ? "Exsitu" : null);
+                dataLogger.RenameWaferFile(
+                    temporaryWaferName,
+                    resolvedWaferLogName,
+                    isExsitu ? "Exsitu" : null,
+                    context.RecipeName);
             }
             catch (Exception ex)
             {
@@ -543,16 +547,34 @@ public class Chamber : BindableBase
 
     private string GetWaferLogName()
     {
-        int plcWaferIndex = GetWaferIndexFromPlc();
-        int currentIndex = plcWaferIndex != -1 ? plcWaferIndex : WaferIndex;
-
-        if (currentIndex != -1 && GlobalService.dicWaferIndex.TryGetValue(currentIndex, out Wafer? wafer))
+        var wafer = GetCurrentWafer();
+        if (wafer != null)
         {
             DataLogFormatting.TryBuildWaferLogName(wafer, out var waferLogName);
             return waferLogName;
         }
 
         return DataLogFormatting.UnknownWaferLogName;
+    }
+
+    private Wafer? GetCurrentWafer()
+    {
+        int plcWaferIndex = GetWaferIndexFromPlc();
+        int currentIndex = plcWaferIndex != -1 ? plcWaferIndex : WaferIndex;
+
+        return currentIndex != -1 && GlobalService.dicWaferIndex.TryGetValue(currentIndex, out Wafer? wafer)
+            ? wafer
+            : null;
+    }
+
+    private string? GetPolishRecipeName()
+    {
+        return DataLogFormatting.TryGetPolishRecipeName(
+            GetCurrentWafer(),
+            _name,
+            out var recipeName)
+            ? recipeName
+            : null;
     }
 
    
@@ -674,7 +696,11 @@ public class Chamber : BindableBase
                         _logExsituCts?.Cancel();
                         _logExsituCts = new CancellationTokenSource();
                         string waferLogName = GetWaferLogName();
-                        var exsituContext = new LogContext(waferLogName, PolishLogState.ExsituCondition, _name);
+                        var exsituContext = new LogContext(
+                            waferLogName,
+                            PolishLogState.ExsituCondition,
+                            _name,
+                            GetPolishRecipeName());
 
                         isExsituLogging = true;
                         // Launch in background to prevent blocking the while loop
@@ -725,7 +751,11 @@ public class Chamber : BindableBase
                         _logDataCts?.Cancel();
                         _logDataCts = new CancellationTokenSource();
                         string waferLogName = GetWaferLogName();
-                        var context = new LogContext(waferLogName, PolishLogState.PolishLoad, _name);
+                        var context = new LogContext(
+                            waferLogName,
+                            PolishLogState.PolishLoad,
+                            _name,
+                            GetPolishRecipeName());
 
                         isDataLogging = true;
                         _logDataTask = Task.Run(async () =>
@@ -2017,12 +2047,14 @@ public class LogContext
     public Enum Status { get; }
     public DateTime Timestamp { get; }
     public string ChamberName { get; }
+    public string? RecipeName { get; }
 
-    public LogContext(string waferLogName, Enum status, string chamberName)
+    public LogContext(string waferLogName, Enum status, string chamberName, string? recipeName = null)
     {
         WaferLogName = waferLogName;
         Status = status;
         ChamberName = chamberName;
+        RecipeName = recipeName;
         Timestamp = DateTime.UtcNow;
     }
 }

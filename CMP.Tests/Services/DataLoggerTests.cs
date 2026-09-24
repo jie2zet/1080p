@@ -85,6 +85,31 @@ public class DataLoggerTests
         Assert.AreEqual(2, destinationFiles.Length);
     }
 
+    [DataTestMethod]
+    [DataRow(null, "PolishRecipeA")]
+    [DataRow("Exsitu", "PolishRecipeA")]
+    public void RenameWaferFile_IncludesPolishRecipeName(string? subcategory, string recipeName)
+    {
+        var logger = new DataLogger("PolishA", _basePath);
+        const string temporaryWaferName = "Temporary_PolishA_recipe";
+        var data = new Dictionary<string, string?> { ["Time"] = "2026-07-22 12:00:00:000" };
+
+        if (subcategory == "Exsitu")
+        {
+            logger.AppendExsituData(temporaryWaferName, data);
+        }
+        else
+        {
+            logger.AppendData(temporaryWaferName, data);
+        }
+
+        const string finalWaferLogName = "LotA_2(C1W1)";
+        Assert.IsTrue(logger.RenameWaferFile(temporaryWaferName, finalWaferLogName, subcategory, recipeName));
+
+        var destinationFiles = Directory.GetFiles(_basePath, $"{finalWaferLogName}_{recipeName}_*.csv", SearchOption.AllDirectories);
+        Assert.AreEqual(1, destinationFiles.Length);
+    }
+
     [TestMethod]
     public void AppendData_PreservesDuplicateHeadersAndValuesWhenColumnsExpand()
     {
