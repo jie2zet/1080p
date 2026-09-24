@@ -33,7 +33,7 @@ public sealed class IoContentViewModel : BindableBase
                 AddGroup(Roller, chamber, $"_{station}", $"Roller {chamber.Name["Roller".Length..]}{station}");
         }
         foreach (var chamber in dataCenter.listPen)
-            AddGroup(Pen, chamber, "_1", $"{chamber.Name} 1");
+            AddGroup(Pen, chamber, "_1", $"Pen {chamber.Name["Pen".Length..]}1");
         BuildGroups(Dry, dataCenter.listDry, string.Empty, "Dry");
         Tabs.Add(new IoCategoryViewModel("Polish", Polish));
         Tabs.Add(new IoCategoryViewModel("Roller", Roller));
