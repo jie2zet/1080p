@@ -1569,6 +1569,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesPress();
         foreach (var (name, addr, plcValue, pressAddr, pressValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, pressAddr, 2, pressValue);
             if (err != 0)
             {
@@ -1596,6 +1599,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesVent();
         foreach (var (name, addr, plcValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, addr, 1, plcValue);
             if (err != 0)
             {
@@ -1613,6 +1619,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesVacuum();
         foreach (var (name, addr, plcValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, addr, 1, plcValue);
             if (err != 0)
             {
@@ -2667,32 +2676,32 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     {
         var zones = new[]
         {
-            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Press.Handle(), Value: PolishUnit.Zone1.Press.Value(),
+            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone1.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone1.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone1.SetPress.Value()),
-            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Press.Handle(), Value: PolishUnit.Zone2.Press.Value(),
+            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone2.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone2.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone2.SetPress.Value()),
-            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Press.Handle(), Value: PolishUnit.Zone3.Press.Value(),
+            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone3.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone3.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone3.SetPress.Value()),
-            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Press.Handle(), Value: PolishUnit.Zone4.Press.Value(),
+            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone4.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone4.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone4.SetPress.Value()),
-            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Press.Handle(), Value: PolishUnit.Zone5.Press.Value(),
+            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone5.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone5.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone5.SetPress.Value()),
-            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Press.Handle(), Value: PolishUnit.Zone6.Press.Value(),
+            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone6.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone6.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone6.SetPress.Value()),
-            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Press.Handle(), Value: PolishUnit.Zone7.Press.Value(),
+            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone7.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone7.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone7.SetPress.Value()),
-            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Press.Handle(), Value: PolishUnit.Zone8.Press.Value(),
+            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone8.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone8.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone8.SetPress.Value()),
             (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Press.Handle(),
-                Value: PolishUnit.Retain.Press.Value(),
+                Value: PlcHandle.CmdPolish.Gas.Retain.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Retain.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Retain.SetPress.Value()),
         };
@@ -2703,15 +2712,15 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     {
         var zones = new[]
         {
-            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vent.Handle(), Value: PolishUnit.Zone1.Vent.Value()),
-            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vent.Handle(), Value: PolishUnit.Zone2.Vent.Value()),
-            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vent.Handle(), Value: PolishUnit.Zone3.Vent.Value()),
-            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vent.Handle(), Value: PolishUnit.Zone4.Vent.Value()),
-            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vent.Handle(), Value: PolishUnit.Zone5.Vent.Value()),
-            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vent.Handle(), Value: PolishUnit.Zone6.Vent.Value()),
-            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vent.Handle(), Value: PolishUnit.Zone7.Vent.Value()),
-            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vent.Handle(), Value: PolishUnit.Zone8.Vent.Value()),
-            (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vent.Handle(), Value: PolishUnit.Retain.Vent.Value()),
+            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone1.Vent.Value()),
+            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone2.Vent.Value()),
+            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone3.Vent.Value()),
+            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone4.Vent.Value()),
+            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone5.Vent.Value()),
+            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone6.Vent.Value()),
+            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone7.Vent.Value()),
+            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone8.Vent.Value()),
+            (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Retain.Vent.Value()),
         };
         return zones;
     }
@@ -2721,23 +2730,23 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = new[]
         {
             (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vacuum.Handle(),
-                Value: PolishUnit.Zone1.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone1.Vacuum.Value()),
             (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vacuum.Handle(),
-                Value: PolishUnit.Zone2.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone2.Vacuum.Value()),
             (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vacuum.Handle(),
-                Value: PolishUnit.Zone3.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone3.Vacuum.Value()),
             (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vacuum.Handle(),
-                Value: PolishUnit.Zone4.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone4.Vacuum.Value()),
             (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vacuum.Handle(),
-                Value: PolishUnit.Zone5.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone5.Vacuum.Value()),
             (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vacuum.Handle(),
-                Value: PolishUnit.Zone6.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone6.Vacuum.Value()),
             (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vacuum.Handle(),
-                Value: PolishUnit.Zone7.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone7.Vacuum.Value()),
             (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vacuum.Handle(),
-                Value: PolishUnit.Zone8.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone8.Vacuum.Value()),
             (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vacuum.Handle(),
-                Value: PolishUnit.Retain.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Retain.Vacuum.Value()),
         };
         return zones;
     }
