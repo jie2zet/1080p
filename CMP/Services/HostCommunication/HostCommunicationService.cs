@@ -1,10 +1,14 @@
 ﻿using CMP.Extensions;
+using CMP.Models.HostCommunication;
 using CMP.Services.LoadPort;
 using Dm.util;
+using FabConnect;
 using FabConnect.SecsGemInterface.Application.MessageServices;
 using FabConnect.SecsGemInterface.Common;
 using FabConnect.SecsGemInterface.Common.ToolModel;
 using FabConnect.SecsGemInterface.GemModel;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using Logger = CMP.Services.Log.Logger;
 
@@ -95,7 +99,7 @@ namespace CMP.Services.HostCommunication
         private const string EventControlModeChangeReport = "ControlMode_CHANGE_Report";
         private const string EventTerminalMessage = "TerminalMessage";
         private DateTime _lastSendMsgTime;
-        private  MessageServiceManager ServiceManager;
+        private MessageServiceManager ServiceManager;
         private object _locker = new object();
 
 
@@ -103,12 +107,15 @@ namespace CMP.Services.HostCommunication
 
         private Stopwatch _monitorLinkTest = new Stopwatch();
 
-       // private   PeriodicJob _faMonitorThread;
+        private static Timer _timer;
 
+       // private PeriodicJob _faMonitorThread;
         private readonly IEventAggregator _eventAggregator;
 
-        //private LoadPortStatus status = new LoadPortStatus();
-        public HostCommunicationService(IEventAggregator eventAggregator) 
+        private ConcurrentQueue<SendEventModel> queue = new ConcurrentQueue<SendEventModel>();
+
+        private LoadPortStatus status = new LoadPortStatus();
+        public HostCommunicationService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
 
@@ -117,8 +124,8 @@ namespace CMP.Services.HostCommunication
             {
 
                 _gem.CommunicationStateChanged += OnCommunicationStateChanged;
-               // _gem.RemoteCommandS2F41In += _gem_RemoteCommandS2F41In;
-               // _gem.RemoteCommandS2F49In += _gem_RemoteCommandS2F49In;
+                // _gem.RemoteCommandS2F41In += _gem_RemoteCommandS2F41In;
+                // _gem.RemoteCommandS2F49In += _gem_RemoteCommandS2F49In;
 
                 _gem.ControlStateChanged += _gem_ControlStateChanged;
                 _gem.ShowTrialMessageBox = false;
@@ -158,7 +165,7 @@ namespace CMP.Services.HostCommunication
                 _systemBuildInVariables.Add("SpoolSubstate");
 
                 ServiceManager = _gem.Services;
-               // _faMonitorThread = new PeriodicJob(200, MonitorFaTask, "Monitor FA Thread", true);
+                //_faMonitorThread = new PeriodicJob(100, MonitorFaTask, "Monitor FA Thread", true);
 
 
                 if (!_gem.IsInitialized)
@@ -170,12 +177,12 @@ namespace CMP.Services.HostCommunication
 
                 SetFAOperativeMode();
 
-               // status.LoadportStatus = LoadportActionStatus.None;
+                status.LoadportStatus = LoadportActionStatus.None;
 
             }
             catch (Exception ex)
             {
-               
+
                 Logger.Error($"HostCommunicationService Initialized Error:{ex.ToString()} ");
             }
 
@@ -183,6 +190,14 @@ namespace CMP.Services.HostCommunication
 
             //监听LoadPort状态改变通知
             _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
+
+            //处理发送事件
+            _timer = new Timer(
+            callback: ProcessSendEventsTask,
+            state: null,
+            dueTime: 1000,
+            period: 2000);
+           
 
 
         }
@@ -201,9 +216,9 @@ namespace CMP.Services.HostCommunication
         /// 接收到LoadPortStatus改变消息
         /// </summary>
         /// <param name="message"></param>
-       private  void OnLoadPortStatusMessageReceived(LoadPortStatusChangedEventArgs  message)
+        private void OnLoadPortStatusMessageReceived(LoadPortStatusChangedEventArgs message)
         {
-          
+
             Logger.Info($"HostCommunicationService Receive {message}");
             if (message.HardwareStatus == null) return;
 
@@ -211,46 +226,51 @@ namespace CMP.Services.HostCommunication
             int carrierId = 0;
             if (!string.IsNullOrEmpty(message.CarrierId))
             {
-                 carrierId = Convert.ToInt16(message.CarrierId);
-            }  
+                carrierId = Convert.ToInt16(message.CarrierId);
+            }
 
             switch (message.HardwareStatus.LoadportStatus)
             {
                 case LoadportActionStatus.None:
-                    SendEventToHost(LoadPortTransferState.LoadPortInitialized.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.LoadPortInitialized.toString(), message.LoadportId, portTransferStatus, carrierId, false));
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
                 case LoadportActionStatus.WaitFoupArrive:
-                    SendEventToHost(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.LoadPortInService.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
-                case LoadportActionStatus.FoupArrived:
-                    SendEventToHost(LoadPortTransferState.LoadPortOutOfService.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+                case LoadportActionStatus.FoupArrived: //LoadPort上有foup可以    
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId, true));
+
                     break;
                 case LoadportActionStatus.Clamp:
-                    SendEventToHost(LoadPortTransferState.TransferReadyStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+
                     break;
                 case LoadportActionStatus.Dock:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedStateEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
+
                     break;
-                case LoadportActionStatus.Load:
-                    SendEventToHost(LoadPortTransferState.ReadyToLoadEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
+                case LoadportActionStatus.Load: //LoadPort 上有foup可以进行装载作业
+
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId, true));
                     break;
                 case LoadportActionStatus.DoorOpen:
-                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEntered.toString(), message.LoadportId, portTransferStatus, carrierId,true);
+
                     break;
                 case LoadportActionStatus.Scan:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToLoad.toString(), message.LoadportId, portTransferStatus, carrierId,true);
+
                     break;
                 case LoadportActionStatus.Undock:
-                    SendEventToHost(LoadPortTransferState.TransferBlockedFromReadyToUnload.toString(), message.LoadportId, portTransferStatus, carrierId,true);
+
                     break;
-                case LoadportActionStatus.Unload:
-                    SendEventToHost(LoadPortTransferState.ReadyToLoadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+                case LoadportActionStatus.Unload: //LoadPort 可以取走foup
+
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.ReadyToLoadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
                 case LoadportActionStatus.Release:
-                    SendEventToHost(LoadPortTransferState.ReadyToUnloadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+
                     break;
-                case LoadportActionStatus.WaitFoupLeave:
-                    SendEventToHost(LoadPortTransferState.TransferReadyEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId,false);
+                case LoadportActionStatus.WaitFoupLeave: //作业完成等待取走foup
+
+                    queue.Enqueue(new SendEventModel(LoadPortTransferState.ReadyToUnloadEnteredFromTransferBlocked.toString(), message.LoadportId, portTransferStatus, carrierId, false));
                     break;
             }
 
@@ -260,42 +280,51 @@ namespace CMP.Services.HostCommunication
         /// <summary>
         /// 通知主机事件
         /// </summary>
-        /// <param name="eventName"></param>
-        /// <param name="loadportId"></param>
-        /// <param name="portTransFerState"></param>
-        /// <param name="carrierID"></param>
-        /// <param name="isSendCarrierID"></param>
-        private void SendEventToHost(string eventName, int loadportId, int portTransFerState, int carrierID, bool isSendCarrierID)
+        /// <param name="model"></param>
+        private void SendEventToHost(SendEventModel model)
         {
 
             var allEvents = _gem.GetAllEnabledEvents();
-            if (!allEvents.Contains(eventName)) return;
+            if (!allEvents.Contains(model.EventName)) return;
 
-            _gem.SetAttribute("PortID", AttributeType.DV, Convert.ToString(loadportId));
-            _gem.SetAttribute("PortTransFerState", AttributeType.DV, Convert.ToString(portTransFerState));
-            if (isSendCarrierID)
+            _gem.SetAttribute("PortID", AttributeType.DV, Convert.ToString(model.LoadportId));
+            _gem.SetAttribute("PortTransFerState", AttributeType.DV, Convert.ToString(model.PortTransFerState));
+            if (model.IsSendCarrierID)
             {
-                _gem.SetAttribute("CarrierID", AttributeType.DV, Convert.ToString(carrierID));
+                _gem.SetAttribute("CarrierID", AttributeType.DV, Convert.ToString(model.CarrierID));
             }
 
 
-            SECsMessage message = ServiceManager.DataCollection.EventReportSend(eventName);
+            SECsMessage message = ServiceManager.DataCollection.EventReportSend(model.EventName);
             SECsMessage reply = _gem.SendAndWait(message);
             if (reply != null)
             {
                 if (reply.DataItem[0].ToInt() == 0)
                 {
-                    Logger.Info($"HostCommunicationService SendEventToHost EventName:{eventName}  LoadportId:{loadportId} PortTransFerState:{portTransFerState} CarrierID:{carrierID}  successfully");
+                    Logger.Info($"HostCommunicationService SendEventToHost EventName:{model.EventName}  LoadportId:{model.LoadportId} PortTransFerState:{model.PortTransFerState} CarrierID:{model.CarrierID}  successfully");
                 }
                 else
                 {
-                   
-                    Logger.Error($"HostCommunicationService SendEventToHost EventName:{eventName}  LoadportId:{loadportId} PortTransFerState:{portTransFerState} CarrierID:{carrierID}  is not sent successfully");
+
+                    Logger.Error($"HostCommunicationService SendEventToHost EventName:{model.EventName}  LoadportId:{model.LoadportId} PortTransFerState:{model.PortTransFerState} CarrierID:{model.CarrierID}  is not sent successfully");
                 }
             }
             else
             {
-                Logger.Error($"HostCommunicationService SendEventToHost EventName:{eventName}  LoadportId:{loadportId} PortTransFerState:{portTransFerState} CarrierID:{carrierID} No reply received!");
+                Logger.Error($"HostCommunicationService SendEventToHost EventName:{model.EventName}  LoadportId:{model.LoadportId} PortTransFerState:{model.PortTransFerState} CarrierID:{model.CarrierID} No reply received!");
+            }
+
+        }
+
+
+        private void ProcessSendEventsTask(object? state)
+        {
+            if (queue.TryDequeue(out SendEventModel? result))
+            {
+                Task.Run(() =>
+                {
+                    SendEventToHost(result);
+                });
             }
 
         }
@@ -303,7 +332,7 @@ namespace CMP.Services.HostCommunication
 
 
 
-        private void _gem_SecondaryMessageIn(object sender, SECsSecondaryInEventArgs e) 
+        private void _gem_SecondaryMessageIn(object sender, SECsSecondaryInEventArgs e)
         {
             _monitorLinkTest.Restart();
         }
@@ -542,7 +571,7 @@ namespace CMP.Services.HostCommunication
             try
             {
                 string reason = string.Empty;
-               // LOG.Write("Handle_S7F1, Request the permission of the process program body");
+                // LOG.Write("Handle_S7F1, Request the permission of the process program body");
 
 
                 SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(7, 2, false);
@@ -557,7 +586,7 @@ namespace CMP.Services.HostCommunication
             }
             catch (Exception ex)
             {
-               // LOG.Write("Handle_S7F1 exception:" + ex.Message);
+                // LOG.Write("Handle_S7F1 exception:" + ex.Message);
                 SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(7, 0, false);
                 _gem.SendReply(reply, e.TransactionID);
             }
@@ -1962,58 +1991,58 @@ namespace CMP.Services.HostCommunication
         //private bool ParseMultiProcssJobObj(SECsPrimaryInEventArgs e, out E40ProcessJob[] PJobjs)
         //{
         //    bool ret = true;
-            //try
-            //{
-            //    PJobjs = new E40ProcessJob[e.Inputs.DataItem[0][1].Count];
+        //try
+        //{
+        //    PJobjs = new E40ProcessJob[e.Inputs.DataItem[0][1].Count];
 
-            //    for (int pjIndex = 0; pjIndex < e.Inputs.DataItem[0][1].Count; pjIndex++)
-            //    {
-            //        var PJobj = new E40ProcessJob();
+        //    for (int pjIndex = 0; pjIndex < e.Inputs.DataItem[0][1].Count; pjIndex++)
+        //    {
+        //        var PJobj = new E40ProcessJob();
 
 
-            //        PJobj.ObjtID = e.Inputs.DataItem[0][1][pjIndex][0].ToString().Trim();
-            //        PJobj.PRMtlType = e.Inputs.DataItem[0][1][pjIndex][1].ToString() == "D" ? MtlType.CARRIER : MtlType.WAFER;   //13（D）= Carrier,E=Wafer
-            //        PJobj.ObjType = "ProcessJob";
-            //        PJobj.PauseEvent = new List<int>();
-            //        PJobj.PRMtlNameList = new List<ProcessMaterialName>();
-            //        for (int i = 0; i < e.Inputs.DataItem[0][1][pjIndex][2].Count; i++)
-            //        {
-            //            ProcessMaterialName promname = new ProcessMaterialName();
-            //            promname.CarrierID = e.Inputs.DataItem[0][1][pjIndex][2][i][0].ToString();
-            //            promname.SlotID = new List<int>();
-            //            for (int j = 0; j < e.Inputs.DataItem[0][1][pjIndex][2][i][1].Count; j++) promname.SlotID.Add(e.Inputs.DataItem[0][1][pjIndex][2][i][1][j].ToInt());
-            //            PJobj.PRMtlNameList.Add(promname);
-            //        }
-            //        PJobj.PRRecipeMethod = e.Inputs.DataItem[0][1][pjIndex][3][0].ToUInt() == 2 ? ProcessRecipeMethod.RECIPE_WITH_VAR_TUNING : ProcessRecipeMethod.RECIEP;
-            //        PJobj.RecID = e.Inputs.DataItem[0][1][pjIndex][3][1].ToString().Split('\\').Last().Replace(".seq", "");
-            //        PJobj.RecVariableList = new Dictionary<string, object>();
-            //        for (int i = 0; i < e.Inputs.DataItem[0][1][pjIndex][3][2].Count; i++)
-            //        {
-            //            if (e.Inputs.DataItem[0][1][pjIndex][3][2][i].Count <= 1)
-            //            {
-            //                return false;
-            //            }
+        //        PJobj.ObjtID = e.Inputs.DataItem[0][1][pjIndex][0].ToString().Trim();
+        //        PJobj.PRMtlType = e.Inputs.DataItem[0][1][pjIndex][1].ToString() == "D" ? MtlType.CARRIER : MtlType.WAFER;   //13（D）= Carrier,E=Wafer
+        //        PJobj.ObjType = "ProcessJob";
+        //        PJobj.PauseEvent = new List<int>();
+        //        PJobj.PRMtlNameList = new List<ProcessMaterialName>();
+        //        for (int i = 0; i < e.Inputs.DataItem[0][1][pjIndex][2].Count; i++)
+        //        {
+        //            ProcessMaterialName promname = new ProcessMaterialName();
+        //            promname.CarrierID = e.Inputs.DataItem[0][1][pjIndex][2][i][0].ToString();
+        //            promname.SlotID = new List<int>();
+        //            for (int j = 0; j < e.Inputs.DataItem[0][1][pjIndex][2][i][1].Count; j++) promname.SlotID.Add(e.Inputs.DataItem[0][1][pjIndex][2][i][1][j].ToInt());
+        //            PJobj.PRMtlNameList.Add(promname);
+        //        }
+        //        PJobj.PRRecipeMethod = e.Inputs.DataItem[0][1][pjIndex][3][0].ToUInt() == 2 ? ProcessRecipeMethod.RECIPE_WITH_VAR_TUNING : ProcessRecipeMethod.RECIEP;
+        //        PJobj.RecID = e.Inputs.DataItem[0][1][pjIndex][3][1].ToString().Split('\\').Last().Replace(".seq", "");
+        //        PJobj.RecVariableList = new Dictionary<string, object>();
+        //        for (int i = 0; i < e.Inputs.DataItem[0][1][pjIndex][3][2].Count; i++)
+        //        {
+        //            if (e.Inputs.DataItem[0][1][pjIndex][3][2][i].Count <= 1)
+        //            {
+        //                return false;
+        //            }
 
-            //            if (!PJobj.RecVariableList.ContainsKey(e.Inputs.DataItem[0][1][pjIndex][3][2][i][0].ToString()))
-            //                PJobj.RecVariableList.Add(e.Inputs.DataItem[0][1][pjIndex][3][2][i][0].ToString(), e.Inputs.DataItem[0][1][pjIndex][3][2][i][1]);
+        //            if (!PJobj.RecVariableList.ContainsKey(e.Inputs.DataItem[0][1][pjIndex][3][2][i][0].ToString()))
+        //                PJobj.RecVariableList.Add(e.Inputs.DataItem[0][1][pjIndex][3][2][i][0].ToString(), e.Inputs.DataItem[0][1][pjIndex][3][2][i][1]);
 
-            //        }
-            //        PJobj.PRProcessStart = e.Inputs.DataItem[0][1][pjIndex][4].ToBoolean();
-            //        PJobj.CreateTime = DateTime.Now;
+        //        }
+        //        PJobj.PRProcessStart = e.Inputs.DataItem[0][1][pjIndex][4].ToBoolean();
+        //        PJobj.CreateTime = DateTime.Now;
 
-            //        PJobjs[pjIndex] = PJobj;
-            //        if (PJobj.RecID == "*null*") PJobj.RecID = "";
-            //        string[] recipelist = GetRecipeList();
-            //        if (!GetRecipeList().Contains(PJobj.RecID) || string.IsNullOrEmpty(PJobj.RecID))
-            //            ret = false;
-            //    }
+        //        PJobjs[pjIndex] = PJobj;
+        //        if (PJobj.RecID == "*null*") PJobj.RecID = "";
+        //        string[] recipelist = GetRecipeList();
+        //        if (!GetRecipeList().Contains(PJobj.RecID) || string.IsNullOrEmpty(PJobj.RecID))
+        //            ret = false;
+        //    }
 
-            //}
-            //catch
-            //{
-            //    PJobjs = new E40ProcessJob[0];
-            //    return false;
-            //}
+        //}
+        //catch
+        //{
+        //    PJobjs = new E40ProcessJob[0];
+        //    return false;
+        //}
 
         //    return ret;
         //}
@@ -2370,7 +2399,7 @@ namespace CMP.Services.HostCommunication
         {
             try
             {
-               // LOG.Write("Process host single terminal message");
+                // LOG.Write("Process host single terminal message");
                 string terminalMessage = e.Inputs.DataItem["Ln"]["TEXT"].ToString();
                 // notify equipment to show terminal message
                 OnReceivedSingleTerminalMessage(terminalMessage);
@@ -2381,7 +2410,7 @@ namespace CMP.Services.HostCommunication
             }
             catch (Exception ex)
             {
-               // LOG.Write("Handle_S10F3 Exception: " + ex.Message);
+                // LOG.Write("Handle_S10F3 Exception: " + ex.Message);
                 SECsMessage reply = _gem.Services.TerminalDisplay.TerminalDisplayAcknowledge(1/*will not display*/);
                 reply.Function = 4;
                 _gem.SendReply(reply, e.TransactionID);
@@ -2404,7 +2433,7 @@ namespace CMP.Services.HostCommunication
         {
             try
             {
-              //  LOG.Write("Process host multiple terminal message");
+                //  LOG.Write("Process host multiple terminal message");
                 List<string> receivedMultipleMessages = new List<string>();
                 string message = string.Empty;
                 for (int i = 0; i < e.Inputs.DataItem[0][1].Count; i++)
@@ -2420,7 +2449,7 @@ namespace CMP.Services.HostCommunication
             }
             catch (Exception ex)
             {
-              //  LOG.Write("Handle_S10F5 Exception: " + ex.Message);
+                //  LOG.Write("Handle_S10F5 Exception: " + ex.Message);
                 SECsMessage reply = _gem.Services.TerminalDisplay.TerminalDisplayAcknowledge(1/*will not display*/);
                 reply.Function = 6;
                 _gem.SendReply(reply, e.TransactionID);
@@ -2605,7 +2634,7 @@ namespace CMP.Services.HostCommunication
         {
             try
             {
-               // LOG.Write("Handle_S2F15, Equipment Constant Send");
+                // LOG.Write("Handle_S2F15, Equipment Constant Send");
                 //get ec mapping
                 Dictionary<long, string> ecMapping = new Dictionary<long, string>();
                 foreach (ECID ec in _gem.EquipmentModel.EquipmentConstants.ECIDCollection)
@@ -2660,7 +2689,7 @@ namespace CMP.Services.HostCommunication
             }
             catch (Exception ex)
             {
-               // LOG.Write(string.Format("Handle_S2F25 Exception: {0}", ex.Message));
+                // LOG.Write(string.Format("Handle_S2F25 Exception: {0}", ex.Message));
                 SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 0, false);
                 _gem.SendReply(reply, e.TransactionID);
             }
@@ -2671,7 +2700,7 @@ namespace CMP.Services.HostCommunication
         /// <param name="terminalMessage"></param>
         protected virtual void OnReceivedSingleTerminalMessage(string terminalMessage)
         {
-          //  EV.Notify("Host", EventTerminalMessage, terminalMessage);
+            //  EV.Notify("Host", EventTerminalMessage, terminalMessage);
         }
 
         /// <summary>
@@ -2682,7 +2711,7 @@ namespace CMP.Services.HostCommunication
         {
             foreach (var message in terminalMessage)
             {
-               // EV.Notify("Host", EventTerminalMessage, message);
+                // EV.Notify("Host", EventTerminalMessage, message);
             }
         }
 
@@ -2726,7 +2755,7 @@ namespace CMP.Services.HostCommunication
         {
             if (_preControlState != _gem.ControlState)
             {
-               // LOG.Write($"Control mode changed from {_preControlState} to {_gem.ControlState}");
+                // LOG.Write($"Control mode changed from {_preControlState} to {_gem.ControlState}");
 
 
             }
@@ -2786,580 +2815,580 @@ namespace CMP.Services.HostCommunication
 
         //private bool _gem_RemoteCommandS2F41In(SECsTransaction trans)
         //{
-            //lock (_locker)
-            //{
-            //    try
-            //    {
+        //lock (_locker)
+        //{
+        //    try
+        //    {
 
-            //        bool ret = true;
-            //        string reason = string.Empty;
-            //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 42, false);
-            //        string remoteCommandName = trans.Primary.DataItem[0][0].ToString().ToUpper();
-            //        var paramters = new object[] { };
-            //        int _port;
-            //        switch (remoteCommandName)
-            //        {
-            //            case "PP_DOWNLOAD":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "RECIPE_NAME")
-            //                {
-            //                    reason = "PP_DOWNLOAD Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "RECIPE_BODY")
-            //                {
-            //                    reason = "PP_DOWNLOAD Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                string ppid = trans.Primary.DataItem[0][1][0][1].ToString();
-            //                string ppbody = trans.Primary.DataItem[0][1][1][1].ToString();
-            //                paramters = new object[] { ppid, ppbody };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
-
-
-
-            //            case "START":
-
-            //                List<object> paras = new List<object>();
-            //                for (int i = 0; i < trans.Primary.DataItem[0][1].Count; i++)
-            //                {
-            //                    paras.Add(trans.Primary.DataItem[0][1][i][1]);
-            //                }
-
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paras.ToArray(), out reason);
-            //                break;
-            //            case "STARTCHECK":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString().ToUpper() != "PORT_ID")
-            //                {
-            //                    reason = "Start Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString().ToUpper() != "SLOT")
-            //                {
-            //                    reason = "Start Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-
-            //                List<int> slots = new List<int>();
-            //                for (int i = 0; i < trans.Primary.DataItem[0][1][1][1].Count; i++)
-            //                {
-            //                    int slot = trans.Primary.DataItem[0][1][1][1][i].ToInt();
-            //                    slots.Add(slot);
-            //                }
-
-
-            //                paramters = new object[] { _port, slots };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
+        //        bool ret = true;
+        //        string reason = string.Empty;
+        //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 42, false);
+        //        string remoteCommandName = trans.Primary.DataItem[0][0].ToString().ToUpper();
+        //        var paramters = new object[] { };
+        //        int _port;
+        //        switch (remoteCommandName)
+        //        {
+        //            case "PP_DOWNLOAD":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "RECIPE_NAME")
+        //                {
+        //                    reason = "PP_DOWNLOAD Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "RECIPE_BODY")
+        //                {
+        //                    reason = "PP_DOWNLOAD Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                string ppid = trans.Primary.DataItem[0][1][0][1].ToString();
+        //                string ppbody = trans.Primary.DataItem[0][1][1][1].ToString();
+        //                paramters = new object[] { ppid, ppbody };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
 
 
 
+        //            case "START":
 
-            //            case "GOREMOTE":
-            //                {
-            //                    _gem.SetRemote();
-            //                }
-            //                break;
-            //            case "GOLOCAL":
-            //                {
-            //                    _gem.SetLocal();
-            //                }
-            //                break;
-            //            case "LOTCOMPLETE":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "LOT_ID")
-            //                {
-            //                    reason = "LotComplete Command Format Not Correct";
-            //                    ret = false;
-            //                }
-            //                string lotId = trans.Primary.DataItem[0][1][0][1].ToString();
-            //                paramters = new object[] { lotId };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
-            //                break;
-            //            case "SETCARRIERINDEX":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "SETCARRIERINDEX Command Format Not Correct";
-            //                    ret = false;
-            //                }
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
-            //                {
-            //                    reason = "SETCARRIERINDEX Command Format Not Correct";
-            //                    ret = false;
-            //                }
-            //                int index = trans.Primary.DataItem[0][1][1][1].ToInt();
-            //                paramters = new object[] { _port, index };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
-            //                break;
-            //            case "SETCARRIERNAME":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "SETCARRIERINDEX Command Format Not Correct";
-            //                    ret = false;
-            //                }
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "NAME")
-            //                {
-            //                    reason = "SETCARRIERINDEX Command Format Not Correct";
-            //                    ret = false;
-            //                }
-            //                string carrierName = trans.Primary.DataItem[0][1][1][1].ToString();
-            //                paramters = new object[] { _port, carrierName };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
-            //                break;
+        //                List<object> paras = new List<object>();
+        //                for (int i = 0; i < trans.Primary.DataItem[0][1].Count; i++)
+        //                {
+        //                    paras.Add(trans.Primary.DataItem[0][1][i][1]);
+        //                }
 
-            //            case "UNCLAMP":
-            //            case "READCARRIERID":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "Read CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
-            //                {
-            //                    reason = "Read CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][2][0].ToString() != "OFFSET")
-            //                {
-            //                    reason = "Read CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][3][0].ToString() != "LENGTH")
-            //                {
-            //                    reason = "Read CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paras.ToArray(), out reason);
+        //                break;
+        //            case "STARTCHECK":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString().ToUpper() != "PORT_ID")
+        //                {
+        //                    reason = "Start Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString().ToUpper() != "SLOT")
+        //                {
+        //                    reason = "Start Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
 
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                paramters = new object[]
-            //                {
-            //                    _port,
-            //                    trans.Primary.DataItem[0][1][1][1].ToInt(),
-            //                    trans.Primary.DataItem[0][1][2][1].ToInt(),
-            //                    trans.Primary.DataItem[0][1][3][1].ToInt(),
-            //                };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
-            //            case "WRITECARRIERID":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "Write CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
-            //                {
-            //                    reason = "Write CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][2][0].ToString() != "OFFSET")
-            //                {
-            //                    reason = "Write CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][3][0].ToString() != "LENGTH")
-            //                {
-            //                    reason = "Write CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][4][0].ToString() != "ID")
-            //                {
-            //                    reason = "Write CarrierID Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                int idindex = trans.Primary.DataItem[0][1][1][1].ToInt();
-            //                int idoffset = trans.Primary.DataItem[0][1][2][1].ToInt();
-            //                int idlength = trans.Primary.DataItem[0][1][3][1].ToInt();
-            //                string id = trans.Primary.DataItem[0][1][4][1].ToString();
+        //                List<int> slots = new List<int>();
+        //                for (int i = 0; i < trans.Primary.DataItem[0][1][1][1].Count; i++)
+        //                {
+        //                    int slot = trans.Primary.DataItem[0][1][1][1][i].ToInt();
+        //                    slots.Add(slot);
+        //                }
 
 
-            //                paramters = new object[]
-            //                {
-            //                    _port,
-            //                    idindex,
-            //                    idoffset,
-            //                    idlength,
-            //                    id,
-            //                };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
-            //            case "READRFID":
-            //            case "WRITERFID":
-            //            case "LOAD":
-            //            case "UNLOAD":
-            //            case "SCANSLOT":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "ScanSlot Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                paramters = new object[] { _port };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
+        //                paramters = new object[] { _port, slots };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
 
-            //            case "PP_SELECT":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
-            //                {
-            //                    reason = "PP_SELECT Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "RECIPE_NAME")
-            //                {
-            //                    reason = "PP_SELECT Command Format Not Correct";
-            //                    ret = false;
-            //                    break;
-            //                }
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                string recipe = trans.Primary.DataItem[0][1][1][1].ToString();
-            //                int start = trans.Primary.DataItem[0][1].Count > 2 ?
-            //                    trans.Primary.DataItem[0][1][2][1].ToInt() : 1;
-            //                int end = trans.Primary.DataItem[0][1].Count > 3 ?
-            //                    trans.Primary.DataItem[0][1][3][1].ToInt() : 25;
-            //                paramters = new object[] { _port, recipe, start, end };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
-            //            case "CREATE_WAFER":
-            //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
-            //                int startslot = trans.Primary.DataItem[0][1].Count > 1 ?
-            //                    trans.Primary.DataItem[0][1][1][1].ToInt() : 1;
-            //                int endslot = trans.Primary.DataItem[0][1].Count > 2 ?
-            //                    trans.Primary.DataItem[0][1][2][1].ToInt() : 25;
-            //                paramters = new object[] { _port, startslot, endslot };
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
-            //                break;
-            //            case "PP-SELECT":
-            //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "RECIPE_NAME" ||
-            //                        trans.Primary.DataItem[0][1][0][1].ToString() == "")
-            //                    throw new Exception("PP-SELECT Command Format Not Correct");
-            //                string recipeId = trans.Primary.DataItem[0][1][0][1].ToString();
-            //                ret = _equipment.ExecuteFACommand("PP-SELECT", new object[] { recipeId }, out _);
 
-            //                break;
-            //            case "PAUSE":
-            //            case "ABORT":
-            //            case "RESUME":
 
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName, null, out reason); ;
-            //                break;
-            //            default:
-            //                Dictionary<string, SECsDataItem> parass = new Dictionary<string, SECsDataItem>();
-            //                for (int i = 0; i < trans.Primary.DataItem[0][1].Count; i++)
-            //                {
-            //                    parass.Add(trans.Primary.DataItem[0][1][i][0].ToString(), trans.Primary.DataItem[0][1][i][1]);
-            //                }
-            //                ret = _equipment.ExecuteHostCommand(remoteCommandName, parass, out reason);
-            //                break;
-            //        }
 
-            //        reply.DataItem.AddList();
-            //        if (ret)
-            //        {
-            //            reply.DataItem[0].Add("HCACK", 0, SECsFormat.Binary);
-            //        }
-            //        else
-            //        {
-            //            reply.DataItem[0].Add("HCACK", 2/*Can not perform now*/, SECsFormat.Binary);
+        //            case "GOREMOTE":
+        //                {
+        //                    _gem.SetRemote();
+        //                }
+        //                break;
+        //            case "GOLOCAL":
+        //                {
+        //                    _gem.SetLocal();
+        //                }
+        //                break;
+        //            case "LOTCOMPLETE":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "LOT_ID")
+        //                {
+        //                    reason = "LotComplete Command Format Not Correct";
+        //                    ret = false;
+        //                }
+        //                string lotId = trans.Primary.DataItem[0][1][0][1].ToString();
+        //                paramters = new object[] { lotId };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
+        //                break;
+        //            case "SETCARRIERINDEX":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "SETCARRIERINDEX Command Format Not Correct";
+        //                    ret = false;
+        //                }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
+        //                {
+        //                    reason = "SETCARRIERINDEX Command Format Not Correct";
+        //                    ret = false;
+        //                }
+        //                int index = trans.Primary.DataItem[0][1][1][1].ToInt();
+        //                paramters = new object[] { _port, index };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
+        //                break;
+        //            case "SETCARRIERNAME":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "SETCARRIERINDEX Command Format Not Correct";
+        //                    ret = false;
+        //                }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "NAME")
+        //                {
+        //                    reason = "SETCARRIERINDEX Command Format Not Correct";
+        //                    ret = false;
+        //                }
+        //                string carrierName = trans.Primary.DataItem[0][1][1][1].ToString();
+        //                paramters = new object[] { _port, carrierName };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason); ;
+        //                break;
 
-            //            reply.DataItem[0].Add("CPVALUE", reason, SECsFormat.Ascii);
-            //        }
+        //            case "UNCLAMP":
+        //            case "READCARRIERID":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "Read CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
+        //                {
+        //                    reason = "Read CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][2][0].ToString() != "OFFSET")
+        //                {
+        //                    reason = "Read CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][3][0].ToString() != "LENGTH")
+        //                {
+        //                    reason = "Read CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
 
-            //        _gem.SendReply(reply, trans.Id);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        LOG.Write(string.Format("Handle_S2F41 Exception: {0}", ex.Message));
-            //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 42, false);
-            //        reply.DataItem.AddList();
-            //        reply.DataItem[0].Add("HCACK", 3/*At least one parameter is invalid*/, SECsFormat.Binary);
-            //        reply.DataItem[0].AddList();
-            //        reply.DataItem[0][1].AddList();
-            //        reply.DataItem[0][1].Add("CPVALUE", ex.Message, SECsFormat.Ascii);
-            //        _gem.SendReply(reply, trans.Id);
-            //    }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                paramters = new object[]
+        //                {
+        //                    _port,
+        //                    trans.Primary.DataItem[0][1][1][1].ToInt(),
+        //                    trans.Primary.DataItem[0][1][2][1].ToInt(),
+        //                    trans.Primary.DataItem[0][1][3][1].ToInt(),
+        //                };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
+        //            case "WRITECARRIERID":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "Write CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "INDEX")
+        //                {
+        //                    reason = "Write CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][2][0].ToString() != "OFFSET")
+        //                {
+        //                    reason = "Write CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][3][0].ToString() != "LENGTH")
+        //                {
+        //                    reason = "Write CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][4][0].ToString() != "ID")
+        //                {
+        //                    reason = "Write CarrierID Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
 
-            //    Thread.Sleep(200);
-            //    return true;
-            //}
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                int idindex = trans.Primary.DataItem[0][1][1][1].ToInt();
+        //                int idoffset = trans.Primary.DataItem[0][1][2][1].ToInt();
+        //                int idlength = trans.Primary.DataItem[0][1][3][1].ToInt();
+        //                string id = trans.Primary.DataItem[0][1][4][1].ToString();
+
+
+        //                paramters = new object[]
+        //                {
+        //                    _port,
+        //                    idindex,
+        //                    idoffset,
+        //                    idlength,
+        //                    id,
+        //                };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
+        //            case "READRFID":
+        //            case "WRITERFID":
+        //            case "LOAD":
+        //            case "UNLOAD":
+        //            case "SCANSLOT":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "ScanSlot Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                paramters = new object[] { _port };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
+
+        //            case "PP_SELECT":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "PORT_ID")
+        //                {
+        //                    reason = "PP_SELECT Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                if (trans.Primary.DataItem[0][1][1][0].ToString() != "RECIPE_NAME")
+        //                {
+        //                    reason = "PP_SELECT Command Format Not Correct";
+        //                    ret = false;
+        //                    break;
+        //                }
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                string recipe = trans.Primary.DataItem[0][1][1][1].ToString();
+        //                int start = trans.Primary.DataItem[0][1].Count > 2 ?
+        //                    trans.Primary.DataItem[0][1][2][1].ToInt() : 1;
+        //                int end = trans.Primary.DataItem[0][1].Count > 3 ?
+        //                    trans.Primary.DataItem[0][1][3][1].ToInt() : 25;
+        //                paramters = new object[] { _port, recipe, start, end };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
+        //            case "CREATE_WAFER":
+        //                _port = trans.Primary.DataItem[0][1][0][1].ToInt();
+        //                int startslot = trans.Primary.DataItem[0][1].Count > 1 ?
+        //                    trans.Primary.DataItem[0][1][1][1].ToInt() : 1;
+        //                int endslot = trans.Primary.DataItem[0][1].Count > 2 ?
+        //                    trans.Primary.DataItem[0][1][2][1].ToInt() : 25;
+        //                paramters = new object[] { _port, startslot, endslot };
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, paramters, out reason);
+        //                break;
+        //            case "PP-SELECT":
+        //                if (trans.Primary.DataItem[0][1][0][0].ToString() != "RECIPE_NAME" ||
+        //                        trans.Primary.DataItem[0][1][0][1].ToString() == "")
+        //                    throw new Exception("PP-SELECT Command Format Not Correct");
+        //                string recipeId = trans.Primary.DataItem[0][1][0][1].ToString();
+        //                ret = _equipment.ExecuteFACommand("PP-SELECT", new object[] { recipeId }, out _);
+
+        //                break;
+        //            case "PAUSE":
+        //            case "ABORT":
+        //            case "RESUME":
+
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName, null, out reason); ;
+        //                break;
+        //            default:
+        //                Dictionary<string, SECsDataItem> parass = new Dictionary<string, SECsDataItem>();
+        //                for (int i = 0; i < trans.Primary.DataItem[0][1].Count; i++)
+        //                {
+        //                    parass.Add(trans.Primary.DataItem[0][1][i][0].ToString(), trans.Primary.DataItem[0][1][i][1]);
+        //                }
+        //                ret = _equipment.ExecuteHostCommand(remoteCommandName, parass, out reason);
+        //                break;
+        //        }
+
+        //        reply.DataItem.AddList();
+        //        if (ret)
+        //        {
+        //            reply.DataItem[0].Add("HCACK", 0, SECsFormat.Binary);
+        //        }
+        //        else
+        //        {
+        //            reply.DataItem[0].Add("HCACK", 2/*Can not perform now*/, SECsFormat.Binary);
+
+        //            reply.DataItem[0].Add("CPVALUE", reason, SECsFormat.Ascii);
+        //        }
+
+        //        _gem.SendReply(reply, trans.Id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LOG.Write(string.Format("Handle_S2F41 Exception: {0}", ex.Message));
+        //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 42, false);
+        //        reply.DataItem.AddList();
+        //        reply.DataItem[0].Add("HCACK", 3/*At least one parameter is invalid*/, SECsFormat.Binary);
+        //        reply.DataItem[0].AddList();
+        //        reply.DataItem[0][1].AddList();
+        //        reply.DataItem[0][1].Add("CPVALUE", ex.Message, SECsFormat.Ascii);
+        //        _gem.SendReply(reply, trans.Id);
+        //    }
+
+        //    Thread.Sleep(200);
+        //    return true;
+        //}
         //}
 
         //private bool _gem_RemoteCommandS2F49In(SECsTransaction trans)
         //{
-            //lock (_locker)
-            //{
-            //    try
-            //    {
-            //        bool ret = true;
-            //        string reason = string.Empty;
-            //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 50, false);
+        //lock (_locker)
+        //{
+        //    try
+        //    {
+        //        bool ret = true;
+        //        string reason = string.Empty;
+        //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 50, false);
 
-            //        string remoteCommandName = trans.Primary.DataItem[0][2].ToString();
-            //        switch (remoteCommandName.ToUpper())
-            //        {
-            //            case "START_TRANSFER":
-            //            case "START_PACK":
-            //                Dictionary<string, SECsDataItem> paras = new Dictionary<string, SECsDataItem>();
-            //                for (int i = 0; i < trans.Primary.DataItem[0][3].Count; i++)
-            //                {
-            //                    paras.Add(trans.Primary.DataItem[0][3][i][0].ToString(), trans.Primary.DataItem[0][3][i][1]);
-            //                }
+        //        string remoteCommandName = trans.Primary.DataItem[0][2].ToString();
+        //        switch (remoteCommandName.ToUpper())
+        //        {
+        //            case "START_TRANSFER":
+        //            case "START_PACK":
+        //                Dictionary<string, SECsDataItem> paras = new Dictionary<string, SECsDataItem>();
+        //                for (int i = 0; i < trans.Primary.DataItem[0][3].Count; i++)
+        //                {
+        //                    paras.Add(trans.Primary.DataItem[0][3][i][0].ToString(), trans.Primary.DataItem[0][3][i][1]);
+        //                }
 
-            //                ret = _equipment.ExecuteHostCommand(remoteCommandName.ToUpper(), paras, out reason);
-            //                break;
-
-
-
-            //            case "START-TRANSFER":
-            //                {
-            //                    if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
-            //                        trans.Primary.DataItem[0][3][1][0].ToString() != "CAR_ID" ||
-            //                        trans.Primary.DataItem[0][3][2][0].ToString() != "SRC_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][3][0].ToString() != "SOURCE_SLOT" ||
-            //                        trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_PORT_ID"
-            //                        )
-            //                    {
-            //                        ret = false;
-            //                        reason = "START-TRANSFER Command format is not correct.";
-            //                        break;
-            //                    }
-
-            //                    SortHostCommand htcmd = new SortHostCommand();
-
-            //                    htcmd.REMOTE_RECIPE_NAME = trans.Primary.DataItem[0][3][0][1].ToString();
-            //                    htcmd.CAR_ID = trans.Primary.DataItem[0][3][1][1].ToString();
-            //                    htcmd.SRC_PORT_ID = trans.Primary.DataItem[0][3][2][1].ToString();
-            //                    if (trans.Primary.DataItem[0][3].Count > 5 && trans.Primary.DataItem[0][3][5][0].ToString() == "ALIGN_ANGLE")
-            //                    {
-            //                        htcmd.ALIGN_ANGLE = trans.Primary.DataItem[0][3][5][1].ToString();
-            //                    }
-
-            //                    List<string> sourceSlot = new List<string>();
-            //                    List<string> destPort = new List<string>();
-            //                    List<string> lm1 = new List<string>();
-            //                    List<string> lm2 = new List<string>();
+        //                ret = _equipment.ExecuteHostCommand(remoteCommandName.ToUpper(), paras, out reason);
+        //                break;
 
 
 
+        //            case "START-TRANSFER":
+        //                {
+        //                    if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
+        //                        trans.Primary.DataItem[0][3][1][0].ToString() != "CAR_ID" ||
+        //                        trans.Primary.DataItem[0][3][2][0].ToString() != "SRC_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][3][0].ToString() != "SOURCE_SLOT" ||
+        //                        trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_PORT_ID"
+        //                        )
+        //                    {
+        //                        ret = false;
+        //                        reason = "START-TRANSFER Command format is not correct.";
+        //                        break;
+        //                    }
+
+        //                    SortHostCommand htcmd = new SortHostCommand();
+
+        //                    htcmd.REMOTE_RECIPE_NAME = trans.Primary.DataItem[0][3][0][1].ToString();
+        //                    htcmd.CAR_ID = trans.Primary.DataItem[0][3][1][1].ToString();
+        //                    htcmd.SRC_PORT_ID = trans.Primary.DataItem[0][3][2][1].ToString();
+        //                    if (trans.Primary.DataItem[0][3].Count > 5 && trans.Primary.DataItem[0][3][5][0].ToString() == "ALIGN_ANGLE")
+        //                    {
+        //                        htcmd.ALIGN_ANGLE = trans.Primary.DataItem[0][3][5][1].ToString();
+        //                    }
+
+        //                    List<string> sourceSlot = new List<string>();
+        //                    List<string> destPort = new List<string>();
+        //                    List<string> lm1 = new List<string>();
+        //                    List<string> lm2 = new List<string>();
 
 
-            //                    int count = trans.Primary.DataItem[0][3][3][1].Count;
-            //                    if (trans.Primary.DataItem[0][3][4][1].Count < count)
-            //                    {
-            //                        ret = false;
-            //                        reason = "START-TRANSFER Command format is not correct.";
-            //                        break;
-            //                    }
-            //                    for (int i = 0; i < count; i++)
-            //                    {
-            //                        sourceSlot.Add(trans.Primary.DataItem[0][3][3][1][i].ToString());
-            //                        destPort.Add(trans.Primary.DataItem[0][3][4][1][i].ToString());
-
-            //                        if (trans.Primary.DataItem[0][3].Count > 5)
-            //                        {
-            //                            lm1.Add(trans.Primary.DataItem[0][3][5][1][i].ToString());
-            //                        }
-            //                        else
-            //                        {
-            //                            lm1.Add("");
-            //                        }
-            //                        if (trans.Primary.DataItem[0][3].Count > 6)
-            //                        {
-            //                            lm2.Add(trans.Primary.DataItem[0][3][6][1][i].ToString());
-            //                        }
-            //                        else
-            //                            lm2.Add("");
-            //                    }
-            //                    htcmd.SRC_SLOT = sourceSlot.ToArray();
-            //                    htcmd.DEST_PORT_ID = destPort.ToArray();
-            //                    htcmd.LASERMARK1 = lm1.ToArray();
-            //                    htcmd.LASERMARK2 = lm2.ToArray();
-
-            //                    ret = _equipment.ExecuteFACommand("START-TRANSFER", new object[] { htcmd }, out reason);
-            //                }
-            //                break;
-
-            //            case "PP-SELECT":
-            //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_ID" ||
-            //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
-            //                    throw new Exception("PP-SELECT Command Format Not Correct");
-            //                string recipeId = trans.Primary.DataItem[0][3][0][1].ToString();
-            //                ret = _equipment.ExecuteFACommand("PP-SELECT", new object[] { recipeId }, out _);
-
-            //                break;
-
-            //            case "SORTBYHOST":
-            //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
-            //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "DEST_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "SOURCE_SLOT" ||
-            //                        trans.Primary.DataItem[0][3][3][1].Count == 0)
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_SLOT" ||
-            //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][5][0].ToString() != "LASERMARK1" ||
-            //                        trans.Primary.DataItem[0][3][5][1].Count == 0)
-            //                    throw new Exception("SORTBYHOST Command Format Not Correct");
-
-            //                string recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
-
-            //                int sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
-            //                int destPort1 = trans.Primary.DataItem[0][3][2][1].ToInt();
-
-            //                List<int> sourceSlots = new List<int>();
-            //                List<Tuple<int, string>> destSlotWafer = new List<Tuple<int, string>>();
-
-            //                int count1 = trans.Primary.DataItem[0][3][3][1].Count;
-
-            //                for (int i = 0; i < count1; i++)
-            //                {
-            //                    sourceSlots.Add(trans.Primary.DataItem[0][3][3][1][i].ToInt());
-            //                    Tuple<int, string> item = new Tuple<int, string>(trans.Primary.DataItem[0][3][4][1][i].ToInt(),
-            //                        trans.Primary.DataItem[0][3][5][1][i].ToString());
-            //                    destSlotWafer.Add(item);
-            //                }
-
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
-            //                    new object[] { recipeName, sourcePort, destPort1, sourceSlots.ToArray(), destSlotWafer.ToArray() }, out _);
-            //                break;
-
-            //            case "SORTBYSLOT":
-            //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
-            //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
-            //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
-            //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "DEST_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
-            //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "SLOT_INDEX_LM" ||
-            //                        trans.Primary.DataItem[0][3][3][1].ToString() == "")
-            //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "SOURCE_SLOT" ||
-            //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
-            //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
-
-            //                recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
-            //                sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
-            //                destPort1 = trans.Primary.DataItem[0][3][2][1].ToInt();
-            //                int slotStartIndex = trans.Primary.DataItem[0][3][3][1].ToInt();
-
-            //                List<int> sourceSlots1 = new List<int>();
-
-            //                int count2 = trans.Primary.DataItem[0][3][4][1].Count;
-
-            //                for (int i = 0; i < count2; i++)
-            //                {
-            //                    sourceSlots1.Add(trans.Primary.DataItem[0][3][4][1][i].ToInt());
-            //                }
-
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
-            //                    new object[] { recipeName, sourcePort, destPort1, slotStartIndex, sourceSlots1.ToArray() }, out _);
-
-            //                break;
-            //            case "DISPATCHBYID":
-            //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
-            //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
-            //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "ID_START_POS" ||
-            //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "LM_ID" ||
-            //                        trans.Primary.DataItem[0][3][3][1].Count == 0)
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_PORT" ||
-            //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-            //                if (trans.Primary.DataItem[0][3][5][0].ToString() != "DEST_SLOT" ||
-            //                        trans.Primary.DataItem[0][3][5][1].Count == 0)
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-
-            //                recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
-            //                sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
-            //                int idstartPos = trans.Primary.DataItem[0][3][2][1].ToInt();
-
-            //                List<Tuple<string, int, int>> waferTransfers = new List<Tuple<string, int, int>>();
-
-            //                count1 = trans.Primary.DataItem[0][3][3][1].Count;
-            //                if (count1 != trans.Primary.DataItem[0][3][4][1].Count ||
-            //                    count1 != trans.Primary.DataItem[0][3][5][1].Count)
-            //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
-
-            //                for (int i = 0; i < count1; i++)
-            //                {
-            //                    Tuple<string, int, int> transfer = new Tuple<string, int, int>(
-            //                        trans.Primary.DataItem[0][3][3][1][i].ToString(),
-            //                        trans.Primary.DataItem[0][3][4][1][i].ToInt(),
-            //                        trans.Primary.DataItem[0][3][5][1][i].ToInt()
-            //                        );
-
-            //                    waferTransfers.Add(transfer);
-            //                }
-
-            //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
-            //                    new object[] { recipeName, sourcePort, idstartPos, waferTransfers }, out reason);
-            //                break;
 
 
-            //        }
 
-            //        reply.DataItem.AddList();
-            //        if (ret)
-            //        {
-            //            reply.DataItem[0].Add("HCACK", 0, SECsFormat.Binary);
-            //        }
-            //        else
-            //        {
-            //            reply.DataItem[0].Add("HCACK", 2/*Can not perform now*/, SECsFormat.Binary);
+        //                    int count = trans.Primary.DataItem[0][3][3][1].Count;
+        //                    if (trans.Primary.DataItem[0][3][4][1].Count < count)
+        //                    {
+        //                        ret = false;
+        //                        reason = "START-TRANSFER Command format is not correct.";
+        //                        break;
+        //                    }
+        //                    for (int i = 0; i < count; i++)
+        //                    {
+        //                        sourceSlot.Add(trans.Primary.DataItem[0][3][3][1][i].ToString());
+        //                        destPort.Add(trans.Primary.DataItem[0][3][4][1][i].ToString());
 
-            //            reply.DataItem[0].Add("CPVALUE", reason, SECsFormat.Ascii);
-            //        }
+        //                        if (trans.Primary.DataItem[0][3].Count > 5)
+        //                        {
+        //                            lm1.Add(trans.Primary.DataItem[0][3][5][1][i].ToString());
+        //                        }
+        //                        else
+        //                        {
+        //                            lm1.Add("");
+        //                        }
+        //                        if (trans.Primary.DataItem[0][3].Count > 6)
+        //                        {
+        //                            lm2.Add(trans.Primary.DataItem[0][3][6][1][i].ToString());
+        //                        }
+        //                        else
+        //                            lm2.Add("");
+        //                    }
+        //                    htcmd.SRC_SLOT = sourceSlot.ToArray();
+        //                    htcmd.DEST_PORT_ID = destPort.ToArray();
+        //                    htcmd.LASERMARK1 = lm1.ToArray();
+        //                    htcmd.LASERMARK2 = lm2.ToArray();
 
-            //        _gem.SendReply(reply, trans.Id);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        //WriteLog(string.Format("Handle_S2F49 Exception: {0}", ex.Message));
-            //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 50, false);
-            //        reply.DataItem.AddList();
-            //        reply.DataItem[0].Add("HCACK", 3/*At least one parameter is invalid*/, SECsFormat.Binary);
-            //        reply.DataItem[0].AddList();
-            //        reply.DataItem[0][1].AddList();
-            //        reply.DataItem[0][1].Add("CPVALUE", ex.Message, SECsFormat.Ascii);
-            //        _gem.SendReply(reply, trans.Id);
-            //    }
+        //                    ret = _equipment.ExecuteFACommand("START-TRANSFER", new object[] { htcmd }, out reason);
+        //                }
+        //                break;
 
-            //    Thread.Sleep(200);
-            //    return true;
-            //}
+        //            case "PP-SELECT":
+        //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_ID" ||
+        //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
+        //                    throw new Exception("PP-SELECT Command Format Not Correct");
+        //                string recipeId = trans.Primary.DataItem[0][3][0][1].ToString();
+        //                ret = _equipment.ExecuteFACommand("PP-SELECT", new object[] { recipeId }, out _);
+
+        //                break;
+
+        //            case "SORTBYHOST":
+        //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
+        //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "DEST_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "SOURCE_SLOT" ||
+        //                        trans.Primary.DataItem[0][3][3][1].Count == 0)
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_SLOT" ||
+        //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][5][0].ToString() != "LASERMARK1" ||
+        //                        trans.Primary.DataItem[0][3][5][1].Count == 0)
+        //                    throw new Exception("SORTBYHOST Command Format Not Correct");
+
+        //                string recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
+
+        //                int sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
+        //                int destPort1 = trans.Primary.DataItem[0][3][2][1].ToInt();
+
+        //                List<int> sourceSlots = new List<int>();
+        //                List<Tuple<int, string>> destSlotWafer = new List<Tuple<int, string>>();
+
+        //                int count1 = trans.Primary.DataItem[0][3][3][1].Count;
+
+        //                for (int i = 0; i < count1; i++)
+        //                {
+        //                    sourceSlots.Add(trans.Primary.DataItem[0][3][3][1][i].ToInt());
+        //                    Tuple<int, string> item = new Tuple<int, string>(trans.Primary.DataItem[0][3][4][1][i].ToInt(),
+        //                        trans.Primary.DataItem[0][3][5][1][i].ToString());
+        //                    destSlotWafer.Add(item);
+        //                }
+
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
+        //                    new object[] { recipeName, sourcePort, destPort1, sourceSlots.ToArray(), destSlotWafer.ToArray() }, out _);
+        //                break;
+
+        //            case "SORTBYSLOT":
+        //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
+        //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
+        //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
+        //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "DEST_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
+        //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "SLOT_INDEX_LM" ||
+        //                        trans.Primary.DataItem[0][3][3][1].ToString() == "")
+        //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "SOURCE_SLOT" ||
+        //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
+        //                    throw new Exception("SORTBYSLOT Command Format Not Correct");
+
+        //                recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
+        //                sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
+        //                destPort1 = trans.Primary.DataItem[0][3][2][1].ToInt();
+        //                int slotStartIndex = trans.Primary.DataItem[0][3][3][1].ToInt();
+
+        //                List<int> sourceSlots1 = new List<int>();
+
+        //                int count2 = trans.Primary.DataItem[0][3][4][1].Count;
+
+        //                for (int i = 0; i < count2; i++)
+        //                {
+        //                    sourceSlots1.Add(trans.Primary.DataItem[0][3][4][1][i].ToInt());
+        //                }
+
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
+        //                    new object[] { recipeName, sourcePort, destPort1, slotStartIndex, sourceSlots1.ToArray() }, out _);
+
+        //                break;
+        //            case "DISPATCHBYID":
+        //                if (trans.Primary.DataItem[0][3][0][0].ToString() != "RECIPE_NAME" ||
+        //                        trans.Primary.DataItem[0][3][0][1].ToString() == "")
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][1][0].ToString() != "SRC_PORT_ID" ||
+        //                        trans.Primary.DataItem[0][3][1][1].ToString() == "")
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][2][0].ToString() != "ID_START_POS" ||
+        //                        trans.Primary.DataItem[0][3][2][1].ToString() == "")
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][3][0].ToString() != "LM_ID" ||
+        //                        trans.Primary.DataItem[0][3][3][1].Count == 0)
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][4][0].ToString() != "DEST_PORT" ||
+        //                        trans.Primary.DataItem[0][3][4][1].Count == 0)
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+        //                if (trans.Primary.DataItem[0][3][5][0].ToString() != "DEST_SLOT" ||
+        //                        trans.Primary.DataItem[0][3][5][1].Count == 0)
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+
+        //                recipeName = trans.Primary.DataItem[0][3][0][1].ToString();
+        //                sourcePort = trans.Primary.DataItem[0][3][1][1].ToInt();
+        //                int idstartPos = trans.Primary.DataItem[0][3][2][1].ToInt();
+
+        //                List<Tuple<string, int, int>> waferTransfers = new List<Tuple<string, int, int>>();
+
+        //                count1 = trans.Primary.DataItem[0][3][3][1].Count;
+        //                if (count1 != trans.Primary.DataItem[0][3][4][1].Count ||
+        //                    count1 != trans.Primary.DataItem[0][3][5][1].Count)
+        //                    throw new Exception("DISPATCHBYID Command Format Not Correct");
+
+        //                for (int i = 0; i < count1; i++)
+        //                {
+        //                    Tuple<string, int, int> transfer = new Tuple<string, int, int>(
+        //                        trans.Primary.DataItem[0][3][3][1][i].ToString(),
+        //                        trans.Primary.DataItem[0][3][4][1][i].ToInt(),
+        //                        trans.Primary.DataItem[0][3][5][1][i].ToInt()
+        //                        );
+
+        //                    waferTransfers.Add(transfer);
+        //                }
+
+        //                ret = _equipment.ExecuteFACommand(remoteCommandName.ToUpper(),
+        //                    new object[] { recipeName, sourcePort, idstartPos, waferTransfers }, out reason);
+        //                break;
+
+
+        //        }
+
+        //        reply.DataItem.AddList();
+        //        if (ret)
+        //        {
+        //            reply.DataItem[0].Add("HCACK", 0, SECsFormat.Binary);
+        //        }
+        //        else
+        //        {
+        //            reply.DataItem[0].Add("HCACK", 2/*Can not perform now*/, SECsFormat.Binary);
+
+        //            reply.DataItem[0].Add("CPVALUE", reason, SECsFormat.Ascii);
+        //        }
+
+        //        _gem.SendReply(reply, trans.Id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //WriteLog(string.Format("Handle_S2F49 Exception: {0}", ex.Message));
+        //        SECsMessage reply = _gem.Services.CustomMessage.CreateMessage(2, 50, false);
+        //        reply.DataItem.AddList();
+        //        reply.DataItem[0].Add("HCACK", 3/*At least one parameter is invalid*/, SECsFormat.Binary);
+        //        reply.DataItem[0].AddList();
+        //        reply.DataItem[0][1].AddList();
+        //        reply.DataItem[0][1].Add("CPVALUE", ex.Message, SECsFormat.Ascii);
+        //        _gem.SendReply(reply, trans.Id);
+        //    }
+
+        //    Thread.Sleep(200);
+        //    return true;
+        //}
         //}
 
         public void Terminate()
@@ -3395,7 +3424,7 @@ namespace CMP.Services.HostCommunication
 
             //HandlePausedEvent(eventName);
 
-         //   _lstEvent.Enqueue(new FAEventItemDemo() { objDvid = objDvid, EventName = eventName, IsAlarm = false });
+            //   _lstEvent.Enqueue(new FAEventItemDemo() { objDvid = objDvid, EventName = eventName, IsAlarm = false });
         }
 
         public void NotifyAlarm(string alarmName, Dictionary<string, string> dvid, Dictionary<string, object> objDvid)
@@ -3450,11 +3479,12 @@ namespace CMP.Services.HostCommunication
 
              return true;
 
+
             //LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
             //{
-
             //    LoadportId = 1,
             //    HardwareStatus = status,
+            //    CarrierId = "100"
 
             //};
 
@@ -3586,7 +3616,7 @@ namespace CMP.Services.HostCommunication
             {
                 _monitorLinkTest.Stop();
             }
-          //  LOG.Write($"Communication state change to {_gem.CommunicationState.ToString()}");
+            //  LOG.Write($"Communication state change to {_gem.CommunicationState.ToString()}");
 
         }
 
@@ -3691,7 +3721,7 @@ namespace CMP.Services.HostCommunication
                         }
                         catch (Exception ex)
                         {
-                          //  LOG.Write(ex);
+                            //  LOG.Write(ex);
                         }
                         return true;
 
@@ -3762,7 +3792,7 @@ namespace CMP.Services.HostCommunication
         {
             get; set;
         }
-    
+
 
         public void SetAlarm(string alarmTag)
         {
@@ -3779,9 +3809,9 @@ namespace CMP.Services.HostCommunication
             }
             else
             {
-               // LOG.Write(string.Format("SetAlarm failed,not find:", alarmTag));
+                // LOG.Write(string.Format("SetAlarm failed,not find:", alarmTag));
             }
-           // LOG.Write(string.Format("FA3SetAlarm--{0}.", alarmTag));
+            // LOG.Write(string.Format("FA3SetAlarm--{0}.", alarmTag));
             Thread.Sleep(500);
             // });
         }
@@ -3861,12 +3891,12 @@ namespace CMP.Services.HostCommunication
         }
 
 
-    public class FAEventItemDemo
-    {
-        public string EventName { get; set; }
-        public Dictionary<string, object> objDvid { get; set; }
-        public bool IsAlarm { get; set; }
-    }
+        public class FAEventItemDemo
+        {
+            public string EventName { get; set; }
+            public Dictionary<string, object> objDvid { get; set; }
+            public bool IsAlarm { get; set; }
+        }
 
 
 

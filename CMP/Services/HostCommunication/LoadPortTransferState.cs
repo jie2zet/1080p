@@ -8,28 +8,28 @@ namespace CMP.Services.HostCommunication
 {
     public enum LoadPortTransferState
     {
-        LoadPortInitialized,
+        LoadPortInitialized, //87001 初始化
 
-        LoadPortInService,
+        LoadPortInService, //87002 LoadPort和主机通信正常 
 
-        LoadPortOutOfService,
+        LoadPortOutOfService,//87003 LoadPort和主机通信异常
 
-        TransferReadyStateEntered,
+        TransferReadyStateEntered,//87004 LoadPort状态正常，可进行装载作业
 
-        TransferBlockedStateEntered,
+        TransferBlockedStateEntered,//87005 LoadPort状态异常，不可进行装载作业
 
-        ReadyToLoadEntered,
+        ReadyToLoadEntered,//87006 LoadPort状态正常且没有Foup
 
-        ReadyToUnloadEntered,
+        ReadyToUnloadEntered,//87007 LoadPort可以使用且有Foup
 
-        TransferBlockedFromReadyToLoad,
+        TransferBlockedFromReadyToLoad,//87008 正在进行LoadPort操作
 
-        TransferBlockedFromReadyToUnload,
+        TransferBlockedFromReadyToUnload, //87009 LoadPort正在进行卸载操作
 
-        ReadyToLoadEnteredFromTransferBlocked,
+        ReadyToLoadEnteredFromTransferBlocked, //87010 LoadPort卸载完成，LoadPort已准备就绪
 
-        ReadyToUnloadEnteredFromTransferBlocked,
+        ReadyToUnloadEnteredFromTransferBlocked, //87011 加工完成，可以进行LoadPort卸载操作
 
-        TransferReadyEnteredFromTransferBlocked
+        TransferReadyEnteredFromTransferBlocked  //87012 LoadPort卸载失败
     }
 }
