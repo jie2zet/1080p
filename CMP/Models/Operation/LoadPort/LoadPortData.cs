@@ -1334,7 +1334,7 @@ namespace CMP.Models.Operation.LoadPort
                 WaferList.Add(new Wafer
                 {   LoadportID = loadportID,
                     SlotID = i,
-                    WaferStatus =WaferStatus.NormalExistence,
+                    WaferStatus = WaferStatus.NonWafer,
                     CurrentStation = CurrentStation.Loadport
                     
                 });

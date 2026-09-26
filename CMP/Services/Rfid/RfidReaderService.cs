@@ -245,7 +245,9 @@ public sealed class RfidReaderService : IRfidReaderService, IDisposable
             string line;
             lock (context.IoLock)
             {
-                var command = V640OneToOneProtocol.BuildReadCommand(config.PageMask);
+                var command = string.IsNullOrWhiteSpace(config.ReadCommand)
+                    ? V640OneToOneProtocol.BuildReadCommand(config.PageMask)
+                    : config.ReadCommand.Trim();
                 _log.Info($"LP{loadPort.DisplayNumber} 发送 READ {command} @ {context.Binding.RfidPort}");
                 line = context.Client.Transact(command, config.ReadTimeoutMs);
             }
@@ -258,8 +260,8 @@ public sealed class RfidReaderService : IRfidReaderService, IDisposable
                 return;
             }
 
-            var carrierId = V640OneToOneProtocol.ParseCarrierId(
-                line, response.PayloadHex, config.CarrierIdByteLength, config.CarrierIdFormat);
+            var parse = config.ResolveParseOptions(context.Binding);
+            var carrierId = V640OneToOneProtocol.ParseCarrierId(line, response.PayloadHex, parse);
             if (string.IsNullOrWhiteSpace(carrierId))
             {
                 FinishRead(loadPort, context, failed: true);
@@ -272,7 +274,7 @@ public sealed class RfidReaderService : IRfidReaderService, IDisposable
             }
 
             FinishRead(loadPort, context, failed: false, carrierId);
-            _log.Info($"LP{loadPort.DisplayNumber} CarrierId={carrierId}");
+            _log.Info($"LP{loadPort.DisplayNumber} CarrierId={carrierId} format={parse.Format} source={parse.Source}");
         }
         catch (TimeoutException ex)
         {

@@ -1,6 +1,7 @@
 ﻿using CMP;
 using CMP.Constants.Plc.RobotControl;
 using CMP.Models.DataCenter;
+using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.Services.Plc;
 using Dm.util;
@@ -11,6 +12,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace CMP.Models.Resource;
@@ -34,8 +36,11 @@ public class RoboticArm : BindableBase
     private string _alarmStatusVarName;
 
     private string _initCommandValue;
+    private string _startCommandValue;
     private string _autoModeCommandValue;
     private string _manualModeCommandValue;
+    private readonly object _statusLock = new();
+    private readonly object _modeSwitchLock = new();
     //private ushort _abortCommandValue;
 
     private string _waferInfo = "";
@@ -87,7 +92,6 @@ public class RoboticArm : BindableBase
     private byte[] _writeBuf = new byte[2048];
     private byte[] _readBuf = new byte[2048];
 
-    private Thread _thMonitorStatus;
     private bool _isResetErrorNeedClear;
     private int _resetErrorDelayCycle;
     private bool _isAutoRunNeedClear;
@@ -114,27 +118,21 @@ public class RoboticArm : BindableBase
 
     private static string DeriveBitAddress(string address, int offset)
     {
-        return point.Name.Contains("alarm", StringComparison.OrdinalIgnoreCase)
-               || point.Name.Contains("error", StringComparison.OrdinalIgnoreCase)
-               || point.Descripition.Contains("alarm", StringComparison.OrdinalIgnoreCase)
-               || point.Descripition.Contains("error", StringComparison.OrdinalIgnoreCase)
-               || point.Comment.Contains("alarm", StringComparison.OrdinalIgnoreCase)
-               || point.Comment.Contains("error", StringComparison.OrdinalIgnoreCase)
-               || point.PLCLink.Contains(_alarmStatusVarName, StringComparison.OrdinalIgnoreCase);
-    }
-
-    private bool TryGetAlarmStateFromStCtrl(out bool isAlarm)
-    {
-        isAlarm = false;
-        if (_linkedStCtrl?.listDataInSingleStCtrl == null || _linkedStCtrl.listDataInSingleStCtrl.Count == 0)
+        if (string.IsNullOrWhiteSpace(address))
         {
-            return false;
+            return null;
         }
 
-        return $"{prefix}{number + offset}";
+        var match = Regex.Match(address.Trim(), @"^(?<prefix>[A-Za-z]+)(?<number>\d+)$");
+        if (!match.Success || !int.TryParse(match.Groups["number"].Value, out var number))
+        {
+            return null;
+        }
+
+        return $"{match.Groups["prefix"].Value}{number + offset}";
     }
 
-    private bool TryReadPlcBool(MitsubishiPlcService plc, string address, out bool value)
+    private static bool TryReadPlcBool(MitsubishiPlcService plc, string address, out bool value)
     {
         value = false;
         if (plc == null || string.IsNullOrWhiteSpace(address) || !plc.IsPLCConnected)
@@ -150,17 +148,16 @@ public class RoboticArm : BindableBase
                 return false;
             }
 
-                continue;
-            }
-
-            if (point.Value != null && bool.TryParse(point.Value.ToString(), out var parsed) && parsed)
-            {
-                isAlarm = true;
-                return true;
-            }
+            value = result.Content;
+            return true;
         }
+        catch
+        {
+            return false;
+        }
+    }
 
-    private bool TryReadDBit(MitsubishiPlcService plc, DBitAddress dBit, out bool value)
+    private static bool TryReadDBit(MitsubishiPlcService plc, DBitAddress dBit, out bool value)
     {
         value = false;
         if (plc == null || dBit == null || !plc.IsPLCConnected)
@@ -170,13 +167,13 @@ public class RoboticArm : BindableBase
 
         try
         {
-            var result = plc.Read<short>(dBit.Address);
+            var result = plc.ReadDBit(dBit);
             if (!result.IsSuccess)
             {
                 return false;
             }
 
-            value = (unchecked((ushort)result.Content) & (1 << dBit.BitIndex)) != 0;
+            value = result.Content;
             return true;
         }
         catch
@@ -185,78 +182,90 @@ public class RoboticArm : BindableBase
         }
     }
 
-    private bool TryReadAutoMode(out bool isAuto)
+    private bool TryReadStartBit(out bool isStarted)
     {
-        if (_autoModeDBit != null)
+        // 启动位 = 初始地址 +3（如 EFEM M1832→M1835）
+        return TryReadPlcBool(mcComm, _startCommandValue, out isStarted)
+               || TryReadPlcBool(_robotPlc, _startCommandValue, out isStarted);
+    }
+
+    private bool TryReadInitialized(out bool isInitialized)
+    {
+        return TryReadPlcBool(mcComm, _initialStatusVarName, out isInitialized)
+               || TryReadPlcBool(_robotPlc, _initialStatusVarName, out isInitialized);
+    }
+
+    private bool TryReadStationAuto(out bool isAuto)
+    {
+        if (TryReadPlcBool(mcComm, _autoStartVarName, out isAuto)
+            || TryReadPlcBool(_robotPlc, _autoStartVarName, out isAuto))
         {
-            return TryReadDBit(_robotPlc, _autoModeDBit, out isAuto);
+            return true;
         }
 
-        return TryReadPlcBool(_robotPlc, _autoModeCommandValue, out isAuto)
-               || TryReadPlcBool(_robotPlc, _autoStartVarName, out isAuto);
+        return _autoModeDBit != null && TryReadDBit(_robotPlc, _autoModeDBit, out isAuto);
     }
 
     private bool TryReadAlarm(out bool isAlarm)
     {
-        return TryReadPlcBool(_robotPlc, _alarmStatusVarName, out isAlarm);
+        return TryReadPlcBool(mcComm, _alarmStatusVarName, out isAlarm)
+               || TryReadPlcBool(_robotPlc, _alarmStatusVarName, out isAlarm);
     }
 
     private void SetRobotStatusFromPlc(ChamberStatus status)
     {
-        if (_robotStatus == status)
+        lock (_statusLock)
+        {
+            if (RobotStatus == ChamberStatus.Offline || _robotStatus == status)
+            {
+                return;
+            }
+
+            RobotStatus = status;
+        }
+    }
+
+    /// <summary>启动位为 true 显示 Run，否则跟 PLC 实际状态。Offline 由菜单保持。</summary>
+    public void SyncStatusFromPlc()
+    {
+        if (RobotStatus == ChamberStatus.Offline)
         {
             return;
         }
 
-    private bool TryGetAlarmStateFromPlc(out bool isAlarm)
-    {
-        isAlarm = false;
-
-        try
+        var mainOk = mcComm.IsPLCConnected;
+        var robotOk = _robotPlc.IsPLCConnected;
+        if (!mainOk && !robotOk)
         {
-            if (!mcComm.IsPLCConnected || string.IsNullOrWhiteSpace(_alarmStatusVarName))
-            {
-                return false;
-            }
-
-            isAlarm = mcComm.ReadBoolVari(_alarmStatusVarName);
-            return true;
+            SetRobotStatusFromPlc(ChamberStatus.Disconnect);
+            return;
         }
-        catch
+
+        if (TryReadStartBit(out var started) && started)
         {
-            return false;
+            SetRobotStatusFromPlc(ChamberStatus.Run);
+            return;
         }
-    }
 
-    /// <summary>按机器人 PLC（7005）自动/报警位刷新主界面状态。Offline 由菜单保持。</summary>
-    public void SyncStatusFromPlc()
-    {
-        if (TryGetAlarmStateFromStCtrl(out var stCtrlAlarm))
+        if (TryReadAlarm(out var isAlarm) && isAlarm)
         {
-            return stCtrlAlarm;
+            SetRobotStatusFromPlc(ChamberStatus.Alarm);
+            return;
         }
 
-            if (!_robotPlc.IsPLCConnected)
-            {
-                SetRobotStatusFromPlc(ChamberStatus.Disconnect);
-                return;
-            }
+        if (TryReadInitialized(out var isInitialized) && !isInitialized)
+        {
+            SetRobotStatusFromPlc(ChamberStatus.Uninitialized);
+            return;
+        }
 
-            if (!TryReadAutoMode(out var isAuto))
-            {
-                return;
-            }
-                return;
-            if (TryReadAlarm(out var isAlarm) && isAlarm)
-            {
-                SetRobotStatusFromPlc(ChamberStatus.Alarm);
-                return;
-            }
-                return;
-            SetRobotStatusFromPlc(isAuto ? ChamberStatus.Auto : ChamberStatus.Manual);
+        if (TryReadStationAuto(out var isAuto) && isAuto)
+        {
+            SetRobotStatusFromPlc(ChamberStatus.Auto);
+            return;
         }
-    }
-        }
+
+        SetRobotStatusFromPlc(ChamberStatus.Manual);
     }
 
     public string HeadColor
@@ -281,6 +290,7 @@ public class RoboticArm : BindableBase
                     HeadColor = "#6BA8D6";
                     break;
                 case ChamberStatus.Auto:
+                case ChamberStatus.Run:
                     HeadColor = "#2C66A7";
                     break;
                 case ChamberStatus.Alarm:
@@ -301,24 +311,19 @@ public class RoboticArm : BindableBase
         _name = name;
         _startPermitionVarName = "PLCStartPermition";
         _readyVarName = "PLCReady";
-        _autoStartVarName = "PLCAutoStart";
         _resetErrorVarName = "PLCResetError";
-       
-        _alarmStatusVarName = "PLCAlarmStatus";
 
         _initCommandValue = initCommandValue;
+        _startCommandValue = DeriveBitAddress(initCommandValue, 3);
         _autoModeCommandValue = autoModeCommandValue;
         _manualModeCommandValue = manualModeCommandValue;
 
         _initialStatusVarName = initStatusValue;
         _autoStartVarName = autoModeStatusValue;
+        _alarmStatusVarName = DeriveBitAddress(initStatusValue, 8);
 
         _isResetErrorNeedClear = false;
         _isAutoRunNeedClear = false;
-
-        _thMonitorStatus = new Thread(MonitorStatus);
-        _thMonitorStatus.Start();
-        _thMonitorStatus.IsBackground = true;
 
         // 初始化晶圆追踪地址（根据机器人名称设置不同的地址）
         InitializeWaferTrackingAddresses();
@@ -925,27 +930,16 @@ public class RoboticArm : BindableBase
             return null;
         }
     }
-        if (RobotStatus == ChamberStatus.Offline || !_robotPlc.IsPLCConnected)
+
+    public bool IsInitialized()
     {
-        if (RobotStatus == ChamberStatus.Offline || !mcComm.IsPLCConnected)
-        {
-            return false;
-        return TryReadPlcBool(_robotPlc, _initialStatusVarName, out var isInitialized) && isInitialized;
-    }
-        return TryReadPlcBool(_initialStatusVarName, out var isInitialized) && isInitialized;
+        return TryReadInitialized(out var isInitialized) && isInitialized;
     }
 
-        return isInitialized;
-    }
-
-        if (RobotStatus == ChamberStatus.Offline || !_robotPlc.IsPLCConnected)
+    public bool IsAutoMode()
     {
-        if (RobotStatus == ChamberStatus.Offline || !mcComm.IsPLCConnected)
-        {
-            return false;
-        return TryReadAutoMode(out var isAuto) && isAuto;
-
-        return TryReadPlcBool(_autoStartVarName, out var isAuto) && isAuto;
+        SyncStatusFromPlc();
+        return RobotStatus is ChamberStatus.Auto or ChamberStatus.Run;
     }
 
     public bool IsConnected()
@@ -953,9 +947,9 @@ public class RoboticArm : BindableBase
         if (RobotStatus == ChamberStatus.Offline)
         {
             return false;
-        return _robotPlc.IsPLCConnected;
+        }
 
-        return mcComm.IsPLCConnected;
+        return mcComm.IsPLCConnected || _robotPlc.IsPLCConnected;
     }
 
     public void SwitchToOffline()
@@ -997,19 +991,14 @@ public class RoboticArm : BindableBase
             return;
         }
 
-        if (RobotStatus == ChamberStatus.Manual)
+        if (!SwitchModeAfterStop(_autoModeCommandValue, _manualModeCommandValue))
         {
-           var result = mcComm.WriteBoolVari(_autoModeCommandValue,true);
-            if (result.IsSuccess)
-            {
-                // 成功发送自动模式命令
-                Growl.InfoGlobal("成功发送自动模式命令");
-            }
-            else
-            {
-                Growl.ErrorGlobal($"{_name} AutoModeCommandExecuteError: {_err} ");
-            }
+            Growl.ErrorGlobal($"{_name} AutoModeCommandExecuteError");
+            return;
         }
+
+        Growl.InfoGlobal("成功发送自动模式命令");
+        SyncStatusFromPlc();
     }
 
     public void SwitchToManualModeCommand()
@@ -1019,20 +1008,52 @@ public class RoboticArm : BindableBase
             return;
         }
 
-        if (RobotStatus == ChamberStatus.Auto)
+        if (!SwitchModeAfterStop(_manualModeCommandValue, _autoModeCommandValue))
         {
-           var result = mcComm.WriteBoolVari(_manualModeCommandValue,true);
-            if (result.IsSuccess)
-            {
-                RobotStatus = ChamberStatus.Manual;
-                // 成功发送手动模式命令
-                Growl.InfoGlobal("成功发送手动模式命令");
-            }
-            else
-            {
-                Growl.ErrorGlobal($"{_name} ManualModeCommandExecuteError: {_err} ");
-            }
+            Growl.ErrorGlobal($"{_name} ManualModeCommandExecuteError");
+            return;
         }
+
+        Growl.InfoGlobal("成功发送手动模式命令");
+        SyncStatusFromPlc();
+    }
+
+    private bool SwitchModeAfterStop(string modeAddress, string oppositeAddress)
+    {
+        lock (_modeSwitchLock)
+        {
+            var stopAddress = DeriveBitAddress(_initCommandValue, 5);
+            if (!PulseBit(mcComm, stopAddress))
+            {
+                return false;
+            }
+
+            Thread.Sleep(100);
+            if (!string.IsNullOrWhiteSpace(oppositeAddress))
+            {
+                mcComm.WriteBoolVari(oppositeAddress, false);
+            }
+
+            return PulseBit(mcComm, modeAddress);
+        }
+    }
+
+    private static bool PulseBit(MitsubishiPlcService plc, string address)
+    {
+        if (plc == null || string.IsNullOrWhiteSpace(address))
+        {
+            return false;
+        }
+
+        var on = plc.WriteBoolVari(address, true);
+        if (!on.IsSuccess)
+        {
+            return false;
+        }
+
+        Thread.Sleep(200);
+        plc.WriteBoolVari(address, false);
+        return true;
     }
 
     public void AbortCommand()
@@ -1132,96 +1153,6 @@ public class RoboticArm : BindableBase
         else
         {
             Growl.ErrorGlobal($"{_name} AutoStartCommandExecuteError: {_err} ");
-        }
-    }
-
-    private void MonitorStatus()
-    {
-        Thread.Sleep(2000);
-        int delay = 500;
-        while (true)
-        {
-            Thread.Sleep(delay);
-            var alarmActive = IsRobotAlarmActive();
-            if (alarmActive)
-            {
-                RobotStatus = ChamberStatus.Alarm;
-                continue;
-            }
-
-            if (RobotStatus == ChamberStatus.Alarm)
-            {
-                RefreshRobotStatusWhenAlarmCleared();
-            }
-
-            //if (_isResetErrorNeedClear)
-            //{
-            //    _resetErrorDelayCycle++;
-            //    if (_resetErrorDelayCycle >= 4)
-            //    {
-            //        ResetErrorClear();
-            //        _resetErrorDelayCycle = 0;
-            //    }
-            //}
-            //Thread.Sleep(delay);
-            //if (_isAutoRunNeedClear)
-            //{
-            //    _resetAutoRunCycle++;
-            //    if (_resetAutoRunCycle >= 4)
-            //    {
-            //        ResetAutoStart();
-            //        _resetAutoRunCycle = 0;
-            //    }
-            //}
-            if (_name == "EFEMRobot") {
-
-                var a = RobotStatus;
-            }
-            // 定期检查机器人连接状态和模式状态
-            switch (RobotStatus)
-            {
-                case ChamberStatus.Manual:
-                    // Auto 状态下不再轮询 PLC；Manual 时继续检测是否切到 Auto
-                    IsAutoMode();
-                    break;
-                case ChamberStatus.Auto:
-                    break;
-                case ChamberStatus.Disconnect:
-                    // 检查是否重新连接
-                    if (IsConnected() && mcComm.IsPLCConnected)
-                    {
-                        RobotStatus = ChamberStatus.Uninitialized;
-                    }
-                    break;
-
-                case ChamberStatus.Uninitialized:
-                    // 检查初始化状态
-                    if (IsAutoMode())
-                    {
-                        // 初始化成功后检查模式状态
-                        IsInitialized();
-                    }
-                    break;
-
-                
-
-                case ChamberStatus.Alarm:
-                    // 检查报警是否已清除
-                    //bool isAlarmCleared = !mcComm.ReadBoolVari(_alarmStatusVarName);
-                    //if (isAlarmCleared)
-                    //{
-                    //    // 报警清除后回到未初始化状态
-                    //    RobotStatus = ChamberStatus.Uninitialized;
-                    //}
-                    break;
-
-                case ChamberStatus.Offline:
-                    // 离线状态下不进行任何操作
-                    break;
-
-                default:
-                    break;
-            }
         }
     }
 }
@@ -1534,19 +1465,23 @@ public class GlobalRobots
     private void RobotsMonitor()
     {
         Thread.Sleep(2000);
-        int delay = 500;
+        const int delay = 500;
         while (_isRobotMonitorRunning)
         {
-            Thread.Sleep(delay);
-            foreach (var robot in listRobot)
+            try
             {
-                if (robot.IsConnected() &&
-                    robot.RobotStatus != ChamberStatus.Alarm &&
-                    robot.RobotStatus != ChamberStatus.Auto)
+                MitsubishiPlcService.EnsureConnected();
+                foreach (var robot in listRobot)
                 {
-                    robot.IsAutoMode();
+                    robot.SyncStatusFromPlc();
                 }
             }
+            catch
+            {
+                // 读失败保持上次状态，避免主界面闪烁
+            }
+
+            Thread.Sleep(delay);
         }
     }
     #region

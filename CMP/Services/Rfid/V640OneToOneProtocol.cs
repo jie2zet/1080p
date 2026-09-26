@@ -49,55 +49,168 @@ public static class V640OneToOneProtocol
         return new V640Response(code, payload, code == SuccessCode);
     }
 
-    /// <summary>
-    /// 与串口助手一致：默认把整帧十六进制当 CarrierId（如 0088776655443322110000）。
-    /// </summary>
-    public static string ParseCarrierId(string rawLine, string payloadHex, int maxBytes, string format = "Hex")
+    public static string ParseCarrierId(string rawLine, string payloadHex, int maxBytes, string format = "Ascii")
+        => ParseCarrierId(rawLine, payloadHex, new CarrierIdParseOptions
+        {
+            Format = format,
+            ByteLength = maxBytes
+        });
+
+    public static string ParseCarrierId(string payloadHex, int maxBytes, string format = "Ascii")
+        => ParseCarrierId(payloadHex, payloadHex, maxBytes, format);
+
+    public static string ParseCarrierId(string rawLine, string payloadHex, CarrierIdParseOptions? options)
     {
-        var mode = string.IsNullOrWhiteSpace(format) ? "Hex" : format.Trim();
+        options ??= new CarrierIdParseOptions();
+        var format = string.IsNullOrWhiteSpace(options.Format) ? "Ascii" : options.Format.Trim();
+        var source = string.IsNullOrWhiteSpace(options.Source)
+            ? CarrierIdParseOptions.DefaultSource(format)
+            : options.Source.Trim();
+
+        if (format.Equals("Raw", StringComparison.OrdinalIgnoreCase)
+            || source.Equals("Raw", StringComparison.OrdinalIgnoreCase))
+        {
+            return ApplyLetterCase((rawLine ?? string.Empty).Trim('\0', '\r', '\n', ' ', '\t'), options.LetterCase);
+        }
+
         var payload = CompactHex(payloadHex);
-
-        if (mode.Equals("Ascii", StringComparison.OrdinalIgnoreCase))
+        var frame = CompactHex(rawLine);
+        if (string.IsNullOrEmpty(frame))
         {
-            return string.IsNullOrEmpty(payload) ? string.Empty : BytesToAscii(TakeBytes(HexToBytes(payload), maxBytes));
+            frame = payload;
         }
 
-        if (mode.Equals("UInt32", StringComparison.OrdinalIgnoreCase))
+        var hex = source.Equals("Payload", StringComparison.OrdinalIgnoreCase)
+            ? (string.IsNullOrEmpty(payload) && frame.Length > 2 ? frame[2..] : payload)
+            : frame;
+
+        hex = SliceHex(hex, options.SkipBytes, options.ByteLength);
+        if (options.ReverseBytes)
         {
-            return string.IsNullOrEmpty(payload) ? string.Empty : BytesToUInt32(TakeBytes(HexToBytes(payload), maxBytes > 0 ? maxBytes : 4));
+            hex = ReverseHexBytes(hex);
         }
 
-        if (mode.Equals("Auto", StringComparison.OrdinalIgnoreCase)
-            && !string.IsNullOrEmpty(payload))
+        var trimNull = options.TrimTrailingNull
+                       ?? format.Equals("Ascii", StringComparison.OrdinalIgnoreCase)
+                       || format.Equals("HexData", StringComparison.OrdinalIgnoreCase)
+                       || format.Equals("Auto", StringComparison.OrdinalIgnoreCase);
+
+        if (format.Equals("UInt32", StringComparison.OrdinalIgnoreCase))
         {
-            var ascii = BytesToAscii(TakeBytes(HexToBytes(payload), maxBytes));
-            if (IsPrintableAscii(ascii))
+            var bytes = HexToBytes(string.IsNullOrEmpty(hex) ? payload : hex);
+            return BytesToUInt32(TakeBytes(bytes, options.ByteLength > 0 ? options.ByteLength : 4));
+        }
+
+        if (format.Equals("BytesAscii", StringComparison.OrdinalIgnoreCase)
+            || format.Equals("Text", StringComparison.OrdinalIgnoreCase))
+        {
+            return ApplyLetterCase(DecodeBytes(hex, options.Encoding), options.LetterCase);
+        }
+
+        if (format.Equals("Auto", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(hex))
+        {
+            var text = DecodeBytes(hex, options.Encoding);
+            if (IsPrintableAscii(text))
             {
-                return ascii;
+                return ApplyLetterCase(text, options.LetterCase);
             }
+
+            return ApplyLetterCase(trimNull ? TrimTrailing00(hex) : hex, options.LetterCase);
         }
 
-        var hex = CompactHex(rawLine);
-        if (string.IsNullOrEmpty(hex))
+        if (trimNull)
         {
-            hex = payload;
+            hex = TrimTrailing00(hex);
         }
 
-        if (maxBytes > 0)
-        {
-            var prefix = hex.StartsWith(SuccessCode, StringComparison.OrdinalIgnoreCase) ? 2 : 0;
-            var maxChars = prefix + maxBytes * 2;
-            if (hex.Length > maxChars)
-            {
-                hex = hex[..maxChars];
-            }
-        }
-
-        return hex.ToUpperInvariant();
+        return ApplyLetterCase(hex, options.LetterCase);
     }
 
-    public static string ParseCarrierId(string payloadHex, int maxBytes, string format = "Hex")
-        => ParseCarrierId(payloadHex, payloadHex, maxBytes, format);
+    private static string SliceHex(string hex, int skipBytes, int byteLength)
+    {
+        if (string.IsNullOrEmpty(hex))
+        {
+            return string.Empty;
+        }
+
+        if (skipBytes > 0)
+        {
+            var skipChars = skipBytes * 2;
+            hex = hex.Length > skipChars ? hex[skipChars..] : string.Empty;
+        }
+
+        if (byteLength > 0)
+        {
+            var takeChars = byteLength * 2;
+            if (hex.Length > takeChars)
+            {
+                hex = hex[..takeChars];
+            }
+        }
+
+        return hex;
+    }
+
+    private static string ReverseHexBytes(string hex)
+    {
+        if (string.IsNullOrEmpty(hex))
+        {
+            return string.Empty;
+        }
+
+        if (hex.Length % 2 != 0)
+        {
+            hex = "0" + hex;
+        }
+
+        var bytes = HexToBytes(hex);
+        Array.Reverse(bytes);
+        return Convert.ToHexString(bytes);
+    }
+
+    private static string TrimTrailing00(string hex)
+    {
+        while (hex.Length >= 2 && hex.EndsWith("00", StringComparison.OrdinalIgnoreCase))
+        {
+            hex = hex[..^2];
+        }
+
+        return hex;
+    }
+
+    private static string DecodeBytes(string hex, string? encodingName)
+    {
+        if (string.IsNullOrEmpty(hex))
+        {
+            return string.Empty;
+        }
+
+        var encoding = encodingName != null
+                       && encodingName.Equals("UTF8", StringComparison.OrdinalIgnoreCase)
+            ? Encoding.UTF8
+            : Encoding.ASCII;
+        return encoding.GetString(HexToBytes(hex)).Trim('\0', ' ', '\t', '\r', '\n');
+    }
+
+    private static string ApplyLetterCase(string text, string? letterCase)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            return string.Empty;
+        }
+
+        if (string.Equals(letterCase, "Lower", StringComparison.OrdinalIgnoreCase))
+        {
+            return text.ToLowerInvariant();
+        }
+
+        if (string.Equals(letterCase, "Keep", StringComparison.OrdinalIgnoreCase))
+        {
+            return text;
+        }
+
+        return text.ToUpperInvariant();
+    }
 
     private static string CompactHex(string? hex)
     {
