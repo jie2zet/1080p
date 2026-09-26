@@ -109,8 +109,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     public DelegateCommand<string> CylinderCommand { get; private set; } = null!;
     public DelegateCommand<string> PressureCommand { get; private set; } = null!;
     public DelegateCommand<string> LiquidCommand { get; private set; } = null!;
-    public DelegateCommand<string> FlashCommand { get; private set; } = null!;
-    public DelegateCommand FlashDelaySetCommand { get; private set; } = null!;
+    public DelegateCommand<string> FlushCommand { get; private set; } = null!;
+    public DelegateCommand FlushDelaySetCommand { get; private set; } = null!;
 
     // Servo button text properties
     public string WfLeftPillarRotateMotorServoText => RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn ? Resources.Off : Resources.On;
@@ -248,8 +248,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         CylinderCommand = OperationAudit.Create<string>("Cylinder", CylinderCommandExecute, () => TabTitle ?? string.Empty);
         PressureCommand = OperationAudit.Create<string>("Pressure", PressureCommandExecute, () => TabTitle ?? string.Empty);
         LiquidCommand = OperationAudit.Create<string>("Liquid", LiquidCommandExecute, () => TabTitle ?? string.Empty);
-        FlashCommand = OperationAudit.Create<string>("Flash", FlashCommandExecute, () => TabTitle ?? string.Empty);
-        FlashDelaySetCommand = OperationAudit.Create("FlashDelaySet", FlashDelaySetCommandExecute, () => TabTitle ?? string.Empty);
+        FlushCommand = OperationAudit.Create<string>("Flush", FlushCommandExecute, () => TabTitle ?? string.Empty);
+        FlushDelaySetCommand = OperationAudit.Create("FlushDelaySet", FlushDelaySetCommandExecute, () => TabTitle ?? string.Empty);
     }
 
     private async Task MonitorLoopAsync()
@@ -860,32 +860,32 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private void FlashCommandExecute(string obj)
+    private void FlushCommandExecute(string obj)
     {
         try
         {
-            var (handle, value) = _rollerConfig.GetFlashCommand(obj);
+            var (handle, value) = _rollerConfig.GetFlushCommand(obj);
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
             if (_err != 0)
             {
-                Growl.ErrorGlobal($"Flash Command {obj} Error: {_err}");
+                Growl.ErrorGlobal($"Flush Command {obj} Error: {_err}");
             }
             else
             {
-                Growl.SuccessGlobal($"{_rollerConfig.RollType} Flash Command: {obj}");
+                Growl.SuccessGlobal($"{_rollerConfig.RollType} Flush Command: {obj}");
             }
         }
         catch (ArgumentException ex)
         {
-            Growl.ErrorGlobal($"Flash Command Error: {ex.Message}");
+            Growl.ErrorGlobal($"Flush Command Error: {ex.Message}");
         }
     }
 
-    private void FlashDelaySetCommandExecute()
+    private void FlushDelaySetCommandExecute()
     {
-        var value = RollerViewPoco.Flash.OpenDelaySet;
-        var parameter = _rollerConfig.Params.Flash.OpenDelay;
+        var value = RollerViewPoco.Flush.OpenDelaySet;
+        var parameter = _rollerConfig.Params.Flush.OpenDelay;
         if (float.IsNaN(value) || float.IsInfinity(value) || value < parameter.MinValue || value > parameter.MaxValue)
         {
             Growl.ErrorGlobal($"DIW(ALL) Open Delay 范围必须为 {parameter.MinValue:0.00}–{parameter.MaxValue:0.00}");
@@ -1048,43 +1048,87 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private static T? GetRealVal<T>(Recipe.Content content, string name, int stepIndex)
-    {
-        Recipe.Data data = new Recipe.Data();
-        bool exists = false;
-        foreach (var item in content.Data!)
-        {
-            if (item.Name?.Replace(" ", "").Replace("_", "").Replace("-", "").Replace("&", "") == name)
-            {
-                data = item;
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) return default;
+    //private static T? GetRealVal<T>(Recipe.Content content, string name, int stepIndex)
+    //{
+    //    Recipe.Data data = new Recipe.Data();
+    //    bool exists = false;
+    //    foreach (var item in content.Data!)
+    //    {
+    //        if (item.Name?.Replace(" ", "").Replace("_", "").Replace("-", "").Replace("&", "") == name)
+    //        {
+    //            data = item;
+    //            exists = true;
+    //            break;
+    //        }
+    //    }
+    //    if (!exists) return default;
 
-        object result = new();
-        string value = data.Steps[stepIndex].Value;
-        data.Type = data.Type?.ToLower();
-        if (data.Type == "option" || data.Type == "list")
+    //    object result = new();
+    //    string value = data.Steps[stepIndex].Value;
+    //    data.Type = data.Type?.ToLower();
+    //    if (data.Type == "option" || data.Type == "list")
+    //    {
+    //        result = Convert.ToInt16(value.Split(":")[0]);
+    //    }
+    //    else if (data.Type == "int")
+    //    {
+    //        result = Convert.ToInt16(value);
+    //    }
+    //    else if (data.Type == "float" || data.Type == "text")
+    //    {
+    //        result = Convert.ToSingle(value);
+    //    }
+    //    else
+    //    {
+    //        result = value;
+    //    }
+    //    T t = (T)result;
+    //    if (t == null) return default;
+    //    return t;
+    //}
+
+    private static T? GetRealVal<T>(Recipe.Content recipeModel, string name, int stepIndex)
+    {
+        var model = recipeModel.Data?
+            .FirstOrDefault(item => {
+                string itemName = item.Name!.Replace(" ", "")
+                            .Replace("_", "")
+                            .Replace("-", "")
+                            .Replace("&", "");
+
+                return itemName == name || (item.CompatibleName != null && item.CompatibleName.Contains(name));
+            }
+                );
+
+        if (model == null) return default;
+        if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
+
+        var value = model.Steps[stepIndex].Value;
+        var type = model.Type?.ToLowerInvariant();
+        var targetType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+
+        if (type == "option" || type == "list")
         {
-            result = Convert.ToInt16(value.Split(":")[0]);
+            value.Replace("：", ":");
+            var arr = value.Split(':');
+            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }
-        else if (data.Type == "int")
+
+
+        try
         {
-            result = Convert.ToInt16(value);
+            if (targetType == typeof(string))
+                return (T)(object)value;
+
+            if (targetType.IsEnum)
+                return (T)Enum.Parse(targetType, value, ignoreCase: true);
+
+            return (T)Convert.ChangeType(value, targetType);
         }
-        else if (data.Type == "float" || data.Type == "text")
+        catch
         {
-            result = Convert.ToSingle(value);
+            return default;
         }
-        else
-        {
-            result = value;
-        }
-        T t = (T)result;
-        if (t == null) return default;
-        return t;
     }
 
     /// <summary>
@@ -1143,7 +1187,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         
         RollerViewPoco.UpperRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerRotationSpeedAct).Replace("_1", ""));
         RollerViewPoco.LowerRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerRotationSpeedAct).Replace("_1", ""));
-        RollerViewPoco.Flash.OpenDelayAct = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
+        RollerViewPoco.Flush.OpenDelayAct = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
 
 
         RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarMotorServoOn).Replace("_1", ""));

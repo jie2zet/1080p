@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CMP.Models.kvsPlc.IO
 {
-    class KvStruct
+    public class KvStruct
     {
         const int stDryIOData_WSIZE = 3;
         const int stPenIOData_WSIZE = 7;

@@ -12,6 +12,7 @@ namespace CMP.Models.Recipe.RecipeEdit
         DechuckRecipeTemplate,
         DryRecipeTemplate,
         ExsituContidionSweepRecipeTemplate,
+        InsituContidionSweepRecipeTemplate,
         HeadSweepRecipeTemplate,
         LoadRecipeTemplate,
         PenA1RecipeTemplate,

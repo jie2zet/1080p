@@ -17,7 +17,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="350" />
+                    <ColumnDefinition Width="400" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -140,7 +140,7 @@
                         </Border>
                     </GroupBox>
                     <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-                              Padding="10" MaxWidth="320" Style="{StaticResource GroupBoxTab.Small}">
+                              Padding="10" MaxWidth="520" Style="{StaticResource GroupBoxTab.Small}">
                         <GroupBox.Header>
                             <StackPanel>
                                 <TextBlock Padding="5" Foreground="White" Text="Pressure" />
@@ -151,55 +151,103 @@
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone1" Width="60" VerticalAlignment="Center" />
                                     <TextBox Width="100" Text="{Binding PolishUnit.Zone1.SetPress, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone1.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone1" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone1" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone1" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone2" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone2.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone2.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone2.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone2" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone2" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone2" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone3" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone3.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone3.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone3.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone3" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone3" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone3" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone4" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone4.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone4.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone4.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone4" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone4" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone4" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone5" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone5.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone5.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone5.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone5" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone5" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone5" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone6" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone6.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone6.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone6.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone6" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone6" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone6" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone7" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone7.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone7.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone7.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone7" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone7" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone7" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="Zone8" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone8.Press, Mode=TwoWay}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Zone8.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Zone8.ActPress}" />
+                                    <Button Content="{lex:Loc Press}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding PressCommand}" CommandParameter="Zone8" />
+                                    <Button Content="{lex:Loc Vent}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VentCommand}" CommandParameter="Zone8" />
+                                    <Button Content="{lex:Loc Vacc}" Width="55" Style="{StaticResource ButtonPrimary}"
+                                            Command="{Binding VacuumCommand}" CommandParameter="Zone8" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="RRing" Width="60" VerticalAlignment="Center" />
-                                    <TextBox Width="100" Text="{Binding PolishUnit.Retain.Press}" />
-                                    <TextBlock Width="80" VerticalAlignment="Center"
+                                    <TextBox Width="100" Text="{Binding PolishUnit.Retain.SetPress, Mode=TwoWay}" />
+                                    <TextBlock Width="40" VerticalAlignment="Center"
                                                Text="{Binding PolishUnit.Retain.ActPress}" />
                                 </StackPanel>
                                 <StackPanel Margin="0 10 0 0" Orientation="Horizontal"

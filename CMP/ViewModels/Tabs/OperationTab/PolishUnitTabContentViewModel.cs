@@ -729,36 +729,37 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     private void RefreshHMI()
     {
         stPolishCollectData stCollectData;
-        PolishUnit.PlatenMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.PlatenRotationSpeedAct));
-        PolishUnit.HeadRotateMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadRotationSpeedAct));
-        PolishUnit.HeadSweepMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadSweepSpeedAct));
-        PolishUnit.HeadSweepMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadSweepPositionAct));
-        PolishUnit.HeadLiftMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadZ_AxisSpeedAct));
-        PolishUnit.HeadLiftMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.HeadZ_AxisPositionAct));
-        PolishUnit.DiskRotateMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionRotationSpeedAct));
-        PolishUnit.ConditionSweepMotor.ActVelocity = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionArmSweepSpeedAct));
-        PolishUnit.ConditionSweepMotor.ActPosition = GetSvValue<float>(polishData.polishName + nameof(stCollectData.ConditionArmSweepPositionAct));
+        string Key(string fieldName) => polishData.BuildRuntimeKey(null, fieldName);
+        PolishUnit.PlatenMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.PlatenRotationSpeedAct)));
+        PolishUnit.HeadRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadRotationSpeedAct)));
+        PolishUnit.HeadSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepSpeedAct)));
+        PolishUnit.HeadSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepPositionAct)));
+        PolishUnit.HeadLiftMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisSpeedAct)));
+        PolishUnit.HeadLiftMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisPositionAct)));
+        PolishUnit.DiskRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionRotationSpeedAct)));
+        PolishUnit.ConditionSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepSpeedAct)));
+        PolishUnit.ConditionSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepPositionAct)));
 
-        PolishUnit.Zone1.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone1PressureAct));
-        PolishUnit.Zone2.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone2PressureAct));
-        PolishUnit.Zone3.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone3PressureAct));
-        PolishUnit.Zone4.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone4PressureAct));
-        PolishUnit.Zone5.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone5PressureAct));
-        PolishUnit.Zone6.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone6PressureAct));
-        PolishUnit.Zone7.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone7PressureAct));
-        PolishUnit.Zone8.ActPress = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Zone8PressureAct));
-        PolishUnit.Slurry.Slurry1Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry1OrDIWFlowrateAct));
-        PolishUnit.Slurry.Slurry2Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry2OrDIWFlowrateAct));
-        PolishUnit.Slurry.Slurry3Act = GetSvValue<float>(polishData.polishName + nameof(stCollectData.Slurry3OrDIWFlowrateAct));
+        PolishUnit.Zone1.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone1PressureAct)));
+        PolishUnit.Zone2.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone2PressureAct)));
+        PolishUnit.Zone3.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone3PressureAct)));
+        PolishUnit.Zone4.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone4PressureAct)));
+        PolishUnit.Zone5.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone5PressureAct)));
+        PolishUnit.Zone6.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone6PressureAct)));
+        PolishUnit.Zone7.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone7PressureAct)));
+        PolishUnit.Zone8.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone8PressureAct)));
+        PolishUnit.Slurry.Slurry1Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry1OrDIWFlowrateAct)));
+        PolishUnit.Slurry.Slurry2Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry2OrDIWFlowrateAct)));
+        PolishUnit.Slurry.Slurry3Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry3OrDIWFlowrateAct)));
 
 
-        PolishUnit.PlatenMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.PlatenRotationMotorServoOn));
-        PolishUnit.HeadRotateMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadRotationMotorServoOn));
-        PolishUnit.HeadSweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadSweepMotorServoOn));
-        PolishUnit.HeadLiftMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.HeadUpDownMotorServoOn));
-        PolishUnit.DiskRotateMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.ConditionHeadRotationMotorServoOn));
-        PolishUnit.ConditionSweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.ConditionSweepMotorServoOn));
-        PolishUnit.SlurrySweepMotor.IsServoOn = GetSvValue<bool>(polishData.polishName + nameof(stCollectData.SlurrySweepMotorServoOn));
+        PolishUnit.PlatenMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.PlatenRotationMotorServoOn)));
+        PolishUnit.HeadRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadRotationMotorServoOn)));
+        PolishUnit.HeadSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadSweepMotorServoOn)));
+        PolishUnit.HeadLiftMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadUpDownMotorServoOn)));
+        PolishUnit.DiskRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionHeadRotationMotorServoOn)));
+        PolishUnit.ConditionSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionSweepMotorServoOn)));
+        PolishUnit.SlurrySweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.SlurrySweepMotorServoOn)));
 
 
         RaisePropertyChanged(nameof(PlatenMotorServoText));
@@ -1568,6 +1569,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesPress();
         foreach (var (name, addr, plcValue, pressAddr, pressValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, pressAddr, 2, pressValue);
             if (err != 0)
             {
@@ -1595,6 +1599,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesVent();
         foreach (var (name, addr, plcValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, addr, 1, plcValue);
             if (err != 0)
             {
@@ -1612,6 +1619,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = GetZonesVacuum();
         foreach (var (name, addr, plcValue) in zones)
         {
+            if (!string.IsNullOrWhiteSpace(obj) && !string.Equals(name, obj, StringComparison.OrdinalIgnoreCase))
+                continue;
+
             err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, addr, 1, plcValue);
             if (err != 0)
             {
@@ -2464,7 +2474,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 KST.stHeadSweepRecipeFormat headSweepRecipe = new KST.stHeadSweepRecipeFormat();
                 headSweepRecipe.HeadSweepType = GetRealVal<short>(recipeContent, "HeadSweepType", 0);
-                headSweepRecipe.HeadSweepCount = GetRealVal<short>(recipeContent, "HeadSweepCount", 0);
+                headSweepRecipe.HeadSweepCount = GetRealVal<float>(recipeContent, "HeadSweepCount", 0);
                 headSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
                 headSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
                 headSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
@@ -2576,42 +2586,69 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             listConditionSweepRecipe.Add(conditionSweepRecipeName);
             var recipeContent = LoadRecipeContent("Condition Sweep Recipe", conditionSweepRecipeName);
             if (recipeContent != null)
-            {
-                KST.stConditionSweepRecipeFormat conditionSweepRecipe = new KST.stConditionSweepRecipeFormat();
-                conditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
-                conditionSweepRecipe.ConditionSweepCount = GetRealVal<short>(recipeContent, "ConditionSweepCount", 0);
-                conditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
-                conditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
-                conditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
-                conditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
-                conditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
-                conditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
-                conditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
-                conditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
-                conditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
-                conditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
-                conditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
-                conditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
-                conditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
-                conditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
-                conditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
-                conditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
-                conditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
-                conditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
-                conditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
-                conditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
-                conditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
-                conditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
-                conditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
-                KST.stConditionSweepRecipeFormat_ToByte(ref writeBuf, conditionSweepRecipe, 1, 0);
+            {                
                 string variableName = string.Empty;
                 if (type == "Insitu")
                 {
+                    KST.stInsituConditionSweepRecipeFormat insituConditionSweepRecipe = new KST.stInsituConditionSweepRecipeFormat();
+                    insituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                    insituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                    insituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                    insituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                    insituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                    insituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                    insituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                    insituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                    insituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                    insituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                    insituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                    insituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                    insituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                    insituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                    insituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                    insituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                    insituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                    insituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                    insituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                    insituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                    insituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                    insituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                    insituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                    insituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                    insituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                    KST.stInsituConditionSweepRecipeFormat_ToByte(ref writeBuf, insituConditionSweepRecipe, 1, 0);
                     variableName =
                         $"structConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
                 }
                 else
                 {
+                    KST.stExsituConditionSweepRecipeFormat exsituConditionSweepRecipe = new KST.stExsituConditionSweepRecipeFormat();
+                    exsituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                    exsituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                    exsituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                    exsituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                    exsituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                    exsituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                    exsituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                    exsituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                    exsituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                    exsituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                    exsituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                    exsituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                    exsituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                    exsituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                    exsituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                    exsituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                    exsituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                    exsituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                    exsituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                    exsituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                    exsituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                    exsituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                    exsituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                    exsituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                    exsituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                    KST.stExsituConditionSweepRecipeFormat_ToByte(ref writeBuf, exsituConditionSweepRecipe, 1, 0);
                     variableName =
                         $"structExsituConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
                 }
@@ -2639,32 +2676,32 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     {
         var zones = new[]
         {
-            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Press.Handle(), Value: PolishUnit.Zone1.Press.Value(),
+            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone1.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone1.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone1.SetPress.Value()),
-            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Press.Handle(), Value: PolishUnit.Zone2.Press.Value(),
+            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone2.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone2.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone2.SetPress.Value()),
-            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Press.Handle(), Value: PolishUnit.Zone3.Press.Value(),
+            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone3.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone3.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone3.SetPress.Value()),
-            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Press.Handle(), Value: PolishUnit.Zone4.Press.Value(),
+            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone4.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone4.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone4.SetPress.Value()),
-            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Press.Handle(), Value: PolishUnit.Zone5.Press.Value(),
+            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone5.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone5.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone5.SetPress.Value()),
-            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Press.Handle(), Value: PolishUnit.Zone6.Press.Value(),
+            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone6.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone6.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone6.SetPress.Value()),
-            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Press.Handle(), Value: PolishUnit.Zone7.Press.Value(),
+            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone7.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone7.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone7.SetPress.Value()),
-            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Press.Handle(), Value: PolishUnit.Zone8.Press.Value(),
+            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Press.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone8.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Zone8.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Zone8.SetPress.Value()),
             (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Press.Handle(),
-                Value: PolishUnit.Retain.Press.Value(),
+                Value: PlcHandle.CmdPolish.Gas.Retain.Press.Value(),
                 PressAddr: PlcHandle.CmdPolish.Gas.Retain.Param.Pressure.ParamHandle(),
                 PressValue: PolishUnit.Retain.SetPress.Value()),
         };
@@ -2675,15 +2712,15 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     {
         var zones = new[]
         {
-            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vent.Handle(), Value: PolishUnit.Zone1.Vent.Value()),
-            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vent.Handle(), Value: PolishUnit.Zone2.Vent.Value()),
-            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vent.Handle(), Value: PolishUnit.Zone3.Vent.Value()),
-            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vent.Handle(), Value: PolishUnit.Zone4.Vent.Value()),
-            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vent.Handle(), Value: PolishUnit.Zone5.Vent.Value()),
-            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vent.Handle(), Value: PolishUnit.Zone6.Vent.Value()),
-            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vent.Handle(), Value: PolishUnit.Zone7.Vent.Value()),
-            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vent.Handle(), Value: PolishUnit.Zone8.Vent.Value()),
-            (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vent.Handle(), Value: PolishUnit.Retain.Vent.Value()),
+            (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone1.Vent.Value()),
+            (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone2.Vent.Value()),
+            (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone3.Vent.Value()),
+            (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone4.Vent.Value()),
+            (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone5.Vent.Value()),
+            (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone6.Vent.Value()),
+            (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone7.Vent.Value()),
+            (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Zone8.Vent.Value()),
+            (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vent.Handle(), Value: PlcHandle.CmdPolish.Gas.Retain.Vent.Value()),
         };
         return zones;
     }
@@ -2693,23 +2730,23 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         var zones = new[]
         {
             (Name: "Zone1", Addr: PlcHandle.CmdPolish.Gas.Zone1.Vacuum.Handle(),
-                Value: PolishUnit.Zone1.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone1.Vacuum.Value()),
             (Name: "Zone2", Addr: PlcHandle.CmdPolish.Gas.Zone2.Vacuum.Handle(),
-                Value: PolishUnit.Zone2.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone2.Vacuum.Value()),
             (Name: "Zone3", Addr: PlcHandle.CmdPolish.Gas.Zone3.Vacuum.Handle(),
-                Value: PolishUnit.Zone3.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone3.Vacuum.Value()),
             (Name: "Zone4", Addr: PlcHandle.CmdPolish.Gas.Zone4.Vacuum.Handle(),
-                Value: PolishUnit.Zone4.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone4.Vacuum.Value()),
             (Name: "Zone5", Addr: PlcHandle.CmdPolish.Gas.Zone5.Vacuum.Handle(),
-                Value: PolishUnit.Zone5.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone5.Vacuum.Value()),
             (Name: "Zone6", Addr: PlcHandle.CmdPolish.Gas.Zone6.Vacuum.Handle(),
-                Value: PolishUnit.Zone6.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone6.Vacuum.Value()),
             (Name: "Zone7", Addr: PlcHandle.CmdPolish.Gas.Zone7.Vacuum.Handle(),
-                Value: PolishUnit.Zone7.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone7.Vacuum.Value()),
             (Name: "Zone8", Addr: PlcHandle.CmdPolish.Gas.Zone8.Vacuum.Handle(),
-                Value: PolishUnit.Zone8.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Zone8.Vacuum.Value()),
             (Name: "Retain", Addr: PlcHandle.CmdPolish.Gas.Retain.Vacuum.Handle(),
-                Value: PolishUnit.Retain.Vacuum.Value()),
+                Value: PlcHandle.CmdPolish.Gas.Retain.Vacuum.Value()),
         };
         return zones;
     }
@@ -2960,6 +2997,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
+            value.Replace("：",":");
             var arr = value.Split(':');
             value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }

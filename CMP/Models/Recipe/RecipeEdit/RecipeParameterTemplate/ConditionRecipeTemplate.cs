@@ -30,9 +30,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Process Time",
             Unit = "s",
             Type = "float",
-            Min = 0,
-            Max = 9999,
-            Default = "5.00",
+            Min = 0.00,
+            Max = 9999.00,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -56,9 +56,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Platen Rotation",
             Unit = "r/min",
             Type = "float",
-            Min = 0,
-            Max = 3000,
-            Default = "300",
+            Min = 0.00,
+            Max = 180.00,
+            Default = "10.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -66,14 +66,17 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             new()
           {
             Id = 5,
-            Name = "Condition Head Rotation",
+            Name = "Conditioner Head Rotation",
             Unit = "r/min",
             Type = "float",
-            Min = 0,
-            Max = 100,
+            Min = 0.00,
+            Max = 100.00,
             Default = "10.00",
             Options = [],
-            CompatibleName = [],
+            CompatibleName = [
+              "ConditionHeadRotation",
+              "ConditionerHeadRotation"
+            ],
             Steps = []
           },
             new()
@@ -82,8 +85,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Condition Pressure",
             Unit = "Kpa",
             Type = "float",
-            Min = 3,
-            Max = 78,
+            Min = 3.00,
+            Max = 78.00,
             Default = "10.00",
             Options = [],
             CompatibleName = [],
@@ -100,13 +103,16 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Default = "0",
             Options = [
               "0:None",
-              "1:Condition Repice1",
-              "2:Condition Repice2",
-              "3:Condition Repice3",
-              "4:Condition Repice4",
-              "5:Condition Repice5"
+              "1:Condition Recipe1",
+              "2:Condition Recipe2",
+              "3:Condition Recipe3",
+              "4:Condition Recipe4",
+              "5:Condition Recipe5"
             ],
-            CompatibleName = [],
+            CompatibleName = [
+              "ConditionSweepRecipe",
+              "ConditionRecipe"
+            ],
             Steps = []
           },
             new()
@@ -182,9 +188,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Slurry Line 1 Flow",
             Unit = "mL/min",
             Type = "float",
-            Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Min = 0.00,
+            Max = 500.00,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -195,9 +201,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Slurry Line 2 Flow",
             Unit = "mL/min",
             Type = "float",
-            Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Min = 0.00,
+            Max = 500.00,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -208,9 +214,9 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Slurry Line 3 Flow",
             Unit = "mL/min",
             Type = "float",
-            Min = 0,
-            Max = 3000,
-            Default = "0.00",
+            Min = 0.00,
+            Max = 500.00,
+            Default = "100.00",
             Options = [],
             CompatibleName = [],
             Steps = []
@@ -234,8 +240,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Name = "Ratio",
             Unit = "",
             Type = "float",
-            Min = 0,
-            Max = 100,
+            Min = 0.00,
+            Max = 100.00,
             Default = "30.00",
             Options = [],
             CompatibleName = [],

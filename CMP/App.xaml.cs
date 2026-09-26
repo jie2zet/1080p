@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
-using CMP.Adapters;
+﻿using CMP.Adapters;
 using CMP.Extensions;
 using CMP.Modules;
 using CMP.Services;
 using CMP.Services.Auth;
+using CMP.Services.HostCommunication;
 using CMP.Services.LoadPort;
 using CMP.Services.Log;
 using CMP.Services.Plc;
@@ -16,10 +14,13 @@ using CMP.ViewModels.Common.Dialog;
 using CMP.ViewModels.Login;
 using CMP.ViewModels.Tabs.OperationTab;
 using CMP.Views;
-using CMP.Views.Tabs.OperationTab;
 using CMP.Views.Common.Dialog;
 using CMP.Views.Common.Message;
+using CMP.Views.Tabs.OperationTab;
 using CMP.Views.Tabs.WarnTab;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
 
 namespace CMP;
@@ -51,6 +52,8 @@ public partial class App
         containerRegistry.RegisterSingleton<IRegionManager, RegionManager>();
         // 在模块的 RegisterTypes 方法中
         containerRegistry.RegisterSingleton<ILoadPortService, LoadPortService>();
+        //主机通信模块
+        containerRegistry.RegisterSingleton<IHostCommunicationService, HostCommunicationService>();
         containerRegistry.RegisterSingleton<IRfidReaderService, RfidReaderService>();
     }
 
@@ -77,6 +80,7 @@ public partial class App
     {
         base.OnInitialized();
         _ = Container.Resolve<ILoadPortService>();
+        _ = Container.Resolve<IHostCommunicationService>();
     }
 
     private Stopwatch? _startupStopwatch;
@@ -174,5 +178,6 @@ public partial class App
 
         Environment.Exit(0);
     }
+
 
 }

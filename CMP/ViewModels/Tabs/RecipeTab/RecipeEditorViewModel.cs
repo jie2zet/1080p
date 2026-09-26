@@ -836,6 +836,9 @@ public class RecipeEditorViewModel : BindableBase
                 case RecipeModelTemplate.ExsituContidionSweepRecipeTemplate:
                     newContent.Data = ExsituContidionSweepRecipeTemplate.Template;
                     break;
+                case RecipeModelTemplate.InsituContidionSweepRecipeTemplate:
+                    newContent.Data = InsituContidionSweepRecipeTemplate.Template;
+                    break;
                 case RecipeModelTemplate.HeadSweepRecipeTemplate:
                     newContent.Data = HeadSweepRecipeTemplate.Template;
                     break;

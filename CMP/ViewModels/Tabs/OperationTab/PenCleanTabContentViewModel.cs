@@ -112,8 +112,8 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     public DelegateCommand<string> PressureCommand { get; private set; } = null!;
     public DelegateCommand<string> LiquidCommand { get; private set; } = null!;
     public DelegateCommand<string> GasCommand { get; private set; } = null!;
-    public DelegateCommand<string> FlashCommand { get; private set; } = null!;
-    public DelegateCommand FlashDelaySetCommand { get; private set; } = null!;
+    public DelegateCommand<string> FlushCommand { get; private set; } = null!;
+    public DelegateCommand FlushDelaySetCommand { get; private set; } = null!;
 
     // Servo button text properties
     public string ChuckRotationMotorServoText => PenClean.ChuckRotationMotor.IsServoOn ? Resources.Off : Resources.On;
@@ -224,8 +224,8 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         PressureCommand = OperationAudit.Create<string>("Pressure", PressureCommandExecute, () => TabTitle ?? string.Empty);
         LiquidCommand = OperationAudit.Create<string>("Liquid", LiquidCommandExecute, () => TabTitle ?? string.Empty);
         GasCommand = OperationAudit.Create<string>("Gas", GasCommandExecute, () => TabTitle ?? string.Empty);
-        FlashCommand = OperationAudit.Create<string>("Flash", FlashCommandExecute, () => TabTitle ?? string.Empty);
-        FlashDelaySetCommand = OperationAudit.Create("FlashDelaySet", FlashDelaySetCommandExecute, () => TabTitle ?? string.Empty);
+        FlushCommand = OperationAudit.Create<string>("Flush", FlushCommandExecute, () => TabTitle ?? string.Empty);
+        FlushDelaySetCommand = OperationAudit.Create("FlushDelaySet", FlushDelaySetCommandExecute, () => TabTitle ?? string.Empty);
     }
 
     private async Task MonitorLoopAsync()
@@ -326,7 +326,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         PenClean.ChuckRotationMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1ChuckMotorServoOn).Replace("_1", ""));
         PenClean.PenArmSweepMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepMotorServoOn).Replace("_1", ""));
         PenClean.PenRotationMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1PenRotationMotorServoOn).Replace("_1", ""));
-        PenClean.Flash.OpenDelayAct = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
+        PenClean.Flush.OpenDelayAct = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
         
         RaisePropertyChanged(nameof(ChuckRotationMotorServoText));
         RaisePropertyChanged(nameof(PenArmSweepMotorServoText));
@@ -1031,32 +1031,32 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private void FlashCommandExecute(string obj)
+    private void FlushCommandExecute(string obj)
     {
         try
         {
-            var (handle, value) = _penCleanConfig.GetFlashCommand(obj);
+            var (handle, value) = _penCleanConfig.GetFlushCommand(obj);
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
             if (_err != 0)
             {
-                Growl.ErrorGlobal($"Flash Command {obj} Error: {_err}");
+                Growl.ErrorGlobal($"Flush Command {obj} Error: {_err}");
             }
             else
             {
-                Growl.SuccessGlobal($"{_penCleanConfig.PenType} Flash Command: {obj}");
+                Growl.SuccessGlobal($"{_penCleanConfig.PenType} Flush Command: {obj}");
             }
         }
         catch (ArgumentException ex)
         {
-            Growl.ErrorGlobal($"Flash Command Error: {ex.Message}");
+            Growl.ErrorGlobal($"Flush Command Error: {ex.Message}");
         }
     }
 
-    private void FlashDelaySetCommandExecute()
+    private void FlushDelaySetCommandExecute()
     {
-        var value = PenClean.Flash.OpenDelaySet;
-        var parameter = _penCleanConfig.Params.Flash.OpenDelay;
+        var value = PenClean.Flush.OpenDelaySet;
+        var parameter = _penCleanConfig.Params.Flush.OpenDelay;
         if (float.IsNaN(value) || float.IsInfinity(value) || value < parameter.MinValue || value > parameter.MaxValue)
         {
             Growl.ErrorGlobal($"DIW(ALL) Open Delay 范围必须为 {parameter.MinValue:0.00}–{parameter.MaxValue:0.00}");
@@ -1275,6 +1275,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
+            value.Replace("：", ":");
             var arr = value.Split(':');
             value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }

@@ -512,7 +512,10 @@ public class DataLogger
     /// <summary>
     /// 构建 Exsitu 文件路径
     /// </summary>
-    private string BuildExsituFilePath(string waferName, DateTime? createTimeOverride = null)
+    private string BuildExsituFilePath(
+        string waferName,
+        DateTime? createTimeOverride = null,
+        string? recipeName = null)
     {
         // Exsitu 使用独立的时间戳
         var createTime = createTimeOverride ?? GetCreateTime(null, "Exsitu");
@@ -524,7 +527,7 @@ public class DataLogger
         
         // Exsitu 路径: D:\CMP\Log\2025\01\10\PolishA\Exsitu\2025-01-10_09.55.23.257.csv
         var fullPath = Path.Combine(basePath, _category, "Exsitu");
-        var fileName = $"{waferName}_{timestamp}.csv";
+        var fileName = BuildLogFileName(waferName, timestamp, recipeName);
         
         return Path.Combine(fullPath, fileName);
     }
@@ -550,16 +553,41 @@ public class DataLogger
 
         return candidatePath;
     }
+
+    private string BuildLogFileName(string waferName, string timestamp, string? recipeName)
+    {
+        // Keep legacy names when the recipe could not be resolved.
+        if (!_category.StartsWith("Polish", StringComparison.OrdinalIgnoreCase)
+            || string.IsNullOrWhiteSpace(recipeName))
+        {
+            return $"{waferName}_{timestamp}.csv";
+        }
+
+        var safeRecipeName = recipeName.Trim();
+        foreach (var invalidCharacter in Path.GetInvalidFileNameChars())
+        {
+            safeRecipeName = safeRecipeName.Replace(invalidCharacter, '_');
+        }
+
+        safeRecipeName = safeRecipeName.Trim('_', ' ');
+        return string.IsNullOrWhiteSpace(safeRecipeName)
+            ? $"{waferName}_{timestamp}.csv"
+            : $"{waferName}_{safeRecipeName}_{timestamp}.csv";
+    }
     
     /// <summary>
     /// 构建文件路径
     /// </summary>
-    private string BuildFilePath(string waferName, string? subcategory = null, DateTime? createTimeOverride = null)
+    private string BuildFilePath(
+        string waferName,
+        string? subcategory = null,
+        DateTime? createTimeOverride = null,
+        string? recipeName = null)
     {
         // Exsitu 使用专用方法
         if (subcategory == "Exsitu")
         {
-            return BuildExsituFilePath(waferName, createTimeOverride);
+            return BuildExsituFilePath(waferName, createTimeOverride, recipeName);
         }
         
         // 获取或创建该 Wafer 的时间戳
@@ -581,14 +609,14 @@ public class DataLogger
             // Polish 正常情况
             // 路径: D:\CMP\Log\2025\01\10\PolishA\Polish\Wafer01_2025-01-10_09.55.23.257.csv
             fullPath = Path.Combine(basePath, _category, "Polish");
-            fileName = $"{waferName}_{timestamp}.csv";
+            fileName = BuildLogFileName(waferName, timestamp, recipeName);
         }
         else
         {
             // 其他类别带 Wafer
             // 路径: D:\CMP\Log\2025\01\10\RollerA1\Wafer02_2025-01-10_09.55.23.257.csv
             fullPath = Path.Combine(basePath, _category);
-            fileName = $"{waferName}_{timestamp}.csv";
+            fileName = BuildLogFileName(waferName, timestamp, recipeName);
         }
         
         return Path.Combine(fullPath, fileName);
@@ -599,23 +627,27 @@ public class DataLogger
     /// </summary>
     /// <param name="waferName">Wafer名称</param>
     /// <param name="subcategory">子类别 (可选)</param>
-    public string GetFilePath(string waferName, string? subcategory = null)
+    public string GetFilePath(string waferName, string? subcategory = null, string? recipeName = null)
     {
-        return BuildFilePath(waferName, subcategory);
+        return BuildFilePath(waferName, subcategory, recipeName: recipeName);
     }
     
     /// <summary>
     /// 获取 Exsitu 文件路径
     /// </summary>
-    public string GetExsituFilePath(string waferName)
+    public string GetExsituFilePath(string waferName, string? recipeName = null)
     {
-        return BuildExsituFilePath(waferName);
+        return BuildExsituFilePath(waferName, recipeName: recipeName);
     }
 
     /// <summary>
     /// 将一次记录会话使用的临时 Wafer 文件名替换为最终 Wafer 名称。
     /// </summary>
-    public bool RenameWaferFile(string temporaryWaferName, string waferName, string? subcategory = null)
+    public bool RenameWaferFile(
+        string temporaryWaferName,
+        string waferName,
+        string? subcategory = null,
+        string? recipeName = null)
     {
         lock (_lockObj)
         {
@@ -629,7 +661,7 @@ public class DataLogger
             var createTime = isExsitu
                 ? GetCreateTime(null, "Exsitu")
                 : GetCreateTime(temporaryWaferName, subcategory);
-            var destinationPath = BuildFilePath(waferName, subcategory, createTime);
+            var destinationPath = BuildFilePath(waferName, subcategory, createTime, recipeName);
             destinationPath = GetAvailableFilePath(destinationPath);
 
             File.Move(sourcePath, destinationPath);

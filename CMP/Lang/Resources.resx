@@ -1308,6 +1308,18 @@
   <data name="EmergencyStop" xml:space="preserve">
     <value>E-Stop</value>
   </data>
+  <data name="Interlock" xml:space="preserve">
+    <value>Interlock</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="SideA" xml:space="preserve">
+    <value>Side A</value>
+  </data>
+  <data name="SideB" xml:space="preserve">
+    <value>Side B</value>
+  </data>
   <data name="MainScreen" xml:space="preserve">
     <value>Main Screen</value>
   </data>

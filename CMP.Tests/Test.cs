@@ -1,7 +1,12 @@
 ﻿using CMP.Constants.Plc.RobotControl;
+using CMP.Extensions;
+using CMP.Models.Operation.LoadPort;
+using CMP.Services.HostCommunication;
+using CMP.Services.LoadPort;
 using CMP.Services.Plc;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -416,4 +421,24 @@ public class WaferTest
         var positionInCarrier = (WaferIndex - 1) % carrierCapacity + 1;
         return (carrierNumber, positionInCarrier);
     }
-}
+
+ 
+
+    [TestMethod]
+    public async Task HostCommunicationServiceTest()
+    {
+        //HostCommunicationService host = new HostCommunicationService();
+
+        //LoadPortStatus status = new LoadPortStatus();
+        //status.LoadportStatus = LoadportActionStatus.None;
+
+        //host.OnLoadPortStatusMessageReceived(new LoadPortStatusChangedEventArgs() {
+
+        //    LoadportId=1,
+        //    HardwareStatus = status,
+
+        //});
+
+    }
+
+    }

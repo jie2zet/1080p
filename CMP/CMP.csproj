@@ -253,4 +253,17 @@
       <Folder Include="Lang\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="FabConnect">
+        <HintPath>..\vendor\dll\FabConnect.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+    
+    <Target Name="CopyVendorDlls" AfterTargets="Build">
+      <ItemGroup>
+        <VendorDlls Include="..\vendor\dll\*.dll" />
+      </ItemGroup>
+      <Copy SourceFiles="@(VendorDlls)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+    </Target>
+
 </Project>

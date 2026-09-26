@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace CMP.Models.kvsPlc.Roll
 { 
-	class KvsStructRollerIOData
+	public class KvsStructRollerIOData
     {
 		const int stRollerIOData_WSIZE = 9;
 
