@@ -1,6 +1,7 @@
 using CMP.Services.Auth;
 using CMP.Views.Tabs.MainTab;
 using CMP.Views.Tabs.MainTab.Content;
+using CMP.Views.Tabs.OperationTab.InterlockTab;
 using CMP.Views.Tabs.OperationTab.RobotControlTab;
 
 namespace CMP.Modules;
@@ -33,5 +34,6 @@ public class MainModule : IModule
         regionManager.RegisterViewWithRegion("WarnRegion", typeof(WarnContentView));
         regionManager.RegisterViewWithRegion("UserRegion", typeof(UserManageContentView));
         regionManager.RegisterViewWithRegion("RobotControlRegion", typeof(RobotControlTabView));
+        regionManager.RegisterViewWithRegion("InterlockRegion", typeof(InterlockTabView));
     }
 }

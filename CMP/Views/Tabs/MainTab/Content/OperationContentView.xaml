@@ -124,6 +124,11 @@
         <TabItem Header="{lex:Loc RobotControl}" Style="{StaticResource SecondaryTabItemStyle}">
             <ContentControl prism:RegionManager.RegionName="RobotControlRegion"/>
         </TabItem>
+
+        <!-- 安全联锁 -->
+        <TabItem Header="{lex:Loc Interlock}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="InterlockRegion"/>
+        </TabItem>
         
         <!--<TabItem Header="{lex:Loc Roller}" Style="{StaticResource SecondaryTabItemStyle}">
             <ContentControl prism:RegionManager.RegionName="RollerRegion"/>
