@@ -606,12 +606,12 @@
             <Grid Grid.Column="3">
                 <Border Margin="5" Style="{StaticResource BorderRegion}">
                     <Grid extensions:GridHelpers.RowDefinitions="*, *, *, *">
-                        <!--<Image Source="/Assets/Images/lights/red.png" Width="30" Height="30" />-->
+                        <!--<Image Source="/CMP;component/Assets/Images/lights/red.png" Width="30" Height="30" />-->
                         <!-- 红色指示灯 (报警时闪烁) -->
                         <Image x:Name="RedLight" Width="30" Height="30">
                             <Image.Style>
                                 <Style TargetType="Image">
-                                    <Setter Property="Source" Value="/Assets/Images/lights/red.png" />
+                                    <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/red.png" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding HasAlarm}" Value="True">
                                             <DataTrigger.EnterActions>
@@ -636,11 +636,11 @@
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <Image Margin="0 5 0 0" Grid.Row="1" Source="/Assets/Images/lights/yellow.png" Width="30"
+                        <Image Margin="0 5 0 0" Grid.Row="1" Source="/CMP;component/Assets/Images/lights/yellow.png" Width="30"
                                Height="30" />
-                        <Image Margin="0 5 0 0" Grid.Row="2" Source="/Assets/Images/lights/green.png" Width="30"
+                        <Image Margin="0 5 0 0" Grid.Row="2" Source="/CMP;component/Assets/Images/lights/green.png" Width="30"
                                Height="30" />                       
-                        <Image Margin="0 5 0 0" Grid.Row="3" Source="/Assets/Images/lights/purple.png" Width="30"
+                        <Image Margin="0 5 0 0" Grid.Row="3" Source="/CMP;component/Assets/Images/lights/purple.png" Width="30"
                                Height="30" />
                     </Grid>
                 </Border>
