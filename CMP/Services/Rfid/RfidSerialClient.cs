@@ -11,6 +11,7 @@ public sealed class RfidSerialClient : IDisposable
 {
     private readonly SerialPort _port;
     private readonly object _ioLock = new();
+    private readonly bool _appendLf;
     private bool _disposed;
 
     public RfidSerialClient(string portName, RfidConfig config)
@@ -19,6 +20,7 @@ public sealed class RfidSerialClient : IDisposable
         ArgumentNullException.ThrowIfNull(config);
 
         PortName = portName;
+        _appendLf = config.AppendLf;
         _port = new SerialPort
         {
             PortName = portName,
@@ -27,7 +29,7 @@ public sealed class RfidSerialClient : IDisposable
             Parity = config.SerialParity,
             StopBits = config.SerialStopBits,
             Encoding = Encoding.ASCII,
-            NewLine = "\r",
+            NewLine = _appendLf ? "\r\n" : "\r",
             Handshake = Handshake.None,
             ReadTimeout = config.ReadTimeoutMs,
             WriteTimeout = Math.Max(1000, config.ReadTimeoutMs),
@@ -71,7 +73,7 @@ public sealed class RfidSerialClient : IDisposable
             _port.DiscardInBuffer();
             _port.DiscardOutBuffer();
             _port.ReadTimeout = timeoutMs;
-            _port.Write(commandWithoutCr + "\r");
+            _port.Write(commandWithoutCr + (_appendLf ? "\r\n" : "\r"));
             return ReadUntilCr(timeoutMs);
         }
     }

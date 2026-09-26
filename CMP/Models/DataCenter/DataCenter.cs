@@ -62,8 +62,15 @@ namespace CMP.Models.DataCenter
         string SVDryAPath = SVBasePath + "SV_DryA.csv";
         string SVDryBPath = SVBasePath + "SV_DryB.csv";
 
+        private volatile bool _collecting = true;
+
         private static readonly Lazy<DataCenter> _instance = new(() => new DataCenter());
         public static DataCenter Instance => _instance.Value;
+
+        public void Stop()
+        {
+            _collecting = false;
+        }
         public DataCenter()
         {
             listSV = new List<SV>();
@@ -144,7 +151,7 @@ namespace CMP.Models.DataCenter
         public async Task CollectData()
         {
             await Task.Delay(1000);
-            while (true)
+            while (_collecting)
             {
                 // 主 PLC 未连接时拉长周期，避免大量同步读阻塞线程池并间接拖慢 UI
                 bool plcOk = MitsubishiPlcService.Main.IsPLCConnected;
@@ -173,9 +180,9 @@ namespace CMP.Models.DataCenter
             await Task.Delay(1000);
             var slowElapsedMs = 0;
 
-            while (true)
+            while (_collecting)
             {
-                bool plcOk = MitsubishiPlcService.Main.IsPLCConnected;
+                bool plcOk = MitsubishiPlcService.RobotCtrlInstance.IsPLCConnected;
                 var delayMs = plcOk ? StCtrlFastRefreshIntervalMs : 2000;
                 await Task.Delay(delayMs);
 
@@ -202,7 +209,7 @@ namespace CMP.Models.DataCenter
         public async Task CollectAlarm()
         {
             await Task.Delay(1000);
-            while (true)
+            while (_collecting)
             {
                 await Task.Delay(500);
                 List<Alarm> resultAlarms = new List<Alarm>();
@@ -286,7 +293,7 @@ namespace CMP.Models.DataCenter
         public async Task CollectAxisData()
         {
             await Task.Delay(1000);
-            while (true)
+            while (_collecting)
             {
                 try
                 {

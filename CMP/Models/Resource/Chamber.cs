@@ -154,6 +154,7 @@ public class Chamber : BindableBase
                     HeadColor = "#6BA8D6";
                     break;
                 case ChamberStatus.Auto:
+                case ChamberStatus.Run:
                     HeadColor = "#2C66A7";
                     break;
                 case ChamberStatus.Alarm:
@@ -1494,10 +1495,9 @@ public enum ChamberStatus
     Uninitialized = 0,//浅蓝色
     Manual,//浅蓝色
     Auto,//蓝色
-
-    //Manual,
     Alarm,//红色
     Offline,//灰色
+    Run,//运行中
 }
 
 public class DataLoggerHelper

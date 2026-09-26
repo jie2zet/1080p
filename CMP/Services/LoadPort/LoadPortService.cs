@@ -945,17 +945,17 @@ namespace CMP.Services.LoadPort
     public enum LoadportActionStatus
     {
         None,
-        WaitFoupArrive,
-        FoupArrived,
-        Clamp,
-        Dock,
-        Load,
-        DoorOpen,
-        Scan,
-        Undock,
-        Unload,
-        Release,
-        WaitFoupLeave,
+        WaitFoupArrive,//等待foup到达
+        FoupArrived,//foup到达
+        Clamp,//foup 夹紧
+        Dock,//锁住
+        Load,//装载
+        DoorOpen,//门打开
+        Scan,//扫片
+        Undock,//解锁
+        Unload,//卸载
+        Release,// 释放
+        WaitFoupLeave,//等待离开
     }
     public enum InfoPadStatus
     {
