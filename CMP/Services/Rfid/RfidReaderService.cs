@@ -250,6 +250,7 @@ public sealed class RfidReaderService : IRfidReaderService, IDisposable
                 line = context.Client.Transact(command, config.ReadTimeoutMs);
             }
             var response = V640OneToOneProtocol.Parse(line);
+            _log.Info($"LP{loadPort.DisplayNumber} RFID 原始响应 [{line}] code={response.Code} payload={response.PayloadHex}");
             if (!response.IsSuccess)
             {
                 FinishRead(loadPort, context, failed: true);
@@ -257,7 +258,8 @@ public sealed class RfidReaderService : IRfidReaderService, IDisposable
                 return;
             }
 
-            var carrierId = V640OneToOneProtocol.ParseCarrierId(response.PayloadHex, config.CarrierIdByteLength);
+            var carrierId = V640OneToOneProtocol.ParseCarrierId(
+                line, response.PayloadHex, config.CarrierIdByteLength, config.CarrierIdFormat);
             if (string.IsNullOrWhiteSpace(carrierId))
             {
                 FinishRead(loadPort, context, failed: true);

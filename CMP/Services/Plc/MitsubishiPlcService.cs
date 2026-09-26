@@ -458,12 +458,54 @@ public class MitsubishiPlcService : IDisposable
             Connect(ipAddress, port);
     }
 
-    /// <summary>
-    /// 预热主连接（用于应用启动时显式触发自动连接）。
-    /// </summary>
+    /// <summary>预热主 PLC 与机器人控制（7005）连接。</summary>
+    public static void EnsureConnected()
+    {
+        _ = Main;
+        _ = RobotCtrlInstance;
+    }
+
+    /// <summary>预热主连接。</summary>
     public static void EnsureMainConnected()
     {
         _ = Main;
+    }
+
+    /// <summary>预热机器人控制连接（端口 7005）。</summary>
+    public static void EnsureRobotCtrlConnected()
+    {
+        _ = RobotCtrlInstance;
+    }
+
+    /// <summary>关闭主 PLC 与各端口连接，避免退出后套接字线程拖住进程。</summary>
+    public static void DisconnectAll()
+    {
+        try
+        {
+            if (MainLazy.IsValueCreated)
+            {
+                Main.Disconnect();
+            }
+        }
+        catch
+        {
+            // 退出时断开失败不阻断关闭
+        }
+
+        foreach (var item in PortLazy.Values)
+        {
+            try
+            {
+                if (item.IsValueCreated)
+                {
+                    item.Value.Disconnect();
+                }
+            }
+            catch
+            {
+                // 退出时断开失败不阻断关闭
+            }
+        }
     }
 
 
@@ -518,9 +560,16 @@ public class MitsubishiPlcService : IDisposable
 
     public void Disconnect()
     {
-        if (!DebugMode)
-            _plc.ConnectClose();
-        IsConnected = false;
+        lock (_connectLock)
+        {
+            if (!DebugMode)
+            {
+                _plc.ConnectClose();
+            }
+
+            IsConnected = false;
+        }
+
         ConnectionStateChanged?.Invoke(this, false);
     }
 

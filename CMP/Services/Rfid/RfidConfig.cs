@@ -15,7 +15,10 @@ public class RfidConfig
     public int StopBits { get; set; } = 1;
     public int ReadTimeoutMs { get; set; } = 3000;
     public string PageMask { get; set; } = "0000000C";
-    public int CarrierIdByteLength { get; set; } = 16;
+    /// <summary>截取长度，0 表示整帧。Hex 模式按字节截数据区，保留开头的 00 响应码。</summary>
+    public int CarrierIdByteLength { get; set; } = 0;
+    /// <summary>Hex：与串口助手相同的十六进制串（如 0088776655443322110000）；Ascii / UInt32 / Auto。</summary>
+    public string CarrierIdFormat { get; set; } = "Hex";
     public bool ProbeOnConnect { get; set; } = true;
     public List<RfidReaderBinding> Readers { get; set; } = [];
 

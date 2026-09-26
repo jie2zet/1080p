@@ -49,16 +49,106 @@ public static class V640OneToOneProtocol
         return new V640Response(code, payload, code == SuccessCode);
     }
 
-    public static string ParseCarrierId(string payloadHex, int maxBytes)
+    /// <summary>
+    /// 与串口助手一致：默认把整帧十六进制当 CarrierId（如 0088776655443322110000）。
+    /// </summary>
+    public static string ParseCarrierId(string rawLine, string payloadHex, int maxBytes, string format = "Hex")
     {
-        var bytes = HexToBytes(payloadHex);
-        if (maxBytes > 0 && bytes.Length > maxBytes)
+        var mode = string.IsNullOrWhiteSpace(format) ? "Hex" : format.Trim();
+        var payload = CompactHex(payloadHex);
+
+        if (mode.Equals("Ascii", StringComparison.OrdinalIgnoreCase))
         {
-            bytes = bytes[..maxBytes];
+            return string.IsNullOrEmpty(payload) ? string.Empty : BytesToAscii(TakeBytes(HexToBytes(payload), maxBytes));
         }
 
-        var text = Encoding.ASCII.GetString(bytes);
-        return text.Trim('\0', ' ', '\t', '\r', '\n');
+        if (mode.Equals("UInt32", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.IsNullOrEmpty(payload) ? string.Empty : BytesToUInt32(TakeBytes(HexToBytes(payload), maxBytes > 0 ? maxBytes : 4));
+        }
+
+        if (mode.Equals("Auto", StringComparison.OrdinalIgnoreCase)
+            && !string.IsNullOrEmpty(payload))
+        {
+            var ascii = BytesToAscii(TakeBytes(HexToBytes(payload), maxBytes));
+            if (IsPrintableAscii(ascii))
+            {
+                return ascii;
+            }
+        }
+
+        var hex = CompactHex(rawLine);
+        if (string.IsNullOrEmpty(hex))
+        {
+            hex = payload;
+        }
+
+        if (maxBytes > 0)
+        {
+            var prefix = hex.StartsWith(SuccessCode, StringComparison.OrdinalIgnoreCase) ? 2 : 0;
+            var maxChars = prefix + maxBytes * 2;
+            if (hex.Length > maxChars)
+            {
+                hex = hex[..maxChars];
+            }
+        }
+
+        return hex.ToUpperInvariant();
+    }
+
+    public static string ParseCarrierId(string payloadHex, int maxBytes, string format = "Hex")
+        => ParseCarrierId(payloadHex, payloadHex, maxBytes, format);
+
+    private static string CompactHex(string? hex)
+    {
+        return (hex ?? string.Empty)
+            .Replace(" ", "", StringComparison.Ordinal)
+            .Trim('\0', '\r', '\n', '\t', ' ')
+            .ToUpperInvariant();
+    }
+
+    private static byte[] TakeBytes(byte[] bytes, int maxBytes)
+    {
+        if (maxBytes > 0 && bytes.Length > maxBytes)
+        {
+            return bytes[..maxBytes];
+        }
+
+        return bytes;
+    }
+
+    private static string BytesToAscii(byte[] bytes)
+    {
+        return Encoding.ASCII.GetString(bytes).Trim('\0', ' ', '\t', '\r', '\n');
+    }
+
+    private static bool IsPrintableAscii(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        foreach (var ch in text)
+        {
+            if (ch < 0x20 || ch > 0x7E)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static string BytesToUInt32(byte[] bytes)
+    {
+        if (bytes.Length < 4)
+        {
+            return Convert.ToHexString(bytes);
+        }
+
+        var value = (uint)((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]);
+        return value.ToString(CultureInfo.InvariantCulture);
     }
 
     public static byte[] HexToBytes(string hex)

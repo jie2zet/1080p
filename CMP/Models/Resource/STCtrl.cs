@@ -11,7 +11,7 @@ namespace CMP.Models.Resource
         private readonly string _stCtrlName;
         private readonly object _refreshLock = new();
         public ObservableCollection<SV_PLC> listDataInSingleStCtrl { get; }
-        private readonly MitsubishiPlcService _plc = MitsubishiPlcService.Instance;
+        private readonly MitsubishiPlcService _plc = MitsubishiPlcService.RobotCtrlInstance;
 
         /// <summary>与 SV_STCtrl.csv 中 Module 列一致，用于与主界面机械手名称（如 EFEMRobot）匹配。</summary>
         public string ModuleName => _stCtrlName;

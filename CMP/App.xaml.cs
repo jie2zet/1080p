@@ -98,7 +98,7 @@ public partial class App
         // 初始化数据库（首次访问时会自动创建）
         var db = SqlSugarHelper.Db;
         // 应用启动时自动连接三菱PLC（统一入口）
-        MitsubishiPlcService.EnsureMainConnected();
+        MitsubishiPlcService.EnsureConnected();
         WaferActionDescriptionProvider.Initialize();
         StartupStopwatch = Stopwatch.StartNew();
         Logger.Info("应用程序启动开始", "startup.txt", 0);
@@ -119,6 +119,24 @@ public partial class App
 
         try
         {
+            GlobalService.globalRobots?.Stop();
+        }
+        catch
+        {
+            // 退出时停机器人监控失败不阻断关闭
+        }
+
+        try
+        {
+            GlobalService.DataCenter?.Stop();
+        }
+        catch
+        {
+            // 退出时停采集循环失败不阻断关闭
+        }
+
+        try
+        {
             Container.Resolve<IRfidReaderService>().Stop();
         }
         catch
@@ -126,9 +144,35 @@ public partial class App
             // 退出时关闭 RFID 串口失败不阻断关闭
         }
 
-        base.OnExit(e);
-        _singleInstanceMutex?.ReleaseMutex();
-        _singleInstanceMutex?.Dispose();
+        try
+        {
+            MitsubishiPlcService.DisconnectAll();
+        }
+        catch
+        {
+            // 退出时断开 PLC 失败不阻断关闭
+        }
+
+        try
+        {
+            base.OnExit(e);
+        }
+        catch
+        {
+            // WPF 关闭异常不阻断进程退出
+        }
+
+        try
+        {
+            _singleInstanceMutex?.ReleaseMutex();
+            _singleInstanceMutex?.Dispose();
+        }
+        catch
+        {
+            // 互斥量释放失败不阻断进程退出
+        }
+
+        Environment.Exit(0);
     }
 
 }
