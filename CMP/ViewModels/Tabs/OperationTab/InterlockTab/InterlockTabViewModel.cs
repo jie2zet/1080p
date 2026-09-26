@@ -41,7 +41,10 @@ public sealed class InterlockItemViewModel : BindableBase
     {
         Definition = definition;
         _toggleAction = toggleAction;
-        ToggleCommand = new DelegateCommand(() => _toggleAction(this), () => IsSwitchEnabled);
+        // The visual enabled state is controlled by IsSwitchEnabled. Keep the
+        // command executable so HandyControl's switch style cannot disable the
+        // ToggleButton because of a stale CanExecute snapshot.
+        ToggleCommand = new DelegateCommand(() => _toggleAction(this));
     }
 
     public InterlockDefinition Definition { get; }
@@ -57,8 +60,22 @@ public sealed class InterlockItemViewModel : BindableBase
     public bool ReadState
     {
         get => _readState;
-        private set => SetProperty(ref _readState, value);
+        private set
+        {
+            if (SetProperty(ref _readState, value))
+            {
+                RaisePropertyChanged(nameof(CurrentLightColor));
+            }
+        }
     }
+
+    /// <summary>
+    /// The lamp is always lit: a PLC 1/true is healthy/green and 0/false is
+    /// fault/not-ready/red. This is independent from the unlock switch.
+    /// </summary>
+    public SignalLightColor CurrentLightColor => ReadState
+        ? SignalLightColor.Green
+        : SignalLightColor.Red;
 
     public bool IsReadStateKnown
     {
@@ -66,11 +83,14 @@ public sealed class InterlockItemViewModel : BindableBase
         private set => SetProperty(ref _hasReadState, value);
     }
 
-    public bool IsConfigured => IsUnlock
+    public bool IsConfigured => Group == InterlockGroup.Unlock
         ? !string.IsNullOrWhiteSpace(ReadAddress) && !string.IsNullOrWhiteSpace(WriteAddress)
         : !string.IsNullOrWhiteSpace(ReadAddress);
 
-    public bool IsSwitchEnabled => IsUnlock && IsConfigured;
+    // The switch is an operator control and is enabled as soon as the
+    // interlock item is created. Address validation is handled when the
+    // command executes, so an unknown PLC state never greys out the switch.
+    public bool IsSwitchEnabled => IsUnlock;
 
     public DelegateCommand ToggleCommand { get; }
 
@@ -145,7 +165,26 @@ public sealed class InterlockTabViewModel : TabContentViewModelBase
 
     private async void ReadTimer_Tick(object? sender, EventArgs e)
     {
-        if (_isReading || (!_plc.IsConnected && !MitsubishiPlcService.DebugMode))
+        if (_isReading)
+        {
+            return;
+        }
+
+        await ReadPlcDataOnceAsync();
+    }
+
+    public override void OnViewActivated()
+    {
+        base.OnViewActivated();
+
+        // Do not wait for the first timer tick. This also makes activation
+        // observable when the PLC is disconnected or running in debug mode.
+        _ = ReadPlcDataOnceAsync();
+    }
+
+    private async Task ReadPlcDataOnceAsync()
+    {
+        if (_isReading)
         {
             return;
         }
@@ -192,7 +231,14 @@ public sealed class InterlockTabViewModel : TabContentViewModelBase
 
     private void ExecuteUnlockCommand(InterlockItemViewModel item)
     {
-        if (!item.IsSwitchEnabled || string.IsNullOrWhiteSpace(item.WriteAddress))
+        // Mitsubishi writes are synchronous in the current service. Keep the
+        // command on the UI thread only long enough to schedule the write.
+        _ = ExecuteUnlockCommandAsync(item);
+    }
+
+    private async Task ExecuteUnlockCommandAsync(InterlockItemViewModel item)
+    {
+        if (string.IsNullOrWhiteSpace(item.WriteAddress))
         {
             WarnMissingAddress(item, "write");
             item.RefreshReadStateBinding();
@@ -202,19 +248,17 @@ public sealed class InterlockTabViewModel : TabContentViewModelBase
         var targetState = !item.ReadState;
         try
         {
-            var result = _plc.WriteBoolVari(NormalizeAddress(item.WriteAddress), targetState);
+            var result = await Task.Run(() =>
+                _plc.WriteBoolVari(NormalizeAddress(item.WriteAddress), targetState));
             if (!result.IsSuccess)
             {
                 Logger.For("Interlock").Warn($"[{item.Key}] PLC write failed: {result.Message}");
+                item.RefreshReadStateBinding();
             }
         }
         catch (Exception ex)
         {
             Logger.For("Interlock").Error($"[{item.Key}] PLC write failed.", ex);
-        }
-        finally
-        {
-            // The PLC readback remains the source of truth until the next poll.
             item.RefreshReadStateBinding();
         }
     }
