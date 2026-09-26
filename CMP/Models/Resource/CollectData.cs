@@ -6,6 +6,8 @@ using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using KHSTRollerIOData = CMP.Models.kvsPlc.Roll.KvsStructRollerIOData;
 using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using KHSTPenIOData = CMP.Models.kvsPlc.Pen.KvsStructPenIOData;
+using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
+using KHSTDryIOData = CMP.Models.kvsPlc.Dry.KvsStructDryIOData;
 using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
 using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
 using CMP.Models.Operation.RoboticArm;
@@ -636,18 +638,18 @@ namespace CMP.Models.Resource
     public class Dry:CollectDataChamber
     {
         public string dryName = string.Empty;
-        private KHSTIO.stDryIOData _ioData = new();
+        private KHSTDryIOData.stDryIOData _ioData = new();
 
         public Dry(string name, KVLink link) : base(name, link)
         {
-            collectDataFields = typeof(KHSTSV.stDryCollectData).GetFields();
+            collectDataFields = typeof(KHSTDryCollectData.stDryCollectData).GetFields();
             dryName = name;
             KeyPrefix = name;
-            ioDataFields = typeof(KHSTIO.stDryIOData).GetFields();
+            ioDataFields = typeof(KHSTDryIOData.stDryIOData).GetFields();
             WarnIfMotorServoMappingIncomplete();
         }
 
-        public KHSTIO.stDryIOData IoData
+        public KHSTDryIOData.stDryIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
         }
@@ -656,7 +658,7 @@ namespace CMP.Models.Resource
         {
             lock (IoDataSync)
             {
-                var field = typeof(KHSTIO.stDryIOData).GetField(fieldName);
+                var field = typeof(KHSTDryIOData.stDryIOData).GetField(fieldName);
                 if (field?.FieldType == typeof(bool) && field.GetValue(_ioData) is bool boolValue)
                 {
                     value = boolValue;
@@ -670,8 +672,8 @@ namespace CMP.Models.Resource
         /// <summary>M539 位顺序：Chuck、Arm Sweep。</summary>
         internal override IReadOnlyList<string> MotorServoSuffixes =>
         [
-            nameof(KHSTSV.stDryCollectData.ChuckMotorServoOn),
-            nameof(KHSTSV.stDryCollectData.ArmSweepMotorServoOn)
+            nameof(KHSTDryCollectData.stDryCollectData.ChuckMotorServoOn),
+            nameof(KHSTDryCollectData.stDryCollectData.ArmSweepMotorServoOn)
         ];
 
         public override void CollectData()
@@ -687,11 +689,11 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHSTSV.stDryCollectData _stDryCollectData = new KHSTSV.stDryCollectData();
-                KHSTSV.ByteTo_stDryCollectData(ref _stDryCollectData, _readBuf);
+                KHSTDryCollectData.stDryCollectData _stDryCollectData = new KHSTDryCollectData.stDryCollectData();
+                KHSTDryCollectData.ByteTo_stDryCollectData(ref _stDryCollectData, _readBuf);
                 if (_stDryCollectData != null)
                 {
-                    CompiledFieldAccessor<stDryCollectData>.ProcessAllFields(_stDryCollectData, (name, value) =>
+                    CompiledFieldAccessor<KHSTDryCollectData.stDryCollectData>.ProcessAllFields(_stDryCollectData, (name, value) =>
                     {
                         SetSv(BuildRuntimeKey(null, name), value);
                     });
@@ -705,15 +707,15 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadVariable(kvLink.sock, "IOData", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHSTIO.stDryIOData _stDryIOData = new KHSTIO.stDryIOData();
-                KHSTIO.ByteTo_stDryIOData(ref _stDryIOData, _readBuf);
+                KHSTDryIOData.stDryIOData _stDryIOData = new KHSTDryIOData.stDryIOData();
+                KHSTDryIOData.ByteTo_stDryIOData(ref _stDryIOData, _readBuf);
                 if (_stDryIOData != null)
                 {
                     lock (IoDataSync)
                     {
                         _ioData = _stDryIOData;
                     }
-                    CompiledFieldAccessor<stDryIOData>.ProcessAllFields(_stDryIOData, (name, value) =>
+                    CompiledFieldAccessor<KHSTDryIOData.stDryIOData>.ProcessAllFields(_stDryIOData, (name, value) =>
                     {
                         SetSv(BuildRuntimeKey(null, name), value);
                     });
@@ -727,7 +729,7 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 539, 0, 2, readBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
+                KHSTDryCollectData.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
                 ApplyMotorServoStatus(motorServoStatus);
             }
         }
