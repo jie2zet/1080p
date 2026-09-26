@@ -324,19 +324,20 @@ public class DryTabContentViewModel : TabContentViewModelBase
                 {
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
-                    plcRecipe.ChuckRotateVelocity[i] = GetRealVal<float>(recipeContent, "ChuckRotateVelocity", i);
+                    plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
                     plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
                     plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
+                    plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
                     plcRecipe.IPAArmCycle[i] = GetRealVal<short>(recipeContent, "IPAArmCycle", i);
-                    plcRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceN2Flow", i);
-                    plcRecipe.WFLowerN2Flow1[i] = GetRealVal<float>(recipeContent, "WFLowerFaceN2Flow1", i);
-                    plcRecipe.WFUpperDIWFlow2[i] = GetRealVal<float>(recipeContent, "WFUpperFaceDIWFlow2", i);
-                    plcRecipe.WFUpperIPASupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceIPASupply", i);
-                    plcRecipe.WFLowerN2Supply2[i] = GetRealVal<short>(recipeContent, "WFLowerFaceN2Supply2", i);
-                    plcRecipe.WFUpperDIWSupply1[i] = GetRealVal<short>(recipeContent, "WFUpperFaceDIWSupply1", i);
-                    plcRecipe.WFLowerDIWSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceDIWSupply", i);
+                    plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
+                    plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
+                    plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
+                    plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
 
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
@@ -497,20 +498,20 @@ public class DryTabContentViewModel : TabContentViewModelBase
                 {
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
-                    plcRecipe.ChuckRotateVelocity[i] = GetRealVal<float>(recipeContent, "ChuckRotateVelocity", i);
+                    plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
                     plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
                     plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
+                    plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
                     plcRecipe.IPAArmCycle[i] = GetRealVal<short>(recipeContent, "IPAArmCycle", i);
-                    plcRecipe.WFUpperN2Flow[i] = GetRealVal<float>(recipeContent, "WFUpperFaceN2Flow", i);
-                    plcRecipe.WFLowerN2Flow1[i] = GetRealVal<float>(recipeContent, "WFLowerFaceN2Flow1", i);
-                    plcRecipe.WFUpperDIWFlow2[i] = GetRealVal<float>(recipeContent, "WFUpperFaceDIWFlow2", i);
-                    plcRecipe.WFUpperIPASupply[i] = GetRealVal<short>(recipeContent, "WFUpperFaceIPASupply", i);
-                    plcRecipe.WFLowerN2Supply2[i] = GetRealVal<short>(recipeContent, "WFLowerFaceN2Supply2", i);
-                    plcRecipe.WFUpperDIWSupply1[i] = GetRealVal<short>(recipeContent, "WFUpperFaceDIWSupply1", i);
-                    plcRecipe.WFLowerDIWSupply[i] = GetRealVal<short>(recipeContent, "WFLowerFaceDIWSupply", i);
-
+                    plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
+                    plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
+                    plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
+                    plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _varNameRecipeStruct, _writeBuf, true);
@@ -984,7 +985,6 @@ public class DryTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
-            value.Replace("：", ":");
             var arr = value.Split(':');
             value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
         }
