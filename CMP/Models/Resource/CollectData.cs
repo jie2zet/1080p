@@ -207,7 +207,7 @@ namespace CMP.Models.Resource
         const uint MotorCount = 7;
         public string polishName = string.Empty;
 
-        KHST.stCollectData _stCollectData;
+        stPolishCollectData _stCollectData;
         KHST.stIOData _stIOData;
         private KHSTIO.stPolishIOData _ioData;
 
@@ -219,7 +219,7 @@ namespace CMP.Models.Resource
 
         public Polish(string name, KVLink link) : base(name, link)
         {
-            _stCollectData = new KHST.stCollectData();
+            _stCollectData = new stPolishCollectData();
             _stIOData = new KHST.stIOData();
             _ioData = new KHSTIO.stPolishIOData();
             collectDataFields = typeof(KHSTSV.stPolishCollectData).GetFields();

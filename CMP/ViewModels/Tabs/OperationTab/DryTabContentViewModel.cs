@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Threading.Tasks;
+using CMP.Models.kvsPlc.Dry;
 using CMP.Models.kvsPlc.SV;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 //using KST = CMP.Models.kvsPlc.Dry.KvStructDry;
@@ -1055,11 +1056,11 @@ public class DryTabContentViewModel : TabContentViewModelBase
     /// </summary>
     private void RefreshHmi()
     {
-        KvStruct.stDryCollectData data;
+        KvsStructDryCollectData.stDryCollectData data;
         // 刷新电机速度和位置的实际值
-        DryClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ChuckRotationMotorVelocityValuAct));
-        DryClean.ArmSwingMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepMotorVelocityAct));
-        DryClean.ArmSwingMotor.ActPosition = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepMotorPositionAct));
+        DryClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ChuckRotationSpeedAct));
+        DryClean.ArmSwingMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepSpeedAct));
+        DryClean.ArmSwingMotor.ActPosition = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepAngleAct));
         
         DryClean.ChuckRotationMotor.IsServoOn = GetSvValue<bool>(dryData.dryName + nameof(data.ChuckMotorServoOn));
         DryClean.ArmSwingMotor.IsServoOn = GetSvValue<bool>(dryData.dryName + nameof(data.ArmSweepMotorServoOn));
