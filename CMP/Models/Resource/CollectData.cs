@@ -149,7 +149,7 @@ namespace CMP.Models.Resource
         /// </summary>
         /// <param name="motorServoBits">设备位，顺序与 <see cref="MotorServoSuffixes"/> 一致。</param>
         /// <param name="stationPrefix">工位前缀（"_1"/"_2"/"_3"），字段名自带工位号时必填。</param>
-        internal void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        internal virtual void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
         {
             ArgumentNullException.ThrowIfNull(motorServoBits);
 
@@ -205,11 +205,16 @@ namespace CMP.Models.Resource
     {
         const uint MotorStatusAddress = 530;
         const uint MotorCount = 7;
+        const int SnapshotBufferSize = 2048;
         public string polishName = string.Empty;
 
-        stPolishCollectData _stCollectData;
+        private readonly object _processDataSync = new();
+        private readonly bool[] _latestMotorServoStatus = new bool[7];
+        private KHSTSV.stPolishCollectData? _stCollectData;
+        private bool _hasMotorServoStatus;
         KHST.stIOData _stIOData;
         private KHSTIO.stPolishIOData _ioData;
+        private bool _hasIoData;
 
         /// <summary>最近一次成功读取的 Polish IO 结构体。</summary>
         public KHSTIO.stPolishIOData IoData
@@ -217,9 +222,24 @@ namespace CMP.Models.Resource
             get { lock (IoDataSync) return _ioData; }
         }
 
+        /// <summary>获取最近一次成功读取的 Polish IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTIO.stPolishIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
+        }
+
         public Polish(string name, KVLink link) : base(name, link)
         {
-            _stCollectData = new stPolishCollectData();
             _stIOData = new KHST.stIOData();
             _ioData = new KHSTIO.stPolishIOData();
             collectDataFields = typeof(KHSTSV.stPolishCollectData).GetFields();
@@ -227,6 +247,30 @@ namespace CMP.Models.Resource
             polishName = name;
             KeyPrefix = name;
             WarnIfMotorServoMappingIncomplete();
+        }
+
+        /// <summary>
+        /// 获取最近一次成功读取的完整过程数据副本。W530 成功读取后，
+        /// 快照中的七个 ServoOn 字段始终以 W530 的最新值为准。
+        /// </summary>
+        internal bool TryGetProcessDataSnapshot(out KHSTSV.stPolishCollectData snapshot)
+        {
+            lock (_processDataSync)
+            {
+                if (_stCollectData == null)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneProcessData(_stCollectData);
+                if (_hasMotorServoStatus)
+                {
+                    ApplyMotorServoStatusToSnapshot(snapshot, _latestMotorServoStatus);
+                }
+
+                return true;
+            }
         }
 
         /// <summary>M530 位顺序：Platen、Head Rotation、Head Sweep、Head UpDown、Condition Head、Condition Sweep、Slurry Sweep。</summary>
@@ -257,14 +301,23 @@ namespace CMP.Models.Resource
             {
                 KHSTSV.stPolishCollectData _stPolishCollectData = new KHSTSV.stPolishCollectData();
                 KHSTSV.ByteTo_stPolishCollectData(ref _stPolishCollectData, _readBuf);
-                if (_stPolishCollectData != null)
-                {
-                    CompiledFieldAccessor<stPolishCollectData>.ProcessAllFields(_stPolishCollectData, (name, value) =>
-                    {
-                        SetSv(BuildRuntimeKey(null, name), value);
-                    });
-                }
+                ApplyProcessData(_stPolishCollectData);
             }
+        }
+
+        internal void ApplyProcessData(KHSTSV.stPolishCollectData processData)
+        {
+            ArgumentNullException.ThrowIfNull(processData);
+
+            lock (_processDataSync)
+            {
+                _stCollectData = processData;
+            }
+
+            CompiledFieldAccessor<KHSTSV.stPolishCollectData>.ProcessAllFields(processData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectIOData1()
@@ -280,6 +333,7 @@ namespace CMP.Models.Resource
                     lock (IoDataSync)
                     {
                         _ioData = _stPolishIOData;
+                        _hasIoData = true;
                     }
                     CompiledFieldAccessor<stPolishIOData>.ProcessAllFields(_stPolishIOData, (name, value) =>
                     {
@@ -287,6 +341,22 @@ namespace CMP.Models.Resource
                     });
                 }
             }
+        }
+
+        internal void ApplyIoData(KHSTIO.stPolishIOData ioData)
+        {
+            ArgumentNullException.ThrowIfNull(ioData);
+
+            lock (IoDataSync)
+            {
+                _ioData = ioData;
+                _hasIoData = true;
+            }
+
+            CompiledFieldAccessor<stPolishIOData>.ProcessAllFields(ioData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -305,6 +375,16 @@ namespace CMP.Models.Resource
             return false;
         }
 
+        private static KHSTIO.stPolishIOData CloneIoData(KHSTIO.stPolishIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTIO.stPolishIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTIO.stPolishIOData();
+            KHSTIO.ByteTo_stPolishIOData(ref clone, buffer);
+            return clone;
+        }
+
         private void CollectMotorServoStatus()
         {
             bool[] motorServoStatus = new bool[MotorCount];
@@ -314,6 +394,50 @@ namespace CMP.Models.Resource
                 KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
                 ApplyMotorServoStatus(motorServoStatus);
             }
+        }
+
+        internal override void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        {
+            ArgumentNullException.ThrowIfNull(motorServoBits);
+
+            if (motorServoBits.Count >= MotorServoSuffixes.Count)
+            {
+                lock (_processDataSync)
+                {
+                    for (var bit = 0; bit < _latestMotorServoStatus.Length; bit++)
+                    {
+                        _latestMotorServoStatus[bit] = motorServoBits[bit];
+                    }
+
+                    _hasMotorServoStatus = true;
+                }
+            }
+
+            // Keep the legacy logging feed, but publish the snapshot first so HMI reads never depend on SV.
+            base.ApplyMotorServoStatus(motorServoBits, stationPrefix);
+        }
+
+        private static KHSTSV.stPolishCollectData CloneProcessData(KHSTSV.stPolishCollectData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTSV.stPolishCollectData_ToByte(ref buffer, source);
+
+            var clone = new KHSTSV.stPolishCollectData();
+            KHSTSV.ByteTo_stPolishCollectData(ref clone, buffer);
+            return clone;
+        }
+
+        private static void ApplyMotorServoStatusToSnapshot(
+            KHSTSV.stPolishCollectData snapshot,
+            IReadOnlyList<bool> motorServoStatus)
+        {
+            snapshot.PlatenRotationMotorServoOn = motorServoStatus[0];
+            snapshot.HeadRotationMotorServoOn = motorServoStatus[1];
+            snapshot.HeadSweepMotorServoOn = motorServoStatus[2];
+            snapshot.HeadUpDownMotorServoOn = motorServoStatus[3];
+            snapshot.ConditionHeadRotationMotorServoOn = motorServoStatus[4];
+            snapshot.ConditionSweepMotorServoOn = motorServoStatus[5];
+            snapshot.SlurrySweepMotorServoOn = motorServoStatus[6];
         }
         
     }
@@ -330,14 +454,18 @@ namespace CMP.Models.Resource
 
     public class Roller:CollectDataChamber
     {
-        KHSTRollerCollectData.stRollerCollectData _stRollerCollectData;
+        private const int SnapshotBufferSize = 2048;
+        private readonly object _processDataSync = new();
+        private readonly bool[,] _latestMotorServoStatus = new bool[3, 4];
+        private readonly bool[] _hasMotorServoStatus = new bool[3];
+        private KHSTRollerCollectData.stRollerCollectData? _stRollerCollectData;
         private readonly KHSTRollerIOData.stRollerIOData[] _ioData =
             [new(), new(), new()];
+        private readonly bool[] _hasIoData = new bool[3];
         public string rollerName = string.Empty;
 
         public Roller(string name, KVLink link) : base(name, link)
         {
-            _stRollerCollectData = new KHSTRollerCollectData.stRollerCollectData();
             collectDataFields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields();
             rollerName = name;
             KeyPrefix = name;
@@ -345,9 +473,52 @@ namespace CMP.Models.Resource
             WarnIfMotorServoMappingIncomplete();
         }
 
+        /// <summary>
+        /// 获取最近一次成功读取的完整 Roller 过程数据副本。各工位的四个 ServoOn 字段
+        /// 在对应设备位成功读取后，以 W534/W535 的最新值为准。
+        /// </summary>
+        internal bool TryGetProcessDataSnapshot(out KHSTRollerCollectData.stRollerCollectData snapshot)
+        {
+            lock (_processDataSync)
+            {
+                if (_stRollerCollectData == null)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneProcessData(_stRollerCollectData);
+                for (var station = 1; station <= _hasMotorServoStatus.Length; station++)
+                {
+                    if (_hasMotorServoStatus[station - 1])
+                    {
+                        ApplyMotorServoStatusToSnapshot(snapshot, station, _latestMotorServoStatus);
+                    }
+                }
+
+                return true;
+            }
+        }
+
         public KHSTRollerIOData.stRollerIOData GetIoData(int station)
         {
             lock (IoDataSync) return _ioData[station - 1];
+        }
+
+        /// <summary>获取指定 Roller 工位最近一次成功读取的 IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(int station, out KHSTRollerIOData.stRollerIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (station is < 1 or > 3 || !_hasIoData[station - 1])
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData[station - 1]);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -399,14 +570,23 @@ namespace CMP.Models.Resource
             {
                 KHSTRollerCollectData.stRollerCollectData _stRollerCollectData = new KHSTRollerCollectData.stRollerCollectData();
                 KHSTRollerCollectData.ByteTo_stRollerCollectData(ref _stRollerCollectData, _readBuf);
-                if (_stRollerCollectData != null)
-                {
-                    CompiledFieldAccessor<KHSTRollerCollectData.stRollerCollectData>.ProcessAllFields(_stRollerCollectData, (name, value) =>
-                    {
-                        SetSv(BuildRuntimeKey(null, name), value);
-                    });
-                }
+                ApplyProcessData(_stRollerCollectData);
             }
+        }
+
+        internal void ApplyProcessData(KHSTRollerCollectData.stRollerCollectData processData)
+        {
+            ArgumentNullException.ThrowIfNull(processData);
+
+            lock (_processDataSync)
+            {
+                _stRollerCollectData = processData;
+            }
+
+            CompiledFieldAccessor<KHSTRollerCollectData.stRollerCollectData>.ProcessAllFields(processData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectIOData()
@@ -456,6 +636,7 @@ namespace CMP.Models.Resource
             lock (IoDataSync)
             {
                 _ioData[rollerIndex - 1] = ioData;
+                _hasIoData[rollerIndex - 1] = true;
             }
             CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
@@ -466,6 +647,17 @@ namespace CMP.Models.Resource
 
                 SetSv(BuildRuntimeKey(indexPrefix, fieldName), value);
             });
+        }
+
+        private static KHSTRollerIOData.stRollerIOData CloneIoData(
+            KHSTRollerIOData.stRollerIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTRollerIOData.stRollerIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTRollerIOData.stRollerIOData();
+            KHSTRollerIOData.ByteTo_stRollerIOData(ref clone, buffer);
+            return clone;
         }
 
         private void CollectMotorServoStatus()
@@ -491,17 +683,83 @@ namespace CMP.Models.Resource
             }
         }
 
+        internal override void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        {
+            ArgumentNullException.ThrowIfNull(motorServoBits);
+
+            var station = ParseStation(stationPrefix);
+            if (station is >= 1 and <= 3 && motorServoBits.Count >= MotorServoSuffixes.Count)
+            {
+                lock (_processDataSync)
+                {
+                    for (var bit = 0; bit < MotorServoSuffixes.Count; bit++)
+                    {
+                        _latestMotorServoStatus[station - 1, bit] = motorServoBits[bit];
+                    }
+
+                    _hasMotorServoStatus[station - 1] = true;
+                }
+            }
+
+            // Keep the legacy logging feed, but publish the snapshot first so HMI reads never depend on SV.
+            base.ApplyMotorServoStatus(motorServoBits, stationPrefix);
+        }
+
+        private static KHSTRollerCollectData.stRollerCollectData CloneProcessData(
+            KHSTRollerCollectData.stRollerCollectData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTRollerCollectData.stRollerCollectData_ToByte(ref buffer, source);
+
+            var clone = new KHSTRollerCollectData.stRollerCollectData();
+            KHSTRollerCollectData.ByteTo_stRollerCollectData(ref clone, buffer);
+            return clone;
+        }
+
+        private static void ApplyMotorServoStatusToSnapshot(
+            KHSTRollerCollectData.stRollerCollectData snapshot,
+            int station,
+            bool[,] motorServoStatus)
+        {
+            var index = station - 1;
+            switch (station)
+            {
+                case 1:
+                    snapshot._1WFLeftPillarMotorServoOn = motorServoStatus[index, 0];
+                    snapshot._1WFRightPillarMotorServoOn = motorServoStatus[index, 1];
+                    snapshot._1UpperRollerMotorServoOn = motorServoStatus[index, 2];
+                    snapshot._1LowerRollerMotorServoOn = motorServoStatus[index, 3];
+                    break;
+                case 2:
+                    snapshot._2WFLeftPillarMotorServoOn = motorServoStatus[index, 0];
+                    snapshot._2WFRightPillarMotorServoOn = motorServoStatus[index, 1];
+                    snapshot._2UpperRollerMotorServoOn = motorServoStatus[index, 2];
+                    snapshot._2LowerRollerMotorServoOn = motorServoStatus[index, 3];
+                    break;
+                case 3:
+                    snapshot._3WFLeftPillarMotorServoOn = motorServoStatus[index, 0];
+                    snapshot._3WFRightPillarMotorServoOn = motorServoStatus[index, 1];
+                    snapshot._3UpperRollerMotorServoOn = motorServoStatus[index, 2];
+                    snapshot._3LowerRollerMotorServoOn = motorServoStatus[index, 3];
+                    break;
+            }
+        }
+
     }
 
     public class Pen:CollectDataChamber
     {
-        KHSTPenCollectData.stPenCollectData _stPenCollectData;
+        private const int SnapshotBufferSize = 2048;
+        private readonly object _processDataSync = new();
+        private readonly bool[,] _latestMotorServoStatus = new bool[2, 3];
+        private readonly bool[] _hasMotorServoStatus = new bool[2];
+        private KHSTPenCollectData.stPenCollectData? _stPenCollectData;
         private KHSTPenIOData.stPenIOData _ioData = new();
+        private bool _hasIoData;
         public string penName = string.Empty;
 
         public Pen(string name, KVLink link) : base(name, link)
         {
-            _stPenCollectData = new KHSTPenCollectData.stPenCollectData();
             collectDataFields = typeof(KHSTPenCollectData.stPenCollectData).GetFields();
             penName = name;
             KeyPrefix = name;
@@ -509,9 +767,52 @@ namespace CMP.Models.Resource
             WarnIfMotorServoMappingIncomplete();
         }
 
+        /// <summary>
+        /// 获取最近一次成功读取的完整 Pen 过程数据副本。各工位的三个 ServoOn 字段
+        /// 在对应设备位成功读取后，以 W537 的最新值为准。
+        /// </summary>
+        internal bool TryGetProcessDataSnapshot(out KHSTPenCollectData.stPenCollectData snapshot)
+        {
+            lock (_processDataSync)
+            {
+                if (_stPenCollectData == null)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneProcessData(_stPenCollectData);
+                for (var station = 1; station <= _hasMotorServoStatus.Length; station++)
+                {
+                    if (_hasMotorServoStatus[station - 1])
+                    {
+                        ApplyMotorServoStatusToSnapshot(snapshot, station, _latestMotorServoStatus);
+                    }
+                }
+
+                return true;
+            }
+        }
+
         public KHSTPenIOData.stPenIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
+        }
+
+        /// <summary>获取最近一次成功读取的 Pen IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTPenIOData.stPenIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -548,6 +849,9 @@ namespace CMP.Models.Resource
         /// <summary>"_1ChuckMotorServoOn" -> "ChuckMotorServoOn"（去掉工位号）。</summary>
         private static string WithoutStation(string fieldName) => fieldName[2..];
 
+        private static int ParseStation(string stationPrefix) =>
+            int.TryParse(stationPrefix.TrimStart('_'), out var result) ? result : 0;
+
         public override void CollectData()
         {
             CollectProcessData();
@@ -563,14 +867,23 @@ namespace CMP.Models.Resource
             {
                 KHSTPenCollectData.stPenCollectData _stPenCollectData = new KHSTPenCollectData.stPenCollectData();
                 KHSTPenCollectData.ByteTo_stPenCollectData(ref _stPenCollectData, _readBuf);
-                if (_stPenCollectData != null)
-                {
-                    CompiledFieldAccessor<KHSTPenCollectData.stPenCollectData>.ProcessAllFields(_stPenCollectData, (name, value) =>
-                    {
-                        SetSv(BuildRuntimeKey(null, name), value);
-                    });
-                }
+                ApplyProcessData(_stPenCollectData);
             }
+        }
+
+        internal void ApplyProcessData(KHSTPenCollectData.stPenCollectData processData)
+        {
+            ArgumentNullException.ThrowIfNull(processData);
+
+            lock (_processDataSync)
+            {
+                _stPenCollectData = processData;
+            }
+
+            CompiledFieldAccessor<KHSTPenCollectData.stPenCollectData>.ProcessAllFields(processData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectIOData()
@@ -604,6 +917,7 @@ namespace CMP.Models.Resource
             lock (IoDataSync)
             {
                 _ioData = ioData;
+                _hasIoData = true;
             }
             CompiledFieldAccessor<KHSTPenIOData.stPenIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
@@ -614,6 +928,16 @@ namespace CMP.Models.Resource
 
                 SetSv(BuildRuntimeKey(indexPrefix, fieldName), value);
             });
+        }
+
+        private static KHSTPenIOData.stPenIOData CloneIoData(KHSTPenIOData.stPenIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTPenIOData.stPenIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTPenIOData.stPenIOData();
+            KHSTPenIOData.ByteTo_stPenIOData(ref clone, buffer);
+            return clone;
         }
 
         private void CollectMotorServoStatus()
@@ -633,12 +957,72 @@ namespace CMP.Models.Resource
             }
         }
 
+        internal override void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        {
+            ArgumentNullException.ThrowIfNull(motorServoBits);
+
+            var station = ParseStation(stationPrefix);
+            if (station is >= 1 and <= 2 && motorServoBits.Count >= MotorServoSuffixes.Count)
+            {
+                lock (_processDataSync)
+                {
+                    for (var bit = 0; bit < MotorServoSuffixes.Count; bit++)
+                    {
+                        _latestMotorServoStatus[station - 1, bit] = motorServoBits[bit];
+                    }
+
+                    _hasMotorServoStatus[station - 1] = true;
+                }
+            }
+
+            // Keep the legacy logging feed, but publish the snapshot first so HMI reads never depend on SV.
+            base.ApplyMotorServoStatus(motorServoBits, stationPrefix);
+        }
+
+        private static KHSTPenCollectData.stPenCollectData CloneProcessData(
+            KHSTPenCollectData.stPenCollectData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTPenCollectData.stPenCollectData_ToByte(ref buffer, source);
+
+            var clone = new KHSTPenCollectData.stPenCollectData();
+            KHSTPenCollectData.ByteTo_stPenCollectData(ref clone, buffer);
+            return clone;
+        }
+
+        private static void ApplyMotorServoStatusToSnapshot(
+            KHSTPenCollectData.stPenCollectData snapshot,
+            int station,
+            bool[,] motorServoStatus)
+        {
+            var index = station - 1;
+            switch (station)
+            {
+                case 1:
+                    snapshot._1ChuckMotorServoOn = motorServoStatus[index, 0];
+                    snapshot._1PenArmSweepMotorServoOn = motorServoStatus[index, 1];
+                    snapshot._1PenRotationMotorServoOn = motorServoStatus[index, 2];
+                    break;
+                case 2:
+                    snapshot._2ChuckMotorServoOn = motorServoStatus[index, 0];
+                    snapshot._2PenArmSweepMotorServoOn = motorServoStatus[index, 1];
+                    snapshot._2PenRotationMotorServoOn = motorServoStatus[index, 2];
+                    break;
+            }
+        }
+
     }
 
     public class Dry:CollectDataChamber
     {
+        private const int SnapshotBufferSize = 2048;
+        private readonly object _processDataSync = new();
+        private readonly bool[] _latestMotorServoStatus = new bool[2];
+        private KHSTDryCollectData.stDryCollectData? _stDryCollectData;
+        private bool _hasMotorServoStatus;
         public string dryName = string.Empty;
         private KHSTDryIOData.stDryIOData _ioData = new();
+        private bool _hasIoData;
 
         public Dry(string name, KVLink link) : base(name, link)
         {
@@ -649,9 +1033,49 @@ namespace CMP.Models.Resource
             WarnIfMotorServoMappingIncomplete();
         }
 
+        /// <summary>
+        /// 获取最近一次成功读取的完整 Dry 过程数据副本。两个 ServoOn 字段
+        /// 在设备位成功读取后，以 W539 的最新值为准。
+        /// </summary>
+        internal bool TryGetProcessDataSnapshot(out KHSTDryCollectData.stDryCollectData snapshot)
+        {
+            lock (_processDataSync)
+            {
+                if (_stDryCollectData == null)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneProcessData(_stDryCollectData);
+                if (_hasMotorServoStatus)
+                {
+                    ApplyMotorServoStatusToSnapshot(snapshot, _latestMotorServoStatus);
+                }
+
+                return true;
+            }
+        }
+
         public KHSTDryIOData.stDryIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
+        }
+
+        /// <summary>获取最近一次成功读取的 Dry IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTDryIOData.stDryIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -691,14 +1115,23 @@ namespace CMP.Models.Resource
             {
                 KHSTDryCollectData.stDryCollectData _stDryCollectData = new KHSTDryCollectData.stDryCollectData();
                 KHSTDryCollectData.ByteTo_stDryCollectData(ref _stDryCollectData, _readBuf);
-                if (_stDryCollectData != null)
-                {
-                    CompiledFieldAccessor<KHSTDryCollectData.stDryCollectData>.ProcessAllFields(_stDryCollectData, (name, value) =>
-                    {
-                        SetSv(BuildRuntimeKey(null, name), value);
-                    });
-                }
+                ApplyProcessData(_stDryCollectData);
             }
+        }
+
+        internal void ApplyProcessData(KHSTDryCollectData.stDryCollectData processData)
+        {
+            ArgumentNullException.ThrowIfNull(processData);
+
+            lock (_processDataSync)
+            {
+                _stDryCollectData = processData;
+            }
+
+            CompiledFieldAccessor<KHSTDryCollectData.stDryCollectData>.ProcessAllFields(processData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectIOData1()
@@ -714,6 +1147,7 @@ namespace CMP.Models.Resource
                     lock (IoDataSync)
                     {
                         _ioData = _stDryIOData;
+                        _hasIoData = true;
                     }
                     CompiledFieldAccessor<KHSTDryIOData.stDryIOData>.ProcessAllFields(_stDryIOData, (name, value) =>
                     {
@@ -721,6 +1155,22 @@ namespace CMP.Models.Resource
                     });
                 }
             }
+        }
+
+        internal void ApplyIoData(KHSTDryIOData.stDryIOData ioData)
+        {
+            ArgumentNullException.ThrowIfNull(ioData);
+
+            lock (IoDataSync)
+            {
+                _ioData = ioData;
+                _hasIoData = true;
+            }
+
+            CompiledFieldAccessor<KHSTDryIOData.stDryIOData>.ProcessAllFields(ioData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectMotorServoStatus()
@@ -732,6 +1182,56 @@ namespace CMP.Models.Resource
                 KHSTDryCollectData.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
                 ApplyMotorServoStatus(motorServoStatus);
             }
+        }
+
+        internal override void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        {
+            ArgumentNullException.ThrowIfNull(motorServoBits);
+
+            if (motorServoBits.Count >= MotorServoSuffixes.Count)
+            {
+                lock (_processDataSync)
+                {
+                    for (var bit = 0; bit < _latestMotorServoStatus.Length; bit++)
+                    {
+                        _latestMotorServoStatus[bit] = motorServoBits[bit];
+                    }
+
+                    _hasMotorServoStatus = true;
+                }
+            }
+
+            // Keep the legacy logging feed, but publish the snapshot first so HMI reads never depend on SV.
+            base.ApplyMotorServoStatus(motorServoBits, stationPrefix);
+        }
+
+        private static KHSTDryCollectData.stDryCollectData CloneProcessData(
+            KHSTDryCollectData.stDryCollectData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTDryCollectData.stDryCollectData_ToByte(ref buffer, source);
+
+            var clone = new KHSTDryCollectData.stDryCollectData();
+            KHSTDryCollectData.ByteTo_stDryCollectData(ref clone, buffer);
+            return clone;
+        }
+
+        private static void ApplyMotorServoStatusToSnapshot(
+            KHSTDryCollectData.stDryCollectData snapshot,
+            IReadOnlyList<bool> motorServoStatus)
+        {
+            snapshot.ChuckMotorServoOn = motorServoStatus[0];
+            snapshot.ArmSweepMotorServoOn = motorServoStatus[1];
+        }
+
+        private static KHSTDryIOData.stDryIOData CloneIoData(KHSTDryIOData.stDryIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTDryIOData.stDryIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTDryIOData.stDryIOData();
+            KHSTDryIOData.ByteTo_stDryIOData(ref clone, buffer);
+            return clone;
         }
 
     }

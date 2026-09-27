@@ -21,7 +21,6 @@ using System.Windows;
 using System.Threading.Tasks;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Clean.KvStruct;
-using KSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using RecipeContent = CMP.Models.Recipe.RecipeEdit.Recipe.Content;
 
 namespace CMP.ViewModels.Tabs.OperationTab;
@@ -55,7 +54,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     private string _recipeBasePath = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\";
     
     private Pen? penData;
-    private string _penKeyPrefix; // "PenA1", "PenA2", "PenB1", or "PenB2"
+    private int _penIndex;
     
     public new string? TabTitle
     {
@@ -178,8 +177,6 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
 
         _ = MonitorLoopAsync();
 
-        // penData = GlobalService.DataCenter.listPen.FirstOrDefault().ListSV;
-
         if (GlobalService.DataCenter.listPen.Count < 2)
         {
             throw new InvalidOperationException("DataCenter.listPen does not contain enough data.");
@@ -192,14 +189,11 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             _ => null
         };
 
-        // 根据id确定键名前缀
-        _penKeyPrefix = id switch
+        _penIndex = id switch
         {
-            0 => "_1",
-            1 => "_2",
-            2 => "_1",
-            3 => "_2",
-            _ => "_1"
+            0 or 2 => 1,
+            1 or 3 => 2,
+            _ => 1
         };
 
         // 订阅Recipe保存事件
@@ -264,69 +258,53 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     }
 
     /// <summary>
-    /// 获取类型的默认失败值
-    /// </summary>
-    private static T GetDefaultFailureValue<T>()
-    {
-        return typeof(T) switch
-        {
-            { } t when t == typeof(double) => (T)(object)double.NaN,
-            { } t when t == typeof(float) => (T)(object)float.NaN,
-            { } t when t == typeof(int) => (T)(object)0,
-            { } t when t == typeof(long) => (T)(object)0L,
-            { } t when t == typeof(short) => (T)(object)(short)0,
-            { } t when t == typeof(byte) => (T)(object)(byte)0,
-            { } t when t == typeof(bool) => (T)(object)false,
-            { } t when t == typeof(string) => (T)(object)string.Empty,
-            _ => default!
-        };
-    }
-
-    /// <summary>
-    /// 获取 SV 的值并转换为指定类型，如果获取失败返回默认值
-    /// </summary>
-    /// <typeparam name="T">目标类型</typeparam>
-    /// <param name="key">SV 的键</param>
-    /// <param name="defaultValue">获取失败时的默认值，不指定则自动匹配类型默认值</param>
-    /// <returns>转换后的值或默认值</returns>
-    private T GetSvValue<T>(string key, T? defaultValue = default)
-    {
-        try
-        {
-            var sv = penData.GetSv(key);
-            if (sv?.Value == null)
-                return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                    ? GetDefaultFailureValue<T>()
-                    : defaultValue!;
-
-            return (T)Convert.ChangeType(sv.Value, typeof(T));
-        }
-        catch
-        {
-            return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                ? GetDefaultFailureValue<T>()
-                : defaultValue!;
-        }
-    }
-
-    /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
     private void RefreshHmi()
     {
-        KSTPenCollectData.stPenCollectData data;
-        // 刷新电机速度和位置的实际值
-        PenClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1ChuckRotationSpeedAct).Replace("_1", ""));
+        if (penData == null || !penData.TryGetProcessDataSnapshot(out var snapshot))
+        {
+            return;
+        }
 
-        PenClean.PenArmSweepMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepSpeedAct).Replace("_1", ""));
-        PenClean.PenArmSweepMotor.ActPosition = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepAngleAct).Replace("_1", ""));
+        (float ChuckRotationSpeed,
+            float PenArmSweepSpeed,
+            float PenArmSweepAngle,
+            float PenHeadRotationSpeed,
+            float DiwOpenTime,
+            bool ChuckServoOn,
+            bool PenArmSweepServoOn,
+            bool PenRotationServoOn) stationData = _penIndex switch
+        {
+            1 => (
+                snapshot._1ChuckRotationSpeedAct,
+                snapshot._1PenArmSweepSpeedAct,
+                snapshot._1PenArmSweepAngleAct,
+                snapshot._1PenHeadRotationSpeedAct,
+                snapshot._1DIWAllOpenTimeAct,
+                snapshot._1ChuckMotorServoOn,
+                snapshot._1PenArmSweepMotorServoOn,
+                snapshot._1PenRotationMotorServoOn),
+            _ => (
+                snapshot._2ChuckRotationSpeedAct,
+                snapshot._2PenArmSweepSpeedAct,
+                snapshot._2PenArmSweepAngleAct,
+                snapshot._2PenHeadRotationSpeedAct,
+                snapshot._2DIWAllOpenTimeAct,
+                snapshot._2ChuckMotorServoOn,
+                snapshot._2PenArmSweepMotorServoOn,
+                snapshot._2PenRotationMotorServoOn)
+        };
 
-        PenClean.PenRotationMotor.ActVelocity = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1PenHeadRotationSpeedAct).Replace("_1", ""));
+        PenClean.ChuckRotationMotor.ActVelocity = stationData.ChuckRotationSpeed;
+        PenClean.PenArmSweepMotor.ActVelocity = stationData.PenArmSweepSpeed;
+        PenClean.PenArmSweepMotor.ActPosition = stationData.PenArmSweepAngle;
+        PenClean.PenRotationMotor.ActVelocity = stationData.PenHeadRotationSpeed;
+        PenClean.Flush.OpenDelayAct = stationData.DiwOpenTime;
 
-        PenClean.ChuckRotationMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1ChuckMotorServoOn).Replace("_1", ""));
-        PenClean.PenArmSweepMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1PenArmSweepMotorServoOn).Replace("_1", ""));
-        PenClean.PenRotationMotor.IsServoOn = GetSvValue<bool>(penData.penName + _penKeyPrefix + nameof(data._1PenRotationMotorServoOn).Replace("_1", ""));
-        PenClean.Flush.OpenDelayAct = GetSvValue<float>(penData.penName + _penKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
+        PenClean.ChuckRotationMotor.IsServoOn = stationData.ChuckServoOn;
+        PenClean.PenArmSweepMotor.IsServoOn = stationData.PenArmSweepServoOn;
+        PenClean.PenRotationMotor.IsServoOn = stationData.PenRotationServoOn;
         
         RaisePropertyChanged(nameof(ChuckRotationMotorServoText));
         RaisePropertyChanged(nameof(PenArmSweepMotorServoText));

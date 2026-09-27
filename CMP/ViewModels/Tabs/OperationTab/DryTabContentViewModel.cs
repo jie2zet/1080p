@@ -20,8 +20,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Threading.Tasks;
-using CMP.Models.kvsPlc.Dry;
-using CMP.Models.kvsPlc.SV;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 //using KST = CMP.Models.kvsPlc.Dry.KvStructDry;
 using KST = CMP.Models.kvsPlc.Clean.KvStruct;
@@ -57,7 +55,6 @@ public class DryTabContentViewModel : TabContentViewModelBase
     private string _recipeBasePath = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\";
 
     private Dry? dryData;
-    private string _dryKeyPrefix;
 
     public new string? TabTitle
     {
@@ -154,8 +151,6 @@ public class DryTabContentViewModel : TabContentViewModelBase
 
         _ = MonitorLoopAsync();
 
-        // dryData = GlobalService.DataCenter.listDry.FirstOrDefault().ListSV;
-
         if (GlobalService.DataCenter.listDry.Count < 2)
         {
             throw new InvalidOperationException("DataCenter.listDry does not contain enough data.");
@@ -163,8 +158,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
 
         dryData = id switch
         {
-            0 or 1 => GlobalService.DataCenter.listDry[0],
-            2 or 3 => GlobalService.DataCenter.listDry[1],
+            0 => GlobalService.DataCenter.listDry[0],
+            1 => GlobalService.DataCenter.listDry[1],
             _ => null
         };
 
@@ -1008,62 +1003,21 @@ public class DryTabContentViewModel : TabContentViewModelBase
     }
 
     /// <summary>
-    /// 获取类型的默认失败值
-    /// </summary>
-    private static T GetDefaultFailureValue<T>()
-    {
-        return typeof(T) switch
-        {
-            { } t when t == typeof(double) => (T)(object)double.NaN,
-            { } t when t == typeof(float) => (T)(object)float.NaN,
-            { } t when t == typeof(int) => (T)(object)(-1),
-            { } t when t == typeof(short) => (T)(object)((short)-1),
-            { } t when t == typeof(bool) => (T)(object)false,
-            { } t when t == typeof(string) => (T)(object)"",
-            _ => default!
-        };
-    }
-
-    /// <summary>
-    /// 获取 SV 的值并转换为指定类型，如果获取失败返回默认值
-    /// </summary>
-    /// <typeparam name="T">目标类型</typeparam>
-    /// <param name="key">SV 的键</param>
-    /// <param name="defaultValue">获取失败时的默认值，不指定则自动匹配类型默认值</param>
-    /// <returns>转换后的值或默认值</returns>
-    private T GetSvValue<T>(string key, T? defaultValue = default)
-    {
-        try
-        {
-            var sv = dryData.GetSv(key);
-            if (sv?.Value == null)
-                return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                    ? GetDefaultFailureValue<T>()
-                    : defaultValue!;
-
-            return (T)Convert.ChangeType(sv.Value, typeof(T));
-        }
-        catch
-        {
-            return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                ? GetDefaultFailureValue<T>()
-                : defaultValue!;
-        }
-    }
-
-    /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
     private void RefreshHmi()
     {
-        KvsStructDryCollectData.stDryCollectData data;
-        // 刷新电机速度和位置的实际值
-        DryClean.ChuckRotationMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ChuckRotationSpeedAct));
-        DryClean.ArmSwingMotor.ActVelocity = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepSpeedAct));
-        DryClean.ArmSwingMotor.ActPosition = GetSvValue<float>(dryData.dryName + nameof(data.ArmSweepAngleAct));
+        if (dryData == null || !dryData.TryGetProcessDataSnapshot(out var snapshot))
+        {
+            return;
+        }
+
+        DryClean.ChuckRotationMotor.ActVelocity = snapshot.ChuckRotationSpeedAct;
+        DryClean.ArmSwingMotor.ActVelocity = snapshot.ArmSweepSpeedAct;
+        DryClean.ArmSwingMotor.ActPosition = snapshot.ArmSweepAngleAct;
         
-        DryClean.ChuckRotationMotor.IsServoOn = GetSvValue<bool>(dryData.dryName + nameof(data.ChuckMotorServoOn));
-        DryClean.ArmSwingMotor.IsServoOn = GetSvValue<bool>(dryData.dryName + nameof(data.ArmSweepMotorServoOn));
+        DryClean.ChuckRotationMotor.IsServoOn = snapshot.ChuckMotorServoOn;
+        DryClean.ArmSwingMotor.IsServoOn = snapshot.ArmSweepMotorServoOn;
         
         RaisePropertyChanged(nameof(ChuckRotationMotorServoText));
         RaisePropertyChanged(nameof(ArmSwingMotorServoText));
