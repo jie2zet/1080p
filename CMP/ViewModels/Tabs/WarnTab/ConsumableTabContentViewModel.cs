@@ -28,6 +28,8 @@ namespace CMP.ViewModels.Tabs.WarnTab
         private readonly string _shortTimeFormate = "HH:mm:ss";
 
         private readonly string consumableFile = "D:\\CMP\\Configuration\\Consumable\\ConsumableInfo.json";
+        /// <summary>各抛光腔有始以来处理片数，Keyence ZF392000。</summary>
+        private const uint LifetimeWaferCountAddress = 392000;
 
         private ObservableCollection<IgnoreConsumableProperty> _ignoreConsumableProperties;
         //<耗材名、耗材参数>
@@ -48,6 +50,17 @@ namespace CMP.ViewModels.Tabs.WarnTab
             set => SetProperty(ref _consumableGroups, value);
         }
 
+        private uint _polisherALifetimeCount;
+        private uint _polisherBLifetimeCount;
+        private uint _polisherCLifetimeCount;
+        private uint _polisherDLifetimeCount;
+
+        public string PolisherALifetimeCount => _polisherALifetimeCount.ToString();
+        public string PolisherBLifetimeCount => _polisherBLifetimeCount.ToString();
+        public string PolisherCLifetimeCount => _polisherCLifetimeCount.ToString();
+        public string PolisherDLifetimeCount => _polisherDLifetimeCount.ToString();
+        public string EquipmentLifetimeCount =>
+            (_polisherALifetimeCount + _polisherBLifetimeCount + _polisherCLifetimeCount + _polisherDLifetimeCount).ToString();
 
         public DelegateCommand<ConsumableModel> UpdateCommand { get; set; }
 
@@ -98,7 +111,45 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     string dateString = Encoding.UTF8.GetString(useTimeByte);
                     item.UsedTime = DateTime.TryParse(dateString, out var parsedDate) ? parsedDate.ToString(_shortTimeFormate) : string.Empty;
                 }
+
+                RefreshPolishLifetimeCounts();
             }
+        }
+
+        private void RefreshPolishLifetimeCounts()
+        {
+            TryReadLifetimeCount(WorkstationType.PolishA, ref _polisherALifetimeCount, nameof(PolisherALifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishB, ref _polisherBLifetimeCount, nameof(PolisherBLifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishC, ref _polisherCLifetimeCount, nameof(PolisherCLifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishD, ref _polisherDLifetimeCount, nameof(PolisherDLifetimeCount));
+        }
+
+        private void TryReadLifetimeCount(WorkstationType workstation, ref uint field, string propertyName)
+        {
+            var hSock = GetSock(workstation);
+            if (hSock == 0)
+            {
+                return;
+            }
+
+            var buffer = new byte[8];
+            var error = KHL.KHLReadDevicesAsWords(hSock, KHLDevType.DEV_ZF, LifetimeWaferCountAddress, 2, buffer);
+            if (error != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Logger.Info($"{workstation} lifetime wafer count read Failure.");
+                return;
+            }
+
+            uint count = 0;
+            KST.ByteToUint(ref count, buffer);
+            if (field == count)
+            {
+                return;
+            }
+
+            field = count;
+            RaisePropertyChanged(propertyName);
+            RaisePropertyChanged(nameof(EquipmentLifetimeCount));
         }
 
         private void OnSelectionChanged(string header)
@@ -316,10 +367,12 @@ namespace CMP.ViewModels.Tabs.WarnTab
             return $"{model.Workstation}/{model.ConsumableName}";
         }
 
-        private static int GetSock(ConsumableModel model)
+        private static int GetSock(ConsumableModel model) => GetSock(model.Workstation);
+
+        private static int GetSock(WorkstationType workstation)
         {
             int hSock = 0;
-            switch (model.Workstation)
+            switch (workstation)
             {
                 case WorkstationType.PolishA:
                     hSock = GlobalService.kvHostLinkInit.kvLinkPolishA.sock;

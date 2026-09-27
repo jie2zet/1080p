@@ -155,23 +155,72 @@
         <TabControl x:Name="tabControl" MaxHeight="770" VerticalAlignment="Top">
             <TabItem Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Polish}">
                 <ScrollViewer VerticalScrollBarVisibility="Visible" CanContentScroll="True">
-                    <ItemsControl ItemsSource="{Binding ConsumableGroups}" ScrollViewer.CanContentScroll="True">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Margin="5"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
-                                           Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
-                                           Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
-                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <Border CornerRadius="10" Background="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">
+                            <Grid Height="32">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{lex:Loc Equipment}" Foreground="White"
+                                           TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{lex:Loc PolisherA}" Foreground="White"
+                                           TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="2" Text="{lex:Loc PolisherB}" Foreground="White"
+                                           TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="3" Text="{lex:Loc PolisherC}" Foreground="White"
+                                           TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="4" Text="{lex:Loc PolisherD}" Foreground="White"
+                                           TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                            </Grid>
+                        </Border>
+                        <Border BorderBrush="#D0D8E8" BorderThickness="1" Background="White" Margin="0,0,0,10" Height="30" Padding="6,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                    <TextBlock Text="{Binding EquipmentLifetimeCount}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                </Border>
+                                <Border Grid.Column="1" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                    <TextBlock Text="{Binding PolisherALifetimeCount}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                </Border>
+                                <Border Grid.Column="2" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                    <TextBlock Text="{Binding PolisherBLifetimeCount}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                </Border>
+                                <Border Grid.Column="3" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                    <TextBlock Text="{Binding PolisherCLifetimeCount}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                </Border>
+                                <Border Grid.Column="4" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                    <TextBlock Text="{Binding PolisherDLifetimeCount}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <ItemsControl ItemsSource="{Binding ConsumableGroups}" ScrollViewer.CanContentScroll="True">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
+                                               Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
+                                               Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
+                                        <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </ScrollViewer>
             </TabItem>
             <TabItem Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Roller}">
