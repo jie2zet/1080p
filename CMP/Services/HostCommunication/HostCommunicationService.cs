@@ -3662,13 +3662,10 @@ namespace CMP.Services.HostCommunication
                 _gem.SetRemote();
                 _isOnline = true;
             }
-
             if (_isOnline)
             {
-                int index = 0;
-
-                if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
-                {
+                SetSVIDValue("PolishAProcessStepAct", 88);
+            }
 
                     FieldInfo[] fields = typeof(stPolishCollectData).GetFields(); //获取所有的公有字段
 
