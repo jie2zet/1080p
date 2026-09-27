@@ -602,8 +602,8 @@ Padding="0" Style="{StaticResource GroupBoxTab.Small}" Width="230">
                                 </GroupBox.Header>
                                 <Border>
                                     <StackPanel Orientation="Horizontal">
-                                        <Canvas>
-                                            <Image Source="/Assets/Images/�м�.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
+                                        <Canvas Width="80" Height="70">
+                                            <Image Source="/Assets/Images/TransBuffer.png" VerticalAlignment="Center" Stretch="Fill" Width="60"
                                                 HorizontalAlignment="Center"  Grid.Column="0" Height="60" />
                                             <Image Source="/Assets/Images/wafer.png" 
                                                 Width="60" Height="60"

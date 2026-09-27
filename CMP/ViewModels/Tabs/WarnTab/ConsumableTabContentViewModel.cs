@@ -1,9 +1,13 @@
 ﻿using CMP.Services.Auth;
 using CMP.Constants.Enums;
 using CMP.Models.kvsPlc;
+using CMP.Models.Resource;
 using CMP.Models.Warn;
 using CMP.Services.Log;
 using CMP.Utils;
+using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
+using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using DocumentFormat.OpenXml.EMMA;
 using HandyControl.Controls;
 using Microsoft.VisualBasic;
@@ -11,10 +15,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Clean.KvStruct;
@@ -25,10 +29,9 @@ namespace CMP.ViewModels.Tabs.WarnTab
     public class ConsumableTabContentViewModel : BindableBase
     {
         private readonly string _dateTimeFormate = "yyyy-MM-dd HH:mm:ss";
-        private readonly string _shortTimeFormate = "HH:mm:ss";
 
         private readonly string consumableFile = "D:\\CMP\\Configuration\\Consumable\\ConsumableInfo.json";
-        /// <summary>各抛光腔有始以来处理片数，Keyence ZF392000。</summary>
+        private readonly string g3HeadFile = "D:\\CMP\\Configuration\\Consumable\\G3HeadInfo.json";
         private const uint LifetimeWaferCountAddress = 392000;
 
         private ObservableCollection<IgnoreConsumableProperty> _ignoreConsumableProperties;
@@ -50,6 +53,15 @@ namespace CMP.ViewModels.Tabs.WarnTab
             set => SetProperty(ref _consumableGroups, value);
         }
 
+        private ObservableCollection<G3HeadModel> _g3HeadModels = [];
+        private ObservableCollection<G3HeadGroup> _g3HeadGroups = [];
+
+        public ObservableCollection<G3HeadGroup> G3HeadGroups
+        {
+            get => _g3HeadGroups;
+            set => SetProperty(ref _g3HeadGroups, value);
+        }
+
         private uint _polisherALifetimeCount;
         private uint _polisherBLifetimeCount;
         private uint _polisherCLifetimeCount;
@@ -64,6 +76,8 @@ namespace CMP.ViewModels.Tabs.WarnTab
 
         public DelegateCommand<ConsumableModel> UpdateCommand { get; set; }
 
+        public DelegateCommand<G3HeadModel> G3HeadUpdateCommand { get; set; }
+
         public DelegateCommand<string> SelectionChangedCommand { get; set; }
 
         private readonly Task _readTask;
@@ -74,10 +88,12 @@ namespace CMP.ViewModels.Tabs.WarnTab
             _consumableModels = new ObservableCollection<ConsumableModel>();
             _consumableGroups = new ObservableCollection<ConsumableGroup>();
             UpdateCommand = new DelegateCommand<ConsumableModel>(OnUpdate);
+            G3HeadUpdateCommand = new DelegateCommand<G3HeadModel>(OnG3HeadUpdate);
             SelectionChangedCommand = new DelegateCommand<string>(OnSelectionChanged);
             _readTask = Task.Factory.StartNew(() => { ReadConsumableInfo(); }, TaskCreationOptions.LongRunning);
             InitIgnoreConsumableProperties();
             InitConsumable();
+            InitG3Head();
         }
 
         private async void ReadConsumableInfo()
@@ -86,70 +102,200 @@ namespace CMP.ViewModels.Tabs.WarnTab
             {
                 await Task.Delay(1000);
                 if (_consumableModels == null || _consumableModels.Count == 0) continue;
-                //读取PLC地址 设置_consumableModels
                 foreach (var item in _consumableModels)
                 {
                     if (item == null) continue;
-                    if (item.WaferCountAdress == default || item.UsedTimeAdress == default) continue;
-
-                    int hSock = GetSock(item);
-                    byte[] readWaferData = new byte[256];
-                    byte[] readUsedTimeData = new byte[2560];
-                    int errorReadWaferCount = item.IsWaferCountSetEditable ? KHL.KHLReadDevicesAsWords(hSock, KHLDevType.DEV_ZF, item.WaferCountAdress, 1, readWaferData) : (int)KHLUserError.KHL_ERR_NONE;
-                    int errorReadUsedTime = item.IsUsedTimeSetEditable ? KHL.KHLReadDevicesAsWords(hSock, KHLDevType.DEV_ZF, item.UsedTimeAdress, 20, readUsedTimeData) : (int)KHLUserError.KHL_ERR_NONE;
-                    if (errorReadWaferCount != (int)KHLUserError.KHL_ERR_NONE || errorReadUsedTime != (int)KHLUserError.KHL_ERR_NONE)
+                    if (IsPolishWorkstation(item.Workstation))
                     {
-                        Logger.Info($"{item.Workstation}-{item.ConsumableName} read Failure.");
-                        continue;
+                        ApplyPolishFromDataCenter(item);
                     }
-                    uint count = 0;
-                    KST.ByteToUint(ref count, readWaferData);
-                    item.WaferCount = count.ToString();
+                    else if (IsRollerWorkstation(item.Workstation))
+                    {
+                        ApplyRollerFromDataCenter(item);
+                    }
+                    else if (IsPenWorkstation(item.Workstation))
+                    {
+                        ApplyPenFromDataCenter(item);
+                    }
+                }
 
-                    byte[] useTimeByte = new byte[1048];
-                    KST.ByteToString(ref useTimeByte, readUsedTimeData);
-                    string dateString = Encoding.UTF8.GetString(useTimeByte);
-                    item.UsedTime = DateTime.TryParse(dateString, out var parsedDate) ? parsedDate.ToString(_shortTimeFormate) : string.Empty;
+                foreach (var item in _g3HeadModels)
+                {
+                    ReadG3HeadRow(item);
                 }
 
                 RefreshPolishLifetimeCounts();
             }
         }
 
-        private void RefreshPolishLifetimeCounts()
+        private static bool IsPolishWorkstation(WorkstationType workstation) =>
+            workstation is WorkstationType.PolishA
+                or WorkstationType.PolishB
+                or WorkstationType.PolishC
+                or WorkstationType.PolishD;
+
+        private static void ApplyPolishFromDataCenter(ConsumableModel item)
         {
-            TryReadLifetimeCount(WorkstationType.PolishA, ref _polisherALifetimeCount, nameof(PolisherALifetimeCount));
-            TryReadLifetimeCount(WorkstationType.PolishB, ref _polisherBLifetimeCount, nameof(PolisherBLifetimeCount));
-            TryReadLifetimeCount(WorkstationType.PolishC, ref _polisherCLifetimeCount, nameof(PolisherCLifetimeCount));
-            TryReadLifetimeCount(WorkstationType.PolishD, ref _polisherDLifetimeCount, nameof(PolisherDLifetimeCount));
+            if (!TryGetPolishCollectData(item.Workstation, out var data))
+            {
+                return;
+            }
+
+            switch (item.ConsumableName)
+            {
+                case "Unit":
+                    item.WaferCount = data.UnitWaferCount.ToString();
+                    break;
+                case "Airbag":
+                    item.WaferCount = data.AirBagWaferCount.ToString();
+                    item.UsedTime = data.AirBagUesTime.ToString();
+                    break;
+                case "Membrance":
+                    item.WaferCount = data.MembranceWaferCount.ToString();
+                    item.UsedTime = data.MembranceUesTime.ToString();
+                    break;
+                case "RatainerRing":
+                    item.WaferCount = data.RatainerRingWaferCount.ToString();
+                    item.UsedTime = data.RatainerRingUesTime.ToString();
+                    break;
+                case "Pad":
+                    item.WaferCount = data.PadWaferCount.ToString();
+                    item.UsedTime = data.PadUesTime.ToString();
+                    break;
+                case "Disk_Insitu":
+                    item.UsedTime = data.ConditionInsiUesTime.ToString();
+                    break;
+                case "Disk_Exsitu":
+                    item.UsedTime = data.ConditionExsiUesTime.ToString();
+                    break;
+            }
         }
 
-        private void TryReadLifetimeCount(WorkstationType workstation, ref uint field, string propertyName)
+        private static bool TryGetPolishCollectData(WorkstationType workstation, out KHSTSV.stPolishCollectData data)
         {
-            var hSock = GetSock(workstation);
-            if (hSock == 0)
+            data = null!;
+            var polish = GlobalService.DataCenter?.listPolish?
+                .FirstOrDefault(item => item.Name == workstation.ToString());
+            return polish != null && polish.TryGetProcessDataSnapshot(out data);
+        }
+
+        private static bool IsRollerWorkstation(WorkstationType workstation) =>
+            workstation is WorkstationType.RollerA1
+                or WorkstationType.RollerA2
+                or WorkstationType.RollerA3
+                or WorkstationType.RollerB1
+                or WorkstationType.RollerB2
+                or WorkstationType.RollerB3;
+
+        private static void ApplyRollerFromDataCenter(ConsumableModel item)
+        {
+            if (!TryGetRollerCollectData(item.Workstation, out var data, out var station))
             {
                 return;
             }
 
-            var buffer = new byte[8];
-            var error = KHL.KHLReadDevicesAsWords(hSock, KHLDevType.DEV_ZF, LifetimeWaferCountAddress, 2, buffer);
-            if (error != (int)KHLUserError.KHL_ERR_NONE)
+            switch (station)
             {
-                Logger.Info($"{workstation} lifetime wafer count read Failure.");
+                case 1:
+                    ApplyRollerStation(item, data._1UnitWaferCount, data._1LowerRollerWaferCount, data._1LowerRollerCumlativeTime,
+                        data._1UpperRollerWaferCount, data._1UpperRollerCumlativeTime, data._1WFPillarRotationWaferCount, data._1WFPillarRotationCumlativeTime);
+                    break;
+                case 2:
+                    ApplyRollerStation(item, data._2UnitWaferCount, data._2LowerRollerWaferCount, data._2LowerRollerCumlativeTime,
+                        data._2UpperRollerWaferCount, data._2UpperRollerCumlativeTime, data._2WFPillarRotationWaferCount, data._2WFPillarRotationCumlativeTime);
+                    break;
+                case 3:
+                    ApplyRollerStation(item, data._3UnitWaferCount, data._3LowerRollerWaferCount, data._3LowerRollerCumlativeTime,
+                        data._3UpperRollerWaferCount, data._3UpperRollerCumlativeTime, data._3WFPillarRotationWaferCount, data._3WFPillarRotationCumlativeTime);
+                    break;
+            }
+        }
+
+        private static void ApplyRollerStation(
+            ConsumableModel item,
+            float unitCount,
+            float lowerCount, float lowerTime,
+            float upperCount, float upperTime,
+            float pillarCount, float pillarTime)
+        {
+            switch (item.ConsumableName)
+            {
+                case "Unit":
+                    item.WaferCount = ToIntText(unitCount);
+                    break;
+                case "LowerRoller":
+                    item.WaferCount = ToIntText(lowerCount);
+                    item.UsedTime = ToIntText(lowerTime);
+                    break;
+                case "UpperRoller":
+                    item.WaferCount = ToIntText(upperCount);
+                    item.UsedTime = ToIntText(upperTime);
+                    break;
+                case "Pillar":
+                    item.WaferCount = ToIntText(pillarCount);
+                    item.UsedTime = ToIntText(pillarTime);
+                    break;
+            }
+        }
+
+        private static bool TryGetRollerCollectData(
+            WorkstationType workstation,
+            out KHSTRollerCollectData.stRollerCollectData data,
+            out int station)
+        {
+            data = null!;
+            station = workstation switch
+            {
+                WorkstationType.RollerA1 or WorkstationType.RollerB1 => 1,
+                WorkstationType.RollerA2 or WorkstationType.RollerB2 => 2,
+                WorkstationType.RollerA3 or WorkstationType.RollerB3 => 3,
+                _ => 0
+            };
+            if (station == 0)
+            {
+                return false;
+            }
+
+            var chamberName = workstation is WorkstationType.RollerA1 or WorkstationType.RollerA2 or WorkstationType.RollerA3
+                ? "RollerA"
+                : "RollerB";
+            var roller = GlobalService.DataCenter?.listRoller?
+                .FirstOrDefault(item => item.Name == chamberName);
+            return roller != null && roller.TryGetProcessDataSnapshot(out data);
+        }
+
+        private static string ToIntText(float value) => ((int)Math.Round(value)).ToString();
+
+        private static bool IsPenWorkstation(WorkstationType workstation) =>
+            workstation is WorkstationType.PenA1 or WorkstationType.PenB1;
+
+        private static void ApplyPenFromDataCenter(ConsumableModel item)
+        {
+            if (!TryGetPenCollectData(item.Workstation, out var data))
+            {
                 return;
             }
 
-            uint count = 0;
-            KST.ByteToUint(ref count, buffer);
-            if (field == count)
+            switch (item.ConsumableName)
             {
-                return;
+                case "Unit":
+                    item.WaferCount = ToIntText(data._1UnitWaferCount);
+                    break;
+                case "Brush":
+                case "Pen":
+                    item.WaferCount = ToIntText(data._1BrushWaferCount);
+                    item.UsedTime = ToIntText(data._1BrushCumlativeTime);
+                    break;
             }
+        }
 
-            field = count;
-            RaisePropertyChanged(propertyName);
-            RaisePropertyChanged(nameof(EquipmentLifetimeCount));
+        private static bool TryGetPenCollectData(WorkstationType workstation, out KHSTPenCollectData.stPenCollectData data)
+        {
+            data = null!;
+            var chamberName = workstation == WorkstationType.PenA1 ? "PenA" : "PenB";
+            var pen = GlobalService.DataCenter?.listPen?
+                .FirstOrDefault(item => item.Name == chamberName);
+            return pen != null && pen.TryGetProcessDataSnapshot(out data);
         }
 
         private void OnSelectionChanged(string header)
@@ -176,9 +322,250 @@ namespace CMP.ViewModels.Tabs.WarnTab
                         .Select(group => new ConsumableGroup(group.Key) { Consumables = new ObservableCollection<ConsumableModel>(group) });
                     ConsumableGroups = new ObservableCollection<ConsumableGroup>(penGroups);
                     break;
+                case "G3Head":
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void InitG3Head()
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(g3HeadFile)!))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(g3HeadFile)!);
+            }
+
+            if (!File.Exists(g3HeadFile))
+            {
+                File.Create(g3HeadFile).Close();
+            }
+
+            var json = FileUtil.ReadFile(g3HeadFile);
+            var list = JsonConvert.DeserializeObject<ObservableCollection<G3HeadModel>>(json);
+            _g3HeadModels = list is { Count: > 0 } ? list : CreateDefaultG3HeadModels();
+            foreach (var item in _g3HeadModels)
+            {
+                item.PropertyChanged += OnG3HeadPropertyChanged;
+            }
+
+            RebuildG3HeadGroups();
+            SaveG3Head();
+        }
+
+        private static ObservableCollection<G3HeadModel> CreateDefaultG3HeadModels()
+        {
+            var list = new ObservableCollection<G3HeadModel>();
+            foreach (var workstation in new[]
+                     {
+                         WorkstationType.PolishA, WorkstationType.PolishB,
+                         WorkstationType.PolishC, WorkstationType.PolishD
+                     })
+            {
+                list.Add(new() { Workstation = workstation, ModuleName = "Pad Wear Amount (mm)", LightFaultAdress = 22136, ProcessInterlockAdress = 22138, PresentDAdress = 10022, Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Dresser Cutting Rate (um/h)", PresentWAdress = "35A2", Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Change Tolerance Min (um/h)", LightFaultAdress = 22150, ProcessInterlockAdress = 22152, Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Change Tolerance Max (um/h)", LightFaultAdress = 22148, ProcessInterlockAdress = 22146, Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Retainer Ring Height (at changed) (mm)", PresentWAdress = "35A4", Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Retainer Ring Wear Amount (mm)", PresentWAdress = "35A6", Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Retainer Ring Wear Limit (mm)", LightFaultAdress = 22164, ProcessInterlockAdress = 22166, Note = "0" });
+            }
+
+            return list;
+        }
+
+        private void RebuildG3HeadGroups()
+        {
+            var groups = _g3HeadModels
+                .GroupBy(x => x.Workstation)
+                .Select(group => new G3HeadGroup(group.Key)
+                {
+                    Parts = new ObservableCollection<G3HeadModel>(group)
+                });
+            G3HeadGroups = new ObservableCollection<G3HeadGroup>(groups);
+        }
+
+        private void OnG3HeadPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(G3HeadModel.Note))
+            {
+                SaveG3Head();
+            }
+        }
+
+        private void SaveG3Head()
+        {
+            FileUtil.WriteFile(g3HeadFile, JsonConvert.SerializeObject(_g3HeadModels, Formatting.Indented));
+        }
+
+        private void ReadG3HeadRow(G3HeadModel item)
+        {
+            var hSock = GetSock(item.Workstation);
+            if (hSock == 0)
+            {
+                return;
+            }
+
+            if (TryReadFloat(hSock, KHLDevType.DEV_ZF, item.LightFaultAdress, out var lightFault))
+            {
+                var text = FormatFloat(lightFault);
+                if (string.IsNullOrEmpty(item.LightFault) || item.LightFault == item.LastLightFaultFromPlc)
+                {
+                    item.LightFault = text;
+                }
+                item.LastLightFaultFromPlc = text;
+            }
+
+            if (TryReadFloat(hSock, KHLDevType.DEV_ZF, item.ProcessInterlockAdress, out var processInterlock))
+            {
+                var text = FormatFloat(processInterlock);
+                if (string.IsNullOrEmpty(item.ProcessInterlock) || item.ProcessInterlock == item.LastProcessInterlockFromPlc)
+                {
+                    item.ProcessInterlock = text;
+                }
+                item.LastProcessInterlockFromPlc = text;
+            }
+
+            if (TryReadFloat(hSock, KHLDevType.DEV_ZF, item.PresentAdress, out var presentZf))
+            {
+                item.Present = FormatFloat(presentZf);
+            }
+            else if (TryReadFloat(hSock, KHLDevType.DEV_D, item.PresentDAdress, out var presentD))
+            {
+                item.Present = FormatFloat(presentD);
+            }
+            else if (G3HeadModel.TryParseW(item.PresentWAdress, out var presentW)
+                     && TryReadFloat(hSock, KHLDevType.DEV_W, presentW, out var presentWValue))
+            {
+                item.Present = FormatFloat(presentWValue);
+            }
+        }
+
+        private static bool TryReadFloat(int hSock, KHLDevType device, uint address, out float value)
+        {
+            value = 0;
+            if (address == 0)
+            {
+                return false;
+            }
+
+            var buffer = new byte[8];
+            var error = KHL.KHLReadDevicesAsWords(hSock, device, address, 2, buffer);
+            if (error != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                return false;
+            }
+
+            KST.ByteToFloat(ref value, buffer);
+            return true;
+        }
+
+        private static string FormatFloat(float value) => value.ToString("0.####", CultureInfo.InvariantCulture);
+
+        private void RefreshPolishLifetimeCounts()
+        {
+            TryReadLifetimeCount(WorkstationType.PolishA, ref _polisherALifetimeCount, nameof(PolisherALifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishB, ref _polisherBLifetimeCount, nameof(PolisherBLifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishC, ref _polisherCLifetimeCount, nameof(PolisherCLifetimeCount));
+            TryReadLifetimeCount(WorkstationType.PolishD, ref _polisherDLifetimeCount, nameof(PolisherDLifetimeCount));
+        }
+
+        private void TryReadLifetimeCount(WorkstationType workstation, ref uint field, string propertyName)
+        {
+            var hSock = GetSock(workstation);
+            if (hSock == 0)
+            {
+                return;
+            }
+
+            var buffer = new byte[8];
+            var error = KHL.KHLReadDevicesAsWords(hSock, KHLDevType.DEV_ZF, LifetimeWaferCountAddress, 2, buffer);
+            if (error != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                return;
+            }
+
+            uint count = 0;
+            KST.ByteToUint(ref count, buffer);
+            if (field == count)
+            {
+                return;
+            }
+
+            field = count;
+            RaisePropertyChanged(propertyName);
+            RaisePropertyChanged(nameof(EquipmentLifetimeCount));
+        }
+
+        private void OnG3HeadUpdate(G3HeadModel item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            var hSock = GetSock(item.Workstation);
+            if (hSock == 0)
+            {
+                Growl.Warning($"{item.Workstation}-{item.ModuleName} write Failure.");
+                return;
+            }
+
+            if (item.IsLightFaultEditable)
+            {
+                if (!TryParseFloat(item.LightFault, out var lightFault))
+                {
+                    Growl.Warning("Light Fault is not valid.");
+                    return;
+                }
+
+                if (!TryWriteFloat(hSock, KHLDevType.DEV_ZF, item.LightFaultAdress, lightFault))
+                {
+                    Logger.Info($"{item.Workstation}-{item.ModuleName} LightFault write Failure.");
+                    Growl.Warning($"{item.Workstation}-{item.ModuleName} write Failure.");
+                    return;
+                }
+
+                item.LightFault = FormatFloat(lightFault);
+                item.LastLightFaultFromPlc = item.LightFault;
+            }
+
+            if (item.IsProcessInterlockEditable)
+            {
+                if (!TryParseFloat(item.ProcessInterlock, out var processInterlock))
+                {
+                    Growl.Warning("Process I/L is not valid.");
+                    return;
+                }
+
+                if (!TryWriteFloat(hSock, KHLDevType.DEV_ZF, item.ProcessInterlockAdress, processInterlock))
+                {
+                    Logger.Info($"{item.Workstation}-{item.ModuleName} ProcessInterlock write Failure.");
+                    Growl.Warning($"{item.Workstation}-{item.ModuleName} write Failure.");
+                    return;
+                }
+
+                item.ProcessInterlock = FormatFloat(processInterlock);
+                item.LastProcessInterlockFromPlc = item.ProcessInterlock;
+            }
+
+            item.UpdateTime = DateTime.Now.ToString(_dateTimeFormate);
+            SaveG3Head();
+        }
+
+        private static bool TryParseFloat(string? text, out float value)
+        {
+            var parsed = float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value)
+                || float.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value);
+            return parsed && value >= 0;
+        }
+
+        private static bool TryWriteFloat(int hSock, KHLDevType device, uint address, float value)
+        {
+            var buffer = new byte[8];
+            KST.FloatToByte(ref buffer, value);
+            var error = KHL.KHLWriteDevicesAsWords(hSock, device, address, 2, buffer);
+            return error == (int)KHLUserError.KHL_ERR_NONE;
         }
 
         private void OnUpdate(ConsumableModel model)
@@ -187,25 +574,28 @@ namespace CMP.ViewModels.Tabs.WarnTab
             var SpecifiedConsumable = _consumableModels.Where(x => x.Workstation == model.Workstation && x.ConsumableName == model.ConsumableName).FirstOrDefault();
             if (SpecifiedConsumable == null) return;
 
-            uint waferCountSetValue = uint.TryParse(SpecifiedConsumable.WaferCountSet, out var waferCount) ? waferCount : 0;
-            if (SpecifiedConsumable.IsWaferCountSetEditable && waferCountSetValue <= 0)
+            int waferCountSetValue = 0;
+            int usedTimeSetValue = 0;
+            if (SpecifiedConsumable.IsWaferCountSetEditable
+                && !int.TryParse(SpecifiedConsumable.WaferCountSet, out waferCountSetValue))
             {
                 Growl.Warning("WaferCountSet is not valid.");
                 return;
             }
-            if (SpecifiedConsumable.IsUsedTimeSetEditable && string.IsNullOrEmpty(SpecifiedConsumable.UsedTimeSet))
+
+            if (SpecifiedConsumable.IsUsedTimeSetEditable
+                && !int.TryParse(SpecifiedConsumable.UsedTimeSet, out usedTimeSetValue))
             {
                 Growl.Warning("UsedTimeSet is not valid.");
                 return;
             }
-            byte[] usedTimeSetValue = Encoding.UTF8.GetBytes(SpecifiedConsumable.UsedTimeSet!);
 
-            //Write To PLC           
+            //Write To PLC：ZF 有符号双字
             int hSock = GetSock(SpecifiedConsumable);
             byte[] writeByte1 = new byte[256];
-            byte[] writeByte2 = new byte[1048];
-            KST.UintToByte(ref writeByte1, waferCountSetValue);
-            KST.StringToByte(ref writeByte2, usedTimeSetValue);
+            byte[] writeByte2 = new byte[256];
+            KST.IntToByte(ref writeByte1, waferCountSetValue);
+            KST.IntToByte(ref writeByte2, usedTimeSetValue);
             int errWaferWrite = SpecifiedConsumable.IsWaferCountSetEditable ? 
                                 KHL.KHLWriteDevicesAsWords(hSock, KHLDevType.DEV_ZF, SpecifiedConsumable.WaferCountAdress, 2, writeByte1) : (int)KHLUserError.KHL_ERR_NONE;
             int errUsedTime = SpecifiedConsumable.IsUsedTimeSetEditable ? 
@@ -279,46 +669,57 @@ namespace CMP.ViewModels.Tabs.WarnTab
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pad", WaferCountAdress = 392130, UsedTimeAdress = 392128 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Airbag", WaferCountAdress = 392106, UsedTimeAdress = 392104 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Disk_Insitu", UsedTimeAdress = 392192 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Disk_Exsitu", UsedTimeAdress = 392116 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Disk_Exsitu", UsedTimeAdress = 392196 });
                     }
 
                     if (value == WorkstationType.RollerA1 || value == WorkstationType.RollerB1)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392050 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392054, UsedTimeAdress = 392052 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392058, UsedTimeAdress = 392056 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392062, UsedTimeAdress = 392060 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392052, UsedTimeAdress = 392054 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392056, UsedTimeAdress = 392058 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392060, UsedTimeAdress = 392062 });
                     }
 
                     if (value == WorkstationType.RollerA2 || value == WorkstationType.RollerB2)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392150 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392154, UsedTimeAdress = 392152 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392158, UsedTimeAdress = 392156 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392162, UsedTimeAdress = 392160 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392152, UsedTimeAdress = 392154 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392156, UsedTimeAdress = 392158 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392160, UsedTimeAdress = 392162 });
                     }
 
                     if (value == WorkstationType.RollerA3 || value == WorkstationType.RollerB3)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392250 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392254, UsedTimeAdress = 392252 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392258, UsedTimeAdress = 392256 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392262, UsedTimeAdress = 392260 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392252, UsedTimeAdress = 392254 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392256, UsedTimeAdress = 392258 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392260, UsedTimeAdress = 392262 });
                     }
 
                     if (value == WorkstationType.PenA1 || value == WorkstationType.PenB1)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392050 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pen", WaferCountAdress = 392054, UsedTimeAdress = 392052 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Brush", WaferCountAdress = 392054, UsedTimeAdress = 392052 });
                     } 
                 }                                
+            }
+
+            if (AlignPenConsumables())
+            {
+                FileUtil.WriteFile(consumableFile, JsonConvert.SerializeObject(_consumableModels, Formatting.Indented));
             }
 
             foreach (var model in _consumableModels)
             {
                 _lastWritten[ConsumableKey(model)] = (model.WaferCountSet, model.UsedTimeSet);
-                model.UsedTimeSet = DateTime.Now.ToString(_shortTimeFormate);
-                model.WaferCountSet = "0";
+                if (!int.TryParse(model.UsedTimeSet, out _))
+                {
+                    model.UsedTimeSet = "0";
+                }
+                if (!int.TryParse(model.WaferCountSet, out _))
+                {
+                    model.WaferCountSet = "0";
+                }
             }
 
             foreach (var consumable in _consumableModels)
@@ -365,6 +766,43 @@ namespace CMP.ViewModels.Tabs.WarnTab
         private static string ConsumableKey(ConsumableModel model)
         {
             return $"{model.Workstation}/{model.ConsumableName}";
+        }
+
+        private bool AlignPenConsumables()
+        {
+            var changed = false;
+            foreach (var item in _consumableModels)
+            {
+                if (!IsPenWorkstation(item.Workstation))
+                {
+                    continue;
+                }
+
+                if (item.ConsumableName == "Pen")
+                {
+                    item.ConsumableName = "Brush";
+                    changed = true;
+                }
+
+                if (item.ConsumableName == "Unit")
+                {
+                    if (item.WaferCountAdress != 392050 || item.UsedTimeAdress != 0)
+                    {
+                        item.WaferCountAdress = 392050;
+                        item.UsedTimeAdress = 0;
+                        changed = true;
+                    }
+                }
+                else if (item.ConsumableName == "Brush"
+                    && (item.WaferCountAdress != 392054 || item.UsedTimeAdress != 392052))
+                {
+                    item.WaferCountAdress = 392054;
+                    item.UsedTimeAdress = 392052;
+                    changed = true;
+                }
+            }
+
+            return changed;
         }
 
         private static int GetSock(ConsumableModel model) => GetSock(model.Workstation);

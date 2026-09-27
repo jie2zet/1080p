@@ -21,7 +21,6 @@
     <UserControl.Resources>
         <converter:NegativeIntToBoolConverter x:Key="NegativeIntToBoolConverter"/>
         <converter:StringNullOrEmptyConverter x:Key="StringNullOrEmptyConverter"/>
-        <converter:StringToDateTimeConverter x:Key="StringToDateTimeConverter"/>
         <Style x:Key="LocalBaseTextBlockStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -114,19 +113,24 @@
                                         <TextBox Text="{Binding WaferCountSet, UpdateSourceTrigger=PropertyChanged}"
                                                  TextAlignment="Center" VerticalAlignment="Center"
                                                  BorderThickness="0" Background="Transparent"
-                                                 IsEnabled="{Binding IsWaferCountSetEditable}"/>
+                                                 IsEnabled="{Binding IsWaferCountSetEditable}"
+                                                 InputMethod.IsInputMethodEnabled="False"
+                                                 PreviewTextInput="OnPositiveIntPreviewTextInput"
+                                                 PreviewKeyDown="OnNumericPreviewKeyDown"
+                                                 DataObject.Pasting="OnPositiveIntPasting"/>
                                     </Border>
-                                    <!-- 设定时间（可编辑，条件满足时禁用） -->
+                                    <!-- 设定时间（秒，整型） -->
                                     <Border Grid.Column="4" Margin="2,0"
                                             CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1"
                                             Background="Transparent">
-                                        <hc:TimePicker SelectedTime="{Binding UsedTimeSet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,
-                                                            Converter={StaticResource StringToDateTimeConverter}}"
-                                                           Text="{Binding UsedTimeSet, Mode=OneWay}"
-                                                           HorizontalContentAlignment="Center"
-                                                 VerticalAlignment="Center"  TimeFormat="HH:mm:ss"
+                                        <TextBox Text="{Binding UsedTimeSet, UpdateSourceTrigger=PropertyChanged}"
+                                                 TextAlignment="Center" VerticalAlignment="Center"
                                                  BorderThickness="0" Background="Transparent"
-                                                 IsEnabled="{Binding IsUsedTimeSetEditable}"/>
+                                                 IsEnabled="{Binding IsUsedTimeSetEditable}"
+                                                 InputMethod.IsInputMethodEnabled="False"
+                                                 PreviewTextInput="OnPositiveIntPreviewTextInput"
+                                                 PreviewKeyDown="OnNumericPreviewKeyDown"
+                                                 DataObject.Pasting="OnPositiveIntPasting"/>
                                     </Border>
 
                                     <!-- 更新时间（只读） -->
@@ -148,13 +152,169 @@
                 </ItemsControl>
             </StackPanel>
         </DataTemplate>
+
+        <DataTemplate x:Key="G3HeadGroupTemplate">
+            <StackPanel Margin="0,5">
+                <Border CornerRadius="10" Background="{DynamicResource PrimaryBrush}">
+                    <Grid Height="32">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.6*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="1.2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{lex:Loc ModuleParts}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="1" Text="{lex:Loc ProcessedWaferLightFault}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="2" Text="{lex:Loc ProcessedWaferProcessIL}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="3" Text="{lex:Loc ProcessedWaferPresent}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="4" Text="{lex:Loc Note}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="5" Text="{lex:Loc UpdateTime}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Grid.Column="6" Text="{lex:Loc Update}" Foreground="White"
+                                   TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                    </Grid>
+                </Border>
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#D0D8E8" BorderThickness="1"
+                                    Background="White" Margin="0,2" Height="30" Padding="6,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.6*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="0.6*"/>
+                                        <ColumnDefinition Width="1.2*"/>
+                                        <ColumnDefinition Width="0.5*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                        <TextBlock Text="{Binding ModuleName}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                    </Border>
+                                    <Border Grid.Column="1" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="Transparent">
+                                        <TextBox Text="{Binding LightFault, UpdateSourceTrigger=PropertyChanged}"
+                                                 TextAlignment="Center" VerticalAlignment="Center"
+                                                 BorderThickness="0" Background="Transparent"
+                                                 IsEnabled="{Binding IsLightFaultEditable}"
+                                                 InputMethod.IsInputMethodEnabled="False"
+                                                 PreviewTextInput="OnNumericPreviewTextInput"
+                                                 PreviewKeyDown="OnNumericPreviewKeyDown"
+                                                 DataObject.Pasting="OnNumericPasting"/>
+                                    </Border>
+                                    <Border Grid.Column="2" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="Transparent">
+                                        <TextBox Text="{Binding ProcessInterlock, UpdateSourceTrigger=PropertyChanged}"
+                                                 TextAlignment="Center" VerticalAlignment="Center"
+                                                 BorderThickness="0" Background="Transparent"
+                                                 IsEnabled="{Binding IsProcessInterlockEditable}"
+                                                 InputMethod.IsInputMethodEnabled="False"
+                                                 PreviewTextInput="OnNumericPreviewTextInput"
+                                                 PreviewKeyDown="OnNumericPreviewKeyDown"
+                                                 DataObject.Pasting="OnNumericPasting"/>
+                                    </Border>
+                                    <Border Grid.Column="3" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="#F8F9FA">
+                                        <TextBlock Text="{Binding Present}" TextAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                    </Border>
+                                    <Border Grid.Column="4" Margin="2,0" CornerRadius="8" BorderBrush="#C0C8D8" BorderThickness="1" Background="Transparent">
+                                        <TextBox Text="{Binding Note, UpdateSourceTrigger=LostFocus}"
+                                                 TextAlignment="Center" VerticalAlignment="Center"
+                                                 BorderThickness="0" Background="Transparent"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="5" Text="{Binding UpdateTime}" Foreground="Black"
+                                               TextAlignment="Center" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="6" Content="{lex:Loc Update}"
+                                            Command="{Binding DataContext.G3HeadUpdateCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Height="26" MinWidth="50" Margin="2"
+                                            Background="{StaticResource PrimaryBrush}"
+                                            Foreground="White"
+                                            IsEnabled="{Binding CanUpdate}"
+                                            hc:BorderElement.CornerRadius="10"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
         
     </UserControl.Resources>
     
     <Grid>
-        <TabControl x:Name="tabControl" MaxHeight="770" VerticalAlignment="Top">
-            <TabItem Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Polish}">
-                <ScrollViewer VerticalScrollBarVisibility="Visible" CanContentScroll="True">
+        <TabControl x:Name="tabControl">
+            <TabItem Tag="Polish" Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Polish}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding ConsumableGroups}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Margin="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
+                                               Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
+                                               Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
+                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Tag="Roller" Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Roller}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding ConsumableGroups}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Margin="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
+                           Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
+                           Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
+                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Tag="Pen" Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Pen}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding ConsumableGroups}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Margin="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
+                           Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
+                           Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
+                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Tag="G3Head" Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc G3Head}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel Orientation="Vertical" Margin="5">
                         <Border CornerRadius="10" Background="{DynamicResource PrimaryBrush}" Margin="0,0,0,8">
                             <Grid Height="32">
@@ -203,7 +363,7 @@
                                 </Border>
                             </Grid>
                         </Border>
-                        <ItemsControl ItemsSource="{Binding ConsumableGroups}" ScrollViewer.CanContentScroll="True">
+                        <ItemsControl ItemsSource="{Binding G3HeadGroups}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Vertical"/>
@@ -212,10 +372,10 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
-                                        <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
-                                               Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
-                                               Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
-                                        <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
+                                        <TextBlock Text="{Binding Workstation}" FontWeight="Bold"
+                                                   Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
+                                                   Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
+                                        <ContentPresenter Content="{Binding Parts}" ContentTemplate="{StaticResource G3HeadGroupTemplate}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -223,53 +383,11 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Roller}">
-                <ScrollViewer VerticalScrollBarVisibility="Visible" CanContentScroll="True" >
-                    <ItemsControl ItemsSource="{Binding ConsumableGroups}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Margin="5"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
-                           Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
-                           Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
-                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Style="{StaticResource SecondaryTabItemStyle}" Header="{lex:Loc Pen}">
-                <ScrollViewer VerticalScrollBarVisibility="Visible" CanContentScroll="True">
-                    <ItemsControl ItemsSource="{Binding ConsumableGroups}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Margin="5"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Workstation}" FontWeight="Bold" 
-                           Foreground="White" TextAlignment="Center" HorizontalAlignment="Stretch"
-                           Style="{StaticResource TextBlockBaseStyle}" Background="#00A2E8"/>
-                                    <ContentPresenter Content="{Binding Consumables}" ContentTemplate="{StaticResource ConsumableGroupTemplate}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </TabItem>
             <behavior:Interaction.Triggers>
                 <behavior:EventTrigger EventName="SelectionChanged">
                     <behavior:InvokeCommandAction Command="{Binding SelectionChangedCommand}"
                                                   PassEventArgsToCommand="True"
-                                                  CommandParameter="{Binding ElementName=tabControl,Path=SelectedItem.Header}">
+                                                  CommandParameter="{Binding ElementName=tabControl,Path=SelectedItem.Tag}">
                     </behavior:InvokeCommandAction>
                 </behavior:EventTrigger>
             </behavior:Interaction.Triggers>
