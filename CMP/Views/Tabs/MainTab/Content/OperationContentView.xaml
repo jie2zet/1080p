@@ -20,6 +20,48 @@
              d:DesignHeight="500" d:DesignWidth="800">
 
     <TabControl ItemContainerStyle="{StaticResource SecondaryTabItemStyle}"          Style="{StaticResource SecondaryTabControlStyle}">
+        <!--<TabItem Header="{lex:Loc Main}">
+            <operationTab:MainContentView />
+        </TabItem>-->
+        <TabItem Header="{lex:Loc Polish}" Style="{StaticResource SecondaryTabItemStyle}" >
+            <Border Padding="10" >
+                <TabControl ItemsSource="{Binding PolishUnitTabItems}" Style="{StaticResource SecondaryTabControlStyle}"
+                            SelectedIndex="{Binding SelectedIndex}"
+                            ItemContainerStyle="{StaticResource SecondaryTabItemStyle}">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TabTitle}" />
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                </TabControl>
+            </Border>
+        </TabItem>
+
+        <TabItem Header="{lex:Loc Roller}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="RollerRegion"/>
+        </TabItem>
+
+        <TabItem Header="{lex:Loc Pen}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="PenCleanRegion"/>
+        </TabItem>
+
+        <TabItem Header="{lex:Loc Dry}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="DryRegion"/>
+        </TabItem>
+
+        <TabItem Header="{lex:Loc LoadPortUnit}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="LoadPortRegion"/>
+        </TabItem>
+        
+        <!--load port test-->
+        <TabItem Header="{lex:Loc SerialPort}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="SerialPortRegion"/>
+        </TabItem>
+        
+        <!-- 机器人控制 -->
+        <TabItem Header="{lex:Loc RobotControl}" Style="{StaticResource SecondaryTabItemStyle}">
+            <ContentControl prism:RegionManager.RegionName="RobotControlRegion"/>
+        </TabItem>
         <TabItem Header="IO" Style="{StaticResource SecondaryTabItemStyle}">
             <TabControl ItemsSource="{Binding IoTabs}" SelectedItem="{Binding SelectedIoTab}"
                         Style="{StaticResource SecondaryTabControlStyle}"
@@ -81,48 +123,6 @@
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </TabControl>
-        </TabItem>
-        <!--<TabItem Header="{lex:Loc Main}">
-            <operationTab:MainContentView />
-        </TabItem>-->
-        <TabItem Header="{lex:Loc Polish}" Style="{StaticResource SecondaryTabItemStyle}" >
-            <Border Padding="10" >
-                <TabControl ItemsSource="{Binding PolishUnitTabItems}" Style="{StaticResource SecondaryTabControlStyle}"
-                            SelectedIndex="{Binding SelectedIndex}"
-                            ItemContainerStyle="{StaticResource SecondaryTabItemStyle}">
-                    <TabControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding TabTitle}" />
-                        </DataTemplate>
-                    </TabControl.ItemTemplate>
-                </TabControl>
-            </Border>
-        </TabItem>
-
-        <TabItem Header="{lex:Loc Roller}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="RollerRegion"/>
-        </TabItem>
-
-        <TabItem Header="{lex:Loc Pen}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="PenCleanRegion"/>
-        </TabItem>
-
-        <TabItem Header="{lex:Loc Dry}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="DryRegion"/>
-        </TabItem>
-
-        <TabItem Header="{lex:Loc LoadPortUnit}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="LoadPortRegion"/>
-        </TabItem>
-        
-        <!--load port test-->
-        <TabItem Header="{lex:Loc SerialPort}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="SerialPortRegion"/>
-        </TabItem>
-        
-        <!-- 机器人控制 -->
-        <TabItem Header="{lex:Loc RobotControl}" Style="{StaticResource SecondaryTabItemStyle}">
-            <ContentControl prism:RegionManager.RegionName="RobotControlRegion"/>
         </TabItem>
 
         <!-- 安全联锁 -->
