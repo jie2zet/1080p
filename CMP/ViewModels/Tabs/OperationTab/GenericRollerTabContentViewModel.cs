@@ -55,7 +55,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     private string _recipeBasePath = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\";
 
     private Roller? rollerData;
-    private string _rollerKeyPrefix; // "RollerA1", "RollerA2", "RollerA3", "RollerB1", "RollerB2", "RollerB3"
+    private int _rollerIndex;
 
     public new string? TabTitle
     {
@@ -217,16 +217,12 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             _ => null
         };
 
-        // 根据id确定键名前缀
-        _rollerKeyPrefix = id switch
+        _rollerIndex = id switch
         {
-            0 => "_1",
-            1 => "_2",
-            2 => "_3",
-            3 => "_1",
-            4 => "_2",
-            5 => "_3",
-            _ => "_1"
+            0 or 3 => 1,
+            1 or 4 => 2,
+            2 or 5 => 3,
+            _ => 1
         };
         // 订阅Recipe保存事件
         _eventAggregator.GetEvent<RecipeSavedEvent>().Subscribe(OnRecipeSaved, ThreadOption.UIThread);
@@ -1132,68 +1128,67 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     }
 
     /// <summary>
-    /// 获取类型的默认失败值
-    /// </summary>
-    private static T GetDefaultFailureValue<T>()
-    {
-        return typeof(T) switch
-        {
-            { } t when t == typeof(double) => (T)(object)double.NaN,
-            { } t when t == typeof(float) => (T)(object)float.NaN,
-            { } t when t == typeof(int) => (T)(object)(-1),
-            { } t when t == typeof(short) => (T)(object)((short)-1),
-            { } t when t == typeof(bool) => (T)(object)false,
-            { } t when t == typeof(string) => (T)(object)"",
-            _ => default!
-        };
-    }
-
-    /// <summary>
-    /// 获取 SV 的值并转换为指定类型，如果获取失败返回默认值
-    /// </summary>
-    /// <typeparam name="T">目标类型</typeparam>
-    /// <param name="key">SV 的键</param>
-    /// <param name="defaultValue">获取失败时的默认值，不指定则自动匹配类型默认值</param>
-    /// <returns>转换后的值或默认值</returns>
-    private T GetSvValue<T>(string key, T? defaultValue = default)
-    {
-        try
-        {
-            var sv = rollerData.GetSv(key);
-            if (sv?.Value == null)
-                return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                    ? GetDefaultFailureValue<T>()
-                    : defaultValue!;
-
-            return (T)Convert.ChangeType(sv.Value, typeof(T));
-        }
-        catch
-        {
-            return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                ? GetDefaultFailureValue<T>()
-                : defaultValue!;
-        }
-    }
-
-    /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
     private void RefreshHmi()
     {
-        KvsStructRollerCollectData.stRollerCollectData data;
-        // 刷新4个电机的实际速度值
-        RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarRotationMotorSpeedAct).Replace("_1", ""));
-        RollerViewPoco.WfRightPillarRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFRightPillarRotationMotorSpeedAct).Replace("_1", ""));
-        
-        RollerViewPoco.UpperRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerRotationSpeedAct).Replace("_1", ""));
-        RollerViewPoco.LowerRollerRotateMotor.ActVelocity = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerRotationSpeedAct).Replace("_1", ""));
-        RollerViewPoco.Flush.OpenDelayAct = GetSvValue<float>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1DIWAllOpenTimeAct).Replace("_1", ""));
+        if (rollerData == null || !rollerData.TryGetProcessDataSnapshot(out var snapshot))
+        {
+            return;
+        }
 
+        (float WfLeftPillarSpeed,
+            float WfRightPillarSpeed,
+            float UpperRollerSpeed,
+            float LowerRollerSpeed,
+            float DiwOpenTime,
+            bool WfLeftPillarServoOn,
+            bool WfRightPillarServoOn,
+            bool UpperRollerServoOn,
+            bool LowerRollerServoOn) stationData = _rollerIndex switch
+        {
+            1 => (
+                snapshot._1WFLeftPillarRotationMotorSpeedAct,
+                snapshot._1WFRightPillarRotationMotorSpeedAct,
+                snapshot._1UpperRollerRotationSpeedAct,
+                snapshot._1LowerRollerRotationSpeedAct,
+                snapshot._1DIWAllOpenTimeAct,
+                snapshot._1WFLeftPillarMotorServoOn,
+                snapshot._1WFRightPillarMotorServoOn,
+                snapshot._1UpperRollerMotorServoOn,
+                snapshot._1LowerRollerMotorServoOn),
+            2 => (
+                snapshot._2WFLeftPillarRotationMotorSpeedAct,
+                snapshot._2WFRightPillarRotationMotorSpeedAct,
+                snapshot._2UpperRollerRotationSpeedAct,
+                snapshot._2LowerRollerRotationSpeedAct,
+                snapshot._2DIWAllOpenTimeAct,
+                snapshot._2WFLeftPillarMotorServoOn,
+                snapshot._2WFRightPillarMotorServoOn,
+                snapshot._2UpperRollerMotorServoOn,
+                snapshot._2LowerRollerMotorServoOn),
+            _ => (
+                snapshot._3WFLeftPillarRotationMotorSpeedAct,
+                snapshot._3WFRightPillarRotationMotorSpeedAct,
+                snapshot._3UpperRollerRotationSpeedAct,
+                snapshot._3LowerRollerRotationSpeedAct,
+                snapshot._3DIWAllOpenTimeAct,
+                snapshot._3WFLeftPillarMotorServoOn,
+                snapshot._3WFRightPillarMotorServoOn,
+                snapshot._3UpperRollerMotorServoOn,
+                snapshot._3LowerRollerMotorServoOn)
+        };
 
-        RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFLeftPillarMotorServoOn).Replace("_1", ""));
-        RollerViewPoco.WfRightPillarRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1WFRightPillarMotorServoOn).Replace("_1", ""));
-        RollerViewPoco.UpperRollerRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1UpperRollerMotorServoOn).Replace("_1", ""));
-        RollerViewPoco.LowerRollerRotateMotor.IsServoOn = GetSvValue<bool>(rollerData.rollerName + _rollerKeyPrefix + nameof(data._1LowerRollerMotorServoOn).Replace("_1", ""));
+        RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity = stationData.WfLeftPillarSpeed;
+        RollerViewPoco.WfRightPillarRotateMotor.ActVelocity = stationData.WfRightPillarSpeed;
+        RollerViewPoco.UpperRollerRotateMotor.ActVelocity = stationData.UpperRollerSpeed;
+        RollerViewPoco.LowerRollerRotateMotor.ActVelocity = stationData.LowerRollerSpeed;
+        RollerViewPoco.Flush.OpenDelayAct = stationData.DiwOpenTime;
+
+        RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = stationData.WfLeftPillarServoOn;
+        RollerViewPoco.WfRightPillarRotateMotor.IsServoOn = stationData.WfRightPillarServoOn;
+        RollerViewPoco.UpperRollerRotateMotor.IsServoOn = stationData.UpperRollerServoOn;
+        RollerViewPoco.LowerRollerRotateMotor.IsServoOn = stationData.LowerRollerServoOn;
 
         RaisePropertyChanged(nameof(WfLeftPillarRotateMotorServoText));
         RaisePropertyChanged(nameof(WfRightPillarRotateMotorServoText));
