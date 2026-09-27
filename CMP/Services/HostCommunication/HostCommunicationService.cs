@@ -3662,10 +3662,13 @@ namespace CMP.Services.HostCommunication
                 _gem.SetRemote();
                 _isOnline = true;
             }
+
             if (_isOnline)
             {
-                SetSVIDValue("PolishAProcessStepAct", 88);
-            }
+                int index = 0;
+
+                if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
+                {
 
                     FieldInfo[] fields = typeof(stPolishCollectData).GetFields(); //获取所有的公有字段
 
@@ -3675,7 +3678,7 @@ namespace CMP.Services.HostCommunication
                         switch (index)
                         {
                             case 0:
-                                name = "PolishA"+ name;
+                                name = "PolishA" + name;
                                 break;
                             case 1:
                                 name = "PolishB" + name;
@@ -3696,7 +3699,6 @@ namespace CMP.Services.HostCommunication
 
                 }
             }
-
 
             return true;
 
