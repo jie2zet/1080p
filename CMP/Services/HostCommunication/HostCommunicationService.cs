@@ -1,5 +1,6 @@
 ﻿using CMP.Extensions;
 using CMP.Models.HostCommunication;
+using CMP.Models.Resource;
 using CMP.Services.LoadPort;
 using Dm.util;
 using FabConnect;
@@ -116,6 +117,8 @@ namespace CMP.Services.HostCommunication
         private bool _isOnline = false;
 
         private LoadPortStatus status = new LoadPortStatus();
+
+        Polish polishData;
         public HostCommunicationService(IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
@@ -3483,6 +3486,24 @@ namespace CMP.Services.HostCommunication
                 _isOnline = true;
             }
 
+            if (_gem.CommunicationState == CommunicationState.EnabledCommunicating && _isOnline == false)
+            {
+                _gem.SetOnline();
+                _gem.SetRemote();
+                _isOnline = true;
+            }
+
+            if (_isOnline)
+            {
+                SetSVIDValue("PolishAProcessStepAct", 88);
+            }
+
+
+
+            polishData = GlobalService.DataCenter.listPolish[0];
+          
+
+
             return true;
 
 
@@ -3541,6 +3562,30 @@ namespace CMP.Services.HostCommunication
 
 
             //return true;
+        }
+
+        private bool SetSVIDValue(string localName, object value)
+        {
+            if (value == null || string.IsNullOrEmpty(localName)) return false;
+
+            if (_gem.EquipmentModel == null || !_gem.EquipmentModel.StatusVariables.SVIDCollection.IsExistLogicalName(localName))
+                return false;
+
+            foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
+            {
+                if (sv != null && !_systemBuildInVariables.Contains(sv.logicalName)) //todo：初始化注册的可以，可以修改值
+                {
+
+                    if (localName == sv.logicalName)
+                    {
+                        _gem.SetAttribute(localName, AttributeType.SV, Convert.ToString(value));
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
 
