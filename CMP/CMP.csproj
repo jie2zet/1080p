@@ -175,6 +175,9 @@
         <Resource Include="Assets\Images\托架.png">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Resource>
+        <Resource Include="Assets\Images\TransBuffer.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
     </ItemGroup>
 
     <ItemGroup>

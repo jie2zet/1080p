@@ -1917,4 +1917,37 @@
   <data name="PasswordRequiredOnAdd" xml:space="preserve">
     <value>Password is required when adding a user.</value>
   </data>
+  <data name="G3Head" xml:space="preserve">
+    <value>G3 Head</value>
+  </data>
+  <data name="Equipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="PolisherA" xml:space="preserve">
+    <value>PolisherA</value>
+  </data>
+  <data name="PolisherB" xml:space="preserve">
+    <value>PolisherB</value>
+  </data>
+  <data name="PolisherC" xml:space="preserve">
+    <value>PolisherC</value>
+  </data>
+  <data name="PolisherD" xml:space="preserve">
+    <value>PolisherD</value>
+  </data>
+  <data name="ModuleParts" xml:space="preserve">
+    <value>Module/Parts</value>
+  </data>
+  <data name="ProcessedWaferLightFault" xml:space="preserve">
+    <value>Processed Wafer Light Fault</value>
+  </data>
+  <data name="ProcessedWaferProcessIL" xml:space="preserve">
+    <value>Processed Wafer Process I/L</value>
+  </data>
+  <data name="ProcessedWaferPresent" xml:space="preserve">
+    <value>Processed Wafer Present</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Notes</value>
+  </data>
 </root>
