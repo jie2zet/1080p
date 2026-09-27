@@ -214,11 +214,28 @@ namespace CMP.Models.Resource
         private bool _hasMotorServoStatus;
         KHST.stIOData _stIOData;
         private KHSTIO.stPolishIOData _ioData;
+        private bool _hasIoData;
 
         /// <summary>最近一次成功读取的 Polish IO 结构体。</summary>
         public KHSTIO.stPolishIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
+        }
+
+        /// <summary>获取最近一次成功读取的 Polish IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTIO.stPolishIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
         }
 
         public Polish(string name, KVLink link) : base(name, link)
@@ -316,6 +333,7 @@ namespace CMP.Models.Resource
                     lock (IoDataSync)
                     {
                         _ioData = _stPolishIOData;
+                        _hasIoData = true;
                     }
                     CompiledFieldAccessor<stPolishIOData>.ProcessAllFields(_stPolishIOData, (name, value) =>
                     {
@@ -323,6 +341,22 @@ namespace CMP.Models.Resource
                     });
                 }
             }
+        }
+
+        internal void ApplyIoData(KHSTIO.stPolishIOData ioData)
+        {
+            ArgumentNullException.ThrowIfNull(ioData);
+
+            lock (IoDataSync)
+            {
+                _ioData = ioData;
+                _hasIoData = true;
+            }
+
+            CompiledFieldAccessor<stPolishIOData>.ProcessAllFields(ioData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -339,6 +373,16 @@ namespace CMP.Models.Resource
 
             value = false;
             return false;
+        }
+
+        private static KHSTIO.stPolishIOData CloneIoData(KHSTIO.stPolishIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTIO.stPolishIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTIO.stPolishIOData();
+            KHSTIO.ByteTo_stPolishIOData(ref clone, buffer);
+            return clone;
         }
 
         private void CollectMotorServoStatus()
@@ -417,6 +461,7 @@ namespace CMP.Models.Resource
         private KHSTRollerCollectData.stRollerCollectData? _stRollerCollectData;
         private readonly KHSTRollerIOData.stRollerIOData[] _ioData =
             [new(), new(), new()];
+        private readonly bool[] _hasIoData = new bool[3];
         public string rollerName = string.Empty;
 
         public Roller(string name, KVLink link) : base(name, link)
@@ -458,6 +503,22 @@ namespace CMP.Models.Resource
         public KHSTRollerIOData.stRollerIOData GetIoData(int station)
         {
             lock (IoDataSync) return _ioData[station - 1];
+        }
+
+        /// <summary>获取指定 Roller 工位最近一次成功读取的 IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(int station, out KHSTRollerIOData.stRollerIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (station is < 1 or > 3 || !_hasIoData[station - 1])
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData[station - 1]);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -575,6 +636,7 @@ namespace CMP.Models.Resource
             lock (IoDataSync)
             {
                 _ioData[rollerIndex - 1] = ioData;
+                _hasIoData[rollerIndex - 1] = true;
             }
             CompiledFieldAccessor<KHSTRollerIOData.stRollerIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
@@ -585,6 +647,17 @@ namespace CMP.Models.Resource
 
                 SetSv(BuildRuntimeKey(indexPrefix, fieldName), value);
             });
+        }
+
+        private static KHSTRollerIOData.stRollerIOData CloneIoData(
+            KHSTRollerIOData.stRollerIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTRollerIOData.stRollerIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTRollerIOData.stRollerIOData();
+            KHSTRollerIOData.ByteTo_stRollerIOData(ref clone, buffer);
+            return clone;
         }
 
         private void CollectMotorServoStatus()
@@ -682,6 +755,7 @@ namespace CMP.Models.Resource
         private readonly bool[] _hasMotorServoStatus = new bool[2];
         private KHSTPenCollectData.stPenCollectData? _stPenCollectData;
         private KHSTPenIOData.stPenIOData _ioData = new();
+        private bool _hasIoData;
         public string penName = string.Empty;
 
         public Pen(string name, KVLink link) : base(name, link)
@@ -723,6 +797,22 @@ namespace CMP.Models.Resource
         public KHSTPenIOData.stPenIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
+        }
+
+        /// <summary>获取最近一次成功读取的 Pen IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTPenIOData.stPenIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -827,6 +917,7 @@ namespace CMP.Models.Resource
             lock (IoDataSync)
             {
                 _ioData = ioData;
+                _hasIoData = true;
             }
             CompiledFieldAccessor<KHSTPenIOData.stPenIOData>.ProcessAllFields(ioData, (fieldName, value) =>
             {
@@ -837,6 +928,16 @@ namespace CMP.Models.Resource
 
                 SetSv(BuildRuntimeKey(indexPrefix, fieldName), value);
             });
+        }
+
+        private static KHSTPenIOData.stPenIOData CloneIoData(KHSTPenIOData.stPenIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTPenIOData.stPenIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTPenIOData.stPenIOData();
+            KHSTPenIOData.ByteTo_stPenIOData(ref clone, buffer);
+            return clone;
         }
 
         private void CollectMotorServoStatus()
@@ -921,6 +1022,7 @@ namespace CMP.Models.Resource
         private bool _hasMotorServoStatus;
         public string dryName = string.Empty;
         private KHSTDryIOData.stDryIOData _ioData = new();
+        private bool _hasIoData;
 
         public Dry(string name, KVLink link) : base(name, link)
         {
@@ -958,6 +1060,22 @@ namespace CMP.Models.Resource
         public KHSTDryIOData.stDryIOData IoData
         {
             get { lock (IoDataSync) return _ioData; }
+        }
+
+        /// <summary>获取最近一次成功读取的 Dry IO 结构体独立副本。</summary>
+        public bool TryGetIoDataSnapshot(out KHSTDryIOData.stDryIOData snapshot)
+        {
+            lock (IoDataSync)
+            {
+                if (!_hasIoData)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneIoData(_ioData);
+                return true;
+            }
         }
 
         public override bool TryGetIoValue(string stationPrefix, string fieldName, out bool value)
@@ -1029,6 +1147,7 @@ namespace CMP.Models.Resource
                     lock (IoDataSync)
                     {
                         _ioData = _stDryIOData;
+                        _hasIoData = true;
                     }
                     CompiledFieldAccessor<KHSTDryIOData.stDryIOData>.ProcessAllFields(_stDryIOData, (name, value) =>
                     {
@@ -1036,6 +1155,22 @@ namespace CMP.Models.Resource
                     });
                 }
             }
+        }
+
+        internal void ApplyIoData(KHSTDryIOData.stDryIOData ioData)
+        {
+            ArgumentNullException.ThrowIfNull(ioData);
+
+            lock (IoDataSync)
+            {
+                _ioData = ioData;
+                _hasIoData = true;
+            }
+
+            CompiledFieldAccessor<KHSTDryIOData.stDryIOData>.ProcessAllFields(ioData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectMotorServoStatus()
@@ -1087,6 +1222,16 @@ namespace CMP.Models.Resource
         {
             snapshot.ChuckMotorServoOn = motorServoStatus[0];
             snapshot.ArmSweepMotorServoOn = motorServoStatus[1];
+        }
+
+        private static KHSTDryIOData.stDryIOData CloneIoData(KHSTDryIOData.stDryIOData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTDryIOData.stDryIOData_ToByte(ref buffer, source);
+
+            var clone = new KHSTDryIOData.stDryIOData();
+            KHSTDryIOData.ByteTo_stDryIOData(ref clone, buffer);
+            return clone;
         }
 
     }
