@@ -680,86 +680,42 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    /// <summary>
-    /// 获取类型的默认失败值
-    /// </summary>
-    private static T GetDefaultFailureValue<T>()
-    {
-        return typeof(T) switch
-        {
-            { } t when t == typeof(double) => (T)(object)double.NaN,
-            { } t when t == typeof(float) => (T)(object)float.NaN,
-            { } t when t == typeof(int) => (T)(object)0,
-            { } t when t == typeof(long) => (T)(object)0L,
-            { } t when t == typeof(short) => (T)(object)(short)0,
-            { } t when t == typeof(byte) => (T)(object)(byte)0,
-            { } t when t == typeof(bool) => (T)(object)false,
-            { } t when t == typeof(string) => (T)(object)string.Empty,
-            _ => default!
-        };
-    }
-
-    /// <summary>
-    /// 获取 SV 的值并转换为指定类型，如果获取失败返回默认值
-    /// </summary>
-    /// <typeparam name="T">目标类型</typeparam>
-    /// <param name="key">SV 的键</param>
-    /// <param name="defaultValue">获取失败时的默认值，不指定则自动匹配类型默认值</param>
-    /// <returns>转换后的值或默认值</returns>
-    private T GetSvValue<T>(string key, T? defaultValue = default)
-    {
-        try
-        {
-            var sv = polishData.GetSv(key);
-            if (sv?.Value == null)
-                return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                    ? GetDefaultFailureValue<T>()
-                    : defaultValue!;
-
-            return (T)Convert.ChangeType(sv.Value, typeof(T));
-        }
-        catch
-        {
-            return EqualityComparer<T>.Default.Equals(defaultValue!, default!)
-                ? GetDefaultFailureValue<T>()
-                : defaultValue!;
-        }
-    }
-
     private void RefreshHMI()
     {
-        stPolishCollectData stCollectData;
-        string Key(string fieldName) => polishData.BuildRuntimeKey(null, fieldName);
-        PolishUnit.PlatenMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.PlatenRotationSpeedAct)));
-        PolishUnit.HeadRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadRotationSpeedAct)));
-        PolishUnit.HeadSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepSpeedAct)));
-        PolishUnit.HeadSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadSweepPositionAct)));
-        PolishUnit.HeadLiftMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisSpeedAct)));
-        PolishUnit.HeadLiftMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.HeadZ_AxisPositionAct)));
-        PolishUnit.DiskRotateMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionRotationSpeedAct)));
-        PolishUnit.ConditionSweepMotor.ActVelocity = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepSpeedAct)));
-        PolishUnit.ConditionSweepMotor.ActPosition = GetSvValue<float>(Key(nameof(stCollectData.ConditionArmSweepPositionAct)));
+        if (!polishData.TryGetProcessDataSnapshot(out var snapshot))
+        {
+            return;
+        }
 
-        PolishUnit.Zone1.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone1PressureAct)));
-        PolishUnit.Zone2.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone2PressureAct)));
-        PolishUnit.Zone3.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone3PressureAct)));
-        PolishUnit.Zone4.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone4PressureAct)));
-        PolishUnit.Zone5.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone5PressureAct)));
-        PolishUnit.Zone6.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone6PressureAct)));
-        PolishUnit.Zone7.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone7PressureAct)));
-        PolishUnit.Zone8.ActPress = GetSvValue<float>(Key(nameof(stCollectData.Zone8PressureAct)));
-        PolishUnit.Slurry.Slurry1Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry1OrDIWFlowrateAct)));
-        PolishUnit.Slurry.Slurry2Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry2OrDIWFlowrateAct)));
-        PolishUnit.Slurry.Slurry3Act = GetSvValue<float>(Key(nameof(stCollectData.Slurry3OrDIWFlowrateAct)));
+        PolishUnit.PlatenMotor.ActVelocity = snapshot.PlatenRotationSpeedAct;
+        PolishUnit.HeadRotateMotor.ActVelocity = snapshot.HeadRotationSpeedAct;
+        PolishUnit.HeadSweepMotor.ActVelocity = snapshot.HeadSweepSpeedAct;
+        PolishUnit.HeadSweepMotor.ActPosition = snapshot.HeadSweepPositionAct;
+        PolishUnit.HeadLiftMotor.ActVelocity = snapshot.HeadZ_AxisSpeedAct;
+        PolishUnit.HeadLiftMotor.ActPosition = snapshot.HeadZ_AxisPositionAct;
+        PolishUnit.DiskRotateMotor.ActVelocity = snapshot.ConditionRotationSpeedAct;
+        PolishUnit.ConditionSweepMotor.ActVelocity = snapshot.ConditionArmSweepSpeedAct;
+        PolishUnit.ConditionSweepMotor.ActPosition = snapshot.ConditionArmSweepPositionAct;
 
+        PolishUnit.Zone1.ActPress = snapshot.Zone1PressureAct;
+        PolishUnit.Zone2.ActPress = snapshot.Zone2PressureAct;
+        PolishUnit.Zone3.ActPress = snapshot.Zone3PressureAct;
+        PolishUnit.Zone4.ActPress = snapshot.Zone4PressureAct;
+        PolishUnit.Zone5.ActPress = snapshot.Zone5PressureAct;
+        PolishUnit.Zone6.ActPress = snapshot.Zone6PressureAct;
+        PolishUnit.Zone7.ActPress = snapshot.Zone7PressureAct;
+        PolishUnit.Zone8.ActPress = snapshot.Zone8PressureAct;
+        PolishUnit.Slurry.Slurry1Act = snapshot.Slurry1OrDIWFlowrateAct;
+        PolishUnit.Slurry.Slurry2Act = snapshot.Slurry2OrDIWFlowrateAct;
+        PolishUnit.Slurry.Slurry3Act = snapshot.Slurry3OrDIWFlowrateAct;
 
-        PolishUnit.PlatenMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.PlatenRotationMotorServoOn)));
-        PolishUnit.HeadRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadRotationMotorServoOn)));
-        PolishUnit.HeadSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadSweepMotorServoOn)));
-        PolishUnit.HeadLiftMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.HeadUpDownMotorServoOn)));
-        PolishUnit.DiskRotateMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionHeadRotationMotorServoOn)));
-        PolishUnit.ConditionSweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.ConditionSweepMotorServoOn)));
-        PolishUnit.SlurrySweepMotor.IsServoOn = GetSvValue<bool>(Key(nameof(stCollectData.SlurrySweepMotorServoOn)));
+        PolishUnit.PlatenMotor.IsServoOn = snapshot.PlatenRotationMotorServoOn;
+        PolishUnit.HeadRotateMotor.IsServoOn = snapshot.HeadRotationMotorServoOn;
+        PolishUnit.HeadSweepMotor.IsServoOn = snapshot.HeadSweepMotorServoOn;
+        PolishUnit.HeadLiftMotor.IsServoOn = snapshot.HeadUpDownMotorServoOn;
+        PolishUnit.DiskRotateMotor.IsServoOn = snapshot.ConditionHeadRotationMotorServoOn;
+        PolishUnit.ConditionSweepMotor.IsServoOn = snapshot.ConditionSweepMotorServoOn;
+        PolishUnit.SlurrySweepMotor.IsServoOn = snapshot.SlurrySweepMotorServoOn;
 
 
         RaisePropertyChanged(nameof(PlatenMotorServoText));

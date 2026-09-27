@@ -149,7 +149,7 @@ namespace CMP.Models.Resource
         /// </summary>
         /// <param name="motorServoBits">设备位，顺序与 <see cref="MotorServoSuffixes"/> 一致。</param>
         /// <param name="stationPrefix">工位前缀（"_1"/"_2"/"_3"），字段名自带工位号时必填。</param>
-        internal void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        internal virtual void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
         {
             ArgumentNullException.ThrowIfNull(motorServoBits);
 
@@ -205,9 +205,13 @@ namespace CMP.Models.Resource
     {
         const uint MotorStatusAddress = 530;
         const uint MotorCount = 7;
+        const int SnapshotBufferSize = 2048;
         public string polishName = string.Empty;
 
-        stPolishCollectData _stCollectData;
+        private readonly object _processDataSync = new();
+        private readonly bool[] _latestMotorServoStatus = new bool[7];
+        private KHSTSV.stPolishCollectData? _stCollectData;
+        private bool _hasMotorServoStatus;
         KHST.stIOData _stIOData;
         private KHSTIO.stPolishIOData _ioData;
 
@@ -219,7 +223,6 @@ namespace CMP.Models.Resource
 
         public Polish(string name, KVLink link) : base(name, link)
         {
-            _stCollectData = new stPolishCollectData();
             _stIOData = new KHST.stIOData();
             _ioData = new KHSTIO.stPolishIOData();
             collectDataFields = typeof(KHSTSV.stPolishCollectData).GetFields();
@@ -227,6 +230,30 @@ namespace CMP.Models.Resource
             polishName = name;
             KeyPrefix = name;
             WarnIfMotorServoMappingIncomplete();
+        }
+
+        /// <summary>
+        /// 获取最近一次成功读取的完整过程数据副本。W530 成功读取后，
+        /// 快照中的七个 ServoOn 字段始终以 W530 的最新值为准。
+        /// </summary>
+        internal bool TryGetProcessDataSnapshot(out KHSTSV.stPolishCollectData snapshot)
+        {
+            lock (_processDataSync)
+            {
+                if (_stCollectData == null)
+                {
+                    snapshot = null!;
+                    return false;
+                }
+
+                snapshot = CloneProcessData(_stCollectData);
+                if (_hasMotorServoStatus)
+                {
+                    ApplyMotorServoStatusToSnapshot(snapshot, _latestMotorServoStatus);
+                }
+
+                return true;
+            }
         }
 
         /// <summary>M530 位顺序：Platen、Head Rotation、Head Sweep、Head UpDown、Condition Head、Condition Sweep、Slurry Sweep。</summary>
@@ -257,14 +284,23 @@ namespace CMP.Models.Resource
             {
                 KHSTSV.stPolishCollectData _stPolishCollectData = new KHSTSV.stPolishCollectData();
                 KHSTSV.ByteTo_stPolishCollectData(ref _stPolishCollectData, _readBuf);
-                if (_stPolishCollectData != null)
-                {
-                    CompiledFieldAccessor<stPolishCollectData>.ProcessAllFields(_stPolishCollectData, (name, value) =>
-                    {
-                        SetSv(BuildRuntimeKey(null, name), value);
-                    });
-                }
+                ApplyProcessData(_stPolishCollectData);
             }
+        }
+
+        internal void ApplyProcessData(KHSTSV.stPolishCollectData processData)
+        {
+            ArgumentNullException.ThrowIfNull(processData);
+
+            lock (_processDataSync)
+            {
+                _stCollectData = processData;
+            }
+
+            CompiledFieldAccessor<KHSTSV.stPolishCollectData>.ProcessAllFields(processData, (name, value) =>
+            {
+                SetSv(BuildRuntimeKey(null, name), value);
+            });
         }
 
         private void CollectIOData1()
@@ -314,6 +350,49 @@ namespace CMP.Models.Resource
                 KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
                 ApplyMotorServoStatus(motorServoStatus);
             }
+        }
+
+        internal override void ApplyMotorServoStatus(IReadOnlyList<bool> motorServoBits, string stationPrefix = "")
+        {
+            base.ApplyMotorServoStatus(motorServoBits, stationPrefix);
+
+            if (motorServoBits.Count < MotorServoSuffixes.Count)
+            {
+                return;
+            }
+
+            lock (_processDataSync)
+            {
+                for (var bit = 0; bit < _latestMotorServoStatus.Length; bit++)
+                {
+                    _latestMotorServoStatus[bit] = motorServoBits[bit];
+                }
+
+                _hasMotorServoStatus = true;
+            }
+        }
+
+        private static KHSTSV.stPolishCollectData CloneProcessData(KHSTSV.stPolishCollectData source)
+        {
+            var buffer = new byte[SnapshotBufferSize];
+            KHSTSV.stPolishCollectData_ToByte(ref buffer, source);
+
+            var clone = new KHSTSV.stPolishCollectData();
+            KHSTSV.ByteTo_stPolishCollectData(ref clone, buffer);
+            return clone;
+        }
+
+        private static void ApplyMotorServoStatusToSnapshot(
+            KHSTSV.stPolishCollectData snapshot,
+            IReadOnlyList<bool> motorServoStatus)
+        {
+            snapshot.PlatenRotationMotorServoOn = motorServoStatus[0];
+            snapshot.HeadRotationMotorServoOn = motorServoStatus[1];
+            snapshot.HeadSweepMotorServoOn = motorServoStatus[2];
+            snapshot.HeadUpDownMotorServoOn = motorServoStatus[3];
+            snapshot.ConditionHeadRotationMotorServoOn = motorServoStatus[4];
+            snapshot.ConditionSweepMotorServoOn = motorServoStatus[5];
+            snapshot.SlurrySweepMotorServoOn = motorServoStatus[6];
         }
         
     }
