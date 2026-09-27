@@ -628,10 +628,10 @@ public static partial class PlcHandle
         public static class Flush
         {
             [PlcHandle(Handle.CmdPenA2, "打开全纯水阀")]
-            public const int Open = 11370;
+            public const int Open = 1370;
 
             [PlcHandle(Handle.CmdPenA2, "关闭全纯水阀")]
-            public const int Close = 11371;
+            public const int Close = 1371;
 
             public static class Param
             {
