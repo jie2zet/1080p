@@ -112,7 +112,7 @@ namespace CMP.Services.HostCommunication
         private object _locker = new object();
 
 
-        private static string modelFilePath = "D:\\CMP\\Configuration\\FA\\FabConnectGemModel.xml";
+        private static string modelFilePath = "D:\\CMP\\Configuration\\FA\\";
 
         private Stopwatch _monitorLinkTest = new Stopwatch();
 
@@ -148,7 +148,7 @@ namespace CMP.Services.HostCommunication
                 _gem.AutoPPDataReply = true;
 
 
-                _gem.Initialize(modelFilePath);
+                _gem.Initialize(modelFilePath+ "FabConnectGemModel.xml");
 
 
                 //get system build in ec
@@ -215,176 +215,41 @@ namespace CMP.Services.HostCommunication
         }
 
 
+        /// <summary>
+        /// SV加载变量
+        /// </summary>
         private void InitialSystemBuildInVariable()
         {
-            _systemBuildInVariables.Add("PolishAProcessStepAct");
-            _systemBuildInVariables.Add("PolishAProcessStepSet");
-            _systemBuildInVariables.Add("PolishAProcessTypeAct");
-            _systemBuildInVariables.Add("PolishAProcessTypeSet");
-            _systemBuildInVariables.Add("PolishARecipeTimeAct");
-            _systemBuildInVariables.Add("PolishARecipeTimeSet");
-            _systemBuildInVariables.Add("PolishAExsituConditionProcessStepAct");
-            _systemBuildInVariables.Add("PolishAExsituConditionProcessStepSet");
-            _systemBuildInVariables.Add("PolishAExsituConditionRecipeTimeAct");
-            _systemBuildInVariables.Add("PolishAExsituConditionRecipeTimeSet");
-            _systemBuildInVariables.Add("PolishAMainPolishRecipeTimeAct");
-            _systemBuildInVariables.Add("PolishAMainPolishRecipeTimeSet");
-            _systemBuildInVariables.Add("PolishAMainPolishCumulativeTimeAct");
-            _systemBuildInVariables.Add("PolishAMainPolishCumulativeTimeSet");
-            _systemBuildInVariables.Add("PolishAPlatenRotationSpeedAct");
-            _systemBuildInVariables.Add("PolishAPlatenRotationSpeedSet");
-            _systemBuildInVariables.Add("PolishAHeadRotationSpeedAct");
-            _systemBuildInVariables.Add("PolishAHeadRotationSpeedSet");
-            _systemBuildInVariables.Add("PolishAHeadSweepSpeedAct");
-            _systemBuildInVariables.Add("PolishAHeadSweepSpeedSet");
-            _systemBuildInVariables.Add("PolishAHeadSweepPositionAct");
-            _systemBuildInVariables.Add("PolishAHeadSweepPositionSet");
-            _systemBuildInVariables.Add("PolishAHeadSweepFrequencyAct");
-            _systemBuildInVariables.Add("PolishAHeadSweepFrequencySet");
-            _systemBuildInVariables.Add("PolishAHeadZ_AxisSpeedAct");
-            _systemBuildInVariables.Add("PolishAHeadZ_AxisSpeedSet");
-            _systemBuildInVariables.Add("PolishAHeadZ_AxisPositionAct");
-            _systemBuildInVariables.Add("PolishAHeadZ_AxisPositionSet");
-            _systemBuildInVariables.Add("PolishAConditionRotationSpeedAct");
-            _systemBuildInVariables.Add("PolishAConditionRotationSpeedSet");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepSpeedAct");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepSpeedSet");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepPositionAct");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepPositionSet");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepFrequencyAct");
-            _systemBuildInVariables.Add("PolishAConditionArmSweepFrequencySet");
-            _systemBuildInVariables.Add("PolishASlurryLine1TypeAct");
-            _systemBuildInVariables.Add("PolishASlurryLine2TypeAct");
-            _systemBuildInVariables.Add("PolishASlurryLine3TypeAct");
-            _systemBuildInVariables.Add("PolishASlurry1OrDIWFlowrateAct");
-            _systemBuildInVariables.Add("PolishASlurry1OrDIWFlowrateSet");
-            _systemBuildInVariables.Add("PolishASlurry2OrDIWFlowrateAct");
-            _systemBuildInVariables.Add("PolishASlurry2OrDIWFlowrateSet");
-            _systemBuildInVariables.Add("PolishASlurry3OrDIWFlowrateAct");
-            _systemBuildInVariables.Add("PolishASlurry3OrDIWFlowrateSet");
-            _systemBuildInVariables.Add("PolishAZone1TypeAct");
-            _systemBuildInVariables.Add("PolishAZone2TypeAct");
-            _systemBuildInVariables.Add("PolishAZone3TypeAct");
-            _systemBuildInVariables.Add("PolishAZone4TypeAct");
-            _systemBuildInVariables.Add("PolishAZone5TypeAct");
-            _systemBuildInVariables.Add("PolishAZone6TypeAct");
-            _systemBuildInVariables.Add("PolishAZone7TypeAct");
-            _systemBuildInVariables.Add("PolishAZone8TypeAct");
-            _systemBuildInVariables.Add("PolishARetainerRingTypeAct");
-            _systemBuildInVariables.Add("PolishAZone1PressureAct");
-            _systemBuildInVariables.Add("PolishAZone1PressureSet");
-            _systemBuildInVariables.Add("PolishAZone2PressureAct");
-            _systemBuildInVariables.Add("PolishAZone2PressureSet");
-            _systemBuildInVariables.Add("PolishAZone3PressureAct");
-            _systemBuildInVariables.Add("PolishAZone3PressureSet");
-            _systemBuildInVariables.Add("PolishAZone4PressureAct");
-            _systemBuildInVariables.Add("PolishAZone4PressureSet");
-            _systemBuildInVariables.Add("PolishAZone5PressureAct");
-            _systemBuildInVariables.Add("PolishAZone5PressureSet");
-            _systemBuildInVariables.Add("PolishAZone6PressureAct");
-            _systemBuildInVariables.Add("PolishAZone6PressureSet");
-            _systemBuildInVariables.Add("PolishAZone7PressureAct");
-            _systemBuildInVariables.Add("PolishAZone7PressureSet");
-            _systemBuildInVariables.Add("PolishAZone8PressureAct");
-            _systemBuildInVariables.Add("PolishAZone8PressureSet");
-            _systemBuildInVariables.Add("PolishARetainerRingAirBagPressureAct");
-            _systemBuildInVariables.Add("PolishARetainerRingAirBagPressureSet");
-            _systemBuildInVariables.Add("PolishAConditionDownForcePressureAct");
-            _systemBuildInVariables.Add("PolishAConditionDownForcePressureSet");
-            _systemBuildInVariables.Add("PolishASlurryNozzleSpeedAct");
-            _systemBuildInVariables.Add("PolishASlurryNozzleSpeedSet");
-            _systemBuildInVariables.Add("PolishASlurryNozzlePositionAct");
-            _systemBuildInVariables.Add("PolishASlurryNozzlePositionSet");
-            _systemBuildInVariables.Add("PolishAPlatenRotationAngleAct");
-            _systemBuildInVariables.Add("PolishAHeadRotationAngleAct");
-            _systemBuildInVariables.Add("PolishAConditionRotationAngleAct");
-            _systemBuildInVariables.Add("PolishASlurry1Press1Act");
-            _systemBuildInVariables.Add("PolishASlurry1Press2Act");
-            _systemBuildInVariables.Add("PolishASlurry2Press1Act");
-            _systemBuildInVariables.Add("PolishASlurry2Press2Act");
-            _systemBuildInVariables.Add("PolishASlurry3Press1Act");
-            _systemBuildInVariables.Add("PolishASlurry3Press2Act");
-            _systemBuildInVariables.Add("PolishADressingWaterFlowrateAct");
-            _systemBuildInVariables.Add("PolishAPlatenWashTubePressAct");
-            _systemBuildInVariables.Add("PolishAPlatenWashTubeFlowrateAct");
-            _systemBuildInVariables.Add("PolishAConditionDIWWashTubeFlowrateAct");
-            _systemBuildInVariables.Add("PolishAConditionArmDIWWashTubeFlowrateAct");
-            _systemBuildInVariables.Add("PolishARR_GapCleaningTubeFlowrateAct");
-            _systemBuildInVariables.Add("PolishAReleaseDIWTubeRinseAct");
-            _systemBuildInVariables.Add("PolishALTPWaferRinseFlowrateAct");
-            _systemBuildInVariables.Add("PolishATRCleaningTubeFlowrateAct");
-            _systemBuildInVariables.Add("PolishAPlatenCoolingWaterFlowrateAct");
-            _systemBuildInVariables.Add("PolishAPlatenMotorCoolingWaterFlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone1FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone2FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone3FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone4FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone5FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone6FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone7FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone8FlowrateAct");
-            _systemBuildInVariables.Add("PolishAZone4N2PressAct");
-            _systemBuildInVariables.Add("PolishARetainingRingAirBagFlowrateAct");
-            _systemBuildInVariables.Add("PolishAVacuumPressAct");
-            _systemBuildInVariables.Add("PolishAReleaseN2PurgeFlowRateAct");
-            _systemBuildInVariables.Add("PolishAConditionHeadHeightPositionAct");
-            _systemBuildInVariables.Add("PolishARetainerRingHeightAct");
-            _systemBuildInVariables.Add("PolishAZone1PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone1PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone2PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone2PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone3PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone3PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone4PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone4PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone5PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone5PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone6PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone6PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone7PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone7PressurePVSet");
-            _systemBuildInVariables.Add("PolishAZone8PressurePVAct");
-            _systemBuildInVariables.Add("PolishAZone8PressurePVSet");
-            _systemBuildInVariables.Add("PolishARetainerRingAirBagPressurePVAct");
-            _systemBuildInVariables.Add("PolishARetainerRingAirBagPressurePVSet");
-            _systemBuildInVariables.Add("PolishAConditionDownForcePressurePVAct");
-            _systemBuildInVariables.Add("PolishAConditionDownForcePressurePVSet");
-            _systemBuildInVariables.Add("PolishAConditionDownForceInlineAct");
-            _systemBuildInVariables.Add("PolishAPadTemperatureAct");
-            _systemBuildInVariables.Add("PolishAConditionCenterRadiusPositionAct");
-            _systemBuildInVariables.Add("PolishAPlatenRotationMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAHeadRotationMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAHeadSweepMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAHeadZ_AxisMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAConditionRotationMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAConditionSweepMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishASlurryNozzleMotorTorqueAct");
-            _systemBuildInVariables.Add("PolishAZone1PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone2PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone3PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone4PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone5PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone6PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone7PressureInlineAct");
-            _systemBuildInVariables.Add("PolishAZone8PressureInlineAct");
-            _systemBuildInVariables.Add("PolishARetainerRingAirBagPressureInlineAct");
-            _systemBuildInVariables.Add("PolishAConditionDownForcePressureInlineAct");
-            _systemBuildInVariables.Add("PolishARetainerRingPressureAct");
-            _systemBuildInVariables.Add("PolishARetainerRingPressureSet");
-            _systemBuildInVariables.Add("PolishAUnitWaferCount");
-            _systemBuildInVariables.Add("PolishAAirBagWaferCount");
-            _systemBuildInVariables.Add("PolishAAirBagUesTime");
-            _systemBuildInVariables.Add("PolishAMembranceWaferCount");
-            _systemBuildInVariables.Add("PolishAMembranceUesTime");
-            _systemBuildInVariables.Add("PolishARatainerRingWaferCount");
-            _systemBuildInVariables.Add("PolishARatainerRingUesTime");
-            _systemBuildInVariables.Add("PolishAPadWaferCount");
-            _systemBuildInVariables.Add("PolishAPadUesTime");
-            _systemBuildInVariables.Add("PolishAConditionInsiUesTime");
-            _systemBuildInVariables.Add("PolishAConditionExsiUesTime");
-            _systemBuildInVariables.Add("PolishAUnitIdleTimeh");
-            _systemBuildInVariables.Add("PolishAUnitIdleTimemin");
-            _systemBuildInVariables.Add("PolishAUnitIdleTimes");
+            string[] txtFiles = Directory.GetFiles(modelFilePath, "*.txt");
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            foreach (string filePath in txtFiles)
+            {
+                if (filePath.Contains("SVVariable"))
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            if (!dic.ContainsKey(line))
+                            {
+                                dic[line] = line;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+            if (dic.Count > 0)
+            {
+                foreach (string svVariable in dic.Keys)
+                {
+                    _systemBuildInVariables.Add(svVariable);
+                }
+            }
+
         }
 
         private void SetFAOperativeMode()
