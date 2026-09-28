@@ -1031,48 +1031,51 @@ namespace CMP.Services.HostCommunication
                 //    }
                 //}
 
-                int index = 0;
+              
 
-                if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
+                for (int index = 0; index < 4; index++)
                 {
-
-                    FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
-
-                    foreach (FieldInfo field in fields)
+                    if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
                     {
-                        string name = field.Name;
-                        switch (index)
+
+                        FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
+
+                        foreach (FieldInfo field in fields)
                         {
-                            case 0:
-                                name = "PolishA" + name;
-                                break;
-                            case 1:
-                                name = "PolishB" + name;
-                                break;
-                            case 2:
-                                name = "PolishC" + name;
-                                break;
-                            case 3:
-                                name = "PolishD" + name;
-                                break;
-                            default:
-                                break;
+                            string name = field.Name;
+                            switch (index)
+                            {
+                                case 0:
+                                    name = "PolishA" + name;
+                                    break;
+                                case 1:
+                                    name = "PolishB" + name;
+                                    break;
+                                case 2:
+                                    name = "PolishC" + name;
+                                    break;
+                                case 3:
+                                    name = "PolishD" + name;
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
 
                         }
-                        object? value = field.GetValue(snapshot);
-                        if (value != null)
-                        {
-                            SetSVIDValue(name, value);
-                        }
-                        
+
                     }
-
                 }
-
+               
                 stopwatch.Stop();
 
  
-                Logger.Info($"上报PolishA耗时: {stopwatch.ElapsedMilliseconds} ms");
+                Logger.Info($"上报SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
             }
 
             return true;
