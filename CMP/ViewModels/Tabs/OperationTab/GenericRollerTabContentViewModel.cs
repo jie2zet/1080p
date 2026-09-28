@@ -579,7 +579,25 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             Growl.WarningGlobal("Please select a Roll recipe first");
             return;
         }
-
+        if (obj.Equals("Manual", StringComparison.OrdinalIgnoreCase))
+        {
+            uint addr = TabId switch
+            {
+                0 => 1012,
+                1 => 11012,
+                2 => 21012,
+                3 => 1012,
+                4 => 11012,
+                5 => 21012,
+                _ => 1012
+            };
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_D, addr, 1, 10.Value());
+            if (_err != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Growl.ErrorGlobal($"Failed to send run command for recipe execution: {_err}");
+                return;
+            }
+        }
         try
         {
             var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);

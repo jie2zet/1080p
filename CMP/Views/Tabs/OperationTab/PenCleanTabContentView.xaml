@@ -56,7 +56,7 @@
                                                  SelectedItem="{Binding SelectedPenRecipe}" 
                                                  Width="150" />
                                     <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
-                                            Command="{Binding ExecuteRecipeCommand}" CommandParameter="" Width="65"/>
+                                            Command="{Binding ExecuteRecipeCommand}" CommandParameter="Manual" Width="65"/>
                                 </StackPanel>
                                 <StackPanel Margin="0 40 0 0" Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="70"
                                             HorizontalAlignment="Center">
