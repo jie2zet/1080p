@@ -191,25 +191,22 @@ namespace CMP.Services.HostCommunication
 
                 status.LoadportStatus = LoadportActionStatus.None;
 
+                //监听LoadPort状态改变通知
+                _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
+
+                //处理发送事件
+                _timer = new Timer(
+                callback: ProcessSendEventsTask,
+                state: null,
+                dueTime: 1000,
+                period: 50);
+
             }
             catch (Exception ex)
             {
 
                 Logger.Error($"HostCommunicationService Initialized Error:{ex.ToString()} ");
             }
-
-
-
-            //监听LoadPort状态改变通知
-            _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
-
-            //处理发送事件
-            _timer = new Timer(
-            callback: ProcessSendEventsTask,
-            state: null,
-            dueTime: 1000,
-            period: 50);
-           
 
 
         }
@@ -221,7 +218,7 @@ namespace CMP.Services.HostCommunication
         private void InitialSystemBuildInVariable()
         {
             string[] txtFiles = Directory.GetFiles(modelFilePath, "*.txt");
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            SortedDictionary<string, string> dic = new SortedDictionary<string, string>();
             foreach (string filePath in txtFiles)
             {
                 if (filePath.Contains("SVVariable"))
@@ -378,7 +375,7 @@ namespace CMP.Services.HostCommunication
         private void ProcessSendEventsTask(object? state)
         {
 
-            //PrintfSVValue();
+            PrintfSVValue();
 
             if (queue.TryDequeue(out SendEventModel? result))
             {
@@ -920,18 +917,23 @@ namespace CMP.Services.HostCommunication
 
  
 
-
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Terminate()
         {
-            //try
-            //{
-            //    _faMonitorThread.Stop();
-            //    _logFabConnectCleaner.Stop();
-            //}
-            //catch (Exception ex)
-            //{
-            //    LOG.Write(ex);
-            //}
+            try
+            {
+                _faMonitorThread.Stop();
+                _timer.Dispose();
+                queue.Clear();
+                _gem.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
 
         }
 
@@ -1016,66 +1018,62 @@ namespace CMP.Services.HostCommunication
             if (_isOnline)
             {
 
-                var stopwatch = Stopwatch.StartNew();
+                foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
+                {
+                    if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish"))
+                    {
 
-                //foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
+                        SetSVIDValue(sv.logicalName, 99);
+
+                    }
+                }
+
+
+                //var stopwatch = Stopwatch.StartNew();
+
+                //for (int index = 0; index < 4; index++)
                 //{
-                //    if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish"))
+                //    if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
                 //    {
 
-                //        //string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
+                //        FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
 
-                //        //Console.WriteLine($"读取到的数据名称：{sv.logicalName} --{str}");
-                //        SetSVIDValue(sv.logicalName, 99);
+                //        foreach (FieldInfo field in fields)
+                //        {
+                //            string name = field.Name;
+                //            switch (index)
+                //            {
+                //                case 0:
+                //                    name = "PolishA" + name;
+                //                    break;
+                //                case 1:
+                //                    name = "PolishB" + name;
+                //                    break;
+                //                case 2:
+                //                    name = "PolishC" + name;
+                //                    break;
+                //                case 3:
+                //                    name = "PolishD" + name;
+                //                    break;
+                //                default:
+                //                    break;
+
+                //            }
+                //            object? value = field.GetValue(snapshot);
+                //            if (value != null)
+                //            {
+                //                SetSVIDValue(name, value);
+                //            }
+
+                //        }
 
                 //    }
                 //}
 
-              
+                //stopwatch.Stop();
 
-                for (int index = 0; index < 4; index++)
-                {
-                    if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
-                    {
 
-                        FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
-
-                        foreach (FieldInfo field in fields)
-                        {
-                            string name = field.Name;
-                            switch (index)
-                            {
-                                case 0:
-                                    name = "PolishA" + name;
-                                    break;
-                                case 1:
-                                    name = "PolishB" + name;
-                                    break;
-                                case 2:
-                                    name = "PolishC" + name;
-                                    break;
-                                case 3:
-                                    name = "PolishD" + name;
-                                    break;
-                                default:
-                                    break;
-
-                            }
-                            object? value = field.GetValue(snapshot);
-                            if (value != null)
-                            {
-                                SetSVIDValue(name, value);
-                            }
-
-                        }
-
-                    }
-                }
-               
-                stopwatch.Stop();
-
- 
-                Logger.Info($"上报SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+                //Logger.Info($"上报SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
             }
 
             return true;
@@ -1169,16 +1167,13 @@ namespace CMP.Services.HostCommunication
             {
                 if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish")) 
                 {
-  
-                        string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
-
+                    string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
                     lock (_fileLock)
                     {
                         string path = $"D:\\CMP\\Configuration\\FA\\2026-09-2718.txt";
                         File.AppendAllText(path, $"读取到的数据名称：{sv.logicalName} --{str}" + Environment.NewLine, Encoding.UTF8);
                     }
                    
-
                 }
             }
 
@@ -1486,6 +1481,12 @@ namespace CMP.Services.HostCommunication
             throw new NotImplementedException();
         }
 
+        public void Dispose()
+        {
+
+            Terminate();
+
+        }
 
         public class FAEventItemDemo
         {

@@ -19,5 +19,7 @@ namespace CMP.Services.HostCommunication
 
         void SendMessge(string data);
 
+        void Dispose();
+
     }
 }
