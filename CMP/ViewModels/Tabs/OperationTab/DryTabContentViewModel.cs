@@ -321,8 +321,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
                     plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
-                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
-                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
+                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepStartPosition", i);
+                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
                     plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
@@ -330,7 +330,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
                     plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
                     plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
-                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<short>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
                     plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
@@ -504,8 +504,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
                     plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
-                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
-                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
+                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepStartPosition", i);
+                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
                     plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
@@ -513,7 +513,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
                     plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
                     plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
-                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<short>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
                     plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
