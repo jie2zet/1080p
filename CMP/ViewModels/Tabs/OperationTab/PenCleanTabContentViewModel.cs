@@ -585,6 +585,23 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             Growl.WarningGlobal("Please select a Pen recipe first");
             return;
         }
+        if (obj.Equals("Manual", StringComparison.OrdinalIgnoreCase))
+        {
+            uint addr = TabId switch
+            {
+                0 => 1012,
+                1 => 11012,
+                2 => 1012,
+                3 => 11012,
+                _ => 1012
+            };
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_D, addr, 1, 10.Value());
+            if (_err != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Growl.ErrorGlobal($"Failed to send run command for recipe execution: {_err}");
+                return;
+            }
+        }
         //byte[] data = new byte[20480];
         try
         {
