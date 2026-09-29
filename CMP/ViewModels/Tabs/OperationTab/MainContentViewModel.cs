@@ -16,6 +16,7 @@ using CMP.Views.Common.Dialog;
 using System.Linq;
 using CMP.ViewModels.Common.Dialog;
 using CMP.Services.Log;
+using CMP.Services.Plc;
 using CMP;
 using Logger = CMP.Services.Log.Logger;
 using System.Threading.Tasks;
@@ -490,11 +491,42 @@ namespace CMP.ViewModels.Tabs.OperationTab
             if (unitIndex >= 0 && unitIndex < 16)
             {
                 GlobalService.kvHostLinkInit.ConnectPLC(chamberName);
+                return;
             }
-            else {
-                int robotIndex = unitIndex - 16;
-                GlobalService.globalRobots.listRobot[robotIndex].IsConnected();
+
+            int robotIndex = unitIndex - 16;
+            if (GlobalService.globalRobots?.listRobot == null
+                || robotIndex < 0
+                || robotIndex >= GlobalService.globalRobots.listRobot.Count)
+            {
+                return;
             }
+
+            _ = Task.Run(() =>
+            {
+                var mainResult = MitsubishiPlcService.Main.Reconnect();
+                var robotResult = MitsubishiPlcService.RobotCtrlInstance.Reconnect();
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    if (mainResult.IsSuccess && robotResult.IsSuccess)
+                    {
+                        Growl.SuccessGlobal("三菱 PLC 已连接");
+                    }
+                    else if (!mainResult.IsSuccess)
+                    {
+                        Growl.WarningGlobal("PLC 未连接");
+                    }
+                    else
+                    {
+                        Growl.WarningGlobal("机器人 PLC 未连接");
+                    }
+
+                    foreach (var robot in GlobalService.globalRobots.listRobot)
+                    {
+                        robot.SyncStatusFromPlc();
+                    }
+                });
+            });
         }
         private void ExecuteSingleChamberInitialize(string chamberName)
         {
