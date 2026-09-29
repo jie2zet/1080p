@@ -1175,7 +1175,7 @@ namespace CMP.Services.HostCommunication
                     string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
                     lock (_fileLock)
                     {
-                        string path = $"{modelFilePath}{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}.txt";
+                        string path = $"{modelFilePath}{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
                         File.AppendAllText(path, $"读取到的数据名称：{sv.logicalName} --{str}" + Environment.NewLine, Encoding.UTF8);
                     }
 
