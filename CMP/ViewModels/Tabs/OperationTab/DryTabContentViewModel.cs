@@ -483,7 +483,16 @@ public class DryTabContentViewModel : TabContentViewModelBase
             Growl.WarningGlobal("Please select a Dry recipe first");
             return;
         }
-
+        if (obj.Equals("Manual", StringComparison.OrdinalIgnoreCase))
+        {
+            uint addr = 1012;
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_D, addr, 1, 10.Value());
+            if (_err != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Growl.ErrorGlobal($"Failed to send run command for recipe execution: {_err}");
+                return;
+            }
+        }
         try
         {
             var recipeContent = LoadRecipeContent("Dry Recipe", SelectedDryRecipe);
