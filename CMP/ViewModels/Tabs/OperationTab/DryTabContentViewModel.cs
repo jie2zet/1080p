@@ -1024,6 +1024,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
         DryClean.ChuckRotationMotor.ActVelocity = snapshot.ChuckRotationSpeedAct;
         DryClean.ArmSwingMotor.ActVelocity = snapshot.ArmSweepSpeedAct;
         DryClean.ArmSwingMotor.ActPosition = snapshot.ArmSweepAngleAct;
+        DryClean.ChuckRotationMotor.ActTorque = snapshot.ChuckRotationTorqueAct;
+        DryClean.ArmSwingMotor.ActTorque = snapshot.ArmSweepTorqueAct;
         
         DryClean.ChuckRotationMotor.IsServoOn = snapshot.ChuckMotorServoOn;
         DryClean.ArmSwingMotor.IsServoOn = snapshot.ArmSweepMotorServoOn;
