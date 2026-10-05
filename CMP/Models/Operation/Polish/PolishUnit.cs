@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Prism.Mvvm;
 
 namespace CMP.Models.Operation.Polish;
