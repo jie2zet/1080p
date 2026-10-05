@@ -3,6 +3,7 @@ using KHT = CMP.Models.kvsPlc.KvHostLink;
 using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
 using KHSTRollerIO = CMP.Models.kvsPlc.Roll.KvsStructRollerIOData;
 using KHSTPenIO = CMP.Models.kvsPlc.Pen.KvsStructPenIOData;
+using KHSTDryIO = CMP.Models.kvsPlc.Dry.KvsStructDryIOData;
 using static CMP.Models.kvsPlc.KvHostLink;
 
 namespace CMP.Services.Io;
@@ -66,9 +67,9 @@ public sealed class IoDataWriteService
 
     private static int WriteDry(CMP.Models.Resource.Dry chamber, string fieldName, bool value)
     {
-        var candidate = Clone(chamber.IoData, KHSTIO.stDryIOData_ToByte, KHSTIO.ByteTo_stDryIOData);
+        var candidate = Clone(chamber.IoData, KHSTDryIO.stDryIOData_ToByte, KHSTDryIO.ByteTo_stDryIOData);
         if (!SetBool(candidate, fieldName, value)) return -1;
-        var bytes = Serialize(candidate, KHSTIO.stDryIOData_ToByte);
+        var bytes = Serialize(candidate, KHSTDryIO.stDryIOData_ToByte);
         return KHT.KHLWriteVariable(chamber.kvLink.sock, DryIoVariable, bytes, true);
     }
 
