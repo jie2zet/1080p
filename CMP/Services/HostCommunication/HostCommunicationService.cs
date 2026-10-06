@@ -18,9 +18,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using static CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
+using static CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using static CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
+using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
+using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
 using Logger = CMP.Services.Log.Logger;
-
 namespace CMP.Services.HostCommunication
 {
     public class HostCommunicationService : IHostCommunicationService
@@ -329,6 +333,8 @@ namespace CMP.Services.HostCommunication
         private void SendEventToHost(SendEventModel model)
         {
 
+            if (!_isOnline || model ==null) return;
+           
             var allEvents = _gem.GetAllEnabledEvents();
             if (!allEvents.Contains(model.EventName)) return;
 
@@ -1009,8 +1015,10 @@ namespace CMP.Services.HostCommunication
             {
 
                 SetPolishSVData();
-
-                // SetPolishSVDataTest();
+                SetRollerSVData();
+                SetPenSVData();
+                SetDrySVData();
+                //SetPolishSVDataTest();
 
             }
 
@@ -1082,7 +1090,11 @@ namespace CMP.Services.HostCommunication
         {
             foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
             {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish"))
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (sv.logicalName.contains("Polish") 
+                    || sv.logicalName.contains("Roller")
+                    || sv.logicalName.contains("Pen")
+                    || sv.logicalName.contains("Dry")))
                 {
 
                     SetSVIDValue(sv.logicalName, 99);
@@ -1137,9 +1149,144 @@ namespace CMP.Services.HostCommunication
             }
 
             stopwatch.Stop();
-            Logger.Info($"上报SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+            Logger.Info($"上报Polish SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
 
         }
+
+
+        private void SetRollerSVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+                if (GlobalService.DataCenter.listRoller[index].TryGetProcessDataSnapshot(out KHSTRollerCollectData.stRollerCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        switch (index)
+                        {
+                            case 0:
+                                name = name.Replace("_", "RollerA");
+                              
+                                break;
+                            case 1:
+                                name = name.Replace("_", "RollerB"); ;
+                                break;
+                            default:
+                                break;
+
+                        }
+                        object? value = field.GetValue(snapshot);
+                        if (value != null)
+                        {
+                            SetSVIDValue(name, value);
+                        }
+
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报 Roller SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
+
+
+
+        private void SetPenSVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+                if (GlobalService.DataCenter.listPen[index].TryGetProcessDataSnapshot(out KHSTPenCollectData.stPenCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTPenCollectData.stPenCollectData).GetFields();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        switch (index)
+                        {
+                            case 0:
+                                name = name.Replace("_", "PenA");
+                                break;
+                            case 1:
+                                name = name.Replace("_", "PenB"); 
+                                break;
+                           
+                            default:
+                                break;
+
+                        }
+                        object? value = field.GetValue(snapshot);
+                        if (value != null)
+                        {
+                            SetSVIDValue(name, value);
+                        }
+
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报 Pen SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
+
+
+        private void SetDrySVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+                if (GlobalService.DataCenter.listDry[index].TryGetProcessDataSnapshot(out KHSTDryCollectData.stDryCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTDryCollectData.stDryCollectData).GetFields();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        switch (index)
+                        {
+                            case 0:
+                                name = name.Replace("_", "DryA");
+                                break;
+                            case 1:
+                                name = name.Replace("_", "DryB");
+                                break;
+                            default:
+                                break;
+
+                        }
+                        object? value = field.GetValue(snapshot);
+                        if (value != null)
+                        {
+                            SetSVIDValue(name, value);
+                        }
+
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报 Dry SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
 
         private bool SetSVIDValue(string localName, object value)
         {
@@ -1150,7 +1297,13 @@ namespace CMP.Services.HostCommunication
 
             foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
             {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && localName.Contains("Polish", StringComparison.OrdinalIgnoreCase))
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (localName.Contains("Polish", StringComparison.OrdinalIgnoreCase) 
+                    || localName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+                    || localName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+                    || localName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+                    
+                    ))
                 {
                     _gem.SetAttribute(localName, AttributeType.SV, Convert.ToString(value));
                     return true;
@@ -1170,7 +1323,13 @@ namespace CMP.Services.HostCommunication
 
             foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
             {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish"))
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (sv.logicalName.Contains("Polish", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+
+                    ))
                 {
                     string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
                     lock (_fileLock)
