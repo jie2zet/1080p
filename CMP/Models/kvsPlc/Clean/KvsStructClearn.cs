@@ -32,7 +32,7 @@ namespace CMP.Models.kvsPlc.Clean
             public float[] DilutionN2GasFlow = new float[25];
             public float[] N2ForWFBacksideFlow = new float[25];
             public float[] OuterRinseFlow = new float[25];
-            public short[] BubblingN2GasFlow = new short[25];
+            public float[] BubblingN2GasFlow = new float[25];
             public short[] UpperRinseSupply = new short[25];
             public short[] LowerRinseSupply = new short[25];
             public float[] WaferRotationAcceleration = new float[25];
@@ -1081,10 +1081,10 @@ namespace CMP.Models.kvsPlc.Clean
             ByteToFloat(ref dst.DilutionN2GasFlow, src, 25, 550 + wordOffset);
             ByteToFloat(ref dst.N2ForWFBacksideFlow, src, 25, 600 + wordOffset);
             ByteToFloat(ref dst.OuterRinseFlow, src, 25, 650 + wordOffset);
-            ByteToShort(ref dst.BubblingN2GasFlow, src, 25, 700 + wordOffset);
-            ByteToShort(ref dst.UpperRinseSupply, src, 25, 725 + wordOffset);
-            ByteToShort(ref dst.LowerRinseSupply, src, 25, 750 + wordOffset);
-            ByteToFloat(ref dst.WaferRotationAcceleration, src, 25, 776 + wordOffset);
+            ByteToFloat(ref dst.BubblingN2GasFlow, src, 25, 700 + wordOffset);
+            ByteToShort(ref dst.UpperRinseSupply, src, 25, 750 + wordOffset);
+            ByteToShort(ref dst.LowerRinseSupply, src, 25, 775 + wordOffset);
+            ByteToFloat(ref dst.WaferRotationAcceleration, src, 25, 800 + wordOffset);
         }
         private static void ByteToBase_stDryRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -1154,10 +1154,10 @@ namespace CMP.Models.kvsPlc.Clean
             FloatToByte(ref dst, src.DilutionN2GasFlow, 25, 550 + wordOffset);
             FloatToByte(ref dst, src.N2ForWFBacksideFlow, 25, 600 + wordOffset);
             FloatToByte(ref dst, src.OuterRinseFlow, 25, 650 + wordOffset);
-            ShortToByte(ref dst, src.BubblingN2GasFlow, 25, 700 + wordOffset);
-            ShortToByte(ref dst, src.UpperRinseSupply, 25, 725 + wordOffset);
-            ShortToByte(ref dst, src.LowerRinseSupply, 25, 750 + wordOffset);
-            FloatToByte(ref dst, src.WaferRotationAcceleration, 25, 776 + wordOffset);
+            FloatToByte(ref dst, src.BubblingN2GasFlow, 25, 700 + wordOffset);
+            ShortToByte(ref dst, src.UpperRinseSupply, 25, 750 + wordOffset);
+            ShortToByte(ref dst, src.LowerRinseSupply, 25, 775 + wordOffset);
+            FloatToByte(ref dst, src.WaferRotationAcceleration, 25, 800 + wordOffset);
         }
         private static void stDryRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {
