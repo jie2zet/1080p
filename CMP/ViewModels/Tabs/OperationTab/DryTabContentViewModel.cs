@@ -330,10 +330,10 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
                     plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
                     plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
-                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<short>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
-                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<float>(recipeContent, "WaferRotationAcceleration", i);
 
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
@@ -513,10 +513,10 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.DilutionN2GasFlow[i] = GetRealVal<float>(recipeContent, "DilutionN2GasFlow", i);
                     plcRecipe.N2ForWFBacksideFlow[i] = GetRealVal<float>(recipeContent, "N2ForWFBacksideFlow", i);
                     plcRecipe.OuterRinseFlow[i] = GetRealVal<float>(recipeContent, "OuterRinseFlow", i);
-                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<short>(recipeContent, "BubblingN2GasFlow", i);
+                    plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
-                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<float>(recipeContent, "WaferRotationAcceleration", i);
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _varNameRecipeStruct, _writeBuf, true);
