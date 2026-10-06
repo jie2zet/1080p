@@ -1160,33 +1160,35 @@ namespace CMP.Services.HostCommunication
 
             for (int index = 0; index < 2; index++)
             {
-                if (GlobalService.DataCenter.listRoller[index].TryGetProcessDataSnapshot(out KHSTRollerCollectData.stRollerCollectData snapshot))
+         if (GlobalService.DataCenter.listRoller[index].TryGetProcessDataSnapshot(out KHSTRollerCollectData.stRollerCollectData snapshot))
                 {
 
-                    FieldInfo[] fields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields();
+                    FieldInfo[] fields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
 
                     foreach (FieldInfo field in fields)
                     {
                         string name = field.Name;
-                        switch (index)
+                        if (!name.Contains("ServoOn")) //过滤
                         {
-                            case 0:
-                                name = name.Replace("_", "RollerA");
-                              
-                                break;
-                            case 1:
-                                name = name.Replace("_", "RollerB"); ;
-                                break;
-                            default:
-                                break;
+                            switch (index)
+                            {
+                                case 0:
+                                    name = name.Replace("_", "RollerA");
 
-                        }
-                        object? value = field.GetValue(snapshot);
-                        if (value != null)
-                        {
-                            SetSVIDValue(name, value);
-                        }
+                                    break;
+                                case 1:
+                                    name = name.Replace("_", "RollerB"); ;
+                                    break;
+                                default:
+                                    break;
 
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
+                        }         
                     }
 
                 }
@@ -1209,30 +1211,32 @@ namespace CMP.Services.HostCommunication
                 if (GlobalService.DataCenter.listPen[index].TryGetProcessDataSnapshot(out KHSTPenCollectData.stPenCollectData snapshot))
                 {
 
-                    FieldInfo[] fields = typeof(KHSTPenCollectData.stPenCollectData).GetFields();
+                    FieldInfo[] fields = typeof(KHSTPenCollectData.stPenCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
 
                     foreach (FieldInfo field in fields)
                     {
                         string name = field.Name;
-                        switch (index)
+                        if (!name.Contains("ServoOn")) //过滤
                         {
-                            case 0:
-                                name = name.Replace("_", "PenA");
-                                break;
-                            case 1:
-                                name = name.Replace("_", "PenB"); 
-                                break;
-                           
-                            default:
-                                break;
+                            switch (index)
+                            {
+                                case 0:
+                                    name = name.Replace("_", "PenA");
+                                    break;
+                                case 1:
+                                    name = name.Replace("_", "PenB");
+                                    break;
 
-                        }
-                        object? value = field.GetValue(snapshot);
-                        if (value != null)
-                        {
-                            SetSVIDValue(name, value);
-                        }
+                                default:
+                                    break;
 
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
+                        }
                     }
 
                 }
@@ -1254,29 +1258,31 @@ namespace CMP.Services.HostCommunication
                 if (GlobalService.DataCenter.listDry[index].TryGetProcessDataSnapshot(out KHSTDryCollectData.stDryCollectData snapshot))
                 {
 
-                    FieldInfo[] fields = typeof(KHSTDryCollectData.stDryCollectData).GetFields();
+                    FieldInfo[] fields = typeof(KHSTDryCollectData.stDryCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
 
                     foreach (FieldInfo field in fields)
                     {
                         string name = field.Name;
-                        switch (index)
+                        if (!name.Contains("ServoOn")) //过滤
                         {
-                            case 0:
-                                name = name.Replace("_", "DryA");
-                                break;
-                            case 1:
-                                name = name.Replace("_", "DryB");
-                                break;
-                            default:
-                                break;
+                            switch (index)
+                            {
+                                case 0:
+                                    name = name.Replace("_", "DryA");
+                                    break;
+                                case 1:
+                                    name = name.Replace("_", "DryB");
+                                    break;
+                                default:
+                                    break;
 
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
                         }
-                        object? value = field.GetValue(snapshot);
-                        if (value != null)
-                        {
-                            SetSVIDValue(name, value);
-                        }
-
                     }
 
                 }
@@ -1328,7 +1334,6 @@ namespace CMP.Services.HostCommunication
                     || sv.logicalName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
                     || sv.logicalName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
                     || sv.logicalName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
-
                     ))
                 {
                     string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
