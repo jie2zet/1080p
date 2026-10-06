@@ -343,10 +343,6 @@ public class HeaderViewModel : BindableBase
             // ?????????
             if (hasActiveAlarm)
             {
-                // ????????????
-                WritePlcBoolFireAndForget("M211", true);
-
-                // ??????????????????????????????????????????
                 bool hasNewUntriggeredAlarm = false;
                 if (hasActiveAlarm)
                 {
@@ -377,8 +373,6 @@ public class HeaderViewModel : BindableBase
             }
             else
             {
-                // ????????????????
-                WritePlcBoolFireAndForget("M211", false);
                 WritePlcBoolFireAndForget("M205", false);
                 // ?????????????????????
                 HasNewAlarm = false;
@@ -426,6 +420,13 @@ public class HeaderViewModel : BindableBase
 
     private int _pauseReadBusy;
     private bool _equipmentPaused;
+    private int _towerWriteBusy;
+    private int _lastTowerPlcMask = -1;
+
+    private const int TowerRedBlinkBit = 1 << 0;
+    private const int TowerYellowBlinkBit = 1 << 1;
+    private const int TowerGreenOnBit = 1 << 2;
+    private const int TowerGreenBlinkBit = 1 << 3;
 
     private string _redLightMode = "Off";
     private string _yellowLightMode = "Off";
@@ -491,21 +492,59 @@ public class HeaderViewModel : BindableBase
 
     private void ApplyTowerLights(bool hasAlarm, bool readyToRemove, bool manual, bool running, bool paused)
     {
-        RedLightMode = hasAlarm ? "Blink" : "Off";
-        YellowLightMode = readyToRemove ? "Blink" : "Off";
+        var redBlink = hasAlarm;
+        var yellowBlink = readyToRemove;
+        var greenBlink = paused || manual;
+        var greenOn = running && !greenBlink;
 
-        if (hasAlarm || paused || manual)
+        RedLightMode = redBlink ? "Blink" : "Off";
+        YellowLightMode = yellowBlink ? "Blink" : "Off";
+        GreenLightMode = greenBlink ? "Blink" : greenOn ? "On" : "Off";
+
+        SyncTowerLightsToPlc(redBlink, yellowBlink, greenOn, greenBlink);
+    }
+
+    private void SyncTowerLightsToPlc(bool redBlink, bool yellowBlink, bool greenOn, bool greenBlink)
+    {
+        var mask = 0;
+        if (redBlink) mask |= TowerRedBlinkBit;
+        if (yellowBlink) mask |= TowerYellowBlinkBit;
+        if (greenOn) mask |= TowerGreenOnBit;
+        if (greenBlink) mask |= TowerGreenBlinkBit;
+        if (mask == _lastTowerPlcMask)
         {
-            GreenLightMode = "Blink";
+            return;
         }
-        else if (running)
+
+        if (System.Threading.Interlocked.CompareExchange(ref _towerWriteBusy, 1, 0) != 0)
         {
-            GreenLightMode = "On";
+            return;
         }
-        else
+
+        _ = Task.Run(() =>
         {
-            GreenLightMode = "Off";
-        }
+            try
+            {
+                var plc = GlobalService.plcComm;
+                if (plc is not { IsPLCConnected: true })
+                {
+                    _lastTowerPlcMask = -1;
+                    return;
+                }
+
+                plc.WriteBoolVariContinuous("M201", [false, false, greenOn, false]);
+                plc.WriteBoolVariContinuous("M211", [redBlink, yellowBlink, greenBlink, false]);
+                _lastTowerPlcMask = mask;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"写入塔灯失败: {ex.Message}");
+            }
+            finally
+            {
+                System.Threading.Interlocked.Exchange(ref _towerWriteBusy, 0);
+            }
+        });
     }
 
     private static bool HasFoupReadyToRemove()
