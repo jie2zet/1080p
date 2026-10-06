@@ -40,7 +40,7 @@ public static class InterlockAddressCatalog
         new("EmergencyStopA3", "Emergency Stop", "A", InterlockGroup.EmergencyStop, SignalLightColor.Red, "B1100"),
         
         new("UnlockB1", "Efem Side B", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1202", "M11202"),
-        new("UnlockB2", "Dry B", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1288", "M11288"),
+        new("UnlockB2", "Dry B", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1284", "M11284"),
         new("UnlockB3", "PenB1/RollB3", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1286", "M11286"),
         new("UnlockB4", "RollB1/RollB2", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1283", "M11283"),
         new("UnlockB5", "CleanB robot1", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B1282", "M11282"),
@@ -48,7 +48,7 @@ public static class InterlockAddressCatalog
         new("UnlockB7", "PolishD", "B", InterlockGroup.Unlock, SignalLightColor.Green, "B12C3", "M11323"),
         
         new("UnlockA1", "Efem Side A", "A", InterlockGroup.Unlock, SignalLightColor.Green, "B1203", "M11203"),
-        new("UnlockA2", "DryA", "A", InterlockGroup.Unlock, SignalLightColor.Green,"B1248", "M11248"),
+        new("UnlockA2", "DryA", "A", InterlockGroup.Unlock, SignalLightColor.Green,"B1244", "M11244"),
         new("UnlockA3", "PenA1/RollA3", "A", InterlockGroup.Unlock, SignalLightColor.Green, "B1246", "M11246"),
         new("UnlockA4", "RollA1/RollA2", "A", InterlockGroup.Unlock, SignalLightColor.Green, "B1243", "M11243"),
         new("UnlockA5", "Transfer Robot", "A", InterlockGroup.Unlock, SignalLightColor.Green, "B1242", "M11242"),
