@@ -1,9 +1,9 @@
 using CMP.Models.Resource;
 using KHT = CMP.Models.kvsPlc.KvHostLink;
-using KHSTDryIO = CMP.Models.kvsPlc.Dry.KvsStructDryIOData;
+using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
 using KHSTRollerIO = CMP.Models.kvsPlc.Roll.KvsStructRollerIOData;
 using KHSTPenIO = CMP.Models.kvsPlc.Pen.KvsStructPenIOData;
-using KHSPolishIO = CMP.Models.kvsPlc.IO.KvStruct;
+using KHSTDryIO = CMP.Models.kvsPlc.Dry.KvsStructDryIOData;
 using static CMP.Models.kvsPlc.KvHostLink;
 
 namespace CMP.Services.Io;
@@ -41,9 +41,9 @@ public sealed class IoDataWriteService
 
     private static int WritePolish(CMP.Models.Resource.Polish chamber, string fieldName, bool value)
     {
-        var candidate = Clone(chamber.IoData, KHSPolishIO.stPolishIOData_ToByte, KHSPolishIO.ByteTo_stPolishIOData);
+        var candidate = Clone(chamber.IoData, KHSTIO.stPolishIOData_ToByte, KHSTIO.ByteTo_stPolishIOData);
         if (!SetBool(candidate, fieldName, value)) return -1;
-        var bytes = Serialize(candidate, KHSPolishIO.stPolishIOData_ToByte);
+        var bytes = Serialize(candidate, KHSTIO.stPolishIOData_ToByte);
         return KHT.KHLWriteVariable(chamber.kvLink.sock, PolishIoVariable, bytes, true);
     }
 

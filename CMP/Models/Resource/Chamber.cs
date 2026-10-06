@@ -88,6 +88,65 @@ public class Chamber : BindableBase
 
     private DataLogger _dataLogger;
 
+    private CollectDataChamber? _processDisplaySource;
+    private string _processDisplayStationPrefix = string.Empty;
+    private string _recipeTimeDisplay = "Recipe Time: --";
+    private string _processStepDisplay = "Step: --";
+
+    public string RecipeTimeDisplay
+    {
+        get => _recipeTimeDisplay;
+        private set => SetProperty(ref _recipeTimeDisplay, value);
+    }
+
+    public string ProcessStepDisplay
+    {
+        get => _processStepDisplay;
+        private set => SetProperty(ref _processStepDisplay, value);
+    }
+
+    internal void ConfigureProcessDataDisplay(CollectDataChamber source, string stationPrefix = "")
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        if (_processDisplaySource != null)
+        {
+            _processDisplaySource.ProcessDataUpdated -= OnProcessDataUpdated;
+        }
+
+        _processDisplaySource = source;
+        _processDisplayStationPrefix = stationPrefix;
+        _processDisplaySource.ProcessDataUpdated += OnProcessDataUpdated;
+        UpdateProcessDataDisplay();
+    }
+
+    private void OnProcessDataUpdated(object? sender, EventArgs e)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher != null && !dispatcher.CheckAccess())
+        {
+            dispatcher.BeginInvoke(DispatcherPriority.DataBind, UpdateProcessDataDisplay);
+            return;
+        }
+
+        UpdateProcessDataDisplay();
+    }
+
+    private void UpdateProcessDataDisplay()
+    {
+        if (_processDisplaySource == null
+            || !_processDisplaySource.TryGetProcessDataDisplay(
+                _processDisplayStationPrefix,
+                out var processStepAct,
+                out var recipeTimeAct))
+        {
+            return;
+        }
+
+        ProcessStepDisplay = $"Step: {processStepAct}";
+        RecipeTimeDisplay = $"Recipe Time: {recipeTimeAct:0.##}";
+    }
+
     private bool _isVisibleWafer;
     public bool IsVisibleWafer
     {
@@ -1445,6 +1504,8 @@ public class GlobalChambers
         listChamber.Add(DryA);
         listChamber.Add(DryB);
 
+        ConfigureProcessDataDisplays();
+
         _ = Task.Run(async () =>
         {
             try
@@ -1456,6 +1517,30 @@ public class GlobalChambers
                 Logger.Error("GlobalChambers.ChambersMonitorLoopAsync 异常", ex);
             }
         });
+    }
+
+    private void ConfigureProcessDataDisplays()
+    {
+        var dataCenter = GlobalService.DataCenter;
+        PolishA.ConfigureProcessDataDisplay(dataCenter.listPolish[0]);
+        PolishB.ConfigureProcessDataDisplay(dataCenter.listPolish[1]);
+        PolishC.ConfigureProcessDataDisplay(dataCenter.listPolish[2]);
+        PolishD.ConfigureProcessDataDisplay(dataCenter.listPolish[3]);
+
+        RollerA1.ConfigureProcessDataDisplay(dataCenter.listRoller[0], "_1");
+        RollerA2.ConfigureProcessDataDisplay(dataCenter.listRoller[0], "_2");
+        RollerA3.ConfigureProcessDataDisplay(dataCenter.listRoller[0], "_3");
+        RollerB1.ConfigureProcessDataDisplay(dataCenter.listRoller[1], "_1");
+        RollerB2.ConfigureProcessDataDisplay(dataCenter.listRoller[1], "_2");
+        RollerB3.ConfigureProcessDataDisplay(dataCenter.listRoller[1], "_3");
+
+        PenA1.ConfigureProcessDataDisplay(dataCenter.listPen[0], "_1");
+        PenA2.ConfigureProcessDataDisplay(dataCenter.listPen[0], "_2");
+        PenB1.ConfigureProcessDataDisplay(dataCenter.listPen[1], "_1");
+        PenB2.ConfigureProcessDataDisplay(dataCenter.listPen[1], "_2");
+
+        DryA.ConfigureProcessDataDisplay(dataCenter.listDry[0]);
+        DryB.ConfigureProcessDataDisplay(dataCenter.listDry[1]);
     }
 
     private async Task ChambersMonitorLoopAsync(CancellationToken cancellationToken)
