@@ -26,7 +26,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static CMP.Models.kvsPlc.SV.KvStruct;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
-using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTPolishCollectData = CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
 using KST = CMP.Models.kvsPlc.Polish.KvStruct;
 
 namespace CMP.ViewModels.Tabs.ConfigTab
@@ -82,7 +82,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         //事件聚合器
         private IEventAggregator _eventAggregator;
 
-        KHSTSV.stPolishCollectData _stPolishCollectData = new();
+        KHSTPolishCollectData.stPolishCollectData _stPolishCollectData = new();
 
         Task task;
 
@@ -566,7 +566,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 var err = KHL.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
                 if (err == (int)KHLUserError.KHL_ERR_NONE)
                 {
-                    KHSTSV.ByteTo_stPolishCollectData(ref _stPolishCollectData, _readBuf);
+                    KHSTPolishCollectData.ByteTo_stPolishCollectData(ref _stPolishCollectData, _readBuf);
                     foreach (var displayInfo in CalibrationDisplayInfos)
                     {
                         switch (displayInfo.Name)

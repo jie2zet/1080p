@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -118,6 +119,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
         public DelegateCommand ApplyCommand { get; private set; }
 
+        public DelegateCommand RestoreDefaultCommand { get; private set; }
+
         public DelegateCommand SynchronouPlcCommand { get; private set; }
 
         public DelegateCommand ExportCsvCommand { get; private set; }
@@ -141,6 +144,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             NewValueChangeCommand = new DelegateCommand<ConfigModel>(OnNewValueChangeCommand);
             PolishChangedCommand = new DelegateCommand<ConfigTreeNode>(OnPolishChanged);
             ApplyCommand = new DelegateCommand(OnApplyCommand);
+            RestoreDefaultCommand = new DelegateCommand(OnRestoreDefaultCommand);
             SynchronouPlcCommand = new DelegateCommand(OnSynchronouPlc);
             ExportCsvCommand = new DelegateCommand(OnExportCsvCommand);
             InitConfigData();
@@ -688,6 +692,119 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             }
             #endregion
         }
+
+        private void OnRestoreDefaultCommand()
+        {
+            if (SelectedSheet?.ConfigModes == null)
+                return;
+
+            foreach (var model in SelectedSheet.ConfigModes)
+            {
+                if (model == null || string.IsNullOrWhiteSpace(model.DefaultValue))
+                    continue;
+
+                int index = ConfigModels.IndexOf(model);
+                if (index < 0 || !TryGetRestoreDefaultValue(model, out var defaultValue))
+                    continue;
+
+                model.NewValue = defaultValue;
+                if (!newValueChangedList.Contains(index))
+                    newValueChangedList.Add(index);
+            }
+        }
+
+        private static bool TryGetRestoreDefaultValue(ConfigModel model, out string defaultValue)
+        {
+            defaultValue = string.Empty;
+
+            switch (model.TemplateType)
+            {
+                case ConfigDataType.Enum:
+                    if (!short.TryParse(model.DefaultValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out short defaultCode) ||
+                        model.Option == null || model.Option.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    foreach (var option in model.Option)
+                    {
+                        if (string.IsNullOrWhiteSpace(option) || !TryGetEnumOptionCode(option, out short optionCode))
+                            continue;
+
+                        if (optionCode == defaultCode)
+                        {
+                            defaultValue = option;
+                            return true;
+                        }
+                    }
+
+                    return false;
+
+                case ConfigDataType.Int:
+                case ConfigDataType.Double:
+                    // Restore-default only accepts a finite numeric value. The configured
+                    // TemplateType is not used to reject a numeric default, because some
+                    // existing configuration rows are labeled Int but contain decimals.
+                    if (!double.TryParse(model.DefaultValue, NumberStyles.Float, CultureInfo.InvariantCulture, out double numericValue) ||
+                        !double.IsFinite(numericValue))
+                    {
+                        return false;
+                    }
+
+                    // The original type-specific validation is intentionally retained here:
+                    // if (model.TemplateType == ConfigDataType.Int &&
+                    //     !int.TryParse(model.DefaultValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out _))
+                    //     return false;
+                    // if (model.TemplateType == ConfigDataType.Double &&
+                    //     !double.TryParse(model.DefaultValue, NumberStyles.Float, CultureInfo.InvariantCulture, out _))
+                    //     return false;
+
+                    // if (!IsWithinConfiguredRange(doubleValue, model.Min, model.Max))
+                    //     return false;
+
+                    defaultValue = numericValue.ToString(CultureInfo.CurrentCulture);
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        private static bool TryGetEnumOptionCode(string option, out short code)
+        {
+            string normalizedOption = option.Replace('：', ':');
+            int separatorIndex = normalizedOption.IndexOf(':');
+            string codeText = separatorIndex >= 0
+                ? normalizedOption[..separatorIndex].Trim()
+                : normalizedOption.Trim();
+
+            return short.TryParse(codeText, NumberStyles.Integer, CultureInfo.InvariantCulture, out code);
+        }
+
+        /*
+        private static bool IsWithinConfiguredRange(double value, string? minText, string? maxText)
+        {
+            if (!string.IsNullOrWhiteSpace(minText))
+            {
+                if (!double.TryParse(minText, NumberStyles.Float, CultureInfo.InvariantCulture, out double min) ||
+                    !double.IsFinite(min) || value < min)
+                {
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(maxText))
+            {
+                if (!double.TryParse(maxText, NumberStyles.Float, CultureInfo.InvariantCulture, out double max) ||
+                    !double.IsFinite(max) || value > max)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        */
 
         private static string FormatEcTarget(string unitName, ConfigModel item)
         {

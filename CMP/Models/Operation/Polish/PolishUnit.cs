@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Prism.Mvvm;
 
 namespace CMP.Models.Operation.Polish;
@@ -105,10 +105,11 @@ public class PolishUnit : BindableBase
     {
         private string _name = string.Empty;
         private int _vent;
-        private int _vacuum;
+        private float _actVacuum;
         private int _press;
         private float _actPress;
         private float _setPress;
+        private int _vacuum;
 
         public string Name
         {
@@ -122,12 +123,18 @@ public class PolishUnit : BindableBase
             set => SetProperty(ref _vent, value);
         }
 
+        public float ActVacuum
+        {
+            get => _actVacuum;
+            set => SetProperty(ref _actVacuum, value);
+        }
+        
         public int Vacuum
         {
             get => _vacuum;
             set => SetProperty(ref _vacuum, value);
         }
-
+        
         public int Press
         {
             get => _press;

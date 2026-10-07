@@ -606,42 +606,83 @@
             <Grid Grid.Column="3">
                 <Border Margin="5" Style="{StaticResource BorderRegion}">
                     <Grid extensions:GridHelpers.RowDefinitions="*, *, *, *">
-                        <!--<Image Source="/CMP;component/Assets/Images/lights/red.png" Width="30" Height="30" />-->
-                        <!-- 红色指示灯 (报警时闪烁) -->
                         <Image x:Name="RedLight" Width="30" Height="30">
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/red.png" />
+                                    <Setter Property="Opacity" Value="0" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasAlarm}" Value="True">
+                                        <DataTrigger Binding="{Binding RedLightMode}" Value="Blink">
                                             <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
+                                                <BeginStoryboard x:Name="RedBlinkBoard">
                                                     <Storyboard RepeatBehavior="Forever">
                                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                       From="1.0" To="0.3" Duration="0:0:0.5"
-                                                       AutoReverse="True" />
+                                                                         From="1.0" To="0.25" Duration="0:0:0.5"
+                                                                         AutoReverse="True" />
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </DataTrigger.EnterActions>
                                             <DataTrigger.ExitActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                       To="1.0" Duration="0:0:0.1" />
-                                                    </Storyboard>
-                                                </BeginStoryboard>
+                                                <StopStoryboard BeginStoryboardName="RedBlinkBoard" />
                                             </DataTrigger.ExitActions>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <Image Margin="0 5 0 0" Grid.Row="1" Source="/CMP;component/Assets/Images/lights/yellow.png" Width="30"
-                               Height="30" />
-                        <Image Margin="0 5 0 0" Grid.Row="2" Source="/CMP;component/Assets/Images/lights/green.png" Width="30"
-                               Height="30" />                       
-                        <Image Margin="0 5 0 0" Grid.Row="3" Source="/CMP;component/Assets/Images/lights/purple.png" Width="30"
-                               Height="30" />
+                        <Image x:Name="YellowLight" Grid.Row="1" Margin="0 5 0 0" Width="30" Height="30">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/yellow.png" />
+                                    <Setter Property="Opacity" Value="0" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding YellowLightMode}" Value="Blink">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard x:Name="YellowBlinkBoard">
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                         From="1.0" To="0.25" Duration="0:0:0.5"
+                                                                         AutoReverse="True" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <StopStoryboard BeginStoryboardName="YellowBlinkBoard" />
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <Image x:Name="GreenLight" Grid.Row="2" Margin="0 5 0 0" Width="30" Height="30">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/green.png" />
+                                    <Setter Property="Opacity" Value="0" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GreenLightMode}" Value="On">
+                                            <Setter Property="Opacity" Value="1" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GreenLightMode}" Value="Blink">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard x:Name="GreenBlinkBoard">
+                                                    <Storyboard RepeatBehavior="Forever">
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                         From="1.0" To="0.25" Duration="0:0:0.5"
+                                                                         AutoReverse="True" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <StopStoryboard BeginStoryboardName="GreenBlinkBoard" />
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <Image Grid.Row="3" Margin="0 5 0 0" Width="30" Height="30" Opacity="0"
+                               Source="/CMP;component/Assets/Images/lights/purple.png" />
                     </Grid>
                 </Border>
             </Grid>

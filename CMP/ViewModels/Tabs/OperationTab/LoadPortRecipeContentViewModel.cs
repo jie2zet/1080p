@@ -484,13 +484,13 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
         /// <summary>
         /// Assign防呆：校验指定 Polish 操作所选配方的 ProcessType 是否为 64 (Pad Search)。
-        /// 校验通过时将 B3003 复位为 False；失败时设置 StatusMessage 并返回 false，调用方应中止 Assign。
+        /// 1、在Assign Wafer时，如果B3003=0，PolishRecipe必须勾选PadSearch模式
+        /// 2、在Assign Wafer时，如果B3003=1，可使用任意模式的PolishRecipe，但是选择PadSearch模式时，给B3003清零
         /// </summary>
         private bool TryValidatePolishProcessType(SequenceRecipeData recipeData, int sock, string recipeKey, string operationName)
         {
             string variableName = "PadSearchFinished";
             byte[] data = new byte[256];
-            //int err = KHL.KHLReadDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, data);
             int err = KHL.KHLReadVariable(sock, variableName, data, true);
             bool b3003Value = false;
             KST.ByteToBool(ref b3003Value, data);
@@ -498,28 +498,36 @@ namespace CMP.ViewModels.Tabs.OperationTab
             if (err != (int)KHLUserError.KHL_ERR_NONE)
             {
                 StatusMessage = $"PLC address B3003 read error. Please check the cause and then assign the Recipe!";
+                Logger.For("PadSearch").Info($"{StatusMessage}");
                 return false;
             }
 
-            if (b3003Value)
+            var selection = recipeData.RecipeSelections?.Find(x => x?.Key == recipeKey);
+            if (selection?.Value == null)
             {
-                var selection = recipeData.RecipeSelections?.Find(x => x?.Key == recipeKey);
-                if (selection?.Value == null)
-                {
-                    StatusMessage = $"{operationName} has no a recipe selecteds";
-                    return false;
-                }
+                StatusMessage = $"{operationName} has no a recipe selecteds";
+                Logger.For("PadSearch").Info($"{StatusMessage}");
+                return false;
+            }
+            var recipe = JsonConvert.DeserializeObject<Recipe.Content>(FileUtil.ReadFile(selection.Value.ToString()!))!;
 
-                var recipe = JsonConvert.DeserializeObject<Recipe.Content>(FileUtil.ReadFile(selection.Value.ToString()!))!;
+            if (!b3003Value)
+            {
                 if (GetRealVal<short>(recipe, "ProcessType", 0) != 64)
                 {
                     StatusMessage = $"The ProcessType option for {operationName} must be set to \"64:Pad Search\"!";
+                    Logger.For("PadSearch").Info($" {StatusMessage}");
                     return false;
                 }
-
-                //int v = KHL.KHLWriteDevicesAsWords(sock, KHLDevType.DEV_B, 3003, 1, [0]);
-                int v = KHL.KHLWriteVariable(sock, variableName, [0], true);
-                return true;
+            }
+            else
+            {
+                if (GetRealVal<short>(recipe, "ProcessType", 0) == 64)
+                {
+                    int v = KHL.KHLWriteVariable(sock, variableName, [0], true);                    
+                    StatusMessage = $"Wrote 0 to address B3003 of station {operationName}, back value:{v}";
+                    Logger.For("PadSearch").Info($" {StatusMessage}");
+                }
             }
             return true;
         }

@@ -579,7 +579,25 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             Growl.WarningGlobal("Please select a Roll recipe first");
             return;
         }
-
+        if (obj.Equals("Manual", StringComparison.OrdinalIgnoreCase))
+        {
+            uint addr = TabId switch
+            {
+                0 => 1012,
+                1 => 11012,
+                2 => 21012,
+                3 => 1012,
+                4 => 11012,
+                5 => 21012,
+                _ => 1012
+            };
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_D, addr, 1, 10.Value());
+            if (_err != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Growl.ErrorGlobal($"Failed to send run command for recipe execution: {_err}");
+                return;
+            }
+        }
         try
         {
             var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);
@@ -1141,6 +1159,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             float WfRightPillarSpeed,
             float UpperRollerSpeed,
             float LowerRollerSpeed,
+            float WfLeftPillarTorque,
+            float WfRightPillarTorque,
+            float UpperRollerTorque,
+            float LowerRollerTorque,
             float DiwOpenTime,
             bool WfLeftPillarServoOn,
             bool WfRightPillarServoOn,
@@ -1152,6 +1174,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._1WFRightPillarRotationMotorSpeedAct,
                 snapshot._1UpperRollerRotationSpeedAct,
                 snapshot._1LowerRollerRotationSpeedAct,
+                snapshot._1WFLeftPillarRotationMotorTorqueAct,
+                snapshot._1WFRightPillarRotationMotorTorqueAct,
+                snapshot._1UpperRollerRotationMotorTorqueAct,
+                snapshot._1LowerRollerRotationMotorTorqueAct,
                 snapshot._1DIWAllOpenTimeAct,
                 snapshot._1WFLeftPillarMotorServoOn,
                 snapshot._1WFRightPillarMotorServoOn,
@@ -1162,6 +1188,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._2WFRightPillarRotationMotorSpeedAct,
                 snapshot._2UpperRollerRotationSpeedAct,
                 snapshot._2LowerRollerRotationSpeedAct,
+                snapshot._2WFLeftPillarRotationMotorTorqueAct,
+                snapshot._2WFRightPillarRotationMotorTorqueAct,
+                snapshot._2UpperRollerRotationMotorTorqueAct,
+                snapshot._2LowerRollerRotationMotorTorqueAct,
                 snapshot._2DIWAllOpenTimeAct,
                 snapshot._2WFLeftPillarMotorServoOn,
                 snapshot._2WFRightPillarMotorServoOn,
@@ -1172,6 +1202,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._3WFRightPillarRotationMotorSpeedAct,
                 snapshot._3UpperRollerRotationSpeedAct,
                 snapshot._3LowerRollerRotationSpeedAct,
+                snapshot._3WFLeftPillarRotationMotorTorqueAct,
+                snapshot._3WFRightPillarRotationMotorTorqueAct,
+                snapshot._3UpperRollerRotationMotorTorqueAct,
+                snapshot._3LowerRollerRotationMotorTorqueAct,
                 snapshot._3DIWAllOpenTimeAct,
                 snapshot._3WFLeftPillarMotorServoOn,
                 snapshot._3WFRightPillarMotorServoOn,
@@ -1183,6 +1217,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         RollerViewPoco.WfRightPillarRotateMotor.ActVelocity = stationData.WfRightPillarSpeed;
         RollerViewPoco.UpperRollerRotateMotor.ActVelocity = stationData.UpperRollerSpeed;
         RollerViewPoco.LowerRollerRotateMotor.ActVelocity = stationData.LowerRollerSpeed;
+        RollerViewPoco.WfLeftPillarRotateMotor.ActTorque = stationData.WfLeftPillarTorque;
+        RollerViewPoco.WfRightPillarRotateMotor.ActTorque = stationData.WfRightPillarTorque;
+        RollerViewPoco.UpperRollerRotateMotor.ActTorque = stationData.UpperRollerTorque;
+        RollerViewPoco.LowerRollerRotateMotor.ActTorque = stationData.LowerRollerTorque;
         RollerViewPoco.Flush.OpenDelayAct = stationData.DiwOpenTime;
 
         RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = stationData.WfLeftPillarServoOn;

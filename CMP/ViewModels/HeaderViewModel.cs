@@ -6,9 +6,13 @@ using System.Windows;
 using System.Windows.Threading;
 using CMP;
 using CMP.Models.DataCenter;
+using CMP.Models.Operation.LoadPort;
+using CMP.Models.Resource;
 using CMP.Models.Warn;
 using CMP.Services.Auth;
+using CMP.Services.LoadPort;
 using CMP.Services.Log;
+using CMP.Services.Plc;
 using CMP.ViewModels.Common.Dialog;
 using CMP.Views;
 using CMP.Views.Common.Dialog;
@@ -77,6 +81,7 @@ public class HeaderViewModel : BindableBase
             RefreshDateTime();
             RefreshAlarmData();
             CheckAlarmStatus();
+            UpdateTowerLights();
         };
         timer.Start();
         if (HasAlarm) IsSoundOnChecked = true;
@@ -338,10 +343,6 @@ public class HeaderViewModel : BindableBase
             // ?????????
             if (hasActiveAlarm)
             {
-                // ????????????
-                WritePlcBoolFireAndForget("M211", true);
-
-                // ??????????????????????????????????????????
                 bool hasNewUntriggeredAlarm = false;
                 if (hasActiveAlarm)
                 {
@@ -372,8 +373,6 @@ public class HeaderViewModel : BindableBase
             }
             else
             {
-                // ????????????????
-                WritePlcBoolFireAndForget("M211", false);
                 WritePlcBoolFireAndForget("M205", false);
                 // ?????????????????????
                 HasNewAlarm = false;
@@ -407,5 +406,216 @@ public class HeaderViewModel : BindableBase
         WritePlcBoolFireAndForget("M205", true);
         IsSoundOnChecked = true;
         //}
+    }
+
+    private static readonly string[] RobotPauseStatusAddresses =
+    [
+        "M5961",
+        "M5993",
+        "M6025",
+        "M6057",
+        "M6089",
+        "M6121",
+    ];
+
+    private int _pauseReadBusy;
+    private bool _equipmentPaused;
+    private int _towerWriteBusy;
+    private int _lastTowerPlcMask = -1;
+
+    private const int TowerRedBlinkBit = 1 << 0;
+    private const int TowerYellowBlinkBit = 1 << 1;
+    private const int TowerGreenOnBit = 1 << 2;
+    private const int TowerGreenBlinkBit = 1 << 3;
+
+    private string _redLightMode = "Off";
+    private string _yellowLightMode = "Off";
+    private string _greenLightMode = "Off";
+
+    /// <summary>Off 或 Blink。红灯没有常亮。</summary>
+    public string RedLightMode
+    {
+        get => _redLightMode;
+        private set => SetProperty(ref _redLightMode, value);
+    }
+
+    /// <summary>Off 或 Blink。黄灯没有常亮。</summary>
+    public string YellowLightMode
+    {
+        get => _yellowLightMode;
+        private set => SetProperty(ref _yellowLightMode, value);
+    }
+
+    /// <summary>Off、On 或 Blink。</summary>
+    public string GreenLightMode
+    {
+        get => _greenLightMode;
+        private set => SetProperty(ref _greenLightMode, value);
+    }
+
+    private void UpdateTowerLights()
+    {
+        if (System.Threading.Interlocked.CompareExchange(ref _pauseReadBusy, 1, 0) == 0)
+        {
+            _ = Task.Run(() =>
+            {
+                var paused = ReadAnyRobotPaused();
+                var dispatcher = Application.Current?.Dispatcher;
+                if (dispatcher == null)
+                {
+                    _equipmentPaused = paused;
+                    System.Threading.Interlocked.Exchange(ref _pauseReadBusy, 0);
+                    return;
+                }
+
+                dispatcher.BeginInvoke(() =>
+                {
+                    _equipmentPaused = paused;
+                    System.Threading.Interlocked.Exchange(ref _pauseReadBusy, 0);
+                    ApplyCurrentTowerLights();
+                });
+            });
+        }
+
+        ApplyCurrentTowerLights();
+    }
+
+    private void ApplyCurrentTowerLights()
+    {
+        ApplyTowerLights(
+            HasAlarm,
+            HasFoupReadyToRemove(),
+            IsEquipmentManual(),
+            IsEquipmentRunning(),
+            _equipmentPaused);
+    }
+
+    private void ApplyTowerLights(bool hasAlarm, bool readyToRemove, bool manual, bool running, bool paused)
+    {
+        var redBlink = hasAlarm;
+        var yellowBlink = readyToRemove;
+        var greenBlink = paused || manual;
+        var greenOn = running && !greenBlink;
+
+        RedLightMode = redBlink ? "Blink" : "Off";
+        YellowLightMode = yellowBlink ? "Blink" : "Off";
+        GreenLightMode = greenBlink ? "Blink" : greenOn ? "On" : "Off";
+
+        SyncTowerLightsToPlc(redBlink, yellowBlink, greenOn, greenBlink);
+    }
+
+    private void SyncTowerLightsToPlc(bool redBlink, bool yellowBlink, bool greenOn, bool greenBlink)
+    {
+        var mask = 0;
+        if (redBlink) mask |= TowerRedBlinkBit;
+        if (yellowBlink) mask |= TowerYellowBlinkBit;
+        if (greenOn) mask |= TowerGreenOnBit;
+        if (greenBlink) mask |= TowerGreenBlinkBit;
+        if (mask == _lastTowerPlcMask)
+        {
+            return;
+        }
+
+        if (System.Threading.Interlocked.CompareExchange(ref _towerWriteBusy, 1, 0) != 0)
+        {
+            return;
+        }
+
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                var plc = GlobalService.plcComm;
+                if (plc is not { IsPLCConnected: true })
+                {
+                    _lastTowerPlcMask = -1;
+                    return;
+                }
+
+                plc.WriteBoolVariContinuous("M201", [false, false, greenOn, false]);
+                plc.WriteBoolVariContinuous("M211", [redBlink, yellowBlink, greenBlink, false]);
+                _lastTowerPlcMask = mask;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"写入塔灯失败: {ex.Message}");
+            }
+            finally
+            {
+                System.Threading.Interlocked.Exchange(ref _towerWriteBusy, 0);
+            }
+        });
+    }
+
+    private static bool HasFoupReadyToRemove()
+    {
+        var ports = LoadPortManager.Instance.GetAllLoadPorts();
+        if (ports == null)
+        {
+            return false;
+        }
+
+        foreach (var loadPort in ports.Values)
+        {
+            if (loadPort?.LoadPortStatus?.foupPlacementStatus != FoupPlacementStatus.Normal)
+            {
+                continue;
+            }
+
+            var assigned = loadPort.WaferList?
+                .Where(wafer => !string.IsNullOrEmpty(wafer.SequenceRecipe))
+                .ToList();
+            if (assigned is { Count: > 0 } && assigned.All(wafer => wafer.WaferStatus == WaferStatus.ProcessDone))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsEquipmentRunning()
+    {
+        var ports = LoadPortManager.Instance.GetAllLoadPorts();
+        if (ports == null)
+        {
+            return false;
+        }
+
+        return ports.Values.Any(loadPort =>
+            loadPort?.WaferList?.Any(wafer => wafer.WaferStatus == WaferStatus.Processing) == true);
+    }
+
+    private static bool IsEquipmentManual()
+    {
+        var chambers = GlobalService.globalChambers?.listChamber;
+        return chambers != null && chambers.Any(chamber =>
+            chamber.IsEnabled && chamber.ChamberStatus == ChamberStatus.Manual);
+    }
+
+    private static bool ReadAnyRobotPaused()
+    {
+        var plc = MitsubishiPlcService.RobotCtrlInstance;
+        if (!plc.IsPLCConnected)
+        {
+            return false;
+        }
+
+        foreach (var address in RobotPauseStatusAddresses)
+        {
+            try
+            {
+                if (plc.ReadBoolVari(address))
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"读取机器人暂停状态 {address} 失败: {ex.Message}");
+            }
+        }
+
+        return false;
     }
 }
