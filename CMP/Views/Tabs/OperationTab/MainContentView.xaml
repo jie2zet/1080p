@@ -1667,6 +1667,10 @@
                                                    Canvas.Top="20" Foreground="White" FontWeight="Bold" FontSize="10"
                                                    Panel.ZIndex="5"
                                                    Visibility="{Binding PolishC.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding PolishC.PolishStateDisplay}" Canvas.Left="5"
+                                                   Canvas.Top="35" Foreground="White" FontWeight="Bold" FontSize="10"
+                                                   Panel.ZIndex="5"
+                                                   Visibility="{Binding PolishC.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         <TextBlock Text="{Binding PolishC.WaferInfo}"
                                                    Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
                                                    Foreground="Blue" FontWeight="Bold" FontSize="12"
@@ -1760,6 +1764,10 @@
                                                    Visibility="{Binding PolishD.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         <TextBlock Text="{Binding PolishD.RecipeTimeDisplay}" Canvas.Left="5"
                                                    Canvas.Top="20" Foreground="White" FontWeight="Bold" FontSize="10"
+                                                   Panel.ZIndex="5"
+                                                   Visibility="{Binding PolishD.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding PolishD.PolishStateDisplay}" Canvas.Left="5"
+                                                   Canvas.Top="35" Foreground="White" FontWeight="Bold" FontSize="10"
                                                    Panel.ZIndex="5"
                                                    Visibility="{Binding PolishD.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         <TextBlock Text="{Binding PolishD.WaferInfo}"
@@ -2464,6 +2472,10 @@
                                                        Canvas.Top="20" Foreground="White" FontWeight="Bold"
                                                        FontSize="10" Panel.ZIndex="5"
                                                        Visibility="{Binding PolishA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            <TextBlock Text="{Binding PolishA.PolishStateDisplay}" Canvas.Left="5"
+                                                       Canvas.Top="35" Foreground="White" FontWeight="Bold"
+                                                       FontSize="10" Panel.ZIndex="5"
+                                                       Visibility="{Binding PolishA.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             <TextBlock Text="{Binding PolishA.WaferInfo}"
                                                        Canvas.Left="180" Canvas.Top="150" Panel.ZIndex="2"
                                                        Foreground="Blue" FontWeight="Bold" FontSize="12"
@@ -2557,6 +2569,10 @@
                                                    Visibility="{Binding PolishB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         <TextBlock Text="{Binding PolishB.RecipeTimeDisplay}" Canvas.Left="5"
                                                    Canvas.Top="20" Foreground="White" FontWeight="Bold" FontSize="10"
+                                                   Panel.ZIndex="5"
+                                                   Visibility="{Binding PolishB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding PolishB.PolishStateDisplay}" Canvas.Left="5"
+                                                   Canvas.Top="35" Foreground="White" FontWeight="Bold" FontSize="10"
                                                    Panel.ZIndex="5"
                                                    Visibility="{Binding PolishB.IsVisibleWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     </Canvas>
