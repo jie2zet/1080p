@@ -75,7 +75,7 @@ public static class TransferRobotAddress
     /// <summary>
     /// JOG 速度
     /// </summary>
-    public const string JogSpeed = "D1042"; // 需确认，图片不清，参考TransferModule
+    public const string JogSpeed = "D1042"; 
 
     /// <summary>
     /// 自动速度
@@ -203,7 +203,7 @@ public static class TransferRobotAddress
     #region 底部状态栏
 
     public const string EmergencyStop = "M99";
-    public const string GlobalAlarmReset = "B0B"; // Same as AxisAlarmReset
+    public const string GlobalAlarmReset = "B0B";
     public const string Save = "M98";
 
     #endregion

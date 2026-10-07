@@ -438,6 +438,10 @@ public static class PolishASideArm1Address
     /// Index
     /// </summary>
     public const string WaferIndex = "W1A11";
+    /// <summary>
+    /// Power Off
+    /// </summary>
+    public const string PowerOff = "M10400";
 
     #endregion
 }

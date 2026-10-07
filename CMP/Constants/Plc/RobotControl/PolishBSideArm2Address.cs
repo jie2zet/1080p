@@ -154,6 +154,18 @@ namespace CMP.Constants.Plc.RobotControl
         /// 2z轴研磨D下片
         /// </summary>
         public const string PolishDDownPiece = "D11428";
+        /// <summary>
+        /// 2z轴有晶圆时速度
+        /// </summary>
+        public const string SpeedWhenHasWafer = "D11402";
+        /// <summary>
+        /// 2z轴加速时间
+        /// </summary>
+        public const string AccelerationTime = "D11412";
+        /// <summary>
+        /// 2z轴减速时间
+        /// </summary>
+        public const string DeaccelerationTime = "D11414";
         #endregion
 
         #region 移动命令 (M)
@@ -181,6 +193,31 @@ namespace CMP.Constants.Plc.RobotControl
         /// 2z轴研磨D下片移动
         /// </summary>
         public const string PolishDDownPieceMove = "M1469";
+        /// <summary>
+        /// 2z轴待机位移动状态
+        /// </summary>
+        public const string StandbyPosMove_2zStatus = "M5704";
+        /// <summary>
+        /// 2z轴中转手臂位移动状态
+        /// </summary>
+        public const string TransferArmMove_2zStatus = "M5705";
+        /// <summary>
+        /// 2z轴研磨C下片移动状态
+        /// </summary>
+        public const string PolishCDownPieceMoveStatus = "M5706";
+        /// <summary>
+        /// 2z轴研磨D上片移动状态
+        /// </summary>
+        public const string PolishDUpPieceMoveStatus = "M5707";
+        /// <summary>
+        /// 2z轴研磨C上片移动状态
+        /// </summary>
+        public const string PolishCUpPieceMoveStatus = "M5708";
+        /// <summary>
+        /// 2z轴研磨D下片移动状态
+        /// </summary>
+        public const string PolishDDownPieceMoveStatus = "M5709";
+
         #endregion
 
         #region 速度设定 (D)
@@ -429,6 +466,18 @@ namespace CMP.Constants.Plc.RobotControl
         /// 手臂1光纤3
         /// </summary>
         public const string Arm2Fiber3 = "X1025";
+        /// <summary>
+        /// 电源关闭
+        /// </summary>
+        public const string PowerOff = "M10404";
+        /// <summary>
+        /// 晶圆槽位
+        /// </summary>
+        public const string FoupSlot = "W1C20";
+        /// <summary>
+        /// 晶圆索引
+        /// </summary>
+        public const string WaferIndex = "W1C21";
 
         #endregion
     }

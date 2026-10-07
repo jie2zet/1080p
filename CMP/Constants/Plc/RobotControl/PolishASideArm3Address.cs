@@ -260,7 +260,18 @@ public static class PolishASideArm3Address
     /// 中转手臂位到位
     /// </summary>
     public const string ZTransferArmPositionArrived = "M5467";
-
+    /// <summary>
+    /// 有晶圆时的速度
+    /// </summary>
+    public const string SpeedWhenHasWafer = "D10902";
+    /// <summary>
+    /// 减速度时间
+    /// </summary>
+    public const string DeaccelerationTime = "D10914";
+    /// <summary>
+    /// 加速度时间
+    /// </summary>
+    public const string AccelerationTime = "D10912";    
     #endregion
 
     #region 底部状态栏
@@ -423,6 +434,10 @@ public static class PolishASideArm3Address
     /// Index
     /// </summary>
     public const string WaferIndex = "W1A31";
+    /// <summary>
+    /// 电源关闭
+    /// </summary>
+    public const string PowerOff = "M10402";
 
     #endregion
 }

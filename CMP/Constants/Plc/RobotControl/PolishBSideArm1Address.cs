@@ -146,6 +146,18 @@ namespace CMP.Constants.Plc.RobotControl
         /// 1z轴研磨D位
         /// </summary>
         public const string PolishDPosition_1z = "D11224";
+        /// <summary>
+        /// 1z轴有晶圆时速度
+        /// </summary>
+        public const string SpeedWhenHasWafer = "D11202";
+        /// <summary>
+        /// 1z轴加速时间
+        /// </summary>
+        public const string AccelerationTime = "D11212";
+        /// <summary>
+        /// 1z轴减速时间
+        /// </summary>
+        public const string DeaccelerationTime = "D11214";
         #endregion
 
         #region 移动命令 (M)
@@ -413,6 +425,19 @@ namespace CMP.Constants.Plc.RobotControl
         /// 手臂1光纤3
         /// </summary>
         public const string Arm1Fiber3 = "X1022";
+        /// <summary>
+        /// 电源关闭
+        /// </summary>
+        public const string PowerOff = "M10403";
+        /// <summary>
+        /// 晶圆槽位
+        /// </summary>
+        public const string FoupSlot = "W1C10";
+        /// <summary>
+        /// 晶圆索引
+        /// </summary>
+        public const string WaferIndex = "W1C11";
+        
 
         #endregion
     }
