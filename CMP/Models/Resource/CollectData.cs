@@ -31,6 +31,8 @@ namespace CMP.Models.Resource
 {
     public abstract class CollectDataChamber : BindableBase
     {
+        public event EventHandler? ProcessDataUpdated;
+
         string name;
         public readonly Dictionary<string, SV> ListSV;
         public KVLink kvLink;
@@ -199,6 +201,61 @@ namespace CMP.Models.Resource
         public abstract bool TryGetIoValue(string stationPrefix, string fieldName, out bool value);
 
         public abstract void CollectData();
+
+        internal bool TryGetProcessDataDisplay(string stationPrefix, out short processStepAct, out float recipeTimeAct)
+        {
+            processStepAct = 0;
+            recipeTimeAct = 0;
+
+            switch (this)
+            {
+                case Polish polish when polish.TryGetProcessDataSnapshot(out var polishSnapshot):
+                    processStepAct = polishSnapshot.ProcessStepAct;
+                    recipeTimeAct = polishSnapshot.RecipeTimeAct;
+                    return true;
+                case Roller roller when roller.TryGetProcessDataSnapshot(out var rollerSnapshot):
+                    switch (stationPrefix)
+                    {
+                        case "_1":
+                            processStepAct = rollerSnapshot._1ProcessStepAct;
+                            recipeTimeAct = rollerSnapshot._1RecipeTimeAct;
+                            return true;
+                        case "_2":
+                            processStepAct = rollerSnapshot._2ProcessStepAct;
+                            recipeTimeAct = rollerSnapshot._2RecipeTimeAct;
+                            return true;
+                        case "_3":
+                            processStepAct = rollerSnapshot._3ProcessStepAct;
+                            recipeTimeAct = rollerSnapshot._3RecipeTimeAct;
+                            return true;
+                    }
+                    break;
+                case Pen pen when pen.TryGetProcessDataSnapshot(out var penSnapshot):
+                    switch (stationPrefix)
+                    {
+                        case "_1":
+                            processStepAct = penSnapshot._1ProcessStepAct;
+                            recipeTimeAct = penSnapshot._1RecipeTimeAct;
+                            return true;
+                        case "_2":
+                            processStepAct = penSnapshot._2ProcessStepAct;
+                            recipeTimeAct = penSnapshot._2RecipeTimeAct;
+                            return true;
+                    }
+                    break;
+                case Dry dry when dry.TryGetProcessDataSnapshot(out var drySnapshot):
+                    processStepAct = drySnapshot.ProcessStepAct;
+                    recipeTimeAct = drySnapshot.RecipeTimeAct;
+                    return true;
+            }
+
+            return false;
+        }
+
+        protected void NotifyProcessDataUpdated()
+        {
+            ProcessDataUpdated?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public class Polish : CollectDataChamber
@@ -318,6 +375,8 @@ namespace CMP.Models.Resource
             {
                 SetSv(BuildRuntimeKey(null, name), value);
             });
+
+            NotifyProcessDataUpdated();
         }
 
         private void CollectIOData1()
@@ -587,6 +646,8 @@ namespace CMP.Models.Resource
             {
                 SetSv(BuildRuntimeKey(null, name), value);
             });
+
+            NotifyProcessDataUpdated();
         }
 
         private void CollectIOData()
@@ -884,6 +945,8 @@ namespace CMP.Models.Resource
             {
                 SetSv(BuildRuntimeKey(null, name), value);
             });
+
+            NotifyProcessDataUpdated();
         }
 
         private void CollectIOData()
@@ -1132,6 +1195,8 @@ namespace CMP.Models.Resource
             {
                 SetSv(BuildRuntimeKey(null, name), value);
             });
+
+            NotifyProcessDataUpdated();
         }
 
         private void CollectIOData1()

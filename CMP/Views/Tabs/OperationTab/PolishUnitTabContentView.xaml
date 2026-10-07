@@ -1,4 +1,4 @@
-<UserControl x:Class="CMP.Views.Tabs.OperationTab.PolishUnitTabContentView"
+﻿<UserControl x:Class="CMP.Views.Tabs.OperationTab.PolishUnitTabContentView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
@@ -29,7 +29,7 @@
                               Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
                         <GroupBox.Header>
                             <StackPanel>
-                                <TextBlock Padding="5" Foreground="White" Text="{Binding PolishUnit}" />
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc Polish}" />
                             </StackPanel>
                         </GroupBox.Header>
                         <Border CornerRadius="4">
@@ -414,7 +414,7 @@
                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10" Grid.Row="1"
                             Grid.Column="0">
                     <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-                              Padding="2" Style="{StaticResource GroupBoxTab.Small}" Width="200">
+          Padding="2" Style="{StaticResource GroupBoxTab.Small}" Width="200">
                         <GroupBox.Header>
                             <StackPanel>
                                 <TextBlock Padding="5" Foreground="White" Text="{lex:Loc PlatenMotor}" />
@@ -425,9 +425,9 @@
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="{lex:Loc Servo}" Width="50" VerticalAlignment="Center" />
                                     <Button Content="{Binding PlatenMotorServoText}" Width="70"
-                                            Style="{StaticResource ButtonPrimary}"
-                                            Command="{Binding ServoCommand}"
-                                            CommandParameter="PlatenMotor" />
+                        Style="{StaticResource ButtonPrimary}"
+                        Command="{Binding ServoCommand}"
+                        CommandParameter="PlatenMotor" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                     <TextBlock Text="{lex:Loc SetVel}" Width="50" VerticalAlignment="Center" />
@@ -435,14 +435,54 @@
                                     <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.PlatenMotor.ActVelocity}" />
                                 </StackPanel>
                                 <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
-                                            extensions:StackPanelHelpers.Spacing="30"
-                                            HorizontalAlignment="Center">
+                        extensions:StackPanelHelpers.Spacing="30"
+                        HorizontalAlignment="Center">
                                     <Button Content="{lex:Loc Run}" Width="60" Style="{StaticResource ButtonPrimary}"
-                                            Command="{Binding RunCommand}"
-                                            CommandParameter="PlatenMotor" />
+                        Command="{Binding RunCommand}"
+                        CommandParameter="PlatenMotor" />
                                     <Button Content="{lex:Loc Stop}" Width="60" Style="{StaticResource ButtonDanger}"
-                                            Command="{Binding AbortCommand}"
-                                            CommandParameter="PlatenMotor" />
+                        Command="{Binding AbortCommand}"
+                        CommandParameter="PlatenMotor" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </GroupBox>
+                    <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+          Padding="2" Style="{StaticResource GroupBoxTab.Small}" Width="200">
+                        <GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Padding="5" Foreground="White" Text="{lex:Loc Torque}" />
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <Border Padding="10">
+                            <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="{lex:Loc PlatenMotor}" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.PlatenMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="{lex:Loc HeadRotateMotor}" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.HeadRotateMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="{lex:Loc HeadSweepMotor}" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.HeadSweepMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="Head Lift Motor" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.HeadLiftMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="Disk Rotate Motor" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.DiskRotateMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="{lex:Loc ConditionSweepMotor}" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.ConditionSweepMotor.ActTorque}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                    <TextBlock Text="{lex:Loc SlurrySweepMotor}" Width="120" VerticalAlignment="Center" />
+                                    <TextBlock Width="30" VerticalAlignment="Center" Text="{Binding PolishUnit.SlurrySweepMotor.ActTorque}" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>

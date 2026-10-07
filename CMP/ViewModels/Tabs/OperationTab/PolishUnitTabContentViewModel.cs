@@ -721,6 +721,13 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.ConditionSweepMotor.IsServoOn = snapshot.ConditionSweepMotorServoOn;
         PolishUnit.SlurrySweepMotor.IsServoOn = snapshot.SlurrySweepMotorServoOn;
 
+        PolishUnit.PlatenMotor.ActTorque = snapshot.PlatenRotationMotorTorqueAct;
+        PolishUnit.HeadRotateMotor.ActTorque = snapshot.HeadRotationMotorTorqueAct;
+        PolishUnit.HeadSweepMotor.ActTorque = snapshot.HeadSweepMotorTorqueAct;
+        PolishUnit.HeadLiftMotor.ActTorque = snapshot.HeadZ_AxisMotorTorqueAct;
+        PolishUnit.DiskRotateMotor.ActTorque = snapshot.ConditionRotationMotorTorqueAct;
+        PolishUnit.ConditionSweepMotor.ActTorque = snapshot.ConditionSweepMotorTorqueAct;
+        PolishUnit.SlurrySweepMotor.ActTorque = snapshot.SlurryNozzleMotorTorqueAct;
 
         RaisePropertyChanged(nameof(PlatenMotorServoText));
         RaisePropertyChanged(nameof(ConditionSweepMotorServoText));

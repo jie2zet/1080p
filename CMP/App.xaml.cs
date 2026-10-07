@@ -176,6 +176,17 @@ public partial class App
             // 互斥量释放失败不阻断进程退出
         }
 
+
+        try
+        {
+            Container.Resolve<IHostCommunicationService>().Dispose();
+        }
+        catch
+        {
+            
+        }
+
+
         Environment.Exit(0);
     }
 

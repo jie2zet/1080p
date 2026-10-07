@@ -18,9 +18,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using static CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
+using static CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using static CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
+using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
+using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
 using Logger = CMP.Services.Log.Logger;
-
 namespace CMP.Services.HostCommunication
 {
     public class HostCommunicationService : IHostCommunicationService
@@ -93,16 +97,6 @@ namespace CMP.Services.HostCommunication
         //public IHostCallBack _equipment;
         private HashSet<string> _systemBuildInEc = new HashSet<string>();
         private HashSet<string> _systemBuildInVariables = new HashSet<string>();
-        //private PeriodicJob _faMonitorThread;
-
-        //private FixSizeQueue<FAEventItemDemo> _lstEvent = new FixSizeQueue<FAEventItemDemo>(30000);
-
-        //private FixSizeQueue<SECsMessage> _lstToBeSendMsg = new FixSizeQueue<SECsMessage>(10000);
-
-        //LogCleaner _logFabConnectCleaner = new LogCleaner(60);
-
-
-
 
         private ControlState _preControlState = ControlState.Unknown;
         private const string EventControlModeChangeReport = "ControlMode_CHANGE_Report";
@@ -148,7 +142,7 @@ namespace CMP.Services.HostCommunication
                 _gem.AutoPPDataReply = true;
 
 
-                _gem.Initialize(modelFilePath+ "FabConnectGemModel.xml");
+                _gem.Initialize(modelFilePath + "FabConnectGemModel.xml");
 
 
                 //get system build in ec
@@ -191,6 +185,16 @@ namespace CMP.Services.HostCommunication
 
                 status.LoadportStatus = LoadportActionStatus.None;
 
+                //监听LoadPort状态改变通知
+                _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
+
+                //处理发送事件
+                _timer = new Timer(
+                callback: ProcessSendEventsTask,
+                state: null,
+                dueTime: 1000,
+                period: 50);
+
             }
             catch (Exception ex)
             {
@@ -199,29 +203,16 @@ namespace CMP.Services.HostCommunication
             }
 
 
-
-            //监听LoadPort状态改变通知
-            _eventAggregator.GetEvent<LoadPortStatusChangedEvent>().Subscribe(OnLoadPortStatusMessageReceived);
-
-            //处理发送事件
-            _timer = new Timer(
-            callback: ProcessSendEventsTask,
-            state: null,
-            dueTime: 1000,
-            period: 50);
-           
-
-
         }
 
 
         /// <summary>
-        /// SV加载变量
+        /// 加载SV变量
         /// </summary>
         private void InitialSystemBuildInVariable()
         {
             string[] txtFiles = Directory.GetFiles(modelFilePath, "*.txt");
-            Dictionary<string, string> dic = new Dictionary<string, string>();
+            SortedDictionary<string, string> dic = new SortedDictionary<string, string>();
             foreach (string filePath in txtFiles)
             {
                 if (filePath.Contains("SVVariable"))
@@ -265,8 +256,8 @@ namespace CMP.Services.HostCommunication
 
                 throw;
             }
-           
-           
+
+
         }
 
 
@@ -342,6 +333,8 @@ namespace CMP.Services.HostCommunication
         private void SendEventToHost(SendEventModel model)
         {
 
+            if (!_isOnline || model ==null) return;
+           
             var allEvents = _gem.GetAllEnabledEvents();
             if (!allEvents.Contains(model.EventName)) return;
 
@@ -378,7 +371,7 @@ namespace CMP.Services.HostCommunication
         private void ProcessSendEventsTask(object? state)
         {
 
-            //PrintfSVValue();
+            // PrintfSVValue();
 
             if (queue.TryDequeue(out SendEventModel? result))
             {
@@ -555,7 +548,7 @@ namespace CMP.Services.HostCommunication
 
         private void E87_PortAction(SECsPrimaryInEventArgs e)
         {
-         
+
         }
         private void E87_ChangeAccessModeList(SECsPrimaryInEventArgs e)
         {
@@ -574,12 +567,12 @@ namespace CMP.Services.HostCommunication
         }
         private void E40_Handle_PJCMD(SECsPrimaryInEventArgs e)
         {
-  
+
 
         }
         private void E40_Handle_PRJobCreateEnh(SECsPrimaryInEventArgs e)
         {
-    
+
 
         }
         private void E40_Handle_PRJobDuplicateCreate(SECsPrimaryInEventArgs e)
@@ -635,9 +628,9 @@ namespace CMP.Services.HostCommunication
 
         private void Handle_S7F5(SECsPrimaryInEventArgs e)
         {
-           
+
         }
- 
+
 
         /// <summary>
         /// Host requests the equipment to send the current EPPD
@@ -647,7 +640,7 @@ namespace CMP.Services.HostCommunication
         /// <param name="e"></param>
         private void Handle_S7F19(SECsPrimaryInEventArgs e)
         {
-           
+
         }
 
 
@@ -731,7 +724,7 @@ namespace CMP.Services.HostCommunication
         /// <param name="e"></param>
         private void Handle_S2F13(SECsPrimaryInEventArgs e)
         {
-           
+
         }
 
         private SECsFormat ConvertObjFormat(object value)
@@ -918,20 +911,25 @@ namespace CMP.Services.HostCommunication
             }
         }
 
- 
 
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
         public void Terminate()
         {
-            //try
-            //{
-            //    _faMonitorThread.Stop();
-            //    _logFabConnectCleaner.Stop();
-            //}
-            //catch (Exception ex)
-            //{
-            //    LOG.Write(ex);
-            //}
+            try
+            {
+                _faMonitorThread.Stop();
+                _timer.Dispose();
+                queue.Clear();
+                _gem.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
 
         }
 
@@ -1012,50 +1010,174 @@ namespace CMP.Services.HostCommunication
                 _gem.SetRemote();
                 _isOnline = true;
             }
-           
+
             if (_isOnline)
             {
 
-                var stopwatch = Stopwatch.StartNew();
+                SetPolishSVData();
+                SetRollerSVData();
+                SetPenSVData();
+                SetDrySVData();
+                //SetPolishSVDataTest();
 
-                //foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
-                //{
-                //    if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish"))
-                //    {
+            }
 
-                //        //string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
+            return true;
 
-                //        //Console.WriteLine($"读取到的数据名称：{sv.logicalName} --{str}");
-                //        SetSVIDValue(sv.logicalName, 99);
 
-                //    }
-                //}
 
-              
+        }
 
-                for (int index = 0; index < 4; index++)
+        private void LoadPortStatusChangedEventTest()
+        {
+            LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
+            {
+                LoadportId = 1,
+                HardwareStatus = status,
+                CarrierId = "100"
+
+            };
+
+
+            OnLoadPortStatusMessageReceived(arg);
+
+            switch (status.LoadportStatus)
+            {
+                case LoadportActionStatus.None:
+                    status.LoadportStatus = LoadportActionStatus.WaitFoupArrive;
+                    break;
+                case LoadportActionStatus.WaitFoupArrive:
+                    status.LoadportStatus = LoadportActionStatus.FoupArrived;
+                    break;
+                case LoadportActionStatus.FoupArrived:
+                    status.LoadportStatus = LoadportActionStatus.Clamp;
+                    break;
+                case LoadportActionStatus.Clamp:
+                    status.LoadportStatus = LoadportActionStatus.Dock;
+                    break;
+                case LoadportActionStatus.Dock:
+                    status.LoadportStatus = LoadportActionStatus.Load;
+                    break;
+                case LoadportActionStatus.Load:
+                    status.LoadportStatus = LoadportActionStatus.DoorOpen;
+                    break;
+                case LoadportActionStatus.DoorOpen:
+                    status.LoadportStatus = LoadportActionStatus.Scan;
+                    break;
+                case LoadportActionStatus.Scan:
+                    status.LoadportStatus = LoadportActionStatus.Undock;
+                    break;
+                case LoadportActionStatus.Undock:
+                    status.LoadportStatus = LoadportActionStatus.Unload;
+                    break;
+                case LoadportActionStatus.Unload:
+                    status.LoadportStatus = LoadportActionStatus.Release;
+                    break;
+                case LoadportActionStatus.Release:
+                    status.LoadportStatus = LoadportActionStatus.WaitFoupLeave;
+                    break;
+                case LoadportActionStatus.WaitFoupLeave:
+                    status.LoadportStatus = LoadportActionStatus.None;
+                    break;
+            }
+
+            Thread.Sleep(500);
+
+        }
+
+
+        private void SetPolishSVDataTest()
+        {
+            foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
+            {
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (sv.logicalName.contains("Polish") 
+                    || sv.logicalName.contains("Roller")
+                    || sv.logicalName.contains("Pen")
+                    || sv.logicalName.contains("Dry")))
                 {
-                    if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
+
+                    SetSVIDValue(sv.logicalName, 99);
+
+                }
+            }
+
+        }
+
+
+        private void SetPolishSVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 4; index++)
+            {
+                if (GlobalService.DataCenter.listPolish[index].TryGetProcessDataSnapshot(out stPolishCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
+
+                    foreach (FieldInfo field in fields)
                     {
-
-                        FieldInfo[] fields = typeof(stPolishCollectData).GetFields();
-
-                        foreach (FieldInfo field in fields)
+                        string name = field.Name;
+                        switch (index)
                         {
-                            string name = field.Name;
+                            case 0:
+                                name = "PolishA" + name;
+                                break;
+                            case 1:
+                                name = "PolishB" + name;
+                                break;
+                            case 2:
+                                name = "PolishC" + name;
+                                break;
+                            case 3:
+                                name = "PolishD" + name;
+                                break;
+                            default:
+                                break;
+
+                        }
+                        object? value = field.GetValue(snapshot);
+                        if (value != null)
+                        {
+                            SetSVIDValue(name, value);
+                        }
+
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报Polish SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
+
+        private void SetRollerSVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+         if (GlobalService.DataCenter.listRoller[index].TryGetProcessDataSnapshot(out KHSTRollerCollectData.stRollerCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTRollerCollectData.stRollerCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        if (!name.Contains("ServoOn")) //过滤
+                        {
                             switch (index)
                             {
                                 case 0:
-                                    name = "PolishA" + name;
+                                    name = name.Replace("_", "RollerA");
+
                                     break;
                                 case 1:
-                                    name = "PolishB" + name;
-                                    break;
-                                case 2:
-                                    name = "PolishC" + name;
-                                    break;
-                                case 3:
-                                    name = "PolishD" + name;
+                                    name = name.Replace("_", "RollerB"); ;
                                     break;
                                 default:
                                     break;
@@ -1066,77 +1188,111 @@ namespace CMP.Services.HostCommunication
                             {
                                 SetSVIDValue(name, value);
                             }
-
-                        }
-
+                        }         
                     }
-                }
-               
-                stopwatch.Stop();
 
- 
-                Logger.Info($"上报SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+                }
             }
 
-            return true;
+            stopwatch.Stop();
+            Logger.Info($"上报 Roller SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
 
-
-            //LoadPortStatusChangedEventArgs arg = new LoadPortStatusChangedEventArgs()
-            //{
-            //    LoadportId = 1,
-            //    HardwareStatus = status,
-            //    CarrierId = "100"
-
-            //};
-
-
-            //OnLoadPortStatusMessageReceived(arg);
-
-            //switch (status.LoadportStatus)
-            //{
-            //    case LoadportActionStatus.None:
-            //        status.LoadportStatus = LoadportActionStatus.WaitFoupArrive;
-            //        break;
-            //    case LoadportActionStatus.WaitFoupArrive:
-            //        status.LoadportStatus = LoadportActionStatus.FoupArrived;
-            //        break;
-            //    case LoadportActionStatus.FoupArrived:
-            //        status.LoadportStatus = LoadportActionStatus.Clamp;
-            //        break;
-            //    case LoadportActionStatus.Clamp:
-            //        status.LoadportStatus = LoadportActionStatus.Dock;
-            //        break;
-            //    case LoadportActionStatus.Dock:
-            //        status.LoadportStatus = LoadportActionStatus.Load;
-            //        break;
-            //    case LoadportActionStatus.Load:
-            //        status.LoadportStatus = LoadportActionStatus.DoorOpen;
-            //        break;
-            //    case LoadportActionStatus.DoorOpen:
-            //        status.LoadportStatus = LoadportActionStatus.Scan;
-            //        break;
-            //    case LoadportActionStatus.Scan:
-            //        status.LoadportStatus = LoadportActionStatus.Undock;
-            //        break;
-            //    case LoadportActionStatus.Undock:
-            //        status.LoadportStatus = LoadportActionStatus.Unload;
-            //        break;
-            //    case LoadportActionStatus.Unload:
-            //        status.LoadportStatus = LoadportActionStatus.Release;
-            //        break;
-            //    case LoadportActionStatus.Release:
-            //        status.LoadportStatus = LoadportActionStatus.WaitFoupLeave;
-            //        break;
-            //    case LoadportActionStatus.WaitFoupLeave:
-            //        status.LoadportStatus = LoadportActionStatus.None;
-            //        break;
-            //}
-
-            //Thread.Sleep(5000);
-
-
-            //return true;
         }
+
+
+
+
+        private void SetPenSVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+                if (GlobalService.DataCenter.listPen[index].TryGetProcessDataSnapshot(out KHSTPenCollectData.stPenCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTPenCollectData.stPenCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        if (!name.Contains("ServoOn")) //过滤
+                        {
+                            switch (index)
+                            {
+                                case 0:
+                                    name = name.Replace("_", "PenA");
+                                    break;
+                                case 1:
+                                    name = name.Replace("_", "PenB");
+                                    break;
+
+                                default:
+                                    break;
+
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报 Pen SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
+
+
+        private void SetDrySVData()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int index = 0; index < 2; index++)
+            {
+                if (GlobalService.DataCenter.listDry[index].TryGetProcessDataSnapshot(out KHSTDryCollectData.stDryCollectData snapshot))
+                {
+
+                    FieldInfo[] fields = typeof(KHSTDryCollectData.stDryCollectData).GetFields().Where(f => f.FieldType != typeof(bool)).ToArray();
+
+                    foreach (FieldInfo field in fields)
+                    {
+                        string name = field.Name;
+                        if (!name.Contains("ServoOn")) //过滤
+                        {
+                            switch (index)
+                            {
+                                case 0:
+                                    name = name.Replace("_", "DryA");
+                                    break;
+                                case 1:
+                                    name = name.Replace("_", "DryB");
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                            object? value = field.GetValue(snapshot);
+                            if (value != null)
+                            {
+                                SetSVIDValue(name, value);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            stopwatch.Stop();
+            Logger.Info($"上报 Dry SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+
+        }
+
 
         private bool SetSVIDValue(string localName, object value)
         {
@@ -1147,8 +1303,14 @@ namespace CMP.Services.HostCommunication
 
             foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
             {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName)&& localName.Contains("Polish", StringComparison.OrdinalIgnoreCase)) 
-                {                  
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (localName.Contains("Polish", StringComparison.OrdinalIgnoreCase) 
+                    || localName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+                    || localName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+                    || localName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+                    
+                    ))
+                {
                     _gem.SetAttribute(localName, AttributeType.SV, Convert.ToString(value));
                     return true;
                 }
@@ -1162,22 +1324,24 @@ namespace CMP.Services.HostCommunication
         //todo：测试参数写入是否成功 
         private void PrintfSVValue()
         {
-            if (!_isOnline) return ; 
-            
+            if (!_isOnline) return;
 
-           foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
+
+            foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
             {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && sv.logicalName.contains("Polish")) 
+                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                    (sv.logicalName.Contains("Polish", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+                    || sv.logicalName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+                    ))
                 {
-  
-                        string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
-
+                    string str = _gem.GetAttribute(sv.logicalName, AttributeType.SV);
                     lock (_fileLock)
                     {
-                        string path = $"D:\\CMP\\Configuration\\FA\\2026-09-2718.txt";
+                        string path = $"{modelFilePath}{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
                         File.AppendAllText(path, $"读取到的数据名称：{sv.logicalName} --{str}" + Environment.NewLine, Encoding.UTF8);
                     }
-                   
 
                 }
             }
@@ -1486,6 +1650,12 @@ namespace CMP.Services.HostCommunication
             throw new NotImplementedException();
         }
 
+        public void Dispose()
+        {
+
+            Terminate();
+
+        }
 
         public class FAEventItemDemo
         {

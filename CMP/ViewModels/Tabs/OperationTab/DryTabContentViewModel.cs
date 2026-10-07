@@ -321,8 +321,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
                     plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
-                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
-                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
+                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepStartPosition", i);
+                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
                     plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
@@ -333,7 +333,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
-                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<float>(recipeContent, "WaferRotationAcceleration", i);
 
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
@@ -504,8 +504,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     plcRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
                     plcRecipe.WaferRotationSpeed[i] = GetRealVal<float>(recipeContent, "WaferRotationSpeed", i);
-                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepStartPosition", i);
-                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEndPosition", i);
+                    plcRecipe.IPAArmSweepStartPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepStartPosition", i);
+                    plcRecipe.IPAArmSweepEndPosition[i] = GetRealVal<short>(recipeContent, "IPAArmSweepEndPosition", i);
                     plcRecipe.IPAArmSweepCenterVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepCenterVelocity", i);
                     plcRecipe.IPAArmSweepEdgeVelocity[i] = GetRealVal<float>(recipeContent, "IPAArmSweepEdgeVelocity", i);
                     plcRecipe.IPAArmSweepSpeed[i] = GetRealVal<float>(recipeContent, "IPAArmSweepSpeed", i);
@@ -516,7 +516,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
                     plcRecipe.BubblingN2GasFlow[i] = GetRealVal<float>(recipeContent, "BubblingN2GasFlow", i);
                     plcRecipe.UpperRinseSupply[i] = GetRealVal<short>(recipeContent, "UpperRinseSupply", i);
                     plcRecipe.LowerRinseSupply[i] = GetRealVal<short>(recipeContent, "LowerRinseSupply", i);
-                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<short>(recipeContent, "WaferRotationAcceleration", i);
+                    plcRecipe.WaferRotationAcceleration[i] = GetRealVal<float>(recipeContent, "WaferRotationAcceleration", i);
                 }
                 KST.stDryRecipeFormat_ToByte(ref _writeBuf, plcRecipe, 1, 0);
                 _err = KHL.KHLWriteVariable(kvLink.sock, _varNameRecipeStruct, _writeBuf, true);
@@ -1024,6 +1024,8 @@ public class DryTabContentViewModel : TabContentViewModelBase
         DryClean.ChuckRotationMotor.ActVelocity = snapshot.ChuckRotationSpeedAct;
         DryClean.ArmSwingMotor.ActVelocity = snapshot.ArmSweepSpeedAct;
         DryClean.ArmSwingMotor.ActPosition = snapshot.ArmSweepAngleAct;
+        DryClean.ChuckRotationMotor.ActTorque = snapshot.ChuckRotationTorqueAct;
+        DryClean.ArmSwingMotor.ActTorque = snapshot.ArmSweepTorqueAct;
         
         DryClean.ChuckRotationMotor.IsServoOn = snapshot.ChuckMotorServoOn;
         DryClean.ArmSwingMotor.IsServoOn = snapshot.ArmSweepMotorServoOn;
