@@ -372,7 +372,7 @@ namespace CMP.Services.HostCommunication
         private void ProcessSendEventsTask(object? state)
         {
 
-             //PrintfSVValue();
+            // PrintfSVValue();
 
             if (queue.TryDequeue(out SendEventModel? result))
             {
@@ -1269,10 +1269,10 @@ namespace CMP.Services.HostCommunication
                             switch (index)
                             {
                                 case 0:
-                                    name = name.Replace("_", "DryA");
+                                    name = $"DryA{name}";
                                     break;
                                 case 1:
-                                    name = name.Replace("_", "DryB");
+                                    name = $"DryB{name}";                   
                                     break;
                                 default:
                                     break;
@@ -1662,11 +1662,7 @@ namespace CMP.Services.HostCommunication
 
 
 
-        //public void SendMessge(string data)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
+    
 
 
 
