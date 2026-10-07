@@ -233,9 +233,8 @@ public class RoboticArm : BindableBase
             return;
         }
 
-        var mainOk = mcComm.IsPLCConnected;
-        var robotOk = _robotPlc.IsPLCConnected;
-        if (!mainOk && !robotOk)
+        // 主界面「PLC 未连接」只看主站。7005 仍连着时也会读到 Manual/Auto，这里主站断开就显示 Disconnect。
+        if (!mcComm.IsPLCConnected)
         {
             SetRobotStatusFromPlc(ChamberStatus.Disconnect);
             return;
