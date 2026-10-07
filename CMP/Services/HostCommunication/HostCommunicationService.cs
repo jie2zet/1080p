@@ -371,7 +371,7 @@ namespace CMP.Services.HostCommunication
         private void ProcessSendEventsTask(object? state)
         {
 
-            // PrintfSVValue();
+             //PrintfSVValue();
 
             if (queue.TryDequeue(out SendEventModel? result))
             {
@@ -1018,7 +1018,7 @@ namespace CMP.Services.HostCommunication
                 SetRollerSVData();
                 SetPenSVData();
                 SetDrySVData();
-                //SetPolishSVDataTest();
+                // SetPolishSVDataTest();
 
             }
 
@@ -1289,34 +1289,29 @@ namespace CMP.Services.HostCommunication
             }
 
             stopwatch.Stop();
-            Logger.Info($"上报 Dry SVVariable耗时: {stopwatch.ElapsedMilliseconds} ms");
+            Logger.Info($"上报 Dry SVVariable 耗时: {stopwatch.ElapsedMilliseconds} ms");
 
         }
 
 
-        private bool SetSVIDValue(string localName, object value)
+        private void SetSVIDValue(string localName, object value)
         {
-            if (value == null || string.IsNullOrEmpty(localName)) return false;
+            if (value == null || string.IsNullOrEmpty(localName)) return ;
 
             if (_gem.EquipmentModel == null || !_gem.EquipmentModel.StatusVariables.SVIDCollection.IsExistLogicalName(localName))
-                return false;
+                return ;
 
-            foreach (SVID sv in _gem.EquipmentModel.StatusVariables.SVIDCollection)
-            {
-                if (sv != null && _systemBuildInVariables.Contains(sv.logicalName) && 
+                if (_systemBuildInVariables.Contains(localName) && 
                     (localName.Contains("Polish", StringComparison.OrdinalIgnoreCase) 
                     || localName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
                     || localName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
-                    || localName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
-                    
+                    || localName.Contains("Dry", StringComparison.OrdinalIgnoreCase)              
                     ))
                 {
                     _gem.SetAttribute(localName, AttributeType.SV, Convert.ToString(value));
-                    return true;
+                  
                 }
-            }
 
-            return false;
         }
 
         private static readonly object _fileLock = new object();
