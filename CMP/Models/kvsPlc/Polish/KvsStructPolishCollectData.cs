@@ -3,12 +3,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace KvStruct
+namespace CMP.Models.kvsPlc.Polish
 {
-    class KvStruct
+    class KvsStructPolishCollectData
     {
-        const int stPolishCollectData_WSIZE = 320;
-
+        const int stPolishCollectData_WSIZE = 316;
 
         public class stPolishCollectData
         {
@@ -154,6 +153,13 @@ namespace KvStruct
             public float ConditionRotationMotorTorqueAct = default(float);
             public float ConditionSweepMotorTorqueAct = default(float);
             public float SlurryNozzleMotorTorqueAct = default(float);
+            public bool PlatenRotationMotorServoOn = default(bool);
+            public bool HeadRotationMotorServoOn = default(bool);
+            public bool HeadSweepMotorServoOn = default(bool);
+            public bool HeadUpDownMotorServoOn = default(bool);
+            public bool ConditionHeadRotationMotorServoOn = default(bool);
+            public bool ConditionSweepMotorServoOn = default(bool);
+            public bool SlurrySweepMotorServoOn = default(bool);
             public float Zone1PressureInlineAct = default(float);
             public float Zone2PressureInlineAct = default(float);
             public float Zone3PressureInlineAct = default(float);
@@ -166,8 +172,6 @@ namespace KvStruct
             public float ConditionDownForcePressureInlineAct = default(float);
             public float RetainerRingPressureAct = default(float);
             public float RetainerRingPressureSet = default(float);
-            public float Zone4DIWFlowrate = default(float);
-            public float DifferentialPressureGauge = default(float);
             public int UnitWaferCount = default(int);
             public int AirBagWaferCount = default(int);
             public int AirBagUesTime = default(int);
@@ -179,9 +183,9 @@ namespace KvStruct
             public int PadUesTime = default(int);
             public int ConditionInsiUesTime = default(int);
             public int ConditionExsiUesTime = default(int);
-            public int UnitIdleTimeh = default(int);
-            public int UnitIdleTimemin = default(int);
-            public int UnitIdleTimes = default(int);
+            public short UnitIdleTimeh = default(short);
+            public short UnitIdleTimemin = default(short);
+            public short UnitIdleTimes = default(short);
         }
 
         public static int[] NewIndices(Array target)
@@ -1120,34 +1124,39 @@ namespace KvStruct
             ByteToFloat(ref dst.ConditionRotationMotorTorqueAct, src, 1, 258 + wordOffset);
             ByteToFloat(ref dst.ConditionSweepMotorTorqueAct, src, 1, 260 + wordOffset);
             ByteToFloat(ref dst.SlurryNozzleMotorTorqueAct, src, 1, 262 + wordOffset);
-            ByteToFloat(ref dst.Zone1PressureInlineAct, src, 1, 264 + wordOffset);
-            ByteToFloat(ref dst.Zone2PressureInlineAct, src, 1, 266 + wordOffset);
-            ByteToFloat(ref dst.Zone3PressureInlineAct, src, 1, 268 + wordOffset);
-            ByteToFloat(ref dst.Zone4PressureInlineAct, src, 1, 270 + wordOffset);
-            ByteToFloat(ref dst.Zone5PressureInlineAct, src, 1, 272 + wordOffset);
-            ByteToFloat(ref dst.Zone6PressureInlineAct, src, 1, 274 + wordOffset);
-            ByteToFloat(ref dst.Zone7PressureInlineAct, src, 1, 276 + wordOffset);
-            ByteToFloat(ref dst.Zone8PressureInlineAct, src, 1, 278 + wordOffset);
-            ByteToFloat(ref dst.RetainerRingAirBagPressureInlineAct, src, 1, 280 + wordOffset);
-            ByteToFloat(ref dst.ConditionDownForcePressureInlineAct, src, 1, 282 + wordOffset);
-            ByteToFloat(ref dst.RetainerRingPressureAct, src, 1, 284 + wordOffset);
-            ByteToFloat(ref dst.RetainerRingPressureSet, src, 1, 286 + wordOffset);
-            ByteToFloat(ref dst.Zone4DIWFlowrate, src, 1, 288 + wordOffset);
-            ByteToFloat(ref dst.DifferentialPressureGauge, src, 1, 290 + wordOffset);
-            ByteToInt(ref dst.UnitWaferCount, src, 1, 292 + wordOffset);
-            ByteToInt(ref dst.AirBagWaferCount, src, 1, 294 + wordOffset);
-            ByteToInt(ref dst.AirBagUesTime, src, 1, 296 + wordOffset);
-            ByteToInt(ref dst.MembranceWaferCount, src, 1, 298 + wordOffset);
-            ByteToInt(ref dst.MembranceUesTime, src, 1, 300 + wordOffset);
-            ByteToInt(ref dst.RatainerRingWaferCount, src, 1, 302 + wordOffset);
-            ByteToInt(ref dst.RatainerRingUesTime, src, 1, 304 + wordOffset);
-            ByteToInt(ref dst.PadWaferCount, src, 1, 306 + wordOffset);
-            ByteToInt(ref dst.PadUesTime, src, 1, 308 + wordOffset);
-            ByteToInt(ref dst.ConditionInsiUesTime, src, 1, 310 + wordOffset);
-            ByteToInt(ref dst.ConditionExsiUesTime, src, 1, 312 + wordOffset);
-            ByteToInt(ref dst.UnitIdleTimeh, src, 1, 314 + wordOffset);
-            ByteToInt(ref dst.UnitIdleTimemin, src, 1, 316 + wordOffset);
-            ByteToInt(ref dst.UnitIdleTimes, src, 1, 318 + wordOffset);
+            ByteToBool(ref dst.PlatenRotationMotorServoOn, src, 1, 264 + wordOffset, 0);
+            ByteToBool(ref dst.HeadRotationMotorServoOn, src, 1, 264 + wordOffset, 1);
+            ByteToBool(ref dst.HeadSweepMotorServoOn, src, 1, 264 + wordOffset, 2);
+            ByteToBool(ref dst.HeadUpDownMotorServoOn, src, 1, 264 + wordOffset, 3);
+            ByteToBool(ref dst.ConditionHeadRotationMotorServoOn, src, 1, 264 + wordOffset, 4);
+            ByteToBool(ref dst.ConditionSweepMotorServoOn, src, 1, 264 + wordOffset, 5);
+            ByteToBool(ref dst.SlurrySweepMotorServoOn, src, 1, 264 + wordOffset, 6);
+            ByteToFloat(ref dst.Zone1PressureInlineAct, src, 1, 266 + wordOffset);
+            ByteToFloat(ref dst.Zone2PressureInlineAct, src, 1, 268 + wordOffset);
+            ByteToFloat(ref dst.Zone3PressureInlineAct, src, 1, 270 + wordOffset);
+            ByteToFloat(ref dst.Zone4PressureInlineAct, src, 1, 272 + wordOffset);
+            ByteToFloat(ref dst.Zone5PressureInlineAct, src, 1, 274 + wordOffset);
+            ByteToFloat(ref dst.Zone6PressureInlineAct, src, 1, 276 + wordOffset);
+            ByteToFloat(ref dst.Zone7PressureInlineAct, src, 1, 278 + wordOffset);
+            ByteToFloat(ref dst.Zone8PressureInlineAct, src, 1, 280 + wordOffset);
+            ByteToFloat(ref dst.RetainerRingAirBagPressureInlineAct, src, 1, 282 + wordOffset);
+            ByteToFloat(ref dst.ConditionDownForcePressureInlineAct, src, 1, 284 + wordOffset);
+            ByteToFloat(ref dst.RetainerRingPressureAct, src, 1, 286 + wordOffset);
+            ByteToFloat(ref dst.RetainerRingPressureSet, src, 1, 288 + wordOffset);
+            ByteToInt(ref dst.UnitWaferCount, src, 1, 290 + wordOffset);
+            ByteToInt(ref dst.AirBagWaferCount, src, 1, 292 + wordOffset);
+            ByteToInt(ref dst.AirBagUesTime, src, 1, 294 + wordOffset);
+            ByteToInt(ref dst.MembranceWaferCount, src, 1, 296 + wordOffset);
+            ByteToInt(ref dst.MembranceUesTime, src, 1, 298 + wordOffset);
+            ByteToInt(ref dst.RatainerRingWaferCount, src, 1, 300 + wordOffset);
+            ByteToInt(ref dst.RatainerRingUesTime, src, 1, 302 + wordOffset);
+            ByteToInt(ref dst.PadWaferCount, src, 1, 304 + wordOffset);
+            ByteToInt(ref dst.PadUesTime, src, 1, 306 + wordOffset);
+            ByteToInt(ref dst.ConditionInsiUesTime, src, 1, 308 + wordOffset);
+            ByteToInt(ref dst.ConditionExsiUesTime, src, 1, 310 + wordOffset);
+            ByteToShort(ref dst.UnitIdleTimeh, src, 1, 312 + wordOffset);
+            ByteToShort(ref dst.UnitIdleTimemin, src, 1, 313 + wordOffset);
+            ByteToShort(ref dst.UnitIdleTimes, src, 1, 314 + wordOffset);
         }
         private static void ByteToBase_stPolishCollectData(Array dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -1339,34 +1348,39 @@ namespace KvStruct
             FloatToByte(ref dst, src.ConditionRotationMotorTorqueAct, 1, 258 + wordOffset);
             FloatToByte(ref dst, src.ConditionSweepMotorTorqueAct, 1, 260 + wordOffset);
             FloatToByte(ref dst, src.SlurryNozzleMotorTorqueAct, 1, 262 + wordOffset);
-            FloatToByte(ref dst, src.Zone1PressureInlineAct, 1, 264 + wordOffset);
-            FloatToByte(ref dst, src.Zone2PressureInlineAct, 1, 266 + wordOffset);
-            FloatToByte(ref dst, src.Zone3PressureInlineAct, 1, 268 + wordOffset);
-            FloatToByte(ref dst, src.Zone4PressureInlineAct, 1, 270 + wordOffset);
-            FloatToByte(ref dst, src.Zone5PressureInlineAct, 1, 272 + wordOffset);
-            FloatToByte(ref dst, src.Zone6PressureInlineAct, 1, 274 + wordOffset);
-            FloatToByte(ref dst, src.Zone7PressureInlineAct, 1, 276 + wordOffset);
-            FloatToByte(ref dst, src.Zone8PressureInlineAct, 1, 278 + wordOffset);
-            FloatToByte(ref dst, src.RetainerRingAirBagPressureInlineAct, 1, 280 + wordOffset);
-            FloatToByte(ref dst, src.ConditionDownForcePressureInlineAct, 1, 282 + wordOffset);
-            FloatToByte(ref dst, src.RetainerRingPressureAct, 1, 284 + wordOffset);
-            FloatToByte(ref dst, src.RetainerRingPressureSet, 1, 286 + wordOffset);
-            FloatToByte(ref dst, src.Zone4DIWFlowrate, 1, 288 + wordOffset);
-            FloatToByte(ref dst, src.DifferentialPressureGauge, 1, 290 + wordOffset);
-            IntToByte(ref dst, src.UnitWaferCount, 1, 292 + wordOffset);
-            IntToByte(ref dst, src.AirBagWaferCount, 1, 294 + wordOffset);
-            IntToByte(ref dst, src.AirBagUesTime, 1, 296 + wordOffset);
-            IntToByte(ref dst, src.MembranceWaferCount, 1, 298 + wordOffset);
-            IntToByte(ref dst, src.MembranceUesTime, 1, 300 + wordOffset);
-            IntToByte(ref dst, src.RatainerRingWaferCount, 1, 302 + wordOffset);
-            IntToByte(ref dst, src.RatainerRingUesTime, 1, 304 + wordOffset);
-            IntToByte(ref dst, src.PadWaferCount, 1, 306 + wordOffset);
-            IntToByte(ref dst, src.PadUesTime, 1, 308 + wordOffset);
-            IntToByte(ref dst, src.ConditionInsiUesTime, 1, 310 + wordOffset);
-            IntToByte(ref dst, src.ConditionExsiUesTime, 1, 312 + wordOffset);
-            IntToByte(ref dst, src.UnitIdleTimeh, 1, 314 + wordOffset);
-            IntToByte(ref dst, src.UnitIdleTimemin, 1, 316 + wordOffset);
-            IntToByte(ref dst, src.UnitIdleTimes, 1, 318 + wordOffset);
+            BoolToByte(ref dst, src.PlatenRotationMotorServoOn, 1, 264 + wordOffset, 0);
+            BoolToByte(ref dst, src.HeadRotationMotorServoOn, 1, 264 + wordOffset, 1);
+            BoolToByte(ref dst, src.HeadSweepMotorServoOn, 1, 264 + wordOffset, 2);
+            BoolToByte(ref dst, src.HeadUpDownMotorServoOn, 1, 264 + wordOffset, 3);
+            BoolToByte(ref dst, src.ConditionHeadRotationMotorServoOn, 1, 264 + wordOffset, 4);
+            BoolToByte(ref dst, src.ConditionSweepMotorServoOn, 1, 264 + wordOffset, 5);
+            BoolToByte(ref dst, src.SlurrySweepMotorServoOn, 1, 264 + wordOffset, 6);
+            FloatToByte(ref dst, src.Zone1PressureInlineAct, 1, 266 + wordOffset);
+            FloatToByte(ref dst, src.Zone2PressureInlineAct, 1, 268 + wordOffset);
+            FloatToByte(ref dst, src.Zone3PressureInlineAct, 1, 270 + wordOffset);
+            FloatToByte(ref dst, src.Zone4PressureInlineAct, 1, 272 + wordOffset);
+            FloatToByte(ref dst, src.Zone5PressureInlineAct, 1, 274 + wordOffset);
+            FloatToByte(ref dst, src.Zone6PressureInlineAct, 1, 276 + wordOffset);
+            FloatToByte(ref dst, src.Zone7PressureInlineAct, 1, 278 + wordOffset);
+            FloatToByte(ref dst, src.Zone8PressureInlineAct, 1, 280 + wordOffset);
+            FloatToByte(ref dst, src.RetainerRingAirBagPressureInlineAct, 1, 282 + wordOffset);
+            FloatToByte(ref dst, src.ConditionDownForcePressureInlineAct, 1, 284 + wordOffset);
+            FloatToByte(ref dst, src.RetainerRingPressureAct, 1, 286 + wordOffset);
+            FloatToByte(ref dst, src.RetainerRingPressureSet, 1, 288 + wordOffset);
+            IntToByte(ref dst, src.UnitWaferCount, 1, 290 + wordOffset);
+            IntToByte(ref dst, src.AirBagWaferCount, 1, 292 + wordOffset);
+            IntToByte(ref dst, src.AirBagUesTime, 1, 294 + wordOffset);
+            IntToByte(ref dst, src.MembranceWaferCount, 1, 296 + wordOffset);
+            IntToByte(ref dst, src.MembranceUesTime, 1, 298 + wordOffset);
+            IntToByte(ref dst, src.RatainerRingWaferCount, 1, 300 + wordOffset);
+            IntToByte(ref dst, src.RatainerRingUesTime, 1, 302 + wordOffset);
+            IntToByte(ref dst, src.PadWaferCount, 1, 304 + wordOffset);
+            IntToByte(ref dst, src.PadUesTime, 1, 306 + wordOffset);
+            IntToByte(ref dst, src.ConditionInsiUesTime, 1, 308 + wordOffset);
+            IntToByte(ref dst, src.ConditionExsiUesTime, 1, 310 + wordOffset);
+            ShortToByte(ref dst, src.UnitIdleTimeh, 1, 312 + wordOffset);
+            ShortToByte(ref dst, src.UnitIdleTimemin, 1, 313 + wordOffset);
+            ShortToByte(ref dst, src.UnitIdleTimes, 1, 314 + wordOffset);
         }
         private static void stPolishCollectData_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
         {

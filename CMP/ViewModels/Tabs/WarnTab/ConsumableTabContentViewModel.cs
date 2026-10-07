@@ -5,7 +5,7 @@ using CMP.Models.Resource;
 using CMP.Models.Warn;
 using CMP.Services.Log;
 using CMP.Utils;
-using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTPolishCollectData = CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
 using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using DocumentFormat.OpenXml.EMMA;
@@ -31,7 +31,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
         private readonly string _dateTimeFormate = "yyyy-MM-dd HH:mm:ss";
 
         private readonly string consumableFile = "D:\\CMP\\Configuration\\Consumable\\ConsumableInfo.json";
-        private readonly string g3HeadFile = "D:\\CMP\\Configuration\\Consumable\\G3HeadInfo.json";
+        private readonly string g3HeadFile = "D:\\CMP\\Configuration\\Consumable\\AlarmLimitInfo.json";
         private const uint LifetimeWaferCountAddress = 392000;
 
         private ObservableCollection<IgnoreConsumableProperty> _ignoreConsumableProperties;
@@ -154,7 +154,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     item.WaferCount = data.MembranceWaferCount.ToString();
                     item.UsedTime = data.MembranceUesTime.ToString();
                     break;
-                case "RatainerRing":
+                case "RetainerRing":
                     item.WaferCount = data.RatainerRingWaferCount.ToString();
                     item.UsedTime = data.RatainerRingUesTime.ToString();
                     break;
@@ -171,7 +171,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
             }
         }
 
-        private static bool TryGetPolishCollectData(WorkstationType workstation, out KHSTSV.stPolishCollectData data)
+        private static bool TryGetPolishCollectData(WorkstationType workstation, out KHSTPolishCollectData.stPolishCollectData data)
         {
             data = null!;
             var polish = GlobalService.DataCenter?.listPolish?
@@ -322,7 +322,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                         .Select(group => new ConsumableGroup(group.Key) { Consumables = new ObservableCollection<ConsumableModel>(group) });
                     ConsumableGroups = new ObservableCollection<ConsumableGroup>(penGroups);
                     break;
-                case "G3Head":
+                case "Alarm Limit":
                     break;
                 default:
                     break;
@@ -363,7 +363,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                      })
             {
                 list.Add(new() { Workstation = workstation, ModuleName = "Pad Wear Amount (mm)", LightFaultAdress = 22136, ProcessInterlockAdress = 22138, PresentDAdress = 10022, Note = "0" });
-                list.Add(new() { Workstation = workstation, ModuleName = "Dresser Cutting Rate (um/h)", PresentWAdress = "35A2", Note = "0" });
+                list.Add(new() { Workstation = workstation, ModuleName = "Disk Cutting Rate (um/h)", PresentWAdress = "35A2", Note = "0" });
                 list.Add(new() { Workstation = workstation, ModuleName = "Change Tolerance Min (um/h)", LightFaultAdress = 22150, ProcessInterlockAdress = 22152, Note = "0" });
                 list.Add(new() { Workstation = workstation, ModuleName = "Change Tolerance Max (um/h)", LightFaultAdress = 22148, ProcessInterlockAdress = 22146, Note = "0" });
                 list.Add(new() { Workstation = workstation, ModuleName = "Retainer Ring Height (at changed) (mm)", PresentWAdress = "35A4", Note = "0" });
@@ -664,7 +664,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
                         value == WorkstationType.PolishD)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392100 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "RatainerRing", WaferCountAdress = 392114, UsedTimeAdress = 392112 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "RetainerRing", WaferCountAdress = 392114, UsedTimeAdress = 392112 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Membrance", WaferCountAdress = 392110, UsedTimeAdress = 392108 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pad", WaferCountAdress = 392130, UsedTimeAdress = 392128 });
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Airbag", WaferCountAdress = 392106, UsedTimeAdress = 392104 });
