@@ -1,5 +1,6 @@
 using CMP.Models.kvsPlc;
 using CMP.Models.DataCenter;
+using CMP.Models.Recipe.Sequence;
 using CMP.Services.Log;
 using Dm.util;
 using DocumentFormat.OpenXml.Office2010.Excel;
@@ -7,12 +8,16 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using HandyControl.Controls;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Newtonsoft.Json;
+using RecipeContent = CMP.Models.Recipe.RecipeEdit.Recipe.Content;
 using DRYA = CMP.Models.Resource.GlobalChambers.DryACommandAndHandle;
 using DRYB = CMP.Models.Resource.GlobalChambers.DryBCommandAndHandle;
 using HANDLE = CMP.Constants.Plc.Handle;
@@ -85,13 +90,26 @@ public class Chamber : BindableBase
     private DateTime _nextMainStepWarnLogUtc = DateTime.MinValue;
     private DateTime _nextMain2StepWarnLogUtc = DateTime.MinValue;
     private DateTime _nextLogStatusWarnLogUtc = DateTime.MinValue;
+    private const int MaxLoadportCount = 4;
+    private const int WaferSlotsPerLoadport = 25;
+    private const string SequenceRecipeDirectory = @"D:\CMP\Configuration\Recipes\Sequence";
+    private const string UnitRecipeDirectory = @"D:\CMP\Configuration\Recipes\UnitRecipe";
 
     private DataLogger _dataLogger;
 
     private CollectDataChamber? _processDisplaySource;
     private string _processDisplayStationPrefix = string.Empty;
-    private string _recipeTimeDisplay = "Recipe Time: --";
+    private string _recipeTimeDisplay = "Time: --";
     private string _processStepDisplay = "Step: --";
+    private string _polishStateDisplay = "State: --";
+    private readonly object _recipeDisplayCacheSync = new();
+    private readonly Dictionary<string, RecipeDisplayInfo?> _recipeDisplayCache = new(StringComparer.OrdinalIgnoreCase);
+
+    private sealed class RecipeDisplayInfo
+    {
+        public required int StepCount { get; init; }
+        public required IReadOnlyList<string> ProcessTimes { get; init; }
+    }
 
     public string RecipeTimeDisplay
     {
@@ -103,6 +121,12 @@ public class Chamber : BindableBase
     {
         get => _processStepDisplay;
         private set => SetProperty(ref _processStepDisplay, value);
+    }
+
+    public string PolishStateDisplay
+    {
+        get => _polishStateDisplay;
+        private set => SetProperty(ref _polishStateDisplay, value);
     }
 
     internal void ConfigureProcessDataDisplay(CollectDataChamber source, string stationPrefix = "")
@@ -143,8 +167,191 @@ public class Chamber : BindableBase
             return;
         }
 
+        var wafer = GetCurrentWaferSafely();
+        RecipeDisplayInfo? recipeInfo = null;
+        var hasRecipe = wafer != null
+            && TryGetRecipeDisplayInfo(wafer, out recipeInfo)
+            && recipeInfo != null;
+        var hasRecipeStep = hasRecipe
+            && processStepAct >= 1
+            && processStepAct <= recipeInfo!.StepCount
+            && processStepAct <= recipeInfo.ProcessTimes.Count;
+
+        var processTime = hasRecipeStep
+            ? recipeInfo!.ProcessTimes[processStepAct - 1]
+            : string.Empty;
+
+        if (hasRecipeStep && !string.IsNullOrWhiteSpace(processTime))
+        {
+            ProcessStepDisplay = $"Step: {processStepAct}/{recipeInfo!.StepCount}";
+            RecipeTimeDisplay = $"Time: {recipeTimeAct:0.##}/{processTime}";
+            return;
+        }
+
         ProcessStepDisplay = $"Step: {processStepAct}";
-        RecipeTimeDisplay = $"Recipe Time: {recipeTimeAct:0.##}";
+        RecipeTimeDisplay = $"Time: {recipeTimeAct:0.##}";
+    }
+
+    private bool TryGetRecipeDisplayInfo(Wafer wafer, out RecipeDisplayInfo? recipeInfo)
+    {
+        recipeInfo = null;
+        var sequenceRecipe = wafer.SequenceRecipe?.Trim();
+        var selectionKey = GetRecipeSelectionKey(_name);
+        if (string.IsNullOrWhiteSpace(sequenceRecipe) || selectionKey == null)
+        {
+            return false;
+        }
+
+        var cacheKey = $"{sequenceRecipe}|{selectionKey}";
+        lock (_recipeDisplayCacheSync)
+        {
+            if (_recipeDisplayCache.TryGetValue(cacheKey, out recipeInfo))
+            {
+                return recipeInfo != null;
+            }
+        }
+
+        RecipeDisplayInfo? loadedInfo = null;
+        try
+        {
+            var sequencePath = ResolveSequenceRecipePath(sequenceRecipe);
+
+            if (sequencePath == null)
+            {
+                return CacheRecipeDisplayInfo(cacheKey, null, out recipeInfo);
+            }
+
+            var sequence = JsonConvert.DeserializeObject<SequenceRecipeData>(File.ReadAllText(sequencePath));
+            var selectedRecipe = sequence?.RecipeSelections?
+                .FirstOrDefault(selection => string.Equals(selection?.Key, selectionKey, StringComparison.Ordinal))
+                ?.Value?.ToString()?.Trim();
+
+            if (string.IsNullOrWhiteSpace(selectedRecipe))
+            {
+                return CacheRecipeDisplayInfo(cacheKey, null, out recipeInfo);
+            }
+
+            var unitRecipePath = ResolveUnitRecipePath(selectedRecipe);
+            if (unitRecipePath == null)
+            {
+                return CacheRecipeDisplayInfo(cacheKey, null, out recipeInfo);
+            }
+
+            var content = JsonConvert.DeserializeObject<RecipeContent>(File.ReadAllText(unitRecipePath));
+            var processTime = content?.Data?.FirstOrDefault(data =>
+                string.Equals(NormalizeRecipeName(data?.Name), "processtime", StringComparison.OrdinalIgnoreCase));
+            if (processTime?.Steps == null || processTime.Steps.Count == 0)
+            {
+                return CacheRecipeDisplayInfo(cacheKey, null, out recipeInfo);
+            }
+
+            loadedInfo = new RecipeDisplayInfo
+            {
+                StepCount = processTime.Steps.Count,
+                ProcessTimes = processTime.Steps
+                    .Select(step => FormatRecipeNumber(step?.Value))
+                    .ToArray()
+            };
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"Failed to load process-time recipe for chamber {_name}: {ex.Message}");
+        }
+
+        return CacheRecipeDisplayInfo(cacheKey, loadedInfo, out recipeInfo);
+    }
+
+    private static string? ResolveSequenceRecipePath(string recipeReference)
+    {
+        var name = Path.GetFileNameWithoutExtension(recipeReference?.Trim());
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return null;
+        }
+
+        var path = Path.Combine(SequenceRecipeDirectory, $"{name}.json");
+        return File.Exists(path) ? path : null;
+    }
+
+    private string? ResolveUnitRecipePath(string recipeReference)
+    {
+        if (File.Exists(recipeReference))
+        {
+            return recipeReference;
+        }
+
+        var folder = _name switch
+        {
+            "PolishA" or "PolishB" or "PolishC" or "PolishD" => "Polish Recipe",
+            "RollerA1" or "RollerA2" or "RollerA3" or "RollerB1" or "RollerB2" or "RollerB3" => "Roll Recipe",
+            "PenA1" or "PenA2" or "PenB1" or "PenB2" => "Pen Recipe",
+            "DryA" or "DryB" => "Dry Recipe",
+            _ => null
+        };
+
+        var name = Path.GetFileNameWithoutExtension(recipeReference?.Trim());
+        if (folder == null || string.IsNullOrWhiteSpace(name))
+        {
+            return null;
+        }
+
+        var path = Path.Combine(UnitRecipeDirectory, folder, $"{name}.json");
+        return File.Exists(path) ? path : null;
+    }
+
+    private bool CacheRecipeDisplayInfo(string cacheKey, RecipeDisplayInfo? recipeInfo, out RecipeDisplayInfo? result)
+    {
+        lock (_recipeDisplayCacheSync)
+        {
+            _recipeDisplayCache[cacheKey] = recipeInfo;
+        }
+
+        result = recipeInfo;
+        return recipeInfo != null;
+    }
+
+    private static string? GetRecipeSelectionKey(string chamberName)
+    {
+        return chamberName switch
+        {
+            "PolishA" => "RecipePolishA",
+            "PolishB" => "RecipePolishB",
+            "PolishC" => "RecipePolishC",
+            "PolishD" => "RecipePolishD",
+            "RollerA1" => "RecipeRollerA1",
+            "RollerA2" => "RecipeRollerA2",
+            "RollerA3" => "RecipeRollerA3",
+            "RollerB1" => "RecipeRollerB1",
+            "RollerB2" => "RecipeRollerB2",
+            "RollerB3" => "RecipeRollerB3",
+            "PenA1" => "RecipePenA1",
+            "PenA2" => "RecipePenA2",
+            "PenB1" => "RecipePenB1",
+            "PenB2" => "RecipePenB2",
+            "DryA" => "RecipeDryA",
+            "DryB" => "RecipeDryB",
+            _ => null
+        };
+    }
+
+    private static string NormalizeRecipeName(string? name)
+    {
+        return string.IsNullOrWhiteSpace(name)
+            ? string.Empty
+            : name.Replace(" ", string.Empty)
+                .Replace("_", string.Empty)
+                .Replace("-", string.Empty)
+                .Replace("&", string.Empty);
+    }
+
+    private static string FormatRecipeNumber(string? value)
+    {
+        if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
+        {
+            return number.ToString("0.##", CultureInfo.InvariantCulture);
+        }
+
+        return value?.Trim() ?? string.Empty;
     }
 
     private bool _isVisibleWafer;
@@ -384,19 +591,58 @@ public class Chamber : BindableBase
             try
             {
                 var value = GlobalService.plcComm.ReadShortVari(trackingAddress);
-                if (value > 0)
-                {
-                    byte slotByte = (byte)(value >> 8);
-                    byte cassetteByte = (byte)(value & 0xFF);
-                    waferInfo = $"C{cassetteByte}W{slotByte}";
-                }
+                TryFormatTrackingWafer(value, out waferInfo);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"读取 Chamber {_name} 的 PLC 地址 {trackingAddress} 时出错: {ex.Message}");
             }
         }
+
+        if (string.IsNullOrEmpty(waferInfo))
+        {
+            var wafer = GetCurrentWaferSafely();
+            if (wafer != null)
+            {
+                TryFormatWafer(wafer, out waferInfo);
+            }
+        }
+
         SetWaferDisplay(waferInfo);
+    }
+
+    private static bool TryFormatTrackingWafer(short value, out string? waferInfo)
+    {
+        waferInfo = null;
+        if (value <= 0)
+        {
+            return false;
+        }
+
+        var raw = unchecked((ushort)value);
+        var slot = raw >> 8;
+        var cassette = raw & 0xFF;
+        if (cassette < 1 || cassette > MaxLoadportCount
+            || slot < 1 || slot > WaferSlotsPerLoadport)
+        {
+            return false;
+        }
+
+        waferInfo = $"C{cassette}W{slot}";
+        return true;
+    }
+
+    private static bool TryFormatWafer(Wafer wafer, out string? waferInfo)
+    {
+        waferInfo = null;
+        if (wafer.LoadportID < 0 || wafer.LoadportID >= MaxLoadportCount
+            || wafer.SlotID < 0 || wafer.SlotID >= WaferSlotsPerLoadport)
+        {
+            return false;
+        }
+
+        waferInfo = $"C{wafer.LoadportID + 1}W{wafer.SlotID + 1}";
+        return true;
     }
     private void SetWaferDisplay(string? waferInfo)
     {
@@ -588,11 +834,21 @@ public class Chamber : BindableBase
 
     private int GetWaferIndexFromPlc()
     {
-        if (_logConfig.HasValue && _logConfig.Value.PlcWaferIndexAddress != 0)
+        if (!_logConfig.HasValue || _logConfig.Value.PlcWaferIndexAddress == 0 || _kvLink.sock < 0)
+        {
+            return -1;
+        }
+
+        try
         {
             var readBuf = new byte[2048];
             short waferIndex = -1;
-            var err = KHL.KHLReadDevicesAsWords(_kvLink.sock, KHLDevType.DEV_W, _logConfig.Value.PlcWaferIndexAddress, 1, readBuf);
+            var err = KHL.KHLReadDevicesAsWords(
+                _kvLink.sock,
+                KHLDevType.DEV_W,
+                _logConfig.Value.PlcWaferIndexAddress,
+                1,
+                readBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KST.ByteToShort(ref waferIndex, readBuf);
@@ -602,6 +858,11 @@ public class Chamber : BindableBase
                 }
             }
         }
+        catch (Exception ex)
+        {
+            Logger.Warn($"Failed to read wafer index for chamber {_name}: {ex.Message}");
+        }
+
         return -1;
     }
 
@@ -620,11 +881,32 @@ public class Chamber : BindableBase
     private Wafer? GetCurrentWafer()
     {
         int plcWaferIndex = GetWaferIndexFromPlc();
-        int currentIndex = plcWaferIndex != -1 ? plcWaferIndex : WaferIndex;
+        lock (GlobalService.dicWaferIndex)
+        {
+            if (plcWaferIndex > 0
+                && GlobalService.dicWaferIndex.TryGetValue(plcWaferIndex, out var plcWafer))
+            {
+                return plcWafer;
+            }
 
-        return currentIndex != -1 && GlobalService.dicWaferIndex.TryGetValue(currentIndex, out Wafer? wafer)
-            ? wafer
-            : null;
+            return WaferIndex > 0
+                && GlobalService.dicWaferIndex.TryGetValue(WaferIndex, out var localWafer)
+                ? localWafer
+                : null;
+        }
+    }
+
+    private Wafer? GetCurrentWaferSafely()
+    {
+        try
+        {
+            return GetCurrentWafer();
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"Failed to resolve current wafer for chamber {_name}: {ex.Message}");
+            return null;
+        }
     }
 
     private string? GetPolishRecipeName()
@@ -738,6 +1020,7 @@ public class Chamber : BindableBase
                 _mainStatusReadCycle = 0;
                 var mainStatus = GetMainStepType();
                 var main2Status = GetMain2StepType();
+                UpdatePolishStateDisplay(mainStatus);
 
                 if (mainStatus != lastMainStatus || main2Status != lastMain2Status)
                 {
@@ -862,6 +1145,33 @@ public class Chamber : BindableBase
         }
         KST.ByteToShort(ref status, readBuf);
         return status;
+    }
+
+    private void UpdatePolishStateDisplay(short mainStatus)
+    {
+        if (!IsPolishChamber())
+        {
+            return;
+        }
+
+        var stateText = Enum.IsDefined(typeof(PolishLogState), (int)mainStatus)
+            ? $"State: {(PolishLogState)mainStatus}"
+            : "State: --";
+
+        void UpdateDisplay() => PolishStateDisplay = stateText;
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher != null && !dispatcher.CheckAccess())
+        {
+            dispatcher.BeginInvoke(DispatcherPriority.DataBind, UpdateDisplay);
+            return;
+        }
+
+        UpdateDisplay();
+    }
+
+    private bool IsPolishChamber()
+    {
+        return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
     }
 
     private async Task LogOtherChamberDataAsync(LogContext context, CancellationToken token)

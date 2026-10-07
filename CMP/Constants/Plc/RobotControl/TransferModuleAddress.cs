@@ -355,5 +355,15 @@ public static class TransferModuleAddress
     /// </summary>
     public const string AutoMode = "M1888";
 
+    /// <summary>
+    /// Load感应
+    /// </summary>
+    public const string LoadInduction = "X102C";
+
+    /// <summary>
+    /// Unload感应
+    /// </summary>
+    public const string UnloadInduction = "X102D";
+
     #endregion
 }

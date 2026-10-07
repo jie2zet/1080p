@@ -390,9 +390,9 @@ public static class PolishASideTransferAddress
     public const string PolishADoorCloseRead = "Y104F";
     
     /// <summary>
-    /// 研磨A门关 写入
+    /// 研磨A门关 
     /// </summary>
-    public const string PolishADoorCloseWrite = "Y104F";
+    public const string PolishADoorCloseWrite = "M2011";
 
     /// <summary>
     /// 研磨A门关 状态

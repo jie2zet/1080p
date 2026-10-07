@@ -165,6 +165,22 @@ namespace CMP.Constants.Plc.RobotControl
         /// 3z轴中转手臂位移动
         /// </summary>
         public const string TransferArmMove_3z = "M1531";
+        /// <summary>
+        /// 3z轴移动完成状态
+        /// </summary>
+        public const string StandbyPosMove_3zStatus = "M5800";
+        /// <summary>
+        /// 3z轴研磨C位移动完成状态
+        /// </summary>
+        public const string PolishCMove_3zStatus = "M5801";
+        /// <summary>
+        /// 3z轴研磨D位移动完成状态
+        /// </summary>
+        public const string PolishDMove_3zStatus = "M5802";
+        /// <summary>
+        /// 3z轴中转手臂位移动完成状态
+        /// </summary>
+        public const string TransferArmMove_3zStatus = "M5803";
         #endregion
 
         #region 速度设定 (D)
@@ -413,6 +429,18 @@ namespace CMP.Constants.Plc.RobotControl
         /// 手臂3光纤3
         /// </summary>
         public const string Arm3Fiber3 = "X1028";
+        /// <summary>
+        /// 电源关闭
+        /// </summary>
+        public const string PowerOff = "M10405";
+        /// <summary>
+        /// 晶圆槽位
+        /// </summary>
+        public const string FoupSlot = "W1C30";
+        /// <summary>
+        /// 晶圆索引
+        /// </summary>
+        public const string WaferIndex = "W1C31";
 
         #endregion
     }

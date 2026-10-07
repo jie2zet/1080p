@@ -291,6 +291,16 @@ public static class PolishASideArm2Address
     /// </summary>
     public const string ZPolishBUnloadPositionArrived = "M5373";
 
+    /// <summary>
+    /// 加速度时间
+    /// </summary>
+    public const string AccelerationTime = "D10712";
+
+    /// <summary>
+    /// 减速度时间
+    /// </summary>
+    public const string DeaccelerationTime = "D10714";
+
     #endregion
 
     #region 底部状态栏
@@ -483,6 +493,10 @@ public static class PolishASideArm2Address
     /// Index
     /// </summary>
     public const string WaferIndex = "W1A21";
+    /// <summary>
+    /// Power Off
+    /// </summary>
+    public const string PowerOff = "M10401";
 
     #endregion
 }

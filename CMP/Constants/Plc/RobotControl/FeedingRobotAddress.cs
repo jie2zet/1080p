@@ -586,5 +586,35 @@ public static class FeedingRobotAddress
     /// </summary>
     public const string Transfer = "M185";
 
+    /// <summary>
+    /// 停止入料
+    /// </summary>
+    public const string StopLoad = "M170";
+
+    /// <summary>
+    /// 停止入料状态
+    /// </summary>
+    public const string StopLoadStatus = "M170";
+
+    /// <summary>
+    /// 恢复入料
+    /// </summary>
+    public const string ResumeLoad = "M171";
+
+    /// <summary>
+    /// 恢复入料状态
+    /// </summary>
+    public const string ResumeLoadStatus = "M171";
+
+    /// <summary>
+    /// A侧正常
+    /// </summary>
+    public const string SideAHealthy = "M183";
+
+    /// <summary>
+    /// B侧正常
+    /// </summary>
+    public const string SideBHealthy = "M184";
+
     #endregion
 }
