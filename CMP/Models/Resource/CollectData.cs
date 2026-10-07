@@ -8,7 +8,7 @@ using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using KHSTPenIOData = CMP.Models.kvsPlc.Pen.KvsStructPenIOData;
 using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
 using KHSTDryIOData = CMP.Models.kvsPlc.Dry.KvsStructDryIOData;
-using KHSTSV = CMP.Models.kvsPlc.SV.KvStruct;
+using KHSTSV =  CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
 using KHSTIO = CMP.Models.kvsPlc.IO.KvStruct;
 using CMP.Models.Operation.RoboticArm;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
