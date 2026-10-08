@@ -1974,4 +1974,10 @@
   <data name="Torque" xml:space="preserve">
     <value>扭矩</value>
   </data>
+  <data name="LoadInduction" xml:space="preserve">
+    <value>Load感应</value>
+  </data>
+  <data name="UnloadInduction" xml:space="preserve">
+    <value>Unload感应</value>
+  </data>
 </root>

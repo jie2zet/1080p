@@ -1974,4 +1974,10 @@
   <data name="Torque" xml:space="preserve">
     <value>Torque</value>
   </data>
+  <data name="LoadInduction" xml:space="preserve">
+    <value>Load Induction</value>
+  </data>
+  <data name="UnloadInduction" xml:space="preserve">
+    <value>Unload Induction</value>
+  </data>
 </root>
