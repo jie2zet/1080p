@@ -2003,6 +2003,23 @@ public class DataLoggerHelper
         "BSide_Discharge_Arm3"
     ];
 
+    /// <summary>
+    /// LTP 日志只记轴当前值。名字与 SV_STCtrl.csv 一致（Postion 是表里的拼写）。
+    /// </summary>
+    private static readonly string[] LtpLogPointNames =
+    [
+        "XAxisCurrentPostion",
+        "XAxisCurrentSpeed",
+        "XAxisCurrentTorque",
+        "ZAxisCurrentPostion",
+        "ZAxisCurrentSpeed",
+        "ZAxisCurrentTorque",
+        "SensorPower",
+        "SensorL",
+        "SensorC",
+        "SensorR"
+    ];
+
     private static List<DataLogField> CreateDataLogRow(string logTime, string timeSpan)
     {
         return
@@ -2247,14 +2264,24 @@ public class DataLoggerHelper
                 continue;
             }
 
-            foreach (var item in stCtrl.listDataInSingleStCtrl)
+            foreach (var pointName in LtpLogPointNames)
             {
-                if (string.IsNullOrWhiteSpace(item.Name))
+                SV_PLC? item = null;
+                foreach (var candidate in stCtrl.listDataInSingleStCtrl)
+                {
+                    if (string.Equals(candidate.Name, pointName, StringComparison.Ordinal))
+                    {
+                        item = candidate;
+                        break;
+                    }
+                }
+
+                if (item == null)
                 {
                     continue;
                 }
 
-                var key = $"{moduleName}.{item.Name}";
+                var key = $"{moduleName}.{pointName}";
                 if (!usedKeys.Add(key))
                 {
                     continue;

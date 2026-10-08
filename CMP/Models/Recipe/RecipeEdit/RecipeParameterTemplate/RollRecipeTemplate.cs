@@ -146,21 +146,21 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Options = ["0:Disabled", "1:Enabled"],
             Steps = []
           },
+          //  new()
+          //{
+          //  Id = 12,
+          //  Name = "Mega Sonic Supply",
+          //  Unit = "",
+          //  Type = "option",
+          //  Min = 0,
+          //  Max = 1,
+          //  Default = "1",
+          //  Options = ["0:Disabled", "1:Enabled"],
+          //  Steps = []
+          //},
             new()
           {
             Id = 12,
-            Name = "Mega Sonic Supply",
-            Unit = "",
-            Type = "option",
-            Min = 0,
-            Max = 1,
-            Default = "1",
-            Options = ["0:Disabled", "1:Enabled"],
-            Steps = []
-          },
-            new()
-          {
-            Id = 13,
             Name = "Total Diluted Chemical Flow Rate",
             Unit = "",
             Type = "float",
@@ -173,7 +173,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 14,
+            Id = 13,
             Name = "Chemical Dilution Ratio",
             Unit = "",
             Type = "float",
@@ -186,7 +186,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 15,
+            Id = 14,
             Name = "Upper Roll Inner Rinse Supply",
             Unit = "",
             Type = "option",
@@ -198,7 +198,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 16,
+            Id = 15,
             Name = "Down Roll Inner Rinse Supply",
             Unit = "",
             Type = "option",
