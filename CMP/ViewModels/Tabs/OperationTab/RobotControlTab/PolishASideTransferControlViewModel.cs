@@ -25,6 +25,7 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     private readonly EditableFloatItem _ltpPickPositionItem = new(PolishASideTransferAddress.LtpPickPosition, nameof(LtpPickPosition), nameof(IsLtpPickPositionDirty));
     private readonly EditableFloatItem _robotLowerArmPositionItem = new(PolishASideTransferAddress.RobotLowerArmPosition, nameof(RobotLowerArmPosition), nameof(IsRobotLowerArmPositionDirty));
     private readonly EditableFloatItem _ltpPlacePositionItem = new(PolishASideTransferAddress.LtpPlacePosition, nameof(LtpPlacePosition), nameof(IsLtpPlacePositionDirty));
+    private readonly EditableFloatItem _speedWhenHasWaferItem = new(PolishASideTransferAddress.SpeedWhenHasWafer, nameof(SpeedWhenHasWafer), nameof(IsSpeedWhenHasWaferDirty));
     private readonly EditableFloatItem _jogSpeedItem = new(PolishASideTransferAddress.JogSpeed, nameof(JogSpeed), nameof(IsJogSpeedDirty));
     private readonly EditableFloatItem _autoSpeedItem = new(PolishASideTransferAddress.AutoSpeed, nameof(AutoSpeed), nameof(IsAutoSpeedDirty));
     private readonly List<EditableFloatItem> _editableItems;
@@ -159,6 +160,14 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     {
         get => _autoSpeedItem.Value;
         set => EditableFloatItemHelper.SetValue(_autoSpeedItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsSpeedWhenHasWaferDirty => _speedWhenHasWaferItem.IsDirty;
+
+    public double SpeedWhenHasWafer
+    {
+        get => _speedWhenHasWaferItem.Value;
+        set => EditableFloatItemHelper.SetValue(_speedWhenHasWaferItem, value, RaisePropertyChanged);
     }
 
     private double _currentCoordinate;
@@ -579,6 +588,8 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     public DelegateCommand JogSpeedCancelCommand => _jogSpeedItem.CancelCommand;
     public DelegateCommand AutoSpeedSetCommand => _autoSpeedItem.SetCommand;
     public DelegateCommand AutoSpeedCancelCommand => _autoSpeedItem.CancelCommand;
+    public DelegateCommand SpeedWhenHasWaferSetCommand => _speedWhenHasWaferItem.SetCommand;
+    public DelegateCommand SpeedWhenHasWaferCancelCommand => _speedWhenHasWaferItem.CancelCommand;
 
     #endregion
 
@@ -592,6 +603,7 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
             _ltpPickPositionItem,
             _robotLowerArmPositionItem,
             _ltpPlacePositionItem,
+            _speedWhenHasWaferItem,
             _jogSpeedItem,
             _autoSpeedItem
         };
