@@ -30,7 +30,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "s",
             Type = "float",
             Min = 0,
-            Max = 0,
+            Max = 9999,
             Default = "0",
             Options = [],
             Steps = []
