@@ -3,7 +3,7 @@
 using CMP.Models.kvsPlc;
 using CMP.Models.Resource;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PolishCollectData = CMP.Models.kvsPlc.SV.KvStruct.stPolishCollectData;
+using PolishCollectData = CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData.stPolishCollectData;
 
 namespace CMP.Tests.Services;
 
