@@ -1092,6 +1092,18 @@
   <data name="StopLoad" xml:space="preserve">
     <value>Stop Load </value>
   </data>
+  <data name="ResumeLoad" xml:space="preserve">
+    <value>Resume Load</value>
+  </data>
+  <data name="SideAHealthy" xml:space="preserve">
+    <value>Side A Healthy</value>
+  </data>
+  <data name="SideBHealthy" xml:space="preserve">
+    <value>Side B Healthy</value>
+  </data>
+  <data name="PowerOff" xml:space="preserve">
+    <value>Power Off</value>
+  </data>
   <data name="EFEMRobot" xml:space="preserve">
     <value>EFEM Robot</value>
   </data>

@@ -1092,6 +1092,18 @@
   <data name="StopLoad" xml:space="preserve">
     <value>停止入料</value>
   </data>
+  <data name="ResumeLoad" xml:space="preserve">
+    <value>恢复入料</value>
+  </data>
+  <data name="SideAHealthy" xml:space="preserve">
+    <value>A侧正常</value>
+  </data>
+  <data name="SideBHealthy" xml:space="preserve">
+    <value>B侧正常</value>
+  </data>
+  <data name="PowerOff" xml:space="preserve">
+    <value>断电</value>
+  </data>
   <data name="EFEMRobot" xml:space="preserve">
     <value>EFEM机械手</value>
   </data>

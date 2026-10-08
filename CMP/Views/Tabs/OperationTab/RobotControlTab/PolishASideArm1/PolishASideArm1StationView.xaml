@@ -91,7 +91,7 @@
                     <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Content="{lex:Loc AlarmReset}" Style="{StaticResource ButtonWarning}" 
                             Width="100" Height="40" FontSize="12" Command="{Binding StationAlarmResetCommand}" VerticalAlignment="Center"/>
                 </Grid>
-                <ToggleButton Content="Power Off" Style="{StaticResource MoveToggleButtonStyle}" Width="100" Height="28" Margin="15,0,0,0"
+                <ToggleButton Content="{lex:Loc PowerOff}" Style="{StaticResource MoveToggleButtonStyle}" Width="100" Height="28" Margin="15,0,0,0"
                               IsChecked="{Binding PowerOffToggle, Mode=OneWay}" Command="{Binding PowerOffCommand}" VerticalAlignment="Center"/>
             </StackPanel>
             

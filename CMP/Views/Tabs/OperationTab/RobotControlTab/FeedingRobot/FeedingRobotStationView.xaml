@@ -174,6 +174,30 @@
                     <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Content="{lex:Loc AlarmReset}" Style="{StaticResource ButtonWarning}" 
                             Width="100" Height="40" FontSize="12" Command="{Binding AlarmResetCommand}" VerticalAlignment="Center"/>
                 </Grid>
+
+                <!-- Load Control and Side Status -->
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="24"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="28"/>
+                    </Grid.RowDefinitions>
+                    <ToggleButton Grid.Row="0" Grid.Column="0" Content="{lex:Loc StopLoad}" Style="{StaticResource ToggleButtonDanger}"
+                                  Height="28" IsChecked="{Binding StopLoadToggle, Mode=OneWay}" Command="{Binding StopLoadCommand}"/>
+                    <ToggleButton Grid.Row="0" Grid.Column="2" Content="{lex:Loc ResumeLoad}" Style="{StaticResource ToggleButtonSuccess}"
+                                  Height="28" IsChecked="{Binding ResumeLoadToggle, Mode=OneWay}" Command="{Binding ResumeLoadCommand}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc SideAHealthy}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="18" Height="18" LightColor="Green"
+                                          IsOn="{Binding SideAHealthy}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{lex:Loc SideBHealthy}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="3" Width="18" Height="18" LightColor="Green"
+                                          IsOn="{Binding SideBHealthy}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
                 
                 <!-- Manual/Auto Buttons -->
                 <Grid Margin="0,0,0,20">
