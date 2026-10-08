@@ -1203,6 +1203,15 @@
   <data name="AutoSpeed" xml:space="preserve">
     <value>自动速度</value>
   </data>
+  <data name="SpeedWhenHasWafer" xml:space="preserve">
+    <value>速度(有晶圆)</value>
+  </data>
+  <data name="AccelerationTime" xml:space="preserve">
+    <value>加速时间</value>
+  </data>
+  <data name="DecelerationTime" xml:space="preserve">
+    <value>减速时间</value>
+  </data>
   <data name="CurrentCoordinate" xml:space="preserve">
     <value>当前坐标</value>
   </data>

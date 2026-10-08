@@ -290,12 +290,14 @@ public static class PolishASideArm2Address
     /// 研磨B下片位到位
     /// </summary>
     public const string ZPolishBUnloadPositionArrived = "M5373";
-
+    /// <summary>
+    /// 有片速度
+    /// </summary>
+    public const string SpeedWhenHasWafer = "D10702";
     /// <summary>
     /// 加速度时间
     /// </summary>
     public const string AccelerationTime = "D10712";
-
     /// <summary>
     /// 减速度时间
     /// </summary>
