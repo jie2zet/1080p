@@ -182,34 +182,51 @@ public class RoboticArm : BindableBase
         }
     }
 
-    private bool TryReadStartBit(out bool isStarted)
+    /// <summary>
+    /// 机械手状态点在机器人 PLC（7005）。主站读成功但为 false 时不能挡住 7005。
+    /// </summary>
+    private bool TryReadRobotBool(string address, out bool value)
     {
-        // 启动位 = 初始地址 +3（如 EFEM M1832→M1835）
-        return TryReadPlcBool(mcComm, _startCommandValue, out isStarted)
-               || TryReadPlcBool(_robotPlc, _startCommandValue, out isStarted);
-    }
-
-    private bool TryReadInitialized(out bool isInitialized)
-    {
-        return TryReadPlcBool(mcComm, _initialStatusVarName, out isInitialized)
-               || TryReadPlcBool(_robotPlc, _initialStatusVarName, out isInitialized);
-    }
-
-    private bool TryReadStationAuto(out bool isAuto)
-    {
-        if (TryReadPlcBool(mcComm, _autoStartVarName, out isAuto)
-            || TryReadPlcBool(_robotPlc, _autoStartVarName, out isAuto))
+        if (TryReadPlcBool(_robotPlc, address, out value))
         {
             return true;
         }
 
-        return _autoModeDBit != null && TryReadDBit(_robotPlc, _autoModeDBit, out isAuto);
+        return TryReadPlcBool(mcComm, address, out value);
+    }
+
+    private bool TryReadStartBit(out bool isStarted)
+    {
+        // running = initdone + 2（如 EFEM M6153→M6155），这是保持的启动状态。
+        // 命令脉冲 init+3 只在按下期间为 true。
+        var runningAddress = DeriveBitAddress(_initialStatusVarName, 2);
+        if (TryReadRobotBool(runningAddress, out isStarted) && isStarted)
+        {
+            return true;
+        }
+
+        return TryReadRobotBool(_startCommandValue, out isStarted);
+    }
+
+    private bool TryReadInitialized(out bool isInitialized)
+    {
+        return TryReadRobotBool(_initialStatusVarName, out isInitialized);
+    }
+
+    private bool TryReadStationAuto(out bool isAuto)
+    {
+        // 有触摸屏 D 位的机械手先认 D 位。M 位读到 false 不能跳过 D 位。
+        if (_autoModeDBit != null && TryReadDBit(_robotPlc, _autoModeDBit, out isAuto))
+        {
+            return true;
+        }
+
+        return TryReadRobotBool(_autoStartVarName, out isAuto);
     }
 
     private bool TryReadAlarm(out bool isAlarm)
     {
-        return TryReadPlcBool(mcComm, _alarmStatusVarName, out isAlarm)
-               || TryReadPlcBool(_robotPlc, _alarmStatusVarName, out isAlarm);
+        return TryReadRobotBool(_alarmStatusVarName, out isAlarm);
     }
 
     private void SetRobotStatusFromPlc(ChamberStatus status)
@@ -225,7 +242,7 @@ public class RoboticArm : BindableBase
         }
     }
 
-    /// <summary>启动位为 true 显示 Run，否则跟 PLC 实际状态。Offline 由菜单保持。</summary>
+    /// <summary>运行中显示 Run，自动模式显示 Auto。initdone 为 false 不能盖住已经 Auto/Run 的状态。Offline 由菜单保持。</summary>
     public void SyncStatusFromPlc()
     {
         if (RobotStatus == ChamberStatus.Offline)
@@ -240,27 +257,27 @@ public class RoboticArm : BindableBase
             return;
         }
 
-        if (TryReadStartBit(out var started) && started)
-        {
-            SetRobotStatusFromPlc(ChamberStatus.Run);
-            return;
-        }
-
         if (TryReadAlarm(out var isAlarm) && isAlarm)
         {
             SetRobotStatusFromPlc(ChamberStatus.Alarm);
             return;
         }
 
-        if (TryReadInitialized(out var isInitialized) && !isInitialized)
+        if (TryReadStartBit(out var started) && started)
         {
-            SetRobotStatusFromPlc(ChamberStatus.Uninitialized);
+            SetRobotStatusFromPlc(ChamberStatus.Run);
             return;
         }
 
         if (TryReadStationAuto(out var isAuto) && isAuto)
         {
             SetRobotStatusFromPlc(ChamberStatus.Auto);
+            return;
+        }
+
+        if (TryReadInitialized(out var isInitialized) && !isInitialized)
+        {
+            SetRobotStatusFromPlc(ChamberStatus.Uninitialized);
             return;
         }
 

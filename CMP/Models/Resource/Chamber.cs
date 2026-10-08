@@ -84,6 +84,7 @@ public class Chamber : BindableBase
     private bool _isAutoRunNeedClear;
     private int _resetAutoRunCycle;
     private int _mainStatusReadCycle;
+    private int _polishLogSession;
     private static readonly TimeSpan WarnLogInterval = TimeSpan.FromSeconds(5);
     private const int ExsituStopDebounceMilliseconds = 2000;
     private const int WaferNameRetryIntervalMilliseconds = 1000;
@@ -726,23 +727,23 @@ public class Chamber : BindableBase
     {
         await LogWithTemporaryWaferNameAsync(
             context,
-            true,
+            "Exsitu",
             static (helper, waferName, logTime, timeSpan) => helper.LogExsituData(waferName, logTime, timeSpan),
             token);
     }
 
-    private async Task LogDataAsync(LogContext context, CancellationToken token)
+    private async Task LogDataAsync(LogContext context, CancellationToken token, string? subcategory = null)
     {
         await LogWithTemporaryWaferNameAsync(
             context,
-            false,
+            subcategory,
             static (helper, waferName, logTime, timeSpan) => helper.LogData(waferName, logTime, timeSpan),
             token);
     }
 
     private async Task LogWithTemporaryWaferNameAsync(
         LogContext context,
-        bool isExsitu,
+        string? subcategory,
         Action<DataLoggerHelper, string, string, string> logAction,
         CancellationToken token)
     {
@@ -750,7 +751,12 @@ public class Chamber : BindableBase
         var resolvedWaferLogName = IsKnownWaferLogName(context.WaferLogName) ? context.WaferLogName : null;
         var nextWaferNameRetryUtc = DateTime.UtcNow;
         var dataLogger = new DataLogger(_name);
-        var dataLoggerHelper = new DataLoggerHelper(dataLogger, _name);
+        var dataLoggerHelper = new DataLoggerHelper(dataLogger, _name)
+        {
+            PolishLogSubcategory = string.Equals(subcategory, "Exsitu", StringComparison.OrdinalIgnoreCase)
+                ? null
+                : subcategory
+        };
         DateTime? last = DateTime.Now;
         var nextRowErrorWarnUtc = DateTime.MinValue;
 
@@ -812,7 +818,7 @@ public class Chamber : BindableBase
                 dataLogger.RenameWaferFile(
                     temporaryWaferName,
                     resolvedWaferLogName,
-                    isExsitu ? "Exsitu" : null,
+                    subcategory,
                     context.RecipeName);
             }
             catch (Exception ex)
@@ -919,6 +925,30 @@ public class Chamber : BindableBase
             : null;
     }
 
+    private bool IsPolishChamber() =>
+        _name.StartsWith("Polish", StringComparison.Ordinal);
+
+    private static bool TryGetPolishLogFolder(short mainStatus, out string folder)
+    {
+        folder = mainStatus switch
+        {
+            (short)PolishLogState.Polish => "Polish",
+            (short)PolishLogState.PolishLoad => "Load",
+            (short)PolishLogState.PolishUnload => "Unload",
+            (short)PolishLogState.PolishDechuck => "Dechuck",
+            _ => string.Empty
+        };
+        return folder.Length > 0;
+    }
+
+    private static PolishLogState PolishLogStateFromFolder(string folder) => folder switch
+    {
+        "Load" => PolishLogState.PolishLoad,
+        "Unload" => PolishLogState.PolishUnload,
+        "Dechuck" => PolishLogState.PolishDechuck,
+        _ => PolishLogState.Polish
+    };
+
    
 
     /// <summary>
@@ -934,6 +964,7 @@ public class Chamber : BindableBase
 
         bool isExsituLogging = false;
         bool isDataLogging = false;
+        string? activePolishLogFolder = null;
         bool isOtherLogging = false;
         DateTime? exsituZeroDetectedUtc = null;
 
@@ -1085,12 +1116,58 @@ public class Chamber : BindableBase
                     }
                 }
 
-                // Polish Data Logging via MainStep
-                if (mainStatus != 0 && mainStatus != -1)
+                // Polish 按主步拆文件：101 Polish、103 Load、104 Unload、105 Dechuck。
+                // 其它腔体仍是主步非 0 就记一份。
+                if (IsPolishChamber())
+                {
+                    if (TryGetPolishLogFolder(mainStatus, out var folder))
+                    {
+                        if (!isDataLogging || !string.Equals(activePolishLogFolder, folder, StringComparison.Ordinal))
+                        {
+                            var session = Interlocked.Increment(ref _polishLogSession);
+                            _logDataCts?.Cancel();
+                            _logDataCts = new CancellationTokenSource();
+                            activePolishLogFolder = folder;
+                            isDataLogging = true;
+                            var context = new LogContext(
+                                GetWaferLogName(),
+                                PolishLogStateFromFolder(folder),
+                                _name,
+                                GetPolishRecipeName());
+                            var token = _logDataCts.Token;
+                            _logDataTask = Task.Run(async () =>
+                            {
+                                try
+                                {
+                                    await LogDataAsync(context, token, folder).ConfigureAwait(false);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.Warn($"Data Logging Task for {_name} crashed: {ex.Message}");
+                                }
+                                finally
+                                {
+                                    if (session == Volatile.Read(ref _polishLogSession))
+                                    {
+                                        isDataLogging = false;
+                                        activePolishLogFolder = null;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (isDataLogging)
+                    {
+                        Interlocked.Increment(ref _polishLogSession);
+                        isDataLogging = false;
+                        activePolishLogFolder = null;
+                        _logDataCts?.Cancel();
+                    }
+                }
+                else if (mainStatus != 0 && mainStatus != -1)
                 {
                     if (!isDataLogging)
                     {
-                        // Start async main data logging
                         _logDataCts?.Cancel();
                         _logDataCts = new CancellationTokenSource();
                         string waferLogName = GetWaferLogName();
@@ -1118,13 +1195,9 @@ public class Chamber : BindableBase
                         });
                     }
                 }
-                else
+                else if (isDataLogging)
                 {
-                    // Reset/stop logging
-                    if (isDataLogging)
-                    {
-                        _logDataCts?.Cancel();
-                    }
+                    _logDataCts?.Cancel();
                 }
             }
         }
@@ -1178,7 +1251,7 @@ public class Chamber : BindableBase
     {
         await LogWithTemporaryWaferNameAsync(
             context,
-            false,
+            null,
             static (helper, waferName, logTime, timeSpan) => helper.LogData(waferName, logTime, timeSpan),
             token);
     }
@@ -1911,6 +1984,25 @@ public class DataLoggerHelper
         _name = name;
     }
 
+    /// <summary>
+    /// Polish 主步对应的日志子目录：Polish、Load、Unload、Dechuck。
+    /// </summary>
+    internal string? PolishLogSubcategory { get; set; }
+
+    private static readonly string[] PolishASideLtpModules =
+    [
+        "ASide_Feed_Arm1",
+        "ASide_Feed_Arm2",
+        "ASide_Discharge_Arm3"
+    ];
+
+    private static readonly string[] PolishBSideLtpModules =
+    [
+        "BSide_Feed_Arm1",
+        "BSide_Feed_Arm2",
+        "BSide_Discharge_Arm3"
+    ];
+
     private static List<DataLogField> CreateDataLogRow(string logTime, string timeSpan)
     {
         return
@@ -2071,7 +2163,9 @@ public class DataLoggerHelper
     private void LogPolishData(string waferName, int index, string logTime, string timeSpan)
     {
         var polishData = GlobalService.DataCenter.listPolish[index];
-        _dataLogger.AppendData(waferName, BuildPolishRow(polishData, logTime, timeSpan));
+        var row = BuildPolishRow(polishData, logTime, timeSpan);
+        AppendLtpFields(row, polishData.Name);
+        _dataLogger.AppendData(waferName, row, PolishLogSubcategory);
     }
 
     /// <summary>
@@ -2114,6 +2208,61 @@ public class DataLoggerHelper
         }
 
         return data;
+    }
+
+    private void AppendLtpFields(List<DataLogField> fields, string polishName)
+    {
+        var moduleNames = polishName switch
+        {
+            "PolishA" or "PolishB" => PolishASideLtpModules,
+            "PolishC" or "PolishD" => PolishBSideLtpModules,
+            _ => null
+        };
+        if (moduleNames == null)
+        {
+            return;
+        }
+
+        var stCtrls = GlobalService.DataCenter.listSTCtrl;
+        if (stCtrls == null || stCtrls.Count == 0)
+        {
+            return;
+        }
+
+        var usedKeys = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var moduleName in moduleNames)
+        {
+            STCtrl? stCtrl = null;
+            for (var i = 0; i < stCtrls.Count; i++)
+            {
+                if (string.Equals(stCtrls[i].ModuleName, moduleName, StringComparison.Ordinal))
+                {
+                    stCtrl = stCtrls[i];
+                    break;
+                }
+            }
+
+            if (stCtrl == null)
+            {
+                continue;
+            }
+
+            foreach (var item in stCtrl.listDataInSingleStCtrl)
+            {
+                if (string.IsNullOrWhiteSpace(item.Name))
+                {
+                    continue;
+                }
+
+                var key = $"{moduleName}.{item.Name}";
+                if (!usedKeys.Add(key))
+                {
+                    continue;
+                }
+
+                fields.Add(new DataLogField(key, key, item.Value?.ToString()));
+            }
+        }
     }
 
     private void LogRollerData(string waferName, int rollerIndex, string logTime, string timeSpan)

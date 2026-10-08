@@ -110,6 +110,21 @@ public class DataLoggerTests
         Assert.AreEqual(1, destinationFiles.Length);
     }
 
+    [DataTestMethod]
+    [DataRow("Polish")]
+    [DataRow("Load")]
+    [DataRow("Unload")]
+    [DataRow("Dechuck")]
+    public void AppendData_WritesPolishStepIntoItsOwnFolder(string subcategory)
+    {
+        var logger = new DataLogger("PolishA", _basePath);
+        logger.AppendData("LotA_2(C1W1)", new Dictionary<string, string?> { ["Time"] = "T1" }, subcategory);
+
+        var path = logger.GetFilePath("LotA_2(C1W1)", subcategory);
+        Assert.IsTrue(File.Exists(path));
+        Assert.IsTrue(path.Contains(Path.Combine("PolishA", subcategory) + Path.DirectorySeparatorChar));
+    }
+
     [TestMethod]
     public void AppendData_PreservesDuplicateHeadersAndValuesWhenColumnsExpand()
     {

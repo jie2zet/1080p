@@ -52,6 +52,30 @@
                            Visibility="{Binding IsVisibleLowerArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Canvas>
         </DataTemplate>
+        <!-- 清洗侧行高不动。下手臂晶圆收进机械手图内，避免被下一行标题挡住。 -->
+        <DataTemplate x:Key="CleanDualArmRobotCanvasTemplate">
+            <Canvas Width="100" Height="80" ClipToBounds="False">
+                <Image Source="/Assets/Images/Robot.png" Width="80" Height="80" Stretch="Fill" />
+                <Image Source="/Assets/Images/wafer.png"
+                       Width="42" Height="42"
+                       Canvas.Left="50" Canvas.Top="0"
+                       Panel.ZIndex="1"
+                       Visibility="{Binding IsVisibleUpperArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Canvas.Left="52" Canvas.Top="10" Panel.ZIndex="2"
+                           Foreground="Blue" FontWeight="Bold" FontSize="7"
+                           Text="{Binding UpperArmWaferInfo, StringFormat='U {0}'}"
+                           Visibility="{Binding IsVisibleUpperArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Image Source="/Assets/Images/wafer.png"
+                       Width="36" Height="36"
+                       Canvas.Left="52" Canvas.Top="30"
+                       Panel.ZIndex="3"
+                       Visibility="{Binding IsVisibleLowerArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Canvas.Left="54" Canvas.Top="42" Panel.ZIndex="4"
+                           Foreground="Blue" FontWeight="Bold" FontSize="7"
+                           Text="{Binding LowerArmWaferInfo, StringFormat='L {0}'}"
+                           Visibility="{Binding IsVisibleLowerArmWafer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Canvas>
+        </DataTemplate>
 
     </UserControl.Resources>
     <Grid extensions:GridHelpers.ColumnDefinitions="380,1400">
@@ -750,7 +774,7 @@
                                 </GroupBox.Header>
                                 <Border>
                                     <ContentControl Content="{Binding CleanBRobot2}"
-                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    ContentTemplate="{StaticResource CleanDualArmRobotCanvasTemplate}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                             </GroupBox>
@@ -833,7 +857,7 @@
                                 </GroupBox.Header>
                                 <Border>
                                     <ContentControl Content="{Binding CleanBRobot1}"
-                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    ContentTemplate="{StaticResource CleanDualArmRobotCanvasTemplate}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                             </GroupBox>
@@ -975,7 +999,7 @@
                                 </GroupBox.Header>
                                 <Border>
                                     <ContentControl Content="{Binding CleanARobot2}"
-                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    ContentTemplate="{StaticResource CleanDualArmRobotCanvasTemplate}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                             </GroupBox>
@@ -1038,7 +1062,7 @@
                                 </GroupBox.Header>
                                 <Border>
                                     <ContentControl Content="{Binding CleanARobot1}"
-                                                    ContentTemplate="{StaticResource DualArmRobotCanvasTemplate}"
+                                                    ContentTemplate="{StaticResource CleanDualArmRobotCanvasTemplate}"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Border>
                             </GroupBox>
