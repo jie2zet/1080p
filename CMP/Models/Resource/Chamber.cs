@@ -1242,10 +1242,10 @@ public class Chamber : BindableBase
         UpdateDisplay();
     }
 
-    //private bool IsPolishChamber()
-    //{
-    //    return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
-    //}
+    // private bool IsPolishChamber()
+    // {
+    //     return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
+    // }
 
     private async Task LogOtherChamberDataAsync(LogContext context, CancellationToken token)
     {
