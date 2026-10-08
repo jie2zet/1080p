@@ -983,7 +983,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
             if (SelectedNode.Name.StartsWith("PolishC")) hSocket = GlobalService.kvHostLinkInit.kvLinkPolishC.sock;
 
-            if (SelectedNode.Name.StartsWith("PolishD")) hSocket = GlobalService.kvHostLinkInit.kvLinkPolishC.sock;
+            if (SelectedNode.Name.StartsWith("PolishD")) hSocket = GlobalService.kvHostLinkInit.kvLinkPolishD.sock;
 
             if (SelectedNode.Name.StartsWith("RollerA") || SelectedNode.Name.StartsWith("RollA")) hSocket = GlobalService.kvHostLinkInit.kvLinkRollerA.sock;
     

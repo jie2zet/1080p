@@ -2,6 +2,7 @@
 using CMP.Models.kvsPlc;
 using KHT = CMP.Models.kvsPlc.KvHostLink;
 using KHST = CMP.Models.kvsPlc.Alarm.KvStruct;
+using KHSTPolishAlarm = CMP.Models.kvsPlc.Polish.KvStructPolishAlarm;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System.Net.NetworkInformation;
 using CMP.Models.Warn;
@@ -412,10 +413,10 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadVariable(kvlink.sock, "alarm", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                stPolishAlarm polishAlarm = new stPolishAlarm(); 
-                KHST.ByteTo_stPolishAlarm(ref polishAlarm, _readBuf);
-                object[] allValues = CompiledFieldAccessor<stPolishAlarm>.GetAllFieldValues(polishAlarm);
-                var fields = typeof(stPolishAlarm).GetFields(
+                KHSTPolishAlarm.stPolishAlarm polishAlarm = new KHSTPolishAlarm.stPolishAlarm();
+                KHSTPolishAlarm.ByteTo_stPolishAlarm(ref polishAlarm, _readBuf);
+                object[] allValues = CompiledFieldAccessor<KHSTPolishAlarm.stPolishAlarm>.GetAllFieldValues(polishAlarm);
+                var fields = typeof(KHSTPolishAlarm.stPolishAlarm).GetFields(
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 for (int i = 0; i < allValues.Length; i++)
                 {
