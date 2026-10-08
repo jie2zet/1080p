@@ -606,9 +606,10 @@ public class DataLogger
         
         if (isPolish)
         {
-            // Polish 正常情况
-            // 路径: D:\CMP\Log\2025\01\10\PolishA\Polish\Wafer01_2025-01-10_09.55.23.257.csv
-            fullPath = Path.Combine(basePath, _category, "Polish");
+            // Polish / Load / Unload / Dechuck 各一份。未指定子目录时仍落在 Polish。
+            // 路径: D:\CMP\Log\2025\01\10\PolishA\Load\Wafer01_2025-01-10_09.55.23.257.csv
+            var stepFolder = string.IsNullOrWhiteSpace(subcategory) ? "Polish" : subcategory;
+            fullPath = Path.Combine(basePath, _category, stepFolder);
             fileName = BuildLogFileName(waferName, timestamp, recipeName);
         }
         else
