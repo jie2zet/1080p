@@ -26,6 +26,19 @@ namespace CMP.Constants.Plc.RobotControl
         /// 3x轴中转手臂位
         /// </summary>
         public const string TransferArmPosition_3x = "D11124";
+        
+        /// <summary>
+        /// 3x轴有晶圆时速度
+        /// </summary>
+        public const string SpeedWhenHasWafer3x = "D11502";
+        /// <summary>
+        /// 3x轴加速时间
+        /// </summary>
+        public const string AccelerationTime3x = "D11512";
+        /// <summary>
+        /// 3x轴减速时间
+        /// </summary>
+        public const string DeaccelerationTime3x = "D11514";
         #endregion
 
         #region 移动命令 (M)
@@ -146,6 +159,19 @@ namespace CMP.Constants.Plc.RobotControl
         /// 3z轴中转手臂位
         /// </summary>
         public const string TransferArmPosition_3z = "D11624";
+        
+        /// <summary>
+        /// 3z轴有晶圆时速度
+        /// </summary>
+        public const string SpeedWhenHasWafer3z = "D11602";
+        /// <summary>
+        /// 3z轴加速时间
+        /// </summary>
+        public const string AccelerationTime3z = "D11612";
+        /// <summary>
+        /// 3z轴减速时间
+        /// </summary>
+        public const string DeaccelerationTime3z = "D11614";
         #endregion
 
         #region 移动命令 (M)
