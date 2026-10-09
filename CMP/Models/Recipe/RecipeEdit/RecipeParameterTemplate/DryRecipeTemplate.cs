@@ -72,33 +72,33 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Options = ["1:Start Position", "2: Near Center Position", "3: Middle Position", "4: Near Edge", "5: Edge Position"],
             Steps = []
           },
-            new()
-          {
-            Id = 6,
-            Name = "IPA Arm Sweep Center Velocity",
-            Unit = "deg/s",
-            Type = "float",
-            Min = 1.00,
-            Max = 60.00,
-            Default = "3.00",
-            Options = [],
-            Steps = []
-          },
-            new()
-          {
-            Id = 7,
-            Name = "IPA Arm Sweep Edge Velocity",
-            Unit = "deg/s",
-            Type = "float",
-            Min = 1.00,
-            Max = 60.00,
-            Default = "3.00",
-            Options = [],
-            Steps = []
-          },
+          //  new()
+          //{
+          //  Id = 6,
+          //  Name = "IPA Arm Sweep Center Velocity",
+          //  Unit = "deg/s",
+          //  Type = "float",
+          //  Min = 1.00,
+          //  Max = 60.00,
+          //  Default = "3.00",
+          //  Options = [],
+          //  Steps = []
+          //},
+          //  new()
+          //{
+          //  Id = 7,
+          //  Name = "IPA Arm Sweep Edge Velocity",
+          //  Unit = "deg/s",
+          //  Type = "float",
+          //  Min = 1.00,
+          //  Max = 60.00,
+          //  Default = "3.00",
+          //  Options = [],
+          //  Steps = []
+          //},
              new()
           {
-            Id = 8,
+            Id = 6,
             Name = "IPA Arm Sweep Speed",
             Unit = "",
             Type = "float",
@@ -110,7 +110,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 9,
+            Id = 7,
             Name = "IPA Arm Cycle",
             Unit = "Times",
             Type = "int",
@@ -122,7 +122,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 10,
+            Id = 8,
             Name = "Dilution N2 Gas Flow",
             Unit = "L/min",
             Type = "float",
@@ -135,7 +135,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 11,
+            Id = 9,
             Name = "N2 For WF Backside Flow",
             Unit = "L/min",
             Type = "float",
@@ -148,7 +148,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 12,
+            Id = 10,
             Name = "Outer Rinse Flow",
             Unit = "ml/min",
             Type = "float",
@@ -161,7 +161,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 13,
+            Id = 11,
             Name = "Bubbling N2 Gas Flow",
             Unit = "L/min",
             Type = "float",
@@ -174,7 +174,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 14,
+            Id = 12,
             Name = "Upper Rinse Supply",
             Unit = "",
             Type = "option",
@@ -187,7 +187,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 15,
+            Id = 13,
             Name = "Lower Rinse Supply",
             Unit = "",
             Type = "option",
@@ -200,7 +200,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 16,
+            Id = 14,
             Name = "Wafer Rotation Acceleration",
             Unit = "",
             Type = "float",

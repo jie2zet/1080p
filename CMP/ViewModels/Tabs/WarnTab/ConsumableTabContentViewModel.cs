@@ -213,10 +213,10 @@ namespace CMP.ViewModels.Tabs.WarnTab
 
         private static void ApplyRollerStation(
             ConsumableModel item,
-            float unitCount,
-            float lowerCount, float lowerTime,
-            float upperCount, float upperTime,
-            float pillarCount, float pillarTime)
+            int unitCount,
+            int lowerCount, int lowerTime,
+            int upperCount, int upperTime,
+            int pillarCount, int pillarTime)
         {
             switch (item.ConsumableName)
             {
@@ -264,7 +264,7 @@ namespace CMP.ViewModels.Tabs.WarnTab
             return roller != null && roller.TryGetProcessDataSnapshot(out data);
         }
 
-        private static string ToIntText(float value) => ((int)Math.Round(value)).ToString();
+        private static string ToIntText(int value) => value.ToString();
 
         private static bool IsPenWorkstation(WorkstationType workstation) =>
             workstation is WorkstationType.PenA1 or WorkstationType.PenB1;
@@ -675,25 +675,25 @@ namespace CMP.ViewModels.Tabs.WarnTab
                     if (value == WorkstationType.RollerA1 || value == WorkstationType.RollerB1)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392050 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392052, UsedTimeAdress = 392054 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392056, UsedTimeAdress = 392058 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392060, UsedTimeAdress = 392062 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392054, UsedTimeAdress = 392052 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392058, UsedTimeAdress = 392056 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392062, UsedTimeAdress = 392060 });
                     }
 
                     if (value == WorkstationType.RollerA2 || value == WorkstationType.RollerB2)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392150 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392152, UsedTimeAdress = 392154 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392156, UsedTimeAdress = 392158 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392160, UsedTimeAdress = 392162 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392154, UsedTimeAdress = 392152 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392158, UsedTimeAdress = 392156 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392162, UsedTimeAdress = 392160 });
                     }
 
                     if (value == WorkstationType.RollerA3 || value == WorkstationType.RollerB3)
                     {
                         _consumableModels.Add(new () { Workstation = value, ConsumableName = "Unit", WaferCountAdress = 392250 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392252, UsedTimeAdress = 392254 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392256, UsedTimeAdress = 392258 });
-                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392260, UsedTimeAdress = 392262 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "LowerRoller", WaferCountAdress = 392254, UsedTimeAdress = 392252 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "UpperRoller", WaferCountAdress = 392258, UsedTimeAdress = 392256 });
+                        _consumableModels.Add(new () { Workstation = value, ConsumableName = "Pillar", WaferCountAdress = 392262, UsedTimeAdress = 392260 });
                     }
 
                     if (value == WorkstationType.PenA1 || value == WorkstationType.PenB1)

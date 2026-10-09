@@ -141,22 +141,22 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = [],
             Steps = []
           },
+          //  new()
+          //{
+          //  Id = 11,
+          //  Name = "WF Upper Face N2 Flow",
+          //  Unit = "L/min",
+          //  Type = "float",
+          //  Min = 0.00,
+          //  Max = 100.00,
+          //  Default = "30.00",
+          //  Options = [],
+          //  CompatibleName = [],
+          //  Steps = []
+          //},
             new()
           {
             Id = 11,
-            Name = "WF Upper Face N2 Flow",
-            Unit = "L/min",
-            Type = "float",
-            Min = 0.00,
-            Max = 100.00,
-            Default = "30.00",
-            Options = [],
-            CompatibleName = [],
-            Steps = []
-          },
-            new()
-          {
-            Id = 12,
             Name = "WF Upper Face DIW Flow",
             Unit = "mL/min",
             Type = "float",
@@ -169,7 +169,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 13,
+            Id = 12,
             Name = "WF Lower Face DIW Flow",
             Unit = "mL/min",
             Type = "float",
@@ -180,22 +180,22 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = [],
             Steps = []
           },
+          //   new()
+          //{
+          //  Id = 14,
+          //  Name = "WF Lower Face N2 Supply",
+          //  Unit = "",
+          //  Type = "option",
+          //  Min = 0,
+          //  Max = 1,
+          //  Default = "1",
+          //  Options = ["0:Disabled", "1:Enabled"],
+          //  CompatibleName = [],
+          //  Steps = []
+          //},
              new()
           {
-            Id = 14,
-            Name = "WF Lower Face N2 Supply",
-            Unit = "",
-            Type = "option",
-            Min = 0,
-            Max = 1,
-            Default = "1",
-            Options = ["0:Disabled", "1:Enabled"],
-            CompatibleName = [],
-            Steps = []
-          },
-             new()
-          {
-            Id = 15,
+            Id = 13,
             Name = "WF Upper Face Chemical Supply",
             Unit = "",
             Type = "option",
@@ -208,7 +208,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 16,
+            Id = 14,
             Name = "WF Lower Face Chemical Supply",
             Unit = "",
             Type = "option",
@@ -219,22 +219,22 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = ["WFUpperFaceChemicalSupply"],
             Steps = []
           },
-             new()
-          {
-            Id = 17,
-            Name = "WF Upper Face DI-CO2 Supply",
-            Unit = "",
-            Type = "option",
-            Min = 0,
-            Max = 1,
-            Default = "1",
-            Options = ["0:Disabled", "1:Enabled"],
-            CompatibleName = [],
-            Steps = []
-          },
+          //   new()
+          //{
+          //  Id = 17,
+          //  Name = "WF Upper Face DI-CO2 Supply",
+          //  Unit = "",
+          //  Type = "option",
+          //  Min = 0,
+          //  Max = 1,
+          //  Default = "1",
+          //  Options = ["0:Disabled", "1:Enabled"],
+          //  CompatibleName = [],
+          //  Steps = []
+          //},
             new()
           {
-            Id = 18,
+            Id = 15,
             Name = "WF Chemical Mixed Total Flow",
             Unit = "",
             Type = "float",
@@ -247,12 +247,12 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 19,
+            Id = 16,
             Name = "WF Chemical Ratio",
             Unit = "",
             Type = "float",
             Min = 0.00,
-            Max = 10.00,
+            Max = 99.00,
             Default = "0.00",
             Options = [],
             CompatibleName = [],
@@ -260,7 +260,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 20,
+            Id = 17,
             Name = "Pen Arm Type",
             Unit = "",
             Type = "option",

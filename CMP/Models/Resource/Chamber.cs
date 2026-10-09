@@ -586,12 +586,14 @@ public class Chamber : BindableBase
         };
 
         string? waferInfo = null;
+        var trackingReadOk = false;
 
         if (!string.IsNullOrWhiteSpace(trackingAddress) && GlobalService.plcComm.IsPLCConnected)
         {
             try
             {
                 var value = GlobalService.plcComm.ReadShortVari(trackingAddress);
+                trackingReadOk = true;
                 TryFormatTrackingWafer(value, out waferInfo);
             }
             catch (Exception ex)
@@ -600,7 +602,7 @@ public class Chamber : BindableBase
             }
         }
 
-        if (string.IsNullOrEmpty(waferInfo))
+        if (!trackingReadOk && string.IsNullOrEmpty(waferInfo))
         {
             var wafer = GetCurrentWaferSafely();
             if (wafer != null)
@@ -1242,10 +1244,7 @@ public class Chamber : BindableBase
         UpdateDisplay();
     }
 
-    // private bool IsPolishChamber()
-    // {
-    //     return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
-    // }
+   
 
     private async Task LogOtherChamberDataAsync(LogContext context, CancellationToken token)
     {
@@ -2003,6 +2002,23 @@ public class DataLoggerHelper
         "BSide_Discharge_Arm3"
     ];
 
+    /// <summary>
+    /// LTP 日志只记轴当前值。名字与 SV_STCtrl.csv 一致（Postion 是表里的拼写）。
+    /// </summary>
+    private static readonly string[] LtpLogPointNames =
+    [
+        "XAxisCurrentPostion",
+        "XAxisCurrentSpeed",
+        "XAxisCurrentTorque",
+        "ZAxisCurrentPostion",
+        "ZAxisCurrentSpeed",
+        "ZAxisCurrentTorque",
+        "SensorPower",
+        "SensorL",
+        "SensorC",
+        "SensorR"
+    ];
+
     private static List<DataLogField> CreateDataLogRow(string logTime, string timeSpan)
     {
         return
@@ -2247,14 +2263,24 @@ public class DataLoggerHelper
                 continue;
             }
 
-            foreach (var item in stCtrl.listDataInSingleStCtrl)
+            foreach (var pointName in LtpLogPointNames)
             {
-                if (string.IsNullOrWhiteSpace(item.Name))
+                SV_PLC? item = null;
+                foreach (var candidate in stCtrl.listDataInSingleStCtrl)
+                {
+                    if (string.Equals(candidate.Name, pointName, StringComparison.Ordinal))
+                    {
+                        item = candidate;
+                        break;
+                    }
+                }
+
+                if (item == null)
                 {
                     continue;
                 }
 
-                var key = $"{moduleName}.{item.Name}";
+                var key = $"{moduleName}.{pointName}";
                 if (!usedKeys.Add(key))
                 {
                     continue;
