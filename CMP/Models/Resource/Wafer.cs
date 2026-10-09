@@ -32,10 +32,20 @@ namespace CMP.Models.Resource
         private WaferStatus _waferStatus;
         public WaferStatus WaferStatus { get=> _waferStatus; 
             set{
-                SetProperty(ref _waferStatus, value);
-                UpdateWaferColor(); 
+                if (!SetProperty(ref _waferStatus, value))
+                {
+                    return;
+                }
+
+                UpdateWaferColor();
+                RaisePropertyChanged(nameof(CanSelectForAssign));
+                ClearSelectionIfNotAssignable();
             }
         }
+
+        /// <summary>只有槽位里正常存在、且尚未下发配方的晶圆可以勾选。</summary>
+        public bool CanSelectForAssign =>
+            WaferStatus == WaferStatus.NormalExistence && string.IsNullOrEmpty(SequenceRecipe);
         public CurrentStation CurrentStation
         {
             get => _currentStation;
@@ -45,7 +55,16 @@ namespace CMP.Models.Resource
         private string _sequenceRecipe;
         public string SequenceRecipe {
             get => _sequenceRecipe;
-            set => SetProperty(ref _sequenceRecipe, value);
+            set
+            {
+                if (!SetProperty(ref _sequenceRecipe, value))
+                {
+                    return;
+                }
+
+                RaisePropertyChanged(nameof(CanSelectForAssign));
+                ClearSelectionIfNotAssignable();
+            }
         }
 
         public int index;
@@ -62,7 +81,32 @@ namespace CMP.Models.Resource
         public bool IsSelected
         {
             get { return _isSelected; }
-            set { SetProperty(ref _isSelected, value); }
+            set
+            {
+                if (value && !CanSelectForAssign)
+                {
+                    if (_isSelected)
+                    {
+                        SetProperty(ref _isSelected, false);
+                    }
+                    else
+                    {
+                        RaisePropertyChanged(nameof(IsSelected));
+                    }
+
+                    return;
+                }
+
+                SetProperty(ref _isSelected, value);
+            }
+        }
+
+        private void ClearSelectionIfNotAssignable()
+        {
+            if (!CanSelectForAssign && _isSelected)
+            {
+                IsSelected = false;
+            }
         }
 
         public List<WaferSequenceModel> WaferSequenceModels { get; set; } = [];

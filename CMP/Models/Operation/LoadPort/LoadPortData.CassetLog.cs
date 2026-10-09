@@ -56,20 +56,22 @@ public partial class LoadPortData
             ["RollerB1"] = "RecipeRollerB1",
             ["RollerB2"] = "RecipeRollerB2",
             ["RollerB3"] = "RecipeRollerB3",
-            ["PenA1"] = "RecipePenA1",
-            ["PenA2"] = "RecipePenA2",
-            ["PenB1"] = "RecipePenB1",
-            ["PenB2"] = "RecipePenB2",
+            ["PenA"] = "RecipePenA1",           
+            ["PenB"] = "RecipePenB1",           
             ["DryA"] = "RecipeDryA",
             ["DryB"] = "RecipeDryB"
         };
 
     private void CaptureCassetteLogSnapshot(Wafer wafer, int cassetteId, int layerNumber)
     {
-        if (wafer == null || string.IsNullOrWhiteSpace(wafer.WaferName) || string.IsNullOrWhiteSpace(wafer.SequenceRecipe))
+        if (wafer == null || string.IsNullOrWhiteSpace(wafer.SequenceRecipe))
         {
             return;
         }
+
+        var waferName = string.IsNullOrWhiteSpace(wafer.WaferName)
+            ? $"C{cassetteId + 1}W{layerNumber + 1}"
+            : wafer.WaferName;
 
         var stepTimes = ReadWaferTrackingStepDateTimes(cassetteId, layerNumber);
         var sequenceData = LoadSequenceRecipeData(wafer.SequenceRecipe);
@@ -82,7 +84,7 @@ public partial class LoadPortData
             _cassetteLogSnapshots[wafer.SlotID] = new CassetteLogSnapshot
             {
                 SlotId = wafer.SlotID,
-                WaferName = wafer.WaferName,
+                WaferName = waferName,
                 SequenceName = wafer.SequenceRecipe,
                 ChamberVisits = visits
             };
