@@ -658,7 +658,7 @@
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/green.png" />
-                                    <Setter Property="Opacity" Value="0" />
+                                    <Setter Property="Opacity" Value="0.1" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding GreenLightMode}" Value="On">
                                             <Setter Property="Opacity" Value="1" />

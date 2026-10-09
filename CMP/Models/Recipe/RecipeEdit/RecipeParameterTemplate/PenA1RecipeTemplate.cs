@@ -252,7 +252,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Unit = "",
             Type = "float",
             Min = 0.00,
-            Max = 10.00,
+            Max = 99.00,
             Default = "0.00",
             Options = [],
             CompatibleName = [],

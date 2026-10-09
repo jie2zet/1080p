@@ -586,12 +586,14 @@ public class Chamber : BindableBase
         };
 
         string? waferInfo = null;
+        var trackingReadOk = false;
 
         if (!string.IsNullOrWhiteSpace(trackingAddress) && GlobalService.plcComm.IsPLCConnected)
         {
             try
             {
                 var value = GlobalService.plcComm.ReadShortVari(trackingAddress);
+                trackingReadOk = true;
                 TryFormatTrackingWafer(value, out waferInfo);
             }
             catch (Exception ex)
@@ -600,7 +602,7 @@ public class Chamber : BindableBase
             }
         }
 
-        if (string.IsNullOrEmpty(waferInfo))
+        if (!trackingReadOk && string.IsNullOrEmpty(waferInfo))
         {
             var wafer = GetCurrentWaferSafely();
             if (wafer != null)
@@ -1242,10 +1244,7 @@ public class Chamber : BindableBase
         UpdateDisplay();
     }
 
-    // private bool IsPolishChamber()
-    // {
-    //     return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
-    // }
+   
 
     private async Task LogOtherChamberDataAsync(LogContext context, CancellationToken token)
     {
