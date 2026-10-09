@@ -260,6 +260,18 @@ public static class PolishASideArm1Address
     /// 研磨B位到位
     /// </summary>
     public const string ZPolishBPositionArrived = "M5275";
+    /// <summary>
+    /// 速度(有晶圆)
+    /// </summary>
+    public const string SpeedWhenHasWafer = "D10502";
+    /// <summary>
+    /// 加速时间
+    /// </summary>
+    public const string AccelerationTime = "D10512";
+    /// <summary>
+    /// 减速时间
+    /// </summary>
+    public const string DecelerationTime = "D10514";
 
     #endregion
 

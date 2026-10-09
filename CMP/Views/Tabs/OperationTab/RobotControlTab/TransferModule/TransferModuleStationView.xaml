@@ -115,6 +115,13 @@
                         <ToggleButton Content="{lex:Loc UnloadOperation}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="8,0" IsChecked="{Binding UnloadOperationToggle, Mode=TwoWay}" Command="{Binding UnloadOperationCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding UnloadOperationDone}" VerticalAlignment="Center"/>
                     </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="8,0,0,10">
+                        <TextBlock Text="{lex:Loc LoadInduction}" Width="120" VerticalAlignment="Center"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding LoadInduction}" VerticalAlignment="Center" Margin="8,0,18,0"/>
+                        <TextBlock Text="{lex:Loc UnloadInduction}" Width="120" VerticalAlignment="Center"/>
+                        <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding UnloadInduction}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
                     
                     <!-- Door Control Buttons -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">

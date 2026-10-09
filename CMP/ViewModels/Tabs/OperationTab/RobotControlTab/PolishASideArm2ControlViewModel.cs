@@ -60,6 +60,9 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
     private readonly EditableFloatItem _zPolishBLoadPositionItem = new(PolishASideArm2Address.ZPolishBLoadPosition, nameof(ZPolishBLoadPosition), nameof(IsZPolishBLoadPositionDirty));
     private readonly EditableFloatItem _zPolishALoadPositionItem = new(PolishASideArm2Address.ZPolishALoadPosition, nameof(ZPolishALoadPosition), nameof(IsZPolishALoadPositionDirty));
     private readonly EditableFloatItem _zPolishBUnloadPositionItem = new(PolishASideArm2Address.ZPolishBUnloadPosition, nameof(ZPolishBUnloadPosition), nameof(IsZPolishBUnloadPositionDirty));
+    private readonly EditableFloatItem _speedWhenHasWaferItem = new(PolishASideArm2Address.SpeedWhenHasWafer, nameof(SpeedWhenHasWafer), nameof(IsSpeedWhenHasWaferDirty));
+    private readonly EditableFloatItem _accelerationTimeItem = new(PolishASideArm2Address.AccelerationTime, nameof(AccelerationTime), nameof(IsAccelerationTimeDirty));
+    private readonly EditableFloatItem _decelerationTimeItem = new(PolishASideArm2Address.DeaccelerationTime, nameof(DecelerationTime), nameof(IsDecelerationTimeDirty));
     private readonly EditableFloatItem _zJogSpeedItem = new(PolishASideArm2Address.ZJogSpeed, nameof(ZJogSpeed), nameof(IsZJogSpeedDirty));
     private readonly EditableFloatItem _zAutoSpeedItem = new(PolishASideArm2Address.ZAutoSpeed, nameof(ZAutoSpeed), nameof(IsZAutoSpeedDirty));
 
@@ -271,6 +274,30 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
         set => EditableFloatItemHelper.SetValue(_zPolishBUnloadPositionItem, value, RaisePropertyChanged);
     }
 
+    public bool IsSpeedWhenHasWaferDirty => _speedWhenHasWaferItem.IsDirty;
+
+    public double SpeedWhenHasWafer
+    {
+        get => _speedWhenHasWaferItem.Value;
+        set => EditableFloatItemHelper.SetValue(_speedWhenHasWaferItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsAccelerationTimeDirty => _accelerationTimeItem.IsDirty;
+
+    public double AccelerationTime
+    {
+        get => _accelerationTimeItem.Value;
+        set => EditableFloatItemHelper.SetValue(_accelerationTimeItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsDecelerationTimeDirty => _decelerationTimeItem.IsDirty;
+
+    public double DecelerationTime
+    {
+        get => _decelerationTimeItem.Value;
+        set => EditableFloatItemHelper.SetValue(_decelerationTimeItem, value, RaisePropertyChanged);
+    }
+
     #endregion
 
     #region Z-Axis Move Toggle Properties (Read-Only via PLC)
@@ -458,6 +485,13 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
     {
         get => _emergencyStopToggle;
         set => SetProperty(ref _emergencyStopToggle, value);
+    }
+
+    private bool _powerOffToggle;
+    public bool PowerOffToggle
+    {
+        get => _powerOffToggle;
+        set => SetProperty(ref _powerOffToggle, value);
     }
 
     private bool _alarmResetToggle;
@@ -735,6 +769,7 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
     public DelegateCommand ZOriginCommand { get; }
 
     public DelegateCommand EmergencyStopCommand { get; }
+    public DelegateCommand PowerOffCommand { get; }
     public DelegateCommand AlarmResetCommand { get; }
     public DelegateCommand SaveCommand { get; }
 
@@ -772,6 +807,12 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
     public DelegateCommand ZPolishALoadPositionCancelCommand => _zPolishALoadPositionItem.CancelCommand;
     public DelegateCommand ZPolishBUnloadPositionSetCommand => _zPolishBUnloadPositionItem.SetCommand;
     public DelegateCommand ZPolishBUnloadPositionCancelCommand => _zPolishBUnloadPositionItem.CancelCommand;
+    public DelegateCommand SpeedWhenHasWaferSetCommand => _speedWhenHasWaferItem.SetCommand;
+    public DelegateCommand SpeedWhenHasWaferCancelCommand => _speedWhenHasWaferItem.CancelCommand;
+    public DelegateCommand AccelerationTimeSetCommand => _accelerationTimeItem.SetCommand;
+    public DelegateCommand AccelerationTimeCancelCommand => _accelerationTimeItem.CancelCommand;
+    public DelegateCommand DecelerationTimeSetCommand => _decelerationTimeItem.SetCommand;
+    public DelegateCommand DecelerationTimeCancelCommand => _decelerationTimeItem.CancelCommand;
     public DelegateCommand ZJogSpeedSetCommand => _zJogSpeedItem.SetCommand;
     public DelegateCommand ZJogSpeedCancelCommand => _zJogSpeedItem.CancelCommand;
     public DelegateCommand ZAutoSpeedSetCommand => _zAutoSpeedItem.SetCommand;
@@ -797,6 +838,9 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
             _zPolishBLoadPositionItem,
             _zPolishALoadPositionItem,
             _zPolishBUnloadPositionItem,
+            _speedWhenHasWaferItem,
+            _accelerationTimeItem,
+            _decelerationTimeItem,
             _zJogSpeedItem,
             _zAutoSpeedItem
         };
@@ -869,6 +913,7 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
         }, () => "PolishASideArm2");
 
         EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(PolishASideArm2Address.EmergencyStop, !EmergencyStopToggle), () => "PolishASideArm2");
+        PowerOffCommand = OperationAudit.Create("PowerOff", () => _plc.Write(PolishASideArm2Address.PowerOff, !PowerOffToggle), () => "PolishASideArm2");
         AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishASideArm2Address.AlarmReset, !AlarmResetToggle), () => "PolishASideArm2");
         SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishASideArm2Address.Save, !SaveToggle), () => "PolishASideArm2");
 
@@ -944,6 +989,7 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
             new PlcBatchReadItem<bool>(PolishASideArm2Address.GlobalAlarm, assign: v => GlobalAlarm = v),
             new PlcBatchReadItem<bool>(PolishASideArm2Address.Save, assign: v => SaveToggle = v),
             new PlcBatchReadItem<bool>(PolishASideArm2Address.EmergencyStop, assign: v => EmergencyStopToggle = v),
+            new PlcBatchReadItem<bool>(PolishASideArm2Address.PowerOff, assign: v => PowerOffToggle = v),
 
             new PlcBatchReadItem<bool>(PolishASideArm2Address.XOrigin, assign: v => XOriginToggle = v),
             new PlcBatchReadItem<bool>(PolishASideArm2Address.XStandbyPositionMove, assign: v => XStandbyPositionMoveToggle = v),

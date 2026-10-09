@@ -23,6 +23,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _polishDPosition2xItem = new(PolishBSideArm2Address.PolishDPosition_2x, nameof(PolishDPosition_2x), nameof(IsPolishDPosition_2xDirty));
         private readonly EditableFloatItem _jogSpeed2xItem = new(PolishBSideArm2Address.JogSpeed_2x, nameof(JogSpeed_2x), nameof(IsJogSpeed_2xDirty));
         private readonly EditableFloatItem _autoSpeed2xItem = new(PolishBSideArm2Address.AutoSpeed_2x, nameof(AutoSpeed_2x), nameof(IsAutoSpeed_2xDirty));
+        private readonly EditableFloatItem _speedWhenHasWafer1xItem = new(PolishBSideArm2Address.SpeedWhenHasWafer1x, nameof(SpeedWhenHasWafer1x), nameof(IsSpeedWhenHasWafer1xDirty));
+        private readonly EditableFloatItem _accelerationTime1xItem = new(PolishBSideArm2Address.AccelerationTime1x, nameof(AccelerationTime1x), nameof(IsAccelerationTime1xDirty));
+        private readonly EditableFloatItem _deaccelerationTime1xItem = new(PolishBSideArm2Address.DeaccelerationTime1x, nameof(DeaccelerationTime1x), nameof(IsDeaccelerationTime1xDirty));
 
         private readonly EditableFloatItem _standbyPosition2zItem = new(PolishBSideArm2Address.StandbyPosition_2z, nameof(StandbyPosition_2z), nameof(IsStandbyPosition_2zDirty));
         private readonly EditableFloatItem _transferArmPosition2zItem = new(PolishBSideArm2Address.TransferArmPosition_2z, nameof(TransferArmPosition_2z), nameof(IsTransferArmPosition_2zDirty));
@@ -32,6 +35,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _polishDUpPieceItem = new(PolishBSideArm2Address.PolishDUpPiece, nameof(PolishDUpPiece), nameof(IsPolishDUpPieceDirty));
         private readonly EditableFloatItem _jogSpeed2zItem = new(PolishBSideArm2Address.JogSpeed_2z, nameof(JogSpeed_2z), nameof(IsJogSpeed_2zDirty));
         private readonly EditableFloatItem _autoSpeed2zItem = new(PolishBSideArm2Address.AutoSpeed_2z, nameof(AutoSpeed_2z), nameof(IsAutoSpeed_2zDirty));
+        private readonly EditableFloatItem _speedWhenHasWafer2zItem = new(PolishBSideArm2Address.SpeedWhenHasWafer2z, nameof(SpeedWhenHasWafer2z), nameof(IsSpeedWhenHasWafer2zDirty));
+        private readonly EditableFloatItem _accelerationTime2zItem = new(PolishBSideArm2Address.AccelerationTime2z, nameof(AccelerationTime2z), nameof(IsAccelerationTime2zDirty));
+        private readonly EditableFloatItem _deaccelerationTime2zItem = new(PolishBSideArm2Address.DeaccelerationTime2z, nameof(DeaccelerationTime2z), nameof(IsDeaccelerationTime2zDirty));
 
         private readonly List<EditableFloatItem> _editableItems;
 
@@ -147,6 +153,13 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             get => _autoSpeed2xItem.Value;
             set => EditableFloatItemHelper.SetValue(_autoSpeed2xItem, value, RaisePropertyChanged);
         }
+
+        public bool IsSpeedWhenHasWafer1xDirty => _speedWhenHasWafer1xItem.IsDirty;
+        public double SpeedWhenHasWafer1x { get => _speedWhenHasWafer1xItem.Value; set => EditableFloatItemHelper.SetValue(_speedWhenHasWafer1xItem, value, RaisePropertyChanged); }
+        public bool IsAccelerationTime1xDirty => _accelerationTime1xItem.IsDirty;
+        public double AccelerationTime1x { get => _accelerationTime1xItem.Value; set => EditableFloatItemHelper.SetValue(_accelerationTime1xItem, value, RaisePropertyChanged); }
+        public bool IsDeaccelerationTime1xDirty => _deaccelerationTime1xItem.IsDirty;
+        public double DeaccelerationTime1x { get => _deaccelerationTime1xItem.Value; set => EditableFloatItemHelper.SetValue(_deaccelerationTime1xItem, value, RaisePropertyChanged); }
 
         private double _currentCoordinate_2x;
         public double CurrentCoordinate_2x
@@ -372,6 +385,13 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             set => EditableFloatItemHelper.SetValue(_autoSpeed2zItem, value, RaisePropertyChanged);
         }
 
+        public bool IsSpeedWhenHasWafer2zDirty => _speedWhenHasWafer2zItem.IsDirty;
+        public double SpeedWhenHasWafer2z { get => _speedWhenHasWafer2zItem.Value; set => EditableFloatItemHelper.SetValue(_speedWhenHasWafer2zItem, value, RaisePropertyChanged); }
+        public bool IsAccelerationTime2zDirty => _accelerationTime2zItem.IsDirty;
+        public double AccelerationTime2z { get => _accelerationTime2zItem.Value; set => EditableFloatItemHelper.SetValue(_accelerationTime2zItem, value, RaisePropertyChanged); }
+        public bool IsDeaccelerationTime2zDirty => _deaccelerationTime2zItem.IsDirty;
+        public double DeaccelerationTime2z { get => _deaccelerationTime2zItem.Value; set => EditableFloatItemHelper.SetValue(_deaccelerationTime2zItem, value, RaisePropertyChanged); }
+
         private double _currentCoordinate_2z;
         public double CurrentCoordinate_2z
         {
@@ -540,6 +560,13 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private bool _arm2Fiber3;
         public bool Arm2Fiber3 { get => _arm2Fiber3; set => SetProperty(ref _arm2Fiber3, value); }
 
+        private bool _powerOffToggle;
+        public bool PowerOffToggle { get => _powerOffToggle; set => SetProperty(ref _powerOffToggle, value); }
+        private int _foupSlot;
+        public int FoupSlot { get => _foupSlot; set => SetProperty(ref _foupSlot, value); }
+        private int _waferIndex;
+        public int WaferIndex { get => _waferIndex; set => SetProperty(ref _waferIndex, value); }
+
         #endregion
 
         #region Commands
@@ -590,6 +617,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 
         public DelegateCommand ManualModeCommand { get; }
         public DelegateCommand AutoModeCommand { get; }
+        public DelegateCommand PowerOffCommand { get; }
 
         public DelegateCommand StandbyPosition_2xSetCommand => _standbyPosition2xItem.SetCommand;
         public DelegateCommand StandbyPosition_2xCancelCommand => _standbyPosition2xItem.CancelCommand;
@@ -603,6 +631,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_2xCancelCommand => _jogSpeed2xItem.CancelCommand;
         public DelegateCommand AutoSpeed_2xSetCommand => _autoSpeed2xItem.SetCommand;
         public DelegateCommand AutoSpeed_2xCancelCommand => _autoSpeed2xItem.CancelCommand;
+        public DelegateCommand SpeedWhenHasWafer1xSetCommand => _speedWhenHasWafer1xItem.SetCommand;
+        public DelegateCommand SpeedWhenHasWafer1xCancelCommand => _speedWhenHasWafer1xItem.CancelCommand;
+        public DelegateCommand AccelerationTime1xSetCommand => _accelerationTime1xItem.SetCommand;
+        public DelegateCommand AccelerationTime1xCancelCommand => _accelerationTime1xItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime1xSetCommand => _deaccelerationTime1xItem.SetCommand;
+        public DelegateCommand DeaccelerationTime1xCancelCommand => _deaccelerationTime1xItem.CancelCommand;
 
         public DelegateCommand StandbyPosition_2zSetCommand => _standbyPosition2zItem.SetCommand;
         public DelegateCommand StandbyPosition_2zCancelCommand => _standbyPosition2zItem.CancelCommand;
@@ -620,6 +654,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_2zCancelCommand => _jogSpeed2zItem.CancelCommand;
         public DelegateCommand AutoSpeed_2zSetCommand => _autoSpeed2zItem.SetCommand;
         public DelegateCommand AutoSpeed_2zCancelCommand => _autoSpeed2zItem.CancelCommand;
+        public DelegateCommand SpeedWhenHasWafer2zSetCommand => _speedWhenHasWafer2zItem.SetCommand;
+        public DelegateCommand SpeedWhenHasWafer2zCancelCommand => _speedWhenHasWafer2zItem.CancelCommand;
+        public DelegateCommand AccelerationTime2zSetCommand => _accelerationTime2zItem.SetCommand;
+        public DelegateCommand AccelerationTime2zCancelCommand => _accelerationTime2zItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime2zSetCommand => _deaccelerationTime2zItem.SetCommand;
+        public DelegateCommand DeaccelerationTime2zCancelCommand => _deaccelerationTime2zItem.CancelCommand;
         #endregion
 
         public PolishBSideArm2ViewModel() : base(9, "Polish B Side Arm2")
@@ -632,6 +672,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 _polishDPosition2xItem,
                 _jogSpeed2xItem,
                 _autoSpeed2xItem,
+                _speedWhenHasWafer1xItem,
+                _accelerationTime1xItem,
+                _deaccelerationTime1xItem,
                 _standbyPosition2zItem,
                 _transferArmPosition2zItem,
                 _polishCDownPieceItem,
@@ -639,7 +682,10 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 _polishDDownPieceItem,
                 _polishDUpPieceItem,
                 _jogSpeed2zItem,
-                _autoSpeed2zItem
+                _autoSpeed2zItem,
+                _speedWhenHasWafer2zItem,
+                _accelerationTime2zItem,
+                _deaccelerationTime2zItem
             };
             EditableFloatItemHelper.InitializeCommands(_editableItems, _plc, RaisePropertyChanged);
 
@@ -744,6 +790,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 
             ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishBSideArm2Address.ManualMode, !ManualModeToggle), () => "PolishBSideArm2");
             AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishBSideArm2Address.AutoMode, !AutoModeToggle), () => "PolishBSideArm2");
+            PowerOffCommand = OperationAudit.Create("PowerOff", () => _plc.Write(PolishBSideArm2Address.PowerOff, !PowerOffToggle), () => "PolishBSideArm2");
         }
 
         private async void ReadTimer_Tick(object? sender, EventArgs e)
@@ -775,6 +822,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 new PlcBatchReadItem<bool>(PolishBSideArm2Address.GlobalAlarm, assign: v => GlobalAlarm = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm2Address.Save, assign: v => SaveToggle = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm2Address.EmergencyStop, assign: v => EmergencyStopToggle = v),
+                new PlcBatchReadItem<bool>(PolishBSideArm2Address.PowerOff, assign: v => PowerOffToggle = v),
 
                 new PlcBatchReadItem<bool>(PolishBSideArm2Address.Origin_2x, assign: v => OriginToggle_2x = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm2Address.StandbyPosMove_2x, assign: v => StandbyPosMoveToggle_2x = v),
@@ -861,8 +909,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             var editableBatchTask = _plc.BatchReadAsync(editableBatchItems);
             var x1023Task = _plc.ReadAsync<bool[]>(PolishBSideArm2Address.Arm2Fiber1, 3);
             var b0bTask = _plc.ReadAsync<bool>(PolishBSideArm2Address.AlarmReset);
+            var waferTask = _plc.ReadAsync<short[]>(PolishBSideArm2Address.FoupSlot, 2);
 
-            await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, x1023Task, b0bTask);
+            await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, x1023Task, b0bTask, waferTask);
 
             if (!mBatchTask.Result.IsSuccess)
                 Logger.For("RobotControl").Warn($"[PolishBSideArm2] M batch read failed: {mBatchTask.Result.Message}");
@@ -891,6 +940,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             if (b0bTask.Result.IsSuccess)
             {
                 AlarmResetToggle = b0bTask.Result.Content;
+            }
+
+            if (waferTask.Result.IsSuccess && waferTask.Result.Content.Length >= 2)
+            {
+                FoupSlot = waferTask.Result.Content[0];
+                WaferIndex = waferTask.Result.Content[1];
             }
         }
 

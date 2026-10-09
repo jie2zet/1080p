@@ -290,6 +290,20 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         set => SetProperty(ref _stationIsStopped, value);
     }
 
+    private bool _loadInduction;
+    public bool LoadInduction
+    {
+        get => _loadInduction;
+        set => SetProperty(ref _loadInduction, value);
+    }
+
+    private bool _unloadInduction;
+    public bool UnloadInduction
+    {
+        get => _unloadInduction;
+        set => SetProperty(ref _unloadInduction, value);
+    }
+
     private bool _loadOperationActive;
     public bool LoadOperationActive
     {
@@ -701,9 +715,10 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         var editableBatchTask = _plc.BatchReadAsync(editableBatchItems);
         var y10C0Task = _plc.ReadAsync<bool[]>(TransferModuleAddress.LoadDoorOpenRead, 6); // Y10C0-Y10C5
         var x10B0Task = _plc.ReadAsync<bool[]>(TransferModuleAddress.LoadDoorOpenDoneStatus, 6); // X10B0-X10B5
+        var x102cTask = _plc.ReadAsync<bool[]>(TransferModuleAddress.LoadInduction, 2); // X102C-X102D
         var b0BTask = _plc.ReadAsync<bool>(TransferModuleAddress.AlarmReset); // B0B
 
-        await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, y10C0Task, x10B0Task, b0BTask);
+        await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, y10C0Task, x10B0Task, x102cTask, b0BTask);
 
         if (!mBatchTask.Result.IsSuccess)
             Logger.For("RobotControl").Warn($"[TransferModule] M batch read failed: {mBatchTask.Result.Message}");
@@ -740,6 +755,12 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
                 UnloadDoorOpenDone = x[4];
                 UnloadDoorCloseDone = x[5];
             }
+        }
+
+        if (x102cTask.Result.IsSuccess && x102cTask.Result.Content.Length >= 2)
+        {
+            LoadInduction = x102cTask.Result.Content[0];
+            UnloadInduction = x102cTask.Result.Content[1];
         }
 
         if (b0BTask.Result.IsSuccess)

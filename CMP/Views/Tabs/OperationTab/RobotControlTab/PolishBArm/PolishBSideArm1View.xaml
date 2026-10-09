@@ -198,6 +198,26 @@
                             <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
 Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_1x}" Command="{Binding PolishDMoveX1Command}"/>
 
+                            <!-- Acceleration time -->
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1"
+                                Value="{Binding AccelerationTime_1x}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsAccelerationTime_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding AccelerationTime_1xSetCommand}"
+                                CancelCommand="{Binding AccelerationTime_1xCancelCommand}"/>
+
+                            <!-- Deceleration time -->
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1"
+                                Value="{Binding DeaccelerationTime_1x}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsDeaccelerationTime_1xDirty, Mode=OneWay}"
+                                SetCommand="{Binding DeaccelerationTime_1xSetCommand}"
+                                CancelCommand="{Binding DeaccelerationTime_1xCancelCommand}"/>
+
                             <!-- Alarm Code -->
                             <Border BorderBrush="#CCCCCC" BorderThickness="1" Grid.Row="7" Grid.Column="0" Margin="5,0,0,5" Height="30">
                                 <TextBlock  Text="{Binding AlarmCode_1x}" VerticalAlignment="Center" Padding="6,0,0,0"/>
@@ -360,6 +380,36 @@ Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_1x}
                                 CancelCommand="{Binding PolishDPosition_1zCancelCommand}"/>
                             <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
 Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_1z}" Command="{Binding PolishDMoveZ1Command}"/>
+
+                            <!-- Speed when has wafer -->
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1"
+                                Value="{Binding SpeedWhenHasWafer}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsSpeedWhenHasWaferDirty, Mode=OneWay}"
+                                SetCommand="{Binding SpeedWhenHasWaferSetCommand}"
+                                CancelCommand="{Binding SpeedWhenHasWaferCancelCommand}"/>
+
+                            <!-- Acceleration time -->
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1"
+                                Value="{Binding AccelerationTime_1z}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsAccelerationTime_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding AccelerationTime_1zSetCommand}"
+                                CancelCommand="{Binding AccelerationTime_1zCancelCommand}"/>
+
+                            <!-- Deceleration time -->
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1"
+                                Value="{Binding DeaccelerationTime_1z}"
+                                DecimalPlaces="3"
+                                Increment="0.001"
+                                IsDirty="{Binding IsDeaccelerationTime_1zDirty, Mode=OneWay}"
+                                SetCommand="{Binding DeaccelerationTime_1zSetCommand}"
+                                CancelCommand="{Binding DeaccelerationTime_1zCancelCommand}"/>
 
                             <!-- Alarm Code -->
                             <Border BorderBrush="#CCCCCC" BorderThickness="1" Grid.Row="7" Grid.Column="0" Margin="5,0,0,5" Height="30">

@@ -196,6 +196,13 @@
                             <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
 Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_2x}" Command="{Binding PolishDMoveX2Command}"/>
 
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1" Value="{Binding SpeedWhenHasWafer1x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsSpeedWhenHasWafer1xDirty, Mode=OneWay}" SetCommand="{Binding SpeedWhenHasWafer1xSetCommand}" CancelCommand="{Binding SpeedWhenHasWafer1xCancelCommand}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1" Value="{Binding AccelerationTime1x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsAccelerationTime1xDirty, Mode=OneWay}" SetCommand="{Binding AccelerationTime1xSetCommand}" CancelCommand="{Binding AccelerationTime1xCancelCommand}"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1" Value="{Binding DeaccelerationTime1x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsDeaccelerationTime1xDirty, Mode=OneWay}" SetCommand="{Binding DeaccelerationTime1xSetCommand}" CancelCommand="{Binding DeaccelerationTime1xCancelCommand}"/>
+
                             <!-- Alarm Code -->
                             <Border BorderBrush="#CCCCCC" BorderThickness="1" Grid.Row="7" Grid.Column="0" Margin="5,0,0,5" Height="30">
                                 <TextBlock  Text="{Binding AlarmCode_2x, Mode=OneWay}" VerticalAlignment="Center" Padding="6,0,0,0"/>
@@ -356,7 +363,14 @@ Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_2x}
                                 SetCommand="{Binding PolishDUpPieceSetCommand}"
                                 CancelCommand="{Binding PolishDUpPieceCancelCommand}"/>
                             <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
-Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDUpPieceMove_2z}" Command="{Binding PolishDUpPieceMoveZ2Command}"/>
+              Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDUpPieceMove_2z}" Command="{Binding PolishDUpPieceMoveZ2Command}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1" Value="{Binding SpeedWhenHasWafer2z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsSpeedWhenHasWafer2zDirty, Mode=OneWay}" SetCommand="{Binding SpeedWhenHasWafer2zSetCommand}" CancelCommand="{Binding SpeedWhenHasWafer2zCancelCommand}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1" Value="{Binding AccelerationTime2z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsAccelerationTime2zDirty, Mode=OneWay}" SetCommand="{Binding AccelerationTime2zSetCommand}" CancelCommand="{Binding AccelerationTime2zCancelCommand}"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1" Value="{Binding DeaccelerationTime2z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsDeaccelerationTime2zDirty, Mode=OneWay}" SetCommand="{Binding DeaccelerationTime2zSetCommand}" CancelCommand="{Binding DeaccelerationTime2zCancelCommand}"/>
 
                             <!-- Polish C Up Piece -->
                             <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc PolishCUpPiece}" VerticalAlignment="Center" Margin="0,0,5,0" />

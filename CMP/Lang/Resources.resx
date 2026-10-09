@@ -1092,6 +1092,18 @@
   <data name="StopLoad" xml:space="preserve">
     <value>Stop Load </value>
   </data>
+  <data name="ResumeLoad" xml:space="preserve">
+    <value>Resume Load</value>
+  </data>
+  <data name="SideAHealthy" xml:space="preserve">
+    <value>Side A Healthy</value>
+  </data>
+  <data name="SideBHealthy" xml:space="preserve">
+    <value>Side B Healthy</value>
+  </data>
+  <data name="PowerOff" xml:space="preserve">
+    <value>Power Off</value>
+  </data>
   <data name="EFEMRobot" xml:space="preserve">
     <value>EFEM Robot</value>
   </data>
@@ -1202,6 +1214,15 @@
   </data>
   <data name="AutoSpeed" xml:space="preserve">
     <value>Auto Speed</value>
+  </data>
+  <data name="SpeedWhenHasWafer" xml:space="preserve">
+    <value>Speed (with Wafer)</value>
+  </data>
+  <data name="AccelerationTime" xml:space="preserve">
+    <value>Acceleration Time</value>
+  </data>
+  <data name="DecelerationTime" xml:space="preserve">
+    <value>Deceleration Time</value>
   </data>
   <data name="CurrentCoordinate" xml:space="preserve">
     <value>Current Coord</value>
@@ -1952,5 +1973,11 @@
   </data>
   <data name="Torque" xml:space="preserve">
     <value>Torque</value>
+  </data>
+  <data name="LoadInduction" xml:space="preserve">
+    <value>Load Induction</value>
+  </data>
+  <data name="UnloadInduction" xml:space="preserve">
+    <value>Unload Induction</value>
   </data>
 </root>

@@ -72,6 +72,7 @@
                 <!-- Stop -->
                 <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}" Width="60" Height="28" Command="{Binding StationStopCommand}"/>
                 <controls:SignalLight Width="20" Height="20" LightColor="Red" IsOn="{Binding StationIsStopped}" VerticalAlignment="Center" Margin="5,0,30,0"/>
+                <ToggleButton Content="{lex:Loc PowerOff}" Style="{StaticResource ToggleButtonDanger}" Width="90" Height="28" IsChecked="{Binding PowerOffToggle, Mode=OneWay}" Command="{Binding PowerOffCommand}" Margin="0,0,20,0"/>
 
                 <!-- Alarm Area -->
                 <Grid VerticalAlignment="Center">
@@ -175,6 +176,13 @@
                         <controls:SignalLight Grid.Row="2" Grid.Column="1" Width="24" Height="24" LightColor="Red" IsOn="{Binding Arm3Fiber3}" VerticalAlignment="Center" Margin="0,0,0,10"/>
                     </Grid>
                 </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,250,0,0">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="80"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="80"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{lex:Loc FoupSlot}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="1" Text="{Binding FoupSlot}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{lex:Loc WaferIndex}" VerticalAlignment="Center" Margin="20,0,8,0"/>
+                <TextBlock Grid.Column="3" Text="{Binding WaferIndex}" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
     </Grid>
