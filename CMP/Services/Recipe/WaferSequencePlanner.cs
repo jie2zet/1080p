@@ -30,12 +30,12 @@ public static class WaferSequencePlanner
             data => data.PolishMainASideChecked,
             data => data.PolishMainBSideChecked,
             [
-                new("PolishB",data => SequenceType.None,data => data.PolishASideOperationBChecked),
-                new("PolishA",data => data.PolishASideOperationType,data => data.PolishASideOperationAChecked),
+                new("PolishB", data => SequenceType.None, data => data.PolishASideOperationBChecked),
+                new("PolishA", data => data.PolishASideOperationType, data => data.PolishASideOperationAChecked),
             ],
             [
-                new("PolishD",data => SequenceType.None,data => data.PolishBSideOperationDChecked),
-                new("PolishC",data => data.PolishBSideOperationType,data => data.PolishBSideOperationCChecked),
+                new("PolishD", data => SequenceType.None, data => data.PolishBSideOperationDChecked),
+                new("PolishC", data => data.PolishBSideOperationType, data => data.PolishBSideOperationCChecked),
             ]
         ),
         new ChamberGroup(

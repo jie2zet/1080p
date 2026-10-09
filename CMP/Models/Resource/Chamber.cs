@@ -2246,31 +2246,56 @@ public class DataLoggerHelper
         }
 
         var usedKeys = new HashSet<string>(StringComparer.Ordinal);
+        // 同一 Module 在表里会再出现一次，轴和传感器在后面那段。
+        // 多出来的同名点（B 侧 Discharge 的 X 位置被标成了 Feed Arm2）留给后面缺这个点的模块。
+        var extraPoints = new List<SV_PLC>();
         foreach (var moduleName in moduleNames)
         {
-            STCtrl? stCtrl = null;
+            var moduleItems = new List<SV_PLC>();
             for (var i = 0; i < stCtrls.Count; i++)
             {
-                if (string.Equals(stCtrls[i].ModuleName, moduleName, StringComparison.Ordinal))
+                if (!string.Equals(stCtrls[i].ModuleName, moduleName, StringComparison.Ordinal))
                 {
-                    stCtrl = stCtrls[i];
-                    break;
+                    continue;
                 }
-            }
 
-            if (stCtrl == null)
-            {
-                continue;
+                foreach (var candidate in stCtrls[i].listDataInSingleStCtrl)
+                {
+                    moduleItems.Add(candidate);
+                }
             }
 
             foreach (var pointName in LtpLogPointNames)
             {
                 SV_PLC? item = null;
-                foreach (var candidate in stCtrl.listDataInSingleStCtrl)
+                for (var i = 0; i < moduleItems.Count; i++)
                 {
-                    if (string.Equals(candidate.Name, pointName, StringComparison.Ordinal))
+                    if (!string.Equals(moduleItems[i].Name, pointName, StringComparison.Ordinal))
                     {
-                        item = candidate;
+                        continue;
+                    }
+
+                    if (item == null)
+                    {
+                        item = moduleItems[i];
+                    }
+                    else
+                    {
+                        extraPoints.Add(moduleItems[i]);
+                    }
+                }
+
+                if (item == null)
+                {
+                    for (var i = 0; i < extraPoints.Count; i++)
+                    {
+                        if (!string.Equals(extraPoints[i].Name, pointName, StringComparison.Ordinal))
+                        {
+                            continue;
+                        }
+
+                        item = extraPoints[i];
+                        extraPoints.RemoveAt(i);
                         break;
                     }
                 }
