@@ -269,10 +269,15 @@ public class LiquidControlTests
             var liquid = new LiquidContentViewModel();
             CollectionAssert.AreEqual(new[] { "Polish", "Roller", "Pen", "Dry" }, liquid.Tabs.Select(t => t.Header).ToArray());
             Assert.IsFalse(liquid.Tabs[0].IsEmpty);
-            var empty = liquid.Tabs[3];
-            Assert.IsTrue(empty.IsEmpty);
+            var dry = liquid.Tabs[3];
+            Assert.IsFalse(dry.IsEmpty);
             Assert.IsFalse(liquid.Tabs[2].IsEmpty);
-            Assert.IsTrue(liquid.Tabs[3].IsEmpty);
+            CollectionAssert.AreEqual(new[] { "DryA", "DryB" }, dry.Chambers.Select(c => c.Header).ToArray());
+            var dryModels = dry.Chambers.Select(c => (GenericDryLiquidContentViewModel)c.Content).ToArray();
+            Assert.AreEqual(2, dryModels.Distinct().Count());
+            Assert.IsTrue(dryModels.All(m => m.Parameters.Count == 1));
+            Assert.IsTrue(dryModels.All(m => m.Parameters[0].Name == "Outer Rinse Flowrate"));
+            var empty = new LiquidCategoryViewModel("LiquidDry");
             var roller = liquid.Tabs[1];
             CollectionAssert.AreEqual(Chambers.Select(c => c.Name).ToArray(), roller.Chambers.Select(c => c.Header).ToArray());
             var models = roller.Chambers.Select(c => (GenericRollerLiquidContentViewModel)c.Content).ToArray();
@@ -285,6 +290,7 @@ public class LiquidControlTests
 
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("zh");
             Assert.AreEqual("抛光", liquid.Tabs[0].Header);
+            Assert.AreEqual("干燥", dry.Header);
             Assert.AreEqual("干燥", empty.Header);
             Assert.AreEqual("此区域暂未配置液路控制。", empty.EmptyState);
             CollectionAssert.Contains(notified, nameof(empty.EmptyState));
@@ -298,6 +304,12 @@ public class LiquidControlTests
                     Assert.AreNotEqual(group.ProjectKey, group.EnglishTitle);
                     Assert.AreNotEqual(group.ProjectKey, group.ChineseTitle);
                 }
+            }
+            foreach (var model in dryModels)
+            {
+                Assert.AreEqual("晶圆上表面外侧清洗流量设定", model.Parameters[0].Name);
+                Assert.AreEqual("晶圆上表面纯水2路冲洗入口阀", model.CommandGroups[0].Title);
+                Assert.AreEqual("SV-SDAC104", model.CommandGroups[0].PidTag);
             }
             Assert.AreEqual("液路控制", Resources.ResourceManager.GetString("LiquidControl", CultureInfo.GetCultureInfo("zh")));
         }

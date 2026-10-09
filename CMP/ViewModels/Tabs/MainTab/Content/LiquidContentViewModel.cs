@@ -51,7 +51,14 @@ public sealed class LiquidContentViewModel : BindableBase
                 new("PenB1", new GenericPenLiquidContentViewModel(PenCleanConfigFactory.CreatePenB1Config()))
             ]
         });
-        Tabs.Add(new LiquidCategoryViewModel("LiquidDry"));
+        Tabs.Add(new LiquidCategoryViewModel("LiquidDry")
+        {
+            Chambers =
+            [
+                new("DryA", new GenericDryLiquidContentViewModel(DryCleanConfigFactory.CreateDryAConfig())),
+                new("DryB", new GenericDryLiquidContentViewModel(DryCleanConfigFactory.CreateDryBConfig()))
+            ]
+        });
     }
 }
 

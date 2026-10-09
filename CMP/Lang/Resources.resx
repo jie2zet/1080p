@@ -1965,6 +1965,30 @@
   <data name="LiquidPen" xml:space="preserve">
     <value>Pen</value>
   </data>
+  <data name="DryWfUpperFaceDiwWashInletValve2" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Inlet Valve 2</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve2" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Outlet Valve 2</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashFlow2" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Flow 2</value>
+  </data>
+  <data name="DryIpaSupplyValve" xml:space="preserve">
+    <value>IPA Supply Valve</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashInletValve1" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Inlet Valve 1</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve1" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Outlet Valve 1</value>
+  </data>
+  <data name="DryWfLowerFaceDiwWashValve" xml:space="preserve">
+    <value>WF Lower Face DIW Wash Valve</value>
+  </data>
+  <data name="DryOuterRinseFlowrate" xml:space="preserve">
+    <value>Outer Rinse Flowrate</value>
+  </data>
   <data name="LiquidDry" xml:space="preserve">
     <value>Dry</value>
   </data>

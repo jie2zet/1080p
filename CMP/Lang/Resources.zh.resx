@@ -1965,6 +1965,30 @@
   <data name="LiquidPen" xml:space="preserve">
     <value>笔清洗</value>
   </data>
+  <data name="DryWfUpperFaceDiwWashInletValve2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗入口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗出口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashFlow2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗流量</value>
+  </data>
+  <data name="DryIpaSupplyValve" xml:space="preserve">
+    <value>IPA供应阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashInletValve1" xml:space="preserve">
+    <value>晶圆上表面纯水1路冲洗入口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve1" xml:space="preserve">
+    <value>晶圆上表面纯水1路冲洗出口阀</value>
+  </data>
+  <data name="DryWfLowerFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆下表面纯水冲洗阀</value>
+  </data>
+  <data name="DryOuterRinseFlowrate" xml:space="preserve">
+    <value>晶圆上表面外侧清洗流量设定</value>
+  </data>
   <data name="LiquidDry" xml:space="preserve">
     <value>干燥</value>
   </data>
