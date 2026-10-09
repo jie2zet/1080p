@@ -175,7 +175,7 @@ public static partial class PlcHandle
 /// <summary>
 /// PLC Handle 帮助类
 /// </summary>
-public static class PlcHandleHelper
+public static partial class PlcHandleHelper
 {
     private static Dictionary<int, (string Name, PlcHandleAttribute Attr)>? _handleCache;
     private static Dictionary<uint, PlcHandle.ParamAttribute>? _paramCacheByHandle;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -2195,5 +2195,107 @@
   </data>
   <data name="LiquidCylinderClose" xml:space="preserve">
     <value>Close cylinders with one touch</value>
+  </data>
+  <data name="ActionFcCalibration" xml:space="preserve">
+    <value>FC Calibration</value>
+  </data>
+  <data name="ActionPressure" xml:space="preserve">
+    <value>Pressure</value>
+  </data>
+  <data name="ActionPressureReset" xml:space="preserve">
+    <value>Pressure Reset</value>
+  </data>
+  <data name="ActionEvCalibration" xml:space="preserve">
+    <value>EV Calibration</value>
+  </data>
+  <data name="PenChemicalInletValve1" xml:space="preserve">
+    <value>Chemical Inlet Valve 1</value>
+  </data>
+  <data name="PenChemicalOutletValve" xml:space="preserve">
+    <value>Chemical Outlet Valve</value>
+  </data>
+  <data name="PenChemicalFlow" xml:space="preserve">
+    <value>Chemical Flow</value>
+  </data>
+  <data name="PenDiwInletValve" xml:space="preserve">
+    <value>DIW Inlet Valve</value>
+  </data>
+  <data name="PenDiwOutletValve" xml:space="preserve">
+    <value>DIW Outlet Valve</value>
+  </data>
+  <data name="PenDiwFlow" xml:space="preserve">
+    <value>DIW Flow</value>
+  </data>
+  <data name="PenWfUpperFaceDiwWashValve" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Valve</value>
+  </data>
+  <data name="PenWfUpperFaceDiwFlow" xml:space="preserve">
+    <value>WF Upper Face DIW Flow</value>
+  </data>
+  <data name="PenWfLowerFaceDiwWashValve" xml:space="preserve">
+    <value>WF Lower Face DIW Wash Valve</value>
+  </data>
+  <data name="PenWfLowerFaceDiwFlow" xml:space="preserve">
+    <value>WF Lower Face DIW Flow</value>
+  </data>
+  <data name="PenDiwSupplyValve" xml:space="preserve">
+    <value>DIW Supply Valve</value>
+  </data>
+  <data name="PenDiwPressure" xml:space="preserve">
+    <value>DIW Pressure</value>
+  </data>
+  <data name="PenChemicalInletValve2" xml:space="preserve">
+    <value>Chemical Inlet Valve 2</value>
+  </data>
+  <data name="PenChemicalInletValve3" xml:space="preserve">
+    <value>Chemical Inlet Valve 3</value>
+  </data>
+  <data name="PenDiwWashValve" xml:space="preserve">
+    <value>Pen DIW Wash Valve</value>
+  </data>
+  <data name="PenPlateDiwWashValve" xml:space="preserve">
+    <value>Plate DIW Wash Valve</value>
+  </data>
+  <data name="PenChemicalPipelineWashValve" xml:space="preserve">
+    <value>Chemical Pipeline Wash Valve</value>
+  </data>
+  <data name="PenPlateChemicalWashValve" xml:space="preserve">
+    <value>Plate Chemical Wash Valve</value>
+  </data>
+  <data name="PenWfUpperLowerFacesChemicalWashValve" xml:space="preserve">
+    <value>WF Upper&amp;Lower Faces Chemical Wash Valve</value>
+  </data>
+  <data name="PenWfUpperFacesChemicalWashValve" xml:space="preserve">
+    <value>WF Upper Faces Chemical Wash Valve</value>
+  </data>
+  <data name="PenDiwChamberValve" xml:space="preserve">
+    <value>DIW Chamber Valve</value>
+  </data>
+  <data name="PenWfUpperFaceDiCo2WashValve" xml:space="preserve">
+    <value>WF Upper Face DI-CO2 Wash Valve</value>
+  </data>
+  <data name="PenDiwAll" xml:space="preserve">
+    <value>DIW(ALL)</value>
+  </data>
+  <data name="PenDiwInletFlowrateSet" xml:space="preserve">
+    <value>DIW Inlet Flowrate Set</value>
+  </data>
+  <data name="PenWfUpperFaceDiwFlowrateSet" xml:space="preserve">
+    <value>WF Upper Face DIW Flowrate Set</value>
+  </data>
+  <data name="PenDiwPressureSet" xml:space="preserve">
+    <value>DIW Pressure Set</value>
+  </data>
+  <data name="PenWfLowerFaceDiwFlowrateSet" xml:space="preserve">
+    <value>WF Lower Face DIW Flowrate Set</value>
+  </data>
+  <data name="PenChemicalFlowrateSet" xml:space="preserve">
+    <value>Chemical Flowrate Set</value>
+  </data>
+  <data name="PenCo2PressureSet" xml:space="preserve">
+    <value>CO2 Pressure Set</value>
+  </data>
+  <data name="PenWfUpperFaceN2PurgeFlowrateSet" xml:space="preserve">
+    <value>WF Upper Face N2 Purge Flowrate Set</value>
   </data>
 </root>

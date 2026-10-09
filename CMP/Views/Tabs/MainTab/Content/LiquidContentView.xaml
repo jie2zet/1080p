@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              xmlns:viewModels="clr-namespace:CMP.ViewModels.Tabs.MainTab.Content"
+             xmlns:operationViewModels="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
              xmlns:operationTab="clr-namespace:CMP.Views.Tabs.OperationTab"
              mc:Ignorable="d"
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
@@ -12,8 +13,11 @@
              d:DataContext="{d:DesignInstance viewModels:LiquidContentViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <DataTemplate DataType="{x:Type viewModels:GenericRollerLiquidContentViewModel}">
+        <DataTemplate DataType="{x:Type operationViewModels:GenericRollerLiquidContentViewModel}">
             <operationTab:GenericRollerLiquidContentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type operationViewModels:GenericPenLiquidContentViewModel}">
+            <operationTab:GenericPenLiquidContentView />
         </DataTemplate>
     </UserControl.Resources>
 

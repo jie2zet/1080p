@@ -271,7 +271,8 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18152, 200, 0, 500, "晶圆上表面氮气流量设定", "晶圆上表面氮气流量设定", "L/min")]
+                    [Param(18152, 200.00, 0.00, 500.00, "晶圆上表面氮气流量设定", "晶圆上表面氮气流量设定", "L/min",
+                        DecimalPlaces = 2, DrawingTag = "MFC-FJAC101", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenWfUpperFaceN2PurgeFlowrateSet")]
                     public static int FlowrateSet = 200;
                 }
             }
@@ -304,7 +305,8 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18150, 450, 5, 900, "CO2压力设定", "CO2压力设定", "kPa")]
+                    [Param(18150, 450.00, 5.00, 900.00, "CO2压力设定", "CO2压力设定", "kPa",
+                        DecimalPlaces = 2, DrawingTag = "EV-FJ103", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenCo2PressureSet")]
                     public static int PressureSet = 450;
                 }
             }
@@ -342,6 +344,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Inlet Valve 药液供应(流量控制器前)混合前阀
             /// </summary>
+            [LiquidControl("PenChemicalInletValve1", "SV-PEAC102A")]
             public static class ChemicalInletValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -354,6 +357,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Outlet Valve 药液供应(流量控制器后)混合前阀
             /// </summary>
+            [LiquidControl("PenChemicalOutletValve", "SV-PEAC102B")]
             public static class ChemicalOutletValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -366,6 +370,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Flow 药液流量控制(混合前)
             /// </summary>
+            [LiquidControl("PenChemicalFlow", "FC-PEAC102")]
             public static class ChemicalFlow
             {
                 [PlcHandle(Handle.CmdPenA1, "流量")]
@@ -379,7 +384,8 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18128, 150, 15, 300, "药液流量设定(混合前)", "药液流量设定(混合前)", "mL/min")]
+                    [Param(18128, 150.00, 15.00, 300.00, "药液流量设定(混合前)", "药液流量设定(混合前)", "mL/min",
+                        DecimalPlaces = 2, DrawingTag = "FC-PEAC102", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenChemicalFlowrateSet")]
                     public static int FlowrateSet = 150;
                 }
             }
@@ -387,6 +393,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Inlet Valve 纯水供应(流量控制器前)混合前阀
             /// </summary>
+            [LiquidControl("PenDiwInletValve", "SV-PReg103")]
             public static class DIWInletValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -399,6 +406,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Outlet Valve 纯水供应(流量控制器后)混合前阀
             /// </summary>
+            [LiquidControl("PenDiwOutletValve", "SV-PEAC103")]
             public static class DIWOutletValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -411,6 +419,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Flow 纯水流量控制(混合前)
             /// </summary>
+            [LiquidControl("PenDiwFlow", "FC-PEAC103")]
             public static class DIWFlow
             {
                 [PlcHandle(Handle.CmdPenA1, "流量")]
@@ -424,7 +433,8 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18120, 2000, 2000, 3500, "纯水流量设定(混合前)", "纯水流量设定(混合前)", "mL/min")]
+                    [Param(18120, 2000.00, 0.00, 3500.00, "纯水流量设定(混合前)", "纯水流量设定(混合前)", "mL/min",
+                        DecimalPlaces = 2, DrawingTag = "FC-PEAC103", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenDiwInletFlowrateSet")]
                     public static int FlowrateSet = 2000;
                 }
             }
@@ -432,6 +442,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Valve 晶圆上表面冲洗纯水阀
             /// </summary>
+            [LiquidControl("PenWfUpperFaceDiwWashValve", "SV-PEAC104")]
             public static class WFUpperFaceDIWWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -444,6 +455,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Flow 晶圆上表面纯水流量控制
             /// </summary>
+            [LiquidControl("PenWfUpperFaceDiwFlow", "FC-PEAC104")]
             public static class WFUpperFaceDIWFlow
             {
                 [PlcHandle(Handle.CmdPenA1, "流量")]
@@ -457,7 +469,8 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18122, 600, 50, 1000, "晶圆上表面纯水流量设定", "晶圆上表面纯水流量设定", "mL/min")]
+                    [Param(18122, 600.00, 0.00, 2000.00, "晶圆上表面纯水流量设定", "晶圆上表面纯水流量设定", "mL/min",
+                        DecimalPlaces = 2, DrawingTag = "FC-PEAC104", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenWfUpperFaceDiwFlowrateSet")]
                     public static int FlowrateSet = 600;
                 }
             }
@@ -465,6 +478,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Wash Valve 晶圆下表面纯水开关阀
             /// </summary>
+            [LiquidControl("PenWfLowerFaceDiwWashValve", "SV-PEAC106")]
             public static class WFLowerFaceDIWWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -477,6 +491,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Flow 晶圆下表面纯水流量控制
             /// </summary>
+            [LiquidControl("PenWfLowerFaceDiwFlow", "FC-PEAC106")]
             public static class WFLowerFaceDIWFlow
             {
                 [PlcHandle(Handle.CmdPenA1, "流量")]
@@ -490,14 +505,16 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18126, 500, 50, 1000, "晶圆下表面纯水流量设定", "晶圆下表面纯水流量设定", "mL/min")]
-                    public static int FlowrateSet = 500;
+                    [Param(18126, 600.00, 0.00, 2000.00, "晶圆下表面纯水流量设定", "晶圆下表面纯水流量设定", "mL/min",
+                        DecimalPlaces = 2, DrawingTag = "FC-PEAC106", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenWfLowerFaceDiwFlowrateSet")]
+                    public static int FlowrateSet = 600;
                 }
             }
             
             /// <summary>
             /// DIW Supply Valve 碳酸水混合前纯水供应阀
             /// </summary>
+            [LiquidControl("PenDiwSupplyValve", "SV-FJ102")]
             public static class DIWSupplyValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -510,6 +527,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Pressure 纯水压力控制
             /// </summary>
+            [LiquidControl("PenDiwPressure", "EV-FJ102")]
             public static class DIWPressure
             {
                 [PlcHandle(Handle.CmdPenA1, "加压")]
@@ -523,14 +541,42 @@ public static partial class PlcHandle
                 
                 public static class Param
                 {
-                    [Param(18124, 300, 50, 500, "碳酸水混合前纯水压力设定", "碳酸水混合前纯水压力设定", "kPa")]
+                    [Param(18124, 300.00, 50.00, 500.00, "碳酸水混合前纯水压力设定", "碳酸水混合前纯水压力设定", "kPa",
+                        DecimalPlaces = 2, DrawingTag = "EV-FJ102", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PenDiwPressureSet")]
                     public static int PressureSet = 300;
                 }
             }
             
             /// <summary>
+            /// Chemical Inlet Valve 2 药液供应(流量控制器前)混合前阀 2
+            /// </summary>
+            [LiquidControl("PenChemicalInletValve2", "SV-PEAC102F")]
+            public static class ChemicalInletValve2
+            {
+                [PlcHandle(Handle.CmdPenA1, "打开")]
+                public const int Open = 1318;
+
+                [PlcHandle(Handle.CmdPenA1, "关闭")]
+                public const int Close = 1319;
+            }
+
+            /// <summary>
+            /// Chemical Inlet Valve 3 药液供应(流量控制器前)混合前阀 3
+            /// </summary>
+            [LiquidControl("PenChemicalInletValve3", "SV-PE1AC102Aa")]
+            public static class ChemicalInletValve3
+            {
+                [PlcHandle(Handle.CmdPenA1, "打开")]
+                public const int Open = 1320;
+
+                [PlcHandle(Handle.CmdPenA1, "关闭")]
+                public const int Close = 1321;
+            }
+
+            /// <summary>
             /// Pen DIW Wash Valve 笔头清洗纯水阀
             /// </summary>
+            [LiquidControl("PenDiwWashValve", "SV-PEAC100")]
             public static class PenDIWWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -543,6 +589,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Quartz DIW Wash Valve 石英冲洗纯水阀
             /// </summary>
+            [LiquidControl("PenPlateDiwWashValve", "SV-PEAC101A")]
             public static class QuartzDIWWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -555,6 +602,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Pipeline Wash Valve 药液管道冲洗阀
             /// </summary>
+            [LiquidControl("PenChemicalPipelineWashValve", "SV-PEAC102Ab")]
             public static class ChemicalPipelineWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -567,6 +615,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Quartz Chemical Wash Valve 石英板冲洗药液阀
             /// </summary>
+            [LiquidControl("PenPlateChemicalWashValve", "SV-PEAC102C")]
             public static class QuartzChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -579,6 +628,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper&Lower Faces Chemical Wash Valve 晶圆上下表面冲洗药液总阀
             /// </summary>
+            [LiquidControl("PenWfUpperLowerFacesChemicalWashValve", "SV-PEAC102D")]
             public static class WFUpperLowerFacesChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -591,6 +641,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Faces Chemical Wash Valve 晶圆上表面冲洗药液阀
             /// </summary>
+            [LiquidControl("PenWfUpperFacesChemicalWashValve", "SV-PEAC102E")]
             public static class WFUpperFacesChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -603,6 +654,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Chamber Valve PEN纯水槽内清洗阀
             /// </summary>
+            [LiquidControl("PenDiwChamberValve", "SV-PEANC120")]
             public static class DIWChamberValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -615,6 +667,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DI-CO2 Wash Valve 晶圆上表面碳酸水(混合后)冲洗阀
             /// </summary>
+            [LiquidControl("PenWfUpperFaceDiCo2WashValve", "SV-FJAC102")]
             public static class WFUpperFaceDICO2WashValve
             {
                 [PlcHandle(Handle.CmdPenA1, "打开")]
@@ -625,6 +678,7 @@ public static partial class PlcHandle
             }
         }
 
+        [LiquidControl("PenDiwAll")]
         public static class Flush
         {
             [PlcHandle(Handle.CmdPenA1, "打开全纯水阀")]

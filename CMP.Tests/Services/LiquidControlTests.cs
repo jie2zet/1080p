@@ -13,6 +13,7 @@ using CMP.Lang;
 using CMP.Models.kvsPlc;
 using CMP.Models.Operation.Roller;
 using CMP.ViewModels.Tabs.MainTab.Content;
+using CMP.ViewModels.Tabs.OperationTab;
 using CMP.Views.Tabs.MainTab.Content;
 using CMP.Views.Tabs.OperationTab;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -47,7 +48,7 @@ public class LiquidControlTests
             return result;
         }, (_, _) => { });
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void Parameters_UseSelectedChamberMetadataEvenWhenOtherChambersReuseOffsets()
     {
         var expected = new[]
@@ -88,16 +89,16 @@ public class LiquidControlTests
         Assert.AreEqual(0, legacy.DecimalPlaces);
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void InvalidParameters_BlockBothSetAndFlowCommands()
     {
         var writes = new List<Write>();
         foreach (var chamber in Chambers)
         {
             var model = CreateModel(writes, config: chamber.CreateConfig());
-            foreach (var flow in model.CommandGroups.SelectMany(g => g.Commands).Where(c => c.FlowParameterHandle.HasValue))
+            foreach (var flow in model.CommandGroups.SelectMany(g => g.Commands).Where(c => c.ParameterHandle.HasValue))
             {
-                var parameter = model.Parameters.Single(p => p.Handle == flow.FlowParameterHandle);
+                var parameter = model.Parameters.Single(p => p.Handle == flow.ParameterHandle);
                 foreach (var input in new[] { "", "abc", "NaN", "Infinity", "-Infinity", "1e999",
                     (parameter.MinValue - 0.01).ToString(CultureInfo.InvariantCulture),
                     (parameter.MaxValue + 0.01).ToString(CultureInfo.InvariantCulture) })
@@ -111,7 +112,7 @@ public class LiquidControlTests
         }
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void ValidParameter_WritesTwoFloatWordsAndFormatsToTwoDecimals()
     {
         var writes = new List<Write>();
@@ -138,7 +139,7 @@ public class LiquidControlTests
         Assert.AreEqual(72, writes.Count);
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void Commands_UseEachChambersHandleAndPlcAndWriteItsFlowParameterFirst()
     {
         var writes = new List<Write>();
@@ -158,6 +159,10 @@ public class LiquidControlTests
             var model = CreateModel(writes, config: config);
             var commands = model.CommandGroups.SelectMany(g => g.Commands).ToArray();
             CollectionAssert.AreEqual(expectedCodes, commands.Select(c => c.CommandCode).ToArray(), chamber.Name);
+            var plcCommandPaths = PlcHandleHelper.GetValuesByHandle(chamber.CommandHandle).Keys
+                .Where(path => path.StartsWith($"{config.PlcHandleTypeName}.Liquid.")
+                    || path.StartsWith($"{config.PlcHandleTypeName}.Flush.")).ToArray();
+            CollectionAssert.AreEquivalent(plcCommandPaths, commands.Select(c => c.CommandPath).ToArray(), chamber.Name);
             Assert.AreEqual(27, model.CommandGroups.Count);
             foreach (var command in commands)
             {
@@ -186,8 +191,12 @@ public class LiquidControlTests
                 var fieldPath = command.ProjectKey == "RollerManualDiwWash"
                     ? $"{config.PlcHandleTypeName}.Flush.{command.CommandKey.Split('_')[1]}"
                     : $"{config.PlcHandleTypeName}.Liquid.{command.CommandKey.Replace('_', '.')}";
+                Assert.AreEqual(fieldPath, command.CommandPath);
                 Assert.AreEqual(chamber.CommandHandle, PlcHandleHelper.GetHandleByPath(fieldPath));
                 Assert.AreEqual(command.CommandCode, PlcHandleHelper.GetValueByPath(fieldPath));
+                var legacyCommand = config.GetLiquidCommand(command.CommandKey);
+                Assert.AreEqual(command.Handle, legacyCommand.handle);
+                CollectionAssert.AreEqual(legacyCommand.value, write.Data);
             }
 
             var valve2 = model.CommandGroups.Single(g => g.ProjectKey == "ChemicalInletMainValve2");
@@ -200,26 +209,26 @@ public class LiquidControlTests
         }
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void FailedFlowWrite_DoesNotSendTheCommand()
     {
         var writes = new List<Write>();
         foreach (var chamber in Chambers)
         {
             var model = CreateModel(writes, -1, chamber.CreateConfig());
-            foreach (var flow in model.CommandGroups.SelectMany(g => g.Commands).Where(c => c.FlowParameterHandle.HasValue))
+            foreach (var flow in model.CommandGroups.SelectMany(g => g.Commands).Where(c => c.ParameterHandle.HasValue))
             {
                 writes.Clear();
                 flow.ExecuteCommand.Execute();
                 Assert.AreEqual(1, writes.Count);
                 Assert.AreEqual(chamber.Socket, writes[0].Socket);
                 Assert.AreEqual(KHLDevType.DEV_ZF, writes[0].Device);
-                Assert.AreEqual(flow.FlowParameterHandle, writes[0].Address);
+                Assert.AreEqual(flow.ParameterHandle, writes[0].Address);
             }
         }
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void Writes_ResolveLatestPlcSocketWithoutConnectingWhenConstructed()
     {
         foreach (var chamber in Chambers)
@@ -250,7 +259,7 @@ public class LiquidControlTests
         }
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void TabsAndLocalization_UpdateEmptyStatesNamesAndActions()
     {
         var originalCulture = LocalizeDictionary.Instance.Culture;
@@ -261,7 +270,7 @@ public class LiquidControlTests
             CollectionAssert.AreEqual(new[] { "Polish", "Roller", "Pen", "Dry" }, liquid.Tabs.Select(t => t.Header).ToArray());
             var empty = liquid.Tabs[0];
             Assert.IsTrue(empty.IsEmpty);
-            Assert.IsTrue(liquid.Tabs[2].IsEmpty);
+            Assert.IsFalse(liquid.Tabs[2].IsEmpty);
             Assert.IsTrue(liquid.Tabs[3].IsEmpty);
             var roller = liquid.Tabs[1];
             CollectionAssert.AreEqual(Chambers.Select(c => c.Name).ToArray(), roller.Chambers.Select(c => c.Header).ToArray());
@@ -296,27 +305,10 @@ public class LiquidControlTests
         }
     }
 
-    [STATestMethod]
+    [WpfTestMethod]
     public void View_LoadsNestedRollerTabAndRendersParametersAndCommandsWithoutPlc()
     {
-        var application = Application.Current;
-        if (application == null)
-        {
-            application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-            // Load application resources only. Do not start CMP or its PLC services.
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary
-            {
-                Source = new Uri("/Core;component/Resources/Theme/Basic/SkinLocal.xaml", UriKind.Relative)
-            });
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary
-            {
-                Source = new Uri("/HandyControl;component/Themes/Theme.xaml", UriKind.Relative)
-            });
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary
-            {
-                Source = new Uri("/Core;component/Controls/Styles/TabControl/SecondaryTabStyle.xaml", UriKind.Relative)
-            });
-        }
+        EnsureApplicationResources();
 
         var originalCulture = LocalizeDictionary.Instance.Culture;
         try
@@ -391,7 +383,30 @@ public class LiquidControlTests
         }
     }
 
-    private static void Layout(FrameworkElement view)
+    internal static void EnsureApplicationResources()
+    {
+        var application = Application.Current;
+        if (application == null)
+        {
+            application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+            // Load application resources only. Do not start CMP or its PLC services.
+            application.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("/Core;component/Resources/Theme/Basic/SkinLocal.xaml", UriKind.Relative)
+            });
+            application.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("/HandyControl;component/Themes/Theme.xaml", UriKind.Relative)
+            });
+            application.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("/Core;component/Controls/Styles/TabControl/SecondaryTabStyle.xaml", UriKind.Relative)
+            });
+        }
+
+    }
+
+    internal static void Layout(FrameworkElement view)
     {
         view.Measure(new Size(1200, 800));
         view.Arrange(new Rect(0, 0, 1200, 800));
@@ -400,7 +415,7 @@ public class LiquidControlTests
         view.UpdateLayout();
     }
 
-    private static IEnumerable<T> Descendants<T>(DependencyObject parent) where T : DependencyObject
+    internal static IEnumerable<T> Descendants<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
