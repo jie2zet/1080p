@@ -2298,4 +2298,139 @@
   <data name="PenWfUpperFaceN2PurgeFlowrateSet" xml:space="preserve">
     <value>晶圆上表面氮气流量设定</value>
   </data>
+  <data name="PolishSlurry1Slurry" xml:space="preserve">
+    <value>研磨液1/药液</value>
+  </data>
+  <data name="PolishSlurry1Diw" xml:space="preserve">
+    <value>研磨液1/纯水</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液1三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液1三通回流阀</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液1三通入口阀</value>
+  </data>
+  <data name="PolishSlurry1WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液1纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry1OutletValve" xml:space="preserve">
+    <value>研磨液1/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry1Flow" xml:space="preserve">
+    <value>研磨液1/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry1DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line1/DIW流量</value>
+  </data>
+  <data name="PolishSlurry2Slurry" xml:space="preserve">
+    <value>研磨液2/药液</value>
+  </data>
+  <data name="PolishSlurry2Diw" xml:space="preserve">
+    <value>研磨液2/纯水</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液2三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液2三通回流阀</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液2三通入口阀</value>
+  </data>
+  <data name="PolishSlurry2WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液2纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry2OutletValve" xml:space="preserve">
+    <value>研磨液2/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry2Flow" xml:space="preserve">
+    <value>研磨液2/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry2DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line2/DIW流量</value>
+  </data>
+  <data name="PolishSlurry3Slurry" xml:space="preserve">
+    <value>研磨液3/药液</value>
+  </data>
+  <data name="PolishSlurry3Diw" xml:space="preserve">
+    <value>研磨液3/纯水</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液3三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液3三通回流阀</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液3三通入口阀</value>
+  </data>
+  <data name="PolishSlurry3WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液3纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry3OutletValve" xml:space="preserve">
+    <value>研磨液3/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry3Flow" xml:space="preserve">
+    <value>研磨液3/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry3DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line3/DIW流量</value>
+  </data>
+  <data name="PolishDiwOutletValve" xml:space="preserve">
+    <value>药液臂纯水出口阀</value>
+  </data>
+  <data name="PolishPlatenWashValve" xml:space="preserve">
+    <value>大盘清洗阀</value>
+  </data>
+  <data name="PolishMovingHeadDiwWashValve" xml:space="preserve">
+    <value>移动头纯水清洗阀</value>
+  </data>
+  <data name="PolishMovingHeadExternalDiwWashValve" xml:space="preserve">
+    <value>移动头外部纯水清洗阀</value>
+  </data>
+  <data name="PolishHeadChemicalWashValve" xml:space="preserve">
+    <value>头部药液清洗阀</value>
+  </data>
+  <data name="PolishConditionerDiwWashValve" xml:space="preserve">
+    <value>修整器纯水清洗阀</value>
+  </data>
+  <data name="PolishConditionerArmDiwWashValve" xml:space="preserve">
+    <value>修整器臂纯水清洗阀</value>
+  </data>
+  <data name="PolishChemicalArmDiwWashValve" xml:space="preserve">
+    <value>药液臂纯水清洗阀</value>
+  </data>
+  <data name="PolishRrCleaningValve" xml:space="preserve">
+    <value>R.R 清洗阀</value>
+  </data>
+  <data name="PolishReleaseDiwWashValve" xml:space="preserve">
+    <value>下片纯水冲洗阀</value>
+  </data>
+  <data name="PolishWfFaceChemicalWashValve" xml:space="preserve">
+    <value>晶圆表面药液清洗阀</value>
+  </data>
+  <data name="PolishWfFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆表面纯水清洗阀</value>
+  </data>
+  <data name="PolishGapCleaningValve" xml:space="preserve">
+    <value>间隙清洗阀</value>
+  </data>
+  <data name="PolishTrCleaningValve" xml:space="preserve">
+    <value>T.R 清洗阀</value>
+  </data>
+  <data name="PolishPlatenCoolWaterValve" xml:space="preserve">
+    <value>大盘冷却水阀</value>
+  </data>
+  <data name="PolishPlatenMotorCoolWaterValve" xml:space="preserve">
+    <value>大盘电机冷却水阀</value>
+  </data>
+  <data name="PolishZone4DiwValve" xml:space="preserve">
+    <value>Zone4 纯水冲洗阀</value>
+  </data>
+  <data name="ActionMfcCalibration" xml:space="preserve">
+    <value>MFC 校准</value>
+  </data>
 </root>

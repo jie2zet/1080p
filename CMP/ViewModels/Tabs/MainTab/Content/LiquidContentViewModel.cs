@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
+using CMP.Constants.Enums;
 using CMP.Lang;
 using CMP.Models.Operation.Clean;
 using CMP.Models.Operation.Roller;
@@ -20,7 +21,16 @@ public sealed class LiquidContentViewModel : BindableBase
 
     public LiquidContentViewModel()
     {
-        Tabs.Add(new LiquidCategoryViewModel("LiquidPolish"));
+        Tabs.Add(new LiquidCategoryViewModel("LiquidPolish")
+        {
+            Chambers =
+            [
+                new("PolishA", new GenericPolishLiquidContentViewModel(WorkstationType.PolishA)),
+                new("PolishB", new GenericPolishLiquidContentViewModel(WorkstationType.PolishB)),
+                new("PolishC", new GenericPolishLiquidContentViewModel(WorkstationType.PolishC)),
+                new("PolishD", new GenericPolishLiquidContentViewModel(WorkstationType.PolishD))
+            ]
+        });
         Tabs.Add(new LiquidCategoryViewModel("LiquidRoller")
         {
             Chambers =

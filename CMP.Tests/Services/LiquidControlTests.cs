@@ -268,7 +268,8 @@ public class LiquidControlTests
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");
             var liquid = new LiquidContentViewModel();
             CollectionAssert.AreEqual(new[] { "Polish", "Roller", "Pen", "Dry" }, liquid.Tabs.Select(t => t.Header).ToArray());
-            var empty = liquid.Tabs[0];
+            Assert.IsFalse(liquid.Tabs[0].IsEmpty);
+            var empty = liquid.Tabs[3];
             Assert.IsTrue(empty.IsEmpty);
             Assert.IsFalse(liquid.Tabs[2].IsEmpty);
             Assert.IsTrue(liquid.Tabs[3].IsEmpty);
@@ -283,7 +284,8 @@ public class LiquidControlTests
             empty.PropertyChanged += (_, e) => notified.Add(e.PropertyName);
 
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("zh");
-            Assert.AreEqual("抛光", empty.Header);
+            Assert.AreEqual("抛光", liquid.Tabs[0].Header);
+            Assert.AreEqual("干燥", empty.Header);
             Assert.AreEqual("此区域暂未配置液路控制。", empty.EmptyState);
             CollectionAssert.Contains(notified, nameof(empty.EmptyState));
             foreach (var model in models)

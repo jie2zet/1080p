@@ -10,6 +10,8 @@ public static partial class PlcHandle
         public string DisplayNameKey { get; } = displayNameKey;
         public string DrawingTag { get; } = drawingTag;
         public string CommandKeyPrefix { get; set; } = string.Empty;
+        // Allows existing PLC setpoints outside the control project's Param class to be reused.
+        public string SetpointPath { get; set; } = string.Empty;
     }
 }
 
@@ -59,6 +61,7 @@ public static partial class PlcHandleHelper
                     "FlowrateReset" => "ActionFlowrateReset",
                     "ClfcCalibration" => "ActionClfcCalibration",
                     "FCCalibration" => "ActionFcCalibration",
+                    "MFCCalibration" => "ActionMfcCalibration",
                     "Pressure" => "ActionPressure",
                     "PressureReset" => "ActionPressureReset",
                     "EVCalibration" => "ActionEvCalibration",
@@ -71,9 +74,11 @@ public static partial class PlcHandleHelper
                     "Pressure" => "PressureSet",
                     _ => null
                 };
+                var parameterPath = string.IsNullOrEmpty(project.SetpointPath)
+                    ? $"{path}.Param.{parameterName}" : project.SetpointPath;
                 var parameterHandle = parameterName == null ? (uint?)null
-                    : (GetParamByPath($"{path}.Param.{parameterName}")
-                       ?? throw new InvalidOperationException($"Liquid setpoint is not defined: {path}.Param.{parameterName}")).Handle;
+                    : (GetParamByPath(parameterPath)
+                       ?? throw new InvalidOperationException($"Liquid setpoint is not defined: {parameterPath}")).Handle;
 
                 commands.Add(new LiquidCommandDefinition($"{path}.{field.Name}",
                     $"{commandKeyPrefix}_{field.Name}", project.DisplayNameKey, actionKey,

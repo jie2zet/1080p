@@ -117,6 +117,9 @@
                                                             <DataTrigger Binding="{Binding Definition.ActionKey}" Value="ActionFcCalibration">
                                                                 <Setter TargetName="ActionButton" Property="Style" Value="{StaticResource ButtonInfo}" />
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Definition.ActionKey}" Value="ActionMfcCalibration">
+                                                                <Setter TargetName="ActionButton" Property="Style" Value="{StaticResource ButtonInfo}" />
+                                                            </DataTrigger>
                                                             <DataTrigger Binding="{Binding Definition.ActionKey}" Value="ActionEvCalibration">
                                                                 <Setter TargetName="ActionButton" Property="Style" Value="{StaticResource ButtonInfo}" />
                                                             </DataTrigger>

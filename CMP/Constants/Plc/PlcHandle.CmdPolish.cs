@@ -284,6 +284,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Slurry1/DIW 研磨液1/去离子水
             /// </summary>
+            [LiquidControl("PolishSlurry1Slurry")]
             public static class Slurry1
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -292,6 +293,7 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "关闭")]
                 public const int Close = 1261;
 
+                [LiquidControl("PolishSlurry1Diw", "", CommandKeyPrefix = "Slurry1Diw")]
                 public static class Diw
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -303,6 +305,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry1 Three-way Total Inlet Valve 三通总进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry1ThreeWayTotalInletValve", "FV-POLA100A", CommandKeyPrefix = "Slurry1ThreeWayTotalInletValve")]
                 public static class ThreeWayTotalInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -315,6 +318,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry1 Three-way Return Valve 三通回流阀
                 /// </summary>
+                [LiquidControl("PolishSlurry1ThreeWayReturnValve", "FV-POLA100B", CommandKeyPrefix = "Slurry1ThreeWayReturnValve")]
                 public static class ThreeWayReturnValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -327,6 +331,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry1 Three-way Inlet Valve 三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry1ThreeWayInletValve", "FV-POLA100C", CommandKeyPrefix = "Slurry1ThreeWayInletValve")]
                 public static class ThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -339,6 +344,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Water Three-way Inlet Valve 水三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry1WaterThreeWayInletValve", "FV-POLA100D", CommandKeyPrefix = "Slurry1WaterThreeWayInletValve")]
                 public static class WaterThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -351,6 +357,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry1/DIW Outlet Valve 出口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry1OutletValve", "SBV-POLA100", CommandKeyPrefix = "Slurry1OutletValve")]
                 public static class OutletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -363,6 +370,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry1/DIW Flow 流量控制
                 /// </summary>
+                [LiquidControl("PolishSlurry1Flow", "FC-POLA100", CommandKeyPrefix = "Slurry1Flow", SetpointPath = "CmdPolish.Liquid.Slurry1.Param.Flowrate")]
                 public static class Flow
                 {
                     [PlcHandle(Handle.CmdPolish, "流量设定")]
@@ -377,7 +385,8 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18172, 100, 0, 1000, "Slurry1/DIW流量", "Slurry1/DIW流量", "mL/min")]
+                    [Param(18172, 100.00, 0.00, 1000.00, "Slurry Line1/DIW流量", "Slurry Line1/DIW流量", "mL/min",
+                        DecimalPlaces = 2, ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PolishSlurry1DiwFlowrateSet")]
                     public static int Flowrate = 100;
                 }
             }
@@ -385,6 +394,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Slurry2/DIW 研磨液2/去离子水
             /// </summary>
+            [LiquidControl("PolishSlurry2Slurry")]
             public static class Slurry2
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -393,6 +403,7 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "关闭")]
                 public const int Close = 1263;
 
+                [LiquidControl("PolishSlurry2Diw", "", CommandKeyPrefix = "Slurry2Diw")]
                 public static class Diw
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -404,6 +415,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry2 Three-way Total Inlet Valve 三通总进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry2ThreeWayTotalInletValve", "FV-POLA102A", CommandKeyPrefix = "Slurry2ThreeWayTotalInletValve")]
                 public static class ThreeWayTotalInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -416,6 +428,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry2 Three-way Return Valve 三通回流阀
                 /// </summary>
+                [LiquidControl("PolishSlurry2ThreeWayReturnValve", "FV-POLA102B", CommandKeyPrefix = "Slurry2ThreeWayReturnValve")]
                 public static class ThreeWayReturnValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -428,6 +441,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry2 Three-way Inlet Valve 三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry2ThreeWayInletValve", "FV-POLA102C", CommandKeyPrefix = "Slurry2ThreeWayInletValve")]
                 public static class ThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -440,6 +454,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Water Three-way Inlet Valve 水三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry2WaterThreeWayInletValve", "FV-POLA102D", CommandKeyPrefix = "Slurry2WaterThreeWayInletValve")]
                 public static class WaterThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -452,6 +467,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry2/DIW Outlet Valve 出口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry2OutletValve", "SBV-POLA102", CommandKeyPrefix = "Slurry2OutletValve")]
                 public static class OutletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -464,6 +480,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry2/DIW Flow 流量控制
                 /// </summary>
+                [LiquidControl("PolishSlurry2Flow", "FC-POLA102", CommandKeyPrefix = "Slurry2Flow", SetpointPath = "CmdPolish.Liquid.Slurry2.Param.Flowrate")]
                 public static class Flow
                 {
                     [PlcHandle(Handle.CmdPolish, "流量设定")]
@@ -478,7 +495,8 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18174, 100, 0, 1000, "Slurry2/DIW流量", "Slurry2/DIW流量", "mL/min")]
+                    [Param(18174, 100.00, 0.00, 1000.00, "Slurry Line2/DIW流量", "Slurry Line2/DIW流量", "mL/min",
+                        DecimalPlaces = 2, ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PolishSlurry2DiwFlowrateSet")]
                     public static int Flowrate = 100;
                 }
             }
@@ -486,6 +504,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Slurry3/DIW 研磨液3/去离子水
             /// </summary>
+            [LiquidControl("PolishSlurry3Slurry")]
             public static class Slurry3
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -494,6 +513,7 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "关闭")]
                 public const int Close = 1265;
 
+                [LiquidControl("PolishSlurry3Diw", "", CommandKeyPrefix = "Slurry3Diw")]
                 public static class Diw
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -505,6 +525,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry3 Three-way Total Inlet Valve 三通总进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry3ThreeWayTotalInletValve", "FV-POLA104A", CommandKeyPrefix = "Slurry3ThreeWayTotalInletValve")]
                 public static class ThreeWayTotalInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -517,6 +538,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry3 Three-way Return Valve 三通回流阀
                 /// </summary>
+                [LiquidControl("PolishSlurry3ThreeWayReturnValve", "FV-POLA104B", CommandKeyPrefix = "Slurry3ThreeWayReturnValve")]
                 public static class ThreeWayReturnValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -529,6 +551,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry3 Three-way Inlet Valve 三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry3ThreeWayInletValve", "FV-POLA104C", CommandKeyPrefix = "Slurry3ThreeWayInletValve")]
                 public static class ThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -541,6 +564,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Water Three-way Inlet Valve 水三通进口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry3WaterThreeWayInletValve", "FV-POLA104D", CommandKeyPrefix = "Slurry3WaterThreeWayInletValve")]
                 public static class WaterThreeWayInletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -553,6 +577,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry3/DIW Outlet Valve 出口阀
                 /// </summary>
+                [LiquidControl("PolishSlurry3OutletValve", "SBV-POLA104", CommandKeyPrefix = "Slurry3OutletValve")]
                 public static class OutletValve
                 {
                     [PlcHandle(Handle.CmdPolish, "打开")]
@@ -565,6 +590,7 @@ public static partial class PlcHandle
                 /// <summary>
                 /// Slurry3/DIW Flow 流量控制
                 /// </summary>
+                [LiquidControl("PolishSlurry3Flow", "FC-POLA104", CommandKeyPrefix = "Slurry3Flow", SetpointPath = "CmdPolish.Liquid.Slurry3.Param.Flowrate")]
                 public static class Flow
                 {
                     [PlcHandle(Handle.CmdPolish, "流量设定")]
@@ -579,7 +605,8 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18176, 100, 0, 1000, "Slurry3/DIW流量", "Slurry3/DIW流量", "mL/min")]
+                    [Param(18176, 100.00, 0.00, 1000.00, "Slurry Line3/DIW流量", "Slurry Line3/DIW流量", "mL/min",
+                        DecimalPlaces = 2, ZrZf = "ZF", WordCount = 2, DisplayNameKey = "PolishSlurry3DiwFlowrateSet")]
                     public static int Flowrate = 100;
                 }
             }
@@ -587,6 +614,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Outlet Valve 去离子水出口阀
             /// </summary>
+            [LiquidControl("PolishDiwOutletValve", "SBV-POLA106")]
             public static class DIWOutletValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -599,6 +627,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Platen Wash Valve 转盘清洗阀
             /// </summary>
+            [LiquidControl("PolishPlatenWashValve", "FV-POLA120")]
             public static class PlatenWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -611,6 +640,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Moving Head DIW Wash Valve 移动头去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishMovingHeadDiwWashValve", "FV-POLA121A")]
             public static class MovingHeadDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -623,6 +653,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Moving Head External DIW Wash Valve 移动头外部去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishMovingHeadExternalDiwWashValve", "FV-POLA121B")]
             public static class MovingHeadExternalDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -635,6 +666,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Head Chemical Wash Valve 头部化学清洗阀
             /// </summary>
+            [LiquidControl("PolishHeadChemicalWashValve", "FV-POLA121C")]
             public static class HeadChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -647,6 +679,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Conditioner DIW Wash Valve 修整器去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishConditionerDiwWashValve", "FV-POLA122A")]
             public static class ConditionerDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -659,6 +692,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Conditioner Arm DIW Wash Valve 修整器臂去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishConditionerArmDiwWashValve", "FV-POLA122B")]
             public static class ConditionerArmDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -671,6 +705,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Arm DIW Wash Valve 化学臂去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishChemicalArmDiwWashValve", "FV-POLA123")]
             public static class ChemicalArmDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -683,6 +718,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Head Middle Wash Valve 头部中部清洗阀
             /// </summary>
+            [LiquidControl("PolishRrCleaningValve", "FV-POLA124")]
             public static class HeadMiddleWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -695,6 +731,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Head External Wash Valve 头部外部清洗阀
             /// </summary>
+            [LiquidControl("PolishReleaseDiwWashValve", "FV-POLA126")]
             public static class HeadExternalWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -707,6 +744,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face Chemical Wash Valve 晶圆上表面化学清洗阀
             /// </summary>
+            [LiquidControl("PolishWfFaceChemicalWashValve", "FV-POLA127")]
             public static class WFUpperFaceChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -719,6 +757,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Valve 晶圆上表面去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishWfFaceDiwWashValve", "FV-POLA128")]
             public static class WFUpperFaceDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -731,6 +770,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face Chemical Wash Valve 晶圆下表面化学清洗阀
             /// </summary>
+            [LiquidControl("PolishGapCleaningValve", "FV-POLA130")]
             public static class WFLowerFaceChemicalWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -743,6 +783,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Wash Valve 晶圆下表面去离子水清洗阀
             /// </summary>
+            [LiquidControl("PolishTrCleaningValve", "FV-POLA129")]
             public static class WFLowerFaceDIWWashValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -755,6 +796,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Platen Cool Water Valve 转盘冷却水阀
             /// </summary>
+            [LiquidControl("PolishPlatenCoolWaterValve", "FV-POLA165")]
             public static class PlatenCoolWaterValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -767,6 +809,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Platen Motor Cool Water Valve 转盘电机冷却水阀
             /// </summary>
+            [LiquidControl("PolishPlatenMotorCoolWaterValve", "FV-POLA167")]
             public static class PlatenMotorCoolWaterValve
             {
                 [PlcHandle(Handle.CmdPolish, "打开")]
@@ -775,6 +818,19 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "关闭")]
                 public const int Close = 1303;
             }
+            /// <summary>
+            /// Zone 4 DIW Valve Zone4 纯水冲洗阀
+            /// </summary>
+            [LiquidControl("PolishZone4DiwValve", "SV-POLA148")]
+            public static class Zone4DIWValve
+            {
+                [PlcHandle(Handle.CmdPolish, "打开")]
+                public const int Open = 1304;
+
+                [PlcHandle(Handle.CmdPolish, "关闭")]
+                public const int Close = 1305;
+            }
+
         }
 
         /// <summary>

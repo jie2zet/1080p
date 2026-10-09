@@ -13,6 +13,9 @@
              d:DataContext="{d:DesignInstance viewModels:LiquidContentViewModel}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <DataTemplate DataType="{x:Type operationViewModels:GenericPolishLiquidContentViewModel}">
+            <operationTab:GenericPolishLiquidContentView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type operationViewModels:GenericRollerLiquidContentViewModel}">
             <operationTab:GenericRollerLiquidContentView />
         </DataTemplate>
