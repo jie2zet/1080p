@@ -1953,4 +1953,247 @@
   <data name="Torque" xml:space="preserve">
     <value>Torque</value>
   </data>
+  <data name="LiquidControl" xml:space="preserve">
+    <value>Liquid Control</value>
+  </data>
+  <data name="LiquidPolish" xml:space="preserve">
+    <value>Polish</value>
+  </data>
+  <data name="LiquidRoller" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="LiquidPen" xml:space="preserve">
+    <value>Pen</value>
+  </data>
+  <data name="LiquidDry" xml:space="preserve">
+    <value>Dry</value>
+  </data>
+  <data name="LiquidEmptyState" xml:space="preserve">
+    <value>No liquid controls are configured for this section.</value>
+  </data>
+  <data name="LiquidParameterSettings" xml:space="preserve">
+    <value>Parameter Settings</value>
+  </data>
+  <data name="LiquidCommandSettings" xml:space="preserve">
+    <value>Liquid Commands</value>
+  </data>
+  <data name="LiquidParameter" xml:space="preserve">
+    <value>Parameter</value>
+  </data>
+  <data name="LiquidItemName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DrawingName" xml:space="preserve">
+    <value>Drawing Name</value>
+  </data>
+  <data name="DrawingTag" xml:space="preserve">
+    <value>Drawing Tag</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="Range" xml:space="preserve">
+    <value>Range</value>
+  </data>
+  <data name="PIDTag" xml:space="preserve">
+    <value>PID Tag</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="CommandCode" xml:space="preserve">
+    <value>Command Code</value>
+  </data>
+  <data name="WordCount" xml:space="preserve">
+    <value>Word(s)</value>
+  </data>
+  <data name="ActionOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ActionClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ActionFlowrate" xml:space="preserve">
+    <value>Flowrate</value>
+  </data>
+  <data name="ActionFlowrateReset" xml:space="preserve">
+    <value>Flowrate Reset</value>
+  </data>
+  <data name="ActionClfcCalibration" xml:space="preserve">
+    <value>CLFC Calibration</value>
+  </data>
+  <data name="ActionPower" xml:space="preserve">
+    <value>Power</value>
+  </data>
+  <data name="ChemicalEnterFlowSet" xml:space="preserve">
+    <value>Chemical Enter Flow Set</value>
+  </data>
+  <data name="DiwEnterFlowSet" xml:space="preserve">
+    <value>DIW Enter Flow Set</value>
+  </data>
+  <data name="UpperRinseDiwWash" xml:space="preserve">
+    <value>Upper Rinse DIW Wash</value>
+  </data>
+  <data name="LowerRinseDiwWash" xml:space="preserve">
+    <value>Lower Rinse DIW Wash</value>
+  </data>
+  <data name="ChemicalEnterMainValve" xml:space="preserve">
+    <value>Chemical Enter Main Valve</value>
+  </data>
+  <data name="ChemicalEnterFlow" xml:space="preserve">
+    <value>Chemical Enter Flow</value>
+  </data>
+  <data name="PipeDiwWash" xml:space="preserve">
+    <value>Pipe DIW Wash</value>
+  </data>
+  <data name="DiwEnterMainValve" xml:space="preserve">
+    <value>DIW Enter Main Valve</value>
+  </data>
+  <data name="DiwEnterFlow" xml:space="preserve">
+    <value>DIW Enter Flow</value>
+  </data>
+  <data name="WfLowerFaceChemicalWash" xml:space="preserve">
+    <value>WF Lower Face Chemical Wash</value>
+  </data>
+  <data name="WfUpperFaceChemicalWash" xml:space="preserve">
+    <value>WF Upper Face Chemical Wash</value>
+  </data>
+  <data name="QuartzChemicalWash" xml:space="preserve">
+    <value>Quartz Chemical Wash</value>
+  </data>
+  <data name="ChemicalInletMainValve1" xml:space="preserve">
+    <value>Chemical Inlet Main Valve 1</value>
+  </data>
+  <data name="ChemicalInletMainValve2" xml:space="preserve">
+    <value>Chemical Inlet Main Valve 2</value>
+  </data>
+  <data name="WfUpperFaceDiwWashInlet" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Inlet</value>
+  </data>
+  <data name="WfUpperFaceDiwWashOutlet" xml:space="preserve">
+    <value>WF Upper Face DIW Wash Outlet</value>
+  </data>
+  <data name="WfUpperFaceWashDiwFlow" xml:space="preserve">
+    <value>WF Upper Face Wash DIW Flow</value>
+  </data>
+  <data name="WfLowerFaceDiwWash" xml:space="preserve">
+    <value>WF Lower Face DIW Wash</value>
+  </data>
+  <data name="WfLowerFaceDiwWashFlow" xml:space="preserve">
+    <value>WF Lower Face DIW Flow</value>
+  </data>
+  <data name="UpperRollerDiwWash" xml:space="preserve">
+    <value>Upper Roller DIW Wash</value>
+  </data>
+  <data name="QuartzDiwWash" xml:space="preserve">
+    <value>Quartz DIW Wash</value>
+  </data>
+  <data name="UpperRollerInsideDiwWash" xml:space="preserve">
+    <value>Upper Roller Inside DIW Wash</value>
+  </data>
+  <data name="LowerRollerInsideDiwWash" xml:space="preserve">
+    <value>Lower Roller Inside DIW Wash</value>
+  </data>
+  <data name="MageSonicDiwWash" xml:space="preserve">
+    <value>Mage Sonic DIW Wash</value>
+  </data>
+  <data name="ChamberDiwWash" xml:space="preserve">
+    <value>Chamber DIW Wash</value>
+  </data>
+  <data name="PillarWash" xml:space="preserve">
+    <value>Pillar Wash</value>
+  </data>
+  <data name="CoolingWaterCirculation" xml:space="preserve">
+    <value>Cooling Water Circulation</value>
+  </data>
+  <data name="UltrasonicVibrationStartup" xml:space="preserve">
+    <value>Ultrasonic Vibration Startup</value>
+  </data>
+  <data name="UltrasonicVibration" xml:space="preserve">
+    <value>Ultrasonic Vibration</value>
+  </data>
+  <data name="RollerManualDiwWash" xml:space="preserve">
+    <value>Roller Manual DIW Wash</value>
+  </data>
+  <data name="CylinderOneTouchAction" xml:space="preserve">
+    <value>Cylinder One-Touch Action</value>
+  </data>
+  <data name="WfLowerFace" xml:space="preserve">
+    <value>Wafer lower face</value>
+  </data>
+  <data name="WfUpperFace" xml:space="preserve">
+    <value>Wafer upper face</value>
+  </data>
+  <data name="QuartzWash" xml:space="preserve">
+    <value>Quartz cleaning</value>
+  </data>
+  <data name="Ultrasonic" xml:space="preserve">
+    <value>Ultrasonic</value>
+  </data>
+  <data name="UltrasonicPower" xml:space="preserve">
+    <value>Ultrasonic power</value>
+  </data>
+  <data name="RollerManualWash" xml:space="preserve">
+    <value>Roller manual wash</value>
+  </data>
+  <data name="CylinderOneTouch" xml:space="preserve">
+    <value>Cylinder one-touch action</value>
+  </data>
+  <data name="UpperRollerInside" xml:space="preserve">
+    <value>Upper roller inside cleaning</value>
+  </data>
+  <data name="LowerRollerInside" xml:space="preserve">
+    <value>Lower roller inside cleaning</value>
+  </data>
+  <data name="ChamberWash" xml:space="preserve">
+    <value>Chamber cleaning</value>
+  </data>
+  <data name="LiquidInvalidNumber" xml:space="preserve">
+    <value>{0}: enter a valid numeric value.</value>
+  </data>
+  <data name="LiquidValueOutOfRange" xml:space="preserve">
+    <value>{0} must be between {1} and {2}.</value>
+  </data>
+  <data name="LiquidWriteFailed" xml:space="preserve">
+    <value>Write to {0} failed ({1}).</value>
+  </data>
+  <data name="LiquidWriteSucceeded" xml:space="preserve">
+    <value>{0} written successfully.</value>
+  </data>
+  <data name="LiquidCommandFailed" xml:space="preserve">
+    <value>{0} failed ({1}).</value>
+  </data>
+  <data name="LiquidCommandSucceeded" xml:space="preserve">
+    <value>{0} sent.</value>
+  </data>
+  <data name="LiquidValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="LiquidDefaultValue" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="LiquidUpperRollerWash" xml:space="preserve">
+    <value>Upper roller surface cleaning</value>
+  </data>
+  <data name="LiquidUltrasonicStart" xml:space="preserve">
+    <value>Ultrasonic vibration startup</value>
+  </data>
+  <data name="LiquidUltrasonicStop" xml:space="preserve">
+    <value>Ultrasonic vibration stop</value>
+  </data>
+  <data name="LiquidRollerManualWashOpen" xml:space="preserve">
+    <value>Start roller manual wash</value>
+  </data>
+  <data name="LiquidRollerManualWashClose" xml:space="preserve">
+    <value>Stop roller manual wash</value>
+  </data>
+  <data name="LiquidCylinderOpen" xml:space="preserve">
+    <value>Open cylinders with one touch</value>
+  </data>
+  <data name="LiquidCylinderClose" xml:space="preserve">
+    <value>Close cylinders with one touch</value>
+  </data>
 </root>

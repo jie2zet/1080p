@@ -14,6 +14,8 @@ public class OperationContentViewModel:BindableBase
 {
     public IoContentViewModel Io { get; }
     public ObservableCollection<IoCategoryViewModel> IoTabs => Io.Tabs;
+    public LiquidContentViewModel Liquid { get; }
+    public ObservableCollection<LiquidCategoryViewModel> LiquidTabs => Liquid.Tabs;
     private ObservableCollection<TabContentViewModelBase> _polishUnitTabItems = [];
     public ObservableCollection<TabContentViewModelBase> PolishUnitTabItems
     {
@@ -31,6 +33,7 @@ public class OperationContentViewModel:BindableBase
     public OperationContentViewModel(IRegionManager regionManager, IEventAggregator eventAggregator)
     {
         Io = new IoContentViewModel();
+        Liquid = new LiquidContentViewModel();
         Task.Run(() =>
         {
             ObservableCollection<TabContentViewModelBase> tabContentViewModelBaseList = new ObservableCollection<TabContentViewModelBase>();

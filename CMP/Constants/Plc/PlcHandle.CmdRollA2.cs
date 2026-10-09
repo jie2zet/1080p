@@ -349,7 +349,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(33118, 100, 15, 300, "药液流量控制(混合前)", "药液流量控制(混合前)", "mL/min")]
+                    [Param(33118, 100.00, 15.00, 500.00, "药液流量控制(混合前)", "药液流量控制(混合前)", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-ROAC100", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "ChemicalEnterFlowSet")]
                     public static int FlowrateSet = 100;
                 }
             }
@@ -394,7 +394,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(33120, 1000, 200, 4000, "纯水流量控制(混合前)", "纯水流量控制(混合前)", "mL/min")]
+                    [Param(33120, 1000.00, 200.00, 9999.00, "纯水流量控制(混合前)", "纯水流量控制(混合前)", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-ROAC101", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "DiwEnterFlowSet")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -433,6 +433,27 @@ public static partial class PlcHandle
                 
                 [PlcHandle(Handle.CmdRollA2, "关闭")]
                 public const int Close = 1227;
+            }
+
+            /// <summary>
+            /// Chemical Inlet Main Valve 1 药水进入主阀1
+            /// </summary>
+            public static class ChemicalInletMainValve1
+            {
+                [PlcHandle(Handle.CmdRollA2, "打开")]
+                public const int Open = 1228;
+
+                [PlcHandle(Handle.CmdRollA2, "关闭")]
+                public const int Close = 1229;
+            }
+
+            /// <summary>
+            /// Chemical Inlet Main Valve 2 药水进入主阀2
+            /// </summary>
+            public static class ChemicalInletMainValve2
+            {
+                [PlcHandle(Handle.CmdRollA2, "打开")]
+                public const int Open = 1230;
             }
             
             /// <summary>
@@ -475,7 +496,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(33122, 1000, 200, 4000, "晶圆上表面清洁 流量控制", "晶圆上表面清洁 流量控制", "mL/min")]
+                    [Param(33122, 1000.00, 200.00, 9999.00, "晶圆上表面清洁 流量控制", "晶圆上表面清洁 流量控制", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-RO1AC105", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "UpperRinseDiwWash")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -508,7 +529,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(33124, 1000, 200, 4000, "晶圆下表面清洁 流量控制", "晶圆下表面清洁 流量控制", "mL/min")]
+                    [Param(33124, 1000.00, 200.00, 9999.00, "晶圆下表面清洁 流量控制", "晶圆下表面清洁 流量控制", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-RO1AC106", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "LowerRinseDiwWash")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -607,6 +628,45 @@ public static partial class PlcHandle
                 
                 [PlcHandle(Handle.CmdRollA2, "关闭")]
                 public const int Close = 1308;
+            }
+
+            /// <summary>
+            /// Ultrasonic Vibration Startup 超声波发振启动
+            /// </summary>
+            public static class UltrasonicVibrationStartup
+            {
+                [PlcHandle(Handle.CmdRollA2, "打开")]
+                public const int Open = 1309;
+
+                [PlcHandle(Handle.CmdRollA2, "关闭")]
+                public const int Close = 1310;
+
+                [PlcHandle(Handle.CmdRollA2, "功率")]
+                public const int Power = 1311;
+            }
+
+            /// <summary>
+            /// Ultrasonic Vibration 超声波发振
+            /// </summary>
+            public static class UltrasonicVibration
+            {
+                [PlcHandle(Handle.CmdRollA2, "打开")]
+                public const int Open = 1400;
+
+                [PlcHandle(Handle.CmdRollA2, "关闭")]
+                public const int Close = 1401;
+            }
+
+            /// <summary>
+            /// Cylinder One-Touch Action 气缸一键动作
+            /// </summary>
+            public static class CylinderOneTouchAction
+            {
+                [PlcHandle(Handle.CmdRollA2, "打开")]
+                public const int Open = 1406;
+
+                [PlcHandle(Handle.CmdRollA2, "关闭")]
+                public const int Close = 1407;
             }
         }
 
