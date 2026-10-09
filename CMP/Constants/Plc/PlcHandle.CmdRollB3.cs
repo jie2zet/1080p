@@ -324,6 +324,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Enter Main Valve 化学品进入主阀
             /// </summary>
+            [LiquidControl("ChemicalEnterMainValve", "FV-ROAC100A")]
             public static class ChemicalEnterMainValve
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -336,6 +337,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chemical Enter Flow 化学品进入流量
             /// </summary>
+            [LiquidControl("ChemicalEnterFlow", "FC-ROAC100")]
             public static class ChemicalEnterFlow
             {
                 [PlcHandle(Handle.CmdRollB3, "流量")]
@@ -349,7 +351,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(48118, 100, 15, 300, "药液流量控制(混合前)", "药液流量控制(混合前)", "mL/min")]
+                    [Param(48118, 100.00, 15.00, 500.00, "药液流量控制(混合前)", "药液流量控制(混合前)", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-ROAC100", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "ChemicalEnterFlowSet")]
                     public static int FlowrateSet = 100;
                 }
             }
@@ -357,6 +359,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Pipe DIW Wash 管道去离子水清洗
             /// </summary>
+            [LiquidControl("PipeDiwWash", "SV-ROAC100B")]
             public static class PipeDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -369,6 +372,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Enter Main Valve 去离子水进入主阀
             /// </summary>
+            [LiquidControl("DiwEnterMainValve", "FV-ROAC101")]
             public static class DiwEnterMainValve
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -381,6 +385,7 @@ public static partial class PlcHandle
             /// <summary>
             /// DIW Enter Flow 去离子水进入流量
             /// </summary>
+            [LiquidControl("DiwEnterFlow", "FC-ROAC101")]
             public static class DiwEnterFlow
             {
                 [PlcHandle(Handle.CmdRollB3, "流量")]
@@ -394,7 +399,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(48120, 1000, 200, 4000, "纯水流量控制(混合前)", "纯水流量控制(混合前)", "mL/min")]
+                    [Param(48120, 1000.00, 200.00, 9999.00, "纯水流量控制(混合前)", "纯水流量控制(混合前)", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-ROAC101", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "DiwEnterFlowSet")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -402,6 +407,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face Chemical Wash 晶圆下表面化学清洗
             /// </summary>
+            [LiquidControl("WfLowerFaceChemicalWash", "FV-ROAC100B")]
             public static class WfLowerFaceChemicalWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -414,6 +420,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face Chemical Wash 晶圆上表面化学清洗
             /// </summary>
+            [LiquidControl("WfUpperFaceChemicalWash", "SFV-ROAC100C")]
             public static class WfUpperFaceChemicalWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -426,6 +433,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Quartz Chemical Wash 石英化学清洗
             /// </summary>
+            [LiquidControl("QuartzChemicalWash", "FV-ROAC100D")]
             public static class QuartzChemicalWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -434,10 +442,34 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB3, "关闭")]
                 public const int Close = 1227;
             }
+
+            /// <summary>
+            /// Chemical Inlet Main Valve 1 药水进入主阀1
+            /// </summary>
+            [LiquidControl("ChemicalInletMainValve1", "")]
+            public static class ChemicalInletMainValve1
+            {
+                [PlcHandle(Handle.CmdRollB3, "打开")]
+                public const int Open = 1228;
+
+                [PlcHandle(Handle.CmdRollB3, "关闭")]
+                public const int Close = 1229;
+            }
+
+            /// <summary>
+            /// Chemical Inlet Main Valve 2 药水进入主阀2
+            /// </summary>
+            [LiquidControl("ChemicalInletMainValve2", "")]
+            public static class ChemicalInletMainValve2
+            {
+                [PlcHandle(Handle.CmdRollB3, "打开")]
+                public const int Open = 1230;
+            }
             
             /// <summary>
             /// WF Upper Face DIW Wash Inlet 晶圆上表面去离子水清洗入口
             /// </summary>
+            [LiquidControl("WfUpperFaceDiwWashInlet", "FV-ROAC105")]
             public static class WfUpperFaceDiwWashInlet
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -450,6 +482,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Outlet 晶圆上表面去离子水清洗出口
             /// </summary>
+            [LiquidControl("WfUpperFaceDiwWashOutlet", "SFV-ROAC105")]
             public static class WfUpperFaceDiwWashOutlet
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -462,6 +495,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face Wash DIW Flow 晶圆上表面清洗去离子水流量
             /// </summary>
+            [LiquidControl("WfUpperFaceWashDiwFlow", "FC-ROAC105")]
             public static class WfUpperFaceWashDiwFlow
             {
                 [PlcHandle(Handle.CmdRollB3, "流量")]
@@ -475,7 +509,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(48122, 1000, 200, 4000, "晶圆上表面清洁 流量控制", "晶圆上表面清洁 流量控制", "mL/min")]
+                    [Param(48122, 1000.00, 200.00, 9999.00, "晶圆上表面清洁 流量控制", "晶圆上表面清洁 流量控制", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-RO1AC105", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "UpperRinseDiwWash")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -483,6 +517,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Wash 晶圆下表面去离子水清洗
             /// </summary>
+            [LiquidControl("WfLowerFaceDiwWash", "")]
             public static class WfLowerFaceDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -495,6 +530,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Wash Flow 晶圆下表面去离子水清洗流量
             /// </summary>
+            [LiquidControl("WfLowerFaceDiwWashFlow", "")]
             public static class WfLowerFaceDiwWashFlow
             {
                 [PlcHandle(Handle.CmdRollB3, "流量")]
@@ -508,7 +544,7 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(48124, 1000, 200, 4000, "晶圆下表面清洁 流量控制", "晶圆下表面清洁 流量控制", "mL/min")]
+                    [Param(48124, 1000.00, 200.00, 9999.00, "晶圆下表面清洁 流量控制", "晶圆下表面清洁 流量控制", "mL/min", DecimalPlaces = 2, DrawingTag = "FC-RO1AC106", ZrZf = "ZF", WordCount = 2, DisplayNameKey = "LowerRinseDiwWash")]
                     public static int FlowrateSet = 1000;
                 }
             }
@@ -516,6 +552,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Upper Roller DIW Wash 上辊去离子水清洗
             /// </summary>
+            [LiquidControl("UpperRollerDiwWash", "FV-ROAC102")]
             public static class UpperRollerDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -528,6 +565,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Quartz DIW Wash 石英去离子水清洗
             /// </summary>
+            [LiquidControl("QuartzDiwWash", "FV-ROAC103")]
             public static class QuartzDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -540,6 +578,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Upper Roller Inside DIW Wash 上辊内部去离子水清洗
             /// </summary>
+            [LiquidControl("UpperRollerInsideDiwWash", "FV-ROAC104")]
             public static class UpperRollerInsideDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -552,6 +591,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Lower Roller Inside DIW Wash 下辊内部去离子水清洗
             /// </summary>
+            [LiquidControl("LowerRollerInsideDiwWash", "FV-ROAC107")]
             public static class LowerRollerInsideDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -564,6 +604,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Mage Sonic DIW Wash 超声波去离子水清洗
             /// </summary>
+            [LiquidControl("MageSonicDiwWash", "FV-MJROAC130")]
             public static class MageSonicDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -576,6 +617,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Chamber DIW Wash 腔室去离子水清洗
             /// </summary>
+            [LiquidControl("ChamberDiwWash", "FV-ROAC120")]
             public static class ChamberDiwWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -588,6 +630,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Pillar Wash 支柱清洗
             /// </summary>
+            [LiquidControl("PillarWash", "FV-ROAC121")]
             public static class PillarWash
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -600,6 +643,7 @@ public static partial class PlcHandle
             /// <summary>
             /// Cooling Water Circulation 冷却水循环
             /// </summary>
+            [LiquidControl("CoolingWaterCirculation", "FV-ROAC122")]
             public static class CoolingWaterCirculation
             {
                 [PlcHandle(Handle.CmdRollB3, "打开")]
@@ -608,8 +652,51 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB3, "关闭")]
                 public const int Close = 1308;
             }
+
+            /// <summary>
+            /// Ultrasonic Vibration Startup 超声波发振启动
+            /// </summary>
+            [LiquidControl("UltrasonicVibrationStartup", "")]
+            public static class UltrasonicVibrationStartup
+            {
+                [PlcHandle(Handle.CmdRollB3, "打开")]
+                public const int Open = 1309;
+
+                [PlcHandle(Handle.CmdRollB3, "关闭")]
+                public const int Close = 1310;
+
+                [PlcHandle(Handle.CmdRollB3, "功率")]
+                public const int Power = 1311;
+            }
+
+            /// <summary>
+            /// Ultrasonic Vibration 超声波发振
+            /// </summary>
+            [LiquidControl("UltrasonicVibration", "")]
+            public static class UltrasonicVibration
+            {
+                [PlcHandle(Handle.CmdRollB3, "打开")]
+                public const int Open = 1400;
+
+                [PlcHandle(Handle.CmdRollB3, "关闭")]
+                public const int Close = 1401;
+            }
+
+            /// <summary>
+            /// Cylinder One-Touch Action 气缸一键动作
+            /// </summary>
+            [LiquidControl("CylinderOneTouchAction", "")]
+            public static class CylinderOneTouchAction
+            {
+                [PlcHandle(Handle.CmdRollB3, "打开")]
+                public const int Open = 1406;
+
+                [PlcHandle(Handle.CmdRollB3, "关闭")]
+                public const int Close = 1407;
+            }
         }
 
+        [LiquidControl("RollerManualDiwWash", CommandKeyPrefix = "RollerManualDiwWash")]
         public static class Flush
         {
             [PlcHandle(Handle.CmdRollB3, "打开全纯水阀")]

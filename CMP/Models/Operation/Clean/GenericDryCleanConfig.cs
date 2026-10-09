@@ -9,6 +9,7 @@ public class GenericDryCleanConfig : IDryCleanConfig
 {
     public string DryType { get; }
     public uint PlcHandleName { get; }
+    public string PlcHandleTypeName => _plcHandleType.Name;
     public string PlcAddress { get; }
     public ushort PlcPort { get; }
     public DryParams Params { get; }
@@ -248,5 +249,4 @@ public static class DryCleanConfigFactory
     public static GenericDryCleanConfig CreateDryBConfig(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
         => new("Dry B1", Handle.CmdDryB, plcAddress, plcPort);
 }
-
 

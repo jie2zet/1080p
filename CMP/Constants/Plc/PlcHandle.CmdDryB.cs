@@ -306,6 +306,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Inlet Valve 2 纯水2路晶圆上表面冲洗阀流量控制器前
             /// </summary>
+            [LiquidControl("DryWfUpperFaceDiwWashInletValve2", "SV-SDAC104")]
             public static class WFUpperFaceDIWWashInletValve2
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -318,6 +319,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Outlet Valve 2 纯水2路晶圆上表面冲洗阀流量控制器后
             /// </summary>
+            [LiquidControl("DryWfUpperFaceDiwWashOutletValve2", "SBV-SDAC104")]
             public static class WFUpperFaceDIWWashOutletValve2
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -330,6 +332,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Flow 2 晶圆上表面冲洗流量控制
             /// </summary>
+            [LiquidControl("DryWfUpperFaceDiwWashFlow2", "FC-SDAC104")]
             public static class WFUpperFaceDIWWashFlow2
             {
                 [PlcHandle(Handle.CmdDryB, "流量")]
@@ -343,14 +346,17 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18100, 600, 50, 1000, "纯水2路晶圆上表面冲洗流量设定", "纯水2路晶圆上表面冲洗流量设定", "mL/min")]
-                    public static int FlowrateSet = 600;
+                    [Param(18100, 100d, 0d, 1000d, "纯水2路晶圆上表面冲洗流量设定", "纯水2路晶圆上表面冲洗流量设定", "mL/min",
+                        DecimalPlaces = 2, DrawingTag = "FC-SDAC104", ZrZf = "ZF", WordCount = 2,
+                        DisplayNameKey = "DryOuterRinseFlowrate")]
+                    public static int FlowrateSet = 100;
                 }
             }
 
             /// <summary>
             /// IPA Supply Valve IPA供应(入罐前)阀
             /// </summary>
+            [LiquidControl("DryIpaSupplyValve", "FC-IPAC101")]
             public static class IPASupplyValve
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -363,6 +369,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Inlet Valve 1 纯水1路晶圆上表面冲洗阀流量控制器前
             /// </summary>
+            [LiquidControl("DryWfUpperFaceDiwWashInletValve1", "SV-SDAC103")]
             public static class WFUpperFaceDIWWashInletValve1
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -375,6 +382,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Upper Face DIW Wash Outlet Valve 1 纯水1路晶圆上表面冲洗阀流量控制器后
             /// </summary>
+            [LiquidControl("DryWfUpperFaceDiwWashOutletValve1", "SBV-SDAC103")]
             public static class WFUpperFaceDIWWashOutletValve1
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -387,6 +395,7 @@ public static partial class PlcHandle
             /// <summary>
             /// WF Lower Face DIW Wash Valve 纯水3路晶圆下表面冲洗阀
             /// </summary>
+            [LiquidControl("DryWfLowerFaceDiwWashValve", "SV-SDAC105")]
             public static class WFLowerFaceDIWWashValve
             {
                 [PlcHandle(Handle.CmdDryB, "打开")]
@@ -398,5 +407,3 @@ public static partial class PlcHandle
         }
     }
 }
-
-

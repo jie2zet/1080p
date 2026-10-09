@@ -1980,4 +1980,508 @@
   <data name="UnloadInduction" xml:space="preserve">
     <value>Unload感应</value>
   </data>
+  <data name="LiquidControl" xml:space="preserve">
+    <value>液路控制</value>
+  </data>
+  <data name="LiquidPolish" xml:space="preserve">
+    <value>抛光</value>
+  </data>
+  <data name="LiquidRoller" xml:space="preserve">
+    <value>辊清洗</value>
+  </data>
+  <data name="LiquidPen" xml:space="preserve">
+    <value>笔清洗</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashInletValve2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗入口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗出口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashFlow2" xml:space="preserve">
+    <value>晶圆上表面纯水2路冲洗流量</value>
+  </data>
+  <data name="DryIpaSupplyValve" xml:space="preserve">
+    <value>IPA供应阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashInletValve1" xml:space="preserve">
+    <value>晶圆上表面纯水1路冲洗入口阀</value>
+  </data>
+  <data name="DryWfUpperFaceDiwWashOutletValve1" xml:space="preserve">
+    <value>晶圆上表面纯水1路冲洗出口阀</value>
+  </data>
+  <data name="DryWfLowerFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆下表面纯水冲洗阀</value>
+  </data>
+  <data name="DryOuterRinseFlowrate" xml:space="preserve">
+    <value>晶圆上表面外侧清洗流量设定</value>
+  </data>
+  <data name="LiquidDry" xml:space="preserve">
+    <value>干燥</value>
+  </data>
+  <data name="LiquidEmptyState" xml:space="preserve">
+    <value>此区域暂未配置液路控制。</value>
+  </data>
+  <data name="LiquidParameterSettings" xml:space="preserve">
+    <value>参数设置</value>
+  </data>
+  <data name="LiquidCommandSettings" xml:space="preserve">
+    <value>液路命令</value>
+  </data>
+  <data name="LiquidParameter" xml:space="preserve">
+    <value>参数</value>
+  </data>
+  <data name="LiquidItemName" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="DrawingName" xml:space="preserve">
+    <value>图纸名称</value>
+  </data>
+  <data name="DrawingTag" xml:space="preserve">
+    <value>图纸标识</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>单位</value>
+  </data>
+  <data name="Range" xml:space="preserve">
+    <value>范围</value>
+  </data>
+  <data name="PIDTag" xml:space="preserve">
+    <value>PID标识</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>说明</value>
+  </data>
+  <data name="CommandCode" xml:space="preserve">
+    <value>命令码</value>
+  </data>
+  <data name="WordCount" xml:space="preserve">
+    <value>字数</value>
+  </data>
+  <data name="ActionOpen" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="ActionClose" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ActionFlowrate" xml:space="preserve">
+    <value>流量</value>
+  </data>
+  <data name="ActionFlowrateReset" xml:space="preserve">
+    <value>流量重置</value>
+  </data>
+  <data name="ActionClfcCalibration" xml:space="preserve">
+    <value>CLFC校准</value>
+  </data>
+  <data name="ActionPower" xml:space="preserve">
+    <value>功率</value>
+  </data>
+  <data name="ChemicalEnterFlowSet" xml:space="preserve">
+    <value>药液流量控制(混合前)</value>
+  </data>
+  <data name="DiwEnterFlowSet" xml:space="preserve">
+    <value>纯水流量控制(混合前)</value>
+  </data>
+  <data name="UpperRinseDiwWash" xml:space="preserve">
+    <value>晶圆上表面清洁 流量控制</value>
+  </data>
+  <data name="LowerRinseDiwWash" xml:space="preserve">
+    <value>晶圆下表面清洁 流量控制</value>
+  </data>
+  <data name="ChemicalEnterMainValve" xml:space="preserve">
+    <value>化学品进入主阀</value>
+  </data>
+  <data name="ChemicalEnterFlow" xml:space="preserve">
+    <value>化学品进入流量</value>
+  </data>
+  <data name="PipeDiwWash" xml:space="preserve">
+    <value>管道纯水清洗</value>
+  </data>
+  <data name="DiwEnterMainValve" xml:space="preserve">
+    <value>纯水进入主阀</value>
+  </data>
+  <data name="DiwEnterFlow" xml:space="preserve">
+    <value>纯水进入流量</value>
+  </data>
+  <data name="WfLowerFaceChemicalWash" xml:space="preserve">
+    <value>晶圆下表面化学清洗</value>
+  </data>
+  <data name="WfUpperFaceChemicalWash" xml:space="preserve">
+    <value>晶圆上表面化学清洗</value>
+  </data>
+  <data name="QuartzChemicalWash" xml:space="preserve">
+    <value>石英化学清洗</value>
+  </data>
+  <data name="ChemicalInletMainValve1" xml:space="preserve">
+    <value>药水进入主阀1</value>
+  </data>
+  <data name="ChemicalInletMainValve2" xml:space="preserve">
+    <value>药水进入主阀2</value>
+  </data>
+  <data name="WfUpperFaceDiwWashInlet" xml:space="preserve">
+    <value>晶圆上表面纯水清洗入口</value>
+  </data>
+  <data name="WfUpperFaceDiwWashOutlet" xml:space="preserve">
+    <value>晶圆上表面纯水清洗出口</value>
+  </data>
+  <data name="WfUpperFaceWashDiwFlow" xml:space="preserve">
+    <value>晶圆上表面清洗纯水流量</value>
+  </data>
+  <data name="WfLowerFaceDiwWash" xml:space="preserve">
+    <value>晶圆下表面纯水清洗</value>
+  </data>
+  <data name="WfLowerFaceDiwWashFlow" xml:space="preserve">
+    <value>晶圆下表面纯水流量</value>
+  </data>
+  <data name="UpperRollerDiwWash" xml:space="preserve">
+    <value>上滚轮纯水清洗</value>
+  </data>
+  <data name="QuartzDiwWash" xml:space="preserve">
+    <value>石英纯水清洗</value>
+  </data>
+  <data name="UpperRollerInsideDiwWash" xml:space="preserve">
+    <value>上滚轮内部纯水清洗</value>
+  </data>
+  <data name="LowerRollerInsideDiwWash" xml:space="preserve">
+    <value>下滚轮内部纯水清洗</value>
+  </data>
+  <data name="MageSonicDiwWash" xml:space="preserve">
+    <value>超声波纯水清洗</value>
+  </data>
+  <data name="ChamberDiwWash" xml:space="preserve">
+    <value>槽内清洗</value>
+  </data>
+  <data name="PillarWash" xml:space="preserve">
+    <value>晶圆支撑柱清洁</value>
+  </data>
+  <data name="CoolingWaterCirculation" xml:space="preserve">
+    <value>冷却水循环</value>
+  </data>
+  <data name="UltrasonicVibrationStartup" xml:space="preserve">
+    <value>超声波发振启动</value>
+  </data>
+  <data name="UltrasonicVibration" xml:space="preserve">
+    <value>超声波发振</value>
+  </data>
+  <data name="RollerManualDiwWash" xml:space="preserve">
+    <value>滚轮手动清洗</value>
+  </data>
+  <data name="CylinderOneTouchAction" xml:space="preserve">
+    <value>气缸一键动作</value>
+  </data>
+  <data name="WfLowerFace" xml:space="preserve">
+    <value>晶圆下表面</value>
+  </data>
+  <data name="WfUpperFace" xml:space="preserve">
+    <value>晶圆上表面</value>
+  </data>
+  <data name="QuartzWash" xml:space="preserve">
+    <value>石英板清洁</value>
+  </data>
+  <data name="Ultrasonic" xml:space="preserve">
+    <value>超声波</value>
+  </data>
+  <data name="UltrasonicPower" xml:space="preserve">
+    <value>超声波功率</value>
+  </data>
+  <data name="RollerManualWash" xml:space="preserve">
+    <value>滚轮手动清洗</value>
+  </data>
+  <data name="CylinderOneTouch" xml:space="preserve">
+    <value>气缸一键动作</value>
+  </data>
+  <data name="UpperRollerInside" xml:space="preserve">
+    <value>上滚轮内部清洁</value>
+  </data>
+  <data name="LowerRollerInside" xml:space="preserve">
+    <value>下滚轮内部清洁</value>
+  </data>
+  <data name="ChamberWash" xml:space="preserve">
+    <value>槽内清洗</value>
+  </data>
+  <data name="LiquidInvalidNumber" xml:space="preserve">
+    <value>{0}：请输入有效数字。</value>
+  </data>
+  <data name="LiquidValueOutOfRange" xml:space="preserve">
+    <value>{0}必须在{1}到{2}之间。</value>
+  </data>
+  <data name="LiquidWriteFailed" xml:space="preserve">
+    <value>写入{0}失败（{1}）。</value>
+  </data>
+  <data name="LiquidWriteSucceeded" xml:space="preserve">
+    <value>{0}写入成功。</value>
+  </data>
+  <data name="LiquidCommandFailed" xml:space="preserve">
+    <value>{0}执行失败（{1}）。</value>
+  </data>
+  <data name="LiquidCommandSucceeded" xml:space="preserve">
+    <value>{0}已发送。</value>
+  </data>
+  <data name="LiquidValue" xml:space="preserve">
+    <value>设置值</value>
+  </data>
+  <data name="LiquidDefaultValue" xml:space="preserve">
+    <value>初期值</value>
+  </data>
+  <data name="LiquidUpperRollerWash" xml:space="preserve">
+    <value>上滚轮表面清洁</value>
+  </data>
+  <data name="LiquidUltrasonicStart" xml:space="preserve">
+    <value>超声波发振</value>
+  </data>
+  <data name="LiquidUltrasonicStop" xml:space="preserve">
+    <value>超声波停止</value>
+  </data>
+  <data name="LiquidRollerManualWashOpen" xml:space="preserve">
+    <value>滚轮手动清洗开启</value>
+  </data>
+  <data name="LiquidRollerManualWashClose" xml:space="preserve">
+    <value>滚轮手动清洗关闭</value>
+  </data>
+  <data name="LiquidCylinderOpen" xml:space="preserve">
+    <value>气缸一键打开</value>
+  </data>
+  <data name="LiquidCylinderClose" xml:space="preserve">
+    <value>气缸一键关闭</value>
+  </data>
+  <data name="ActionFcCalibration" xml:space="preserve">
+    <value>FC校准</value>
+  </data>
+  <data name="ActionPressure" xml:space="preserve">
+    <value>加压</value>
+  </data>
+  <data name="ActionPressureReset" xml:space="preserve">
+    <value>压力重置</value>
+  </data>
+  <data name="ActionEvCalibration" xml:space="preserve">
+    <value>EV校准</value>
+  </data>
+  <data name="PenChemicalInletValve1" xml:space="preserve">
+    <value>药液入口阀1</value>
+  </data>
+  <data name="PenChemicalOutletValve" xml:space="preserve">
+    <value>药液出口阀</value>
+  </data>
+  <data name="PenChemicalFlow" xml:space="preserve">
+    <value>药液流量控制(混合前)</value>
+  </data>
+  <data name="PenDiwInletValve" xml:space="preserve">
+    <value>纯水入口阀</value>
+  </data>
+  <data name="PenDiwOutletValve" xml:space="preserve">
+    <value>纯水出口阀</value>
+  </data>
+  <data name="PenDiwFlow" xml:space="preserve">
+    <value>纯水流量控制(混合前)</value>
+  </data>
+  <data name="PenWfUpperFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆上表面纯水冲洗阀</value>
+  </data>
+  <data name="PenWfUpperFaceDiwFlow" xml:space="preserve">
+    <value>晶圆上表面纯水流量控制</value>
+  </data>
+  <data name="PenWfLowerFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆下表面纯水冲洗阀</value>
+  </data>
+  <data name="PenWfLowerFaceDiwFlow" xml:space="preserve">
+    <value>晶圆下表面纯水流量控制</value>
+  </data>
+  <data name="PenDiwSupplyValve" xml:space="preserve">
+    <value>碳酸水混合前纯水供应阀</value>
+  </data>
+  <data name="PenDiwPressure" xml:space="preserve">
+    <value>纯水压力控制</value>
+  </data>
+  <data name="PenChemicalInletValve2" xml:space="preserve">
+    <value>药液入口阀2</value>
+  </data>
+  <data name="PenChemicalInletValve3" xml:space="preserve">
+    <value>药液入口阀3</value>
+  </data>
+  <data name="PenDiwWashValve" xml:space="preserve">
+    <value>笔头清洗纯水阀</value>
+  </data>
+  <data name="PenPlateDiwWashValve" xml:space="preserve">
+    <value>石英板纯水冲洗阀</value>
+  </data>
+  <data name="PenChemicalPipelineWashValve" xml:space="preserve">
+    <value>药液管道冲洗阀</value>
+  </data>
+  <data name="PenPlateChemicalWashValve" xml:space="preserve">
+    <value>石英板药液冲洗阀</value>
+  </data>
+  <data name="PenWfUpperLowerFacesChemicalWashValve" xml:space="preserve">
+    <value>晶圆上下表面药液冲洗总阀</value>
+  </data>
+  <data name="PenWfUpperFacesChemicalWashValve" xml:space="preserve">
+    <value>晶圆上表面药液冲洗阀</value>
+  </data>
+  <data name="PenDiwChamberValve" xml:space="preserve">
+    <value>PEN纯水槽内清洗阀</value>
+  </data>
+  <data name="PenWfUpperFaceDiCo2WashValve" xml:space="preserve">
+    <value>晶圆上表面碳酸水冲洗阀</value>
+  </data>
+  <data name="PenDiwAll" xml:space="preserve">
+    <value>所有纯水阀</value>
+  </data>
+  <data name="PenDiwInletFlowrateSet" xml:space="preserve">
+    <value>纯水流量设定(混合前)</value>
+  </data>
+  <data name="PenWfUpperFaceDiwFlowrateSet" xml:space="preserve">
+    <value>晶圆上表面纯水流量设定</value>
+  </data>
+  <data name="PenDiwPressureSet" xml:space="preserve">
+    <value>碳酸水混合前纯水压力设定</value>
+  </data>
+  <data name="PenWfLowerFaceDiwFlowrateSet" xml:space="preserve">
+    <value>晶圆下表面纯水流量设定</value>
+  </data>
+  <data name="PenChemicalFlowrateSet" xml:space="preserve">
+    <value>药液流量设定(混合前)</value>
+  </data>
+  <data name="PenCo2PressureSet" xml:space="preserve">
+    <value>CO2压力设定</value>
+  </data>
+  <data name="PenWfUpperFaceN2PurgeFlowrateSet" xml:space="preserve">
+    <value>晶圆上表面氮气流量设定</value>
+  </data>
+  <data name="PolishSlurry1Slurry" xml:space="preserve">
+    <value>研磨液1/药液</value>
+  </data>
+  <data name="PolishSlurry1Diw" xml:space="preserve">
+    <value>研磨液1/纯水</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液1三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液1三通回流阀</value>
+  </data>
+  <data name="PolishSlurry1ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液1三通入口阀</value>
+  </data>
+  <data name="PolishSlurry1WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液1纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry1OutletValve" xml:space="preserve">
+    <value>研磨液1/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry1Flow" xml:space="preserve">
+    <value>研磨液1/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry1DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line1/DIW流量</value>
+  </data>
+  <data name="PolishSlurry2Slurry" xml:space="preserve">
+    <value>研磨液2/药液</value>
+  </data>
+  <data name="PolishSlurry2Diw" xml:space="preserve">
+    <value>研磨液2/纯水</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液2三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液2三通回流阀</value>
+  </data>
+  <data name="PolishSlurry2ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液2三通入口阀</value>
+  </data>
+  <data name="PolishSlurry2WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液2纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry2OutletValve" xml:space="preserve">
+    <value>研磨液2/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry2Flow" xml:space="preserve">
+    <value>研磨液2/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry2DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line2/DIW流量</value>
+  </data>
+  <data name="PolishSlurry3Slurry" xml:space="preserve">
+    <value>研磨液3/药液</value>
+  </data>
+  <data name="PolishSlurry3Diw" xml:space="preserve">
+    <value>研磨液3/纯水</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayTotalInletValve" xml:space="preserve">
+    <value>研磨液3三通总入口阀</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayReturnValve" xml:space="preserve">
+    <value>研磨液3三通回流阀</value>
+  </data>
+  <data name="PolishSlurry3ThreeWayInletValve" xml:space="preserve">
+    <value>研磨液3三通入口阀</value>
+  </data>
+  <data name="PolishSlurry3WaterThreeWayInletValve" xml:space="preserve">
+    <value>研磨液3纯水三通入口阀</value>
+  </data>
+  <data name="PolishSlurry3OutletValve" xml:space="preserve">
+    <value>研磨液3/纯水出口阀</value>
+  </data>
+  <data name="PolishSlurry3Flow" xml:space="preserve">
+    <value>研磨液3/纯水流量控制</value>
+  </data>
+  <data name="PolishSlurry3DiwFlowrateSet" xml:space="preserve">
+    <value>Slurry Line3/DIW流量</value>
+  </data>
+  <data name="PolishDiwOutletValve" xml:space="preserve">
+    <value>药液臂纯水出口阀</value>
+  </data>
+  <data name="PolishPlatenWashValve" xml:space="preserve">
+    <value>大盘清洗阀</value>
+  </data>
+  <data name="PolishMovingHeadDiwWashValve" xml:space="preserve">
+    <value>移动头纯水清洗阀</value>
+  </data>
+  <data name="PolishMovingHeadExternalDiwWashValve" xml:space="preserve">
+    <value>移动头外部纯水清洗阀</value>
+  </data>
+  <data name="PolishHeadChemicalWashValve" xml:space="preserve">
+    <value>头部药液清洗阀</value>
+  </data>
+  <data name="PolishConditionerDiwWashValve" xml:space="preserve">
+    <value>修整器纯水清洗阀</value>
+  </data>
+  <data name="PolishConditionerArmDiwWashValve" xml:space="preserve">
+    <value>修整器臂纯水清洗阀</value>
+  </data>
+  <data name="PolishChemicalArmDiwWashValve" xml:space="preserve">
+    <value>药液臂纯水清洗阀</value>
+  </data>
+  <data name="PolishRrCleaningValve" xml:space="preserve">
+    <value>R.R 清洗阀</value>
+  </data>
+  <data name="PolishReleaseDiwWashValve" xml:space="preserve">
+    <value>下片纯水冲洗阀</value>
+  </data>
+  <data name="PolishWfFaceChemicalWashValve" xml:space="preserve">
+    <value>晶圆表面药液清洗阀</value>
+  </data>
+  <data name="PolishWfFaceDiwWashValve" xml:space="preserve">
+    <value>晶圆表面纯水清洗阀</value>
+  </data>
+  <data name="PolishGapCleaningValve" xml:space="preserve">
+    <value>间隙清洗阀</value>
+  </data>
+  <data name="PolishTrCleaningValve" xml:space="preserve">
+    <value>T.R 清洗阀</value>
+  </data>
+  <data name="PolishPlatenCoolWaterValve" xml:space="preserve">
+    <value>大盘冷却水阀</value>
+  </data>
+  <data name="PolishPlatenMotorCoolWaterValve" xml:space="preserve">
+    <value>大盘电机冷却水阀</value>
+  </data>
+  <data name="PolishZone4DiwValve" xml:space="preserve">
+    <value>Zone4 纯水冲洗阀</value>
+  </data>
+  <data name="ActionMfcCalibration" xml:space="preserve">
+    <value>MFC 校准</value>
+  </data>
 </root>
