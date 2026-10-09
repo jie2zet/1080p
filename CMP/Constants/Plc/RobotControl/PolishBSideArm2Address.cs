@@ -26,6 +26,19 @@ namespace CMP.Constants.Plc.RobotControl
         /// 2x轴研磨D位
         /// </summary>
         public const string PolishDPosition_2x = "D11324";
+        
+        /// <summary>
+        /// 1x轴有晶圆时速度
+        /// </summary>
+        public const string SpeedWhenHasWafer1x = "D11302";
+        /// <summary>
+        /// 1x轴加速时间
+        /// </summary>
+        public const string AccelerationTime1x = "D11312";
+        /// <summary>
+        /// 1x轴减速时间
+        /// </summary>
+        public const string DeaccelerationTime1x = "D11314";
         #endregion
 
         #region 移动命令 (M)
@@ -157,15 +170,15 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 2z轴有晶圆时速度
         /// </summary>
-        public const string SpeedWhenHasWafer = "D11402";
+        public const string SpeedWhenHasWafer2z = "D11402";
         /// <summary>
         /// 2z轴加速时间
         /// </summary>
-        public const string AccelerationTime = "D11412";
+        public const string AccelerationTime2z = "D11412";
         /// <summary>
         /// 2z轴减速时间
         /// </summary>
-        public const string DeaccelerationTime = "D11414";
+        public const string DeaccelerationTime2z = "D11414";
         #endregion
 
         #region 移动命令 (M)

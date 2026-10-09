@@ -84,20 +84,11 @@
                         <!-- 添加行样式来控制禁用状态 -->
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
-                                <Setter Property="IsEnabled" Value="True"/>
+                                <Setter Property="IsEnabled" Value="{Binding CanSelectForAssign}"/>
                                 <Setter Property="Background" Value="White"/>
                                 <Setter Property="Opacity" Value="0.6"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding WaferStatus}" Value="NonWafer">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                        <Setter Property="Background" Value="LightGray"/>
-                                        <Setter Property="Opacity" Value="1.0"/>
-                                    </DataTrigger>
-
-                                    <!-- 当已分配 Recipe 但仍然选中时 -->
-
-                                    <DataTrigger Binding="{Binding SequenceRecipe, Converter={StaticResource StringNullOrEmptyConverter}}" Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
+                                    <DataTrigger Binding="{Binding CanSelectForAssign}" Value="False">
                                         <Setter Property="Background" Value="LightGray"/>
                                         <Setter Property="Opacity" Value="1.0"/>
                                     </DataTrigger>
@@ -119,7 +110,18 @@
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="" 
                                                     Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" 
-                                                    Width="40"/>
+                                                    Width="40">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="CheckBox">
+                                        <Setter Property="IsEnabled" Value="{Binding CanSelectForAssign}"/>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                                <DataGridCheckBoxColumn.EditingElementStyle>
+                                    <Style TargetType="CheckBox">
+                                        <Setter Property="IsEnabled" Value="{Binding CanSelectForAssign}"/>
+                                    </Style>
+                                </DataGridCheckBoxColumn.EditingElementStyle>
+                            </DataGridCheckBoxColumn>
                             <!-- 修改 DataGridTextColumn -->
                             <DataGridTextColumn Header="SlotID" 
                                 Binding="{Binding SlotID, Converter={StaticResource SlotIdConverter}}" 

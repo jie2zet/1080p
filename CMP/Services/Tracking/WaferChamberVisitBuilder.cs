@@ -17,7 +17,11 @@ public static class WaferChamberVisitBuilder
         foreach (var mapping in ChamberStepMappingProvider.GetMappings())
         {
             var recipeName = recipeMap.TryGetValue(mapping.ChamberName, out var recipe) ? recipe : string.Empty;
-            var planned = plannedChambers?.Contains(mapping.ChamberName) == true;
+            var planned = IsPlannedChamber(plannedChambers, mapping.ChamberName);
+            if (!planned)
+            {
+                continue;
+            }
 
             var enterTime = GetFirstStepTimeInRange(stepTimes, mapping.EnterStartStep, mapping.ExitEndStep);
             var exitTime = GetLastStepTimeInRange(stepTimes, mapping.EnterStartStep, mapping.ExitEndStep);
@@ -29,11 +33,6 @@ public static class WaferChamberVisitBuilder
                 : null;
 
             var status = ResolveStatus(enterTime, exitTime);
-
-            if (!planned && !enterTime.HasValue && !exitTime.HasValue)
-            {
-                continue;
-            }
 
             visits.Add(new WaferChamberVisitRecord
             {
@@ -48,7 +47,33 @@ public static class WaferChamberVisitBuilder
             });
         }
 
-        return visits;
+        return visits
+            .OrderBy(visit => visit.EnterTime.HasValue ? 0 : 1)
+            .ThenBy(visit => visit.EnterTime)
+            .ToList();
+    }
+
+    /// <summary>
+    /// Sequence 里笔刷只有 PenA / PenB，日志腔体名是 PenA1 / PenB1。
+    /// </summary>
+    private static bool IsPlannedChamber(IReadOnlySet<string>? plannedChambers, string chamberName)
+    {
+        if (plannedChambers == null || plannedChambers.Count == 0)
+        {
+            return false;
+        }
+
+        if (plannedChambers.Contains(chamberName))
+        {
+            return true;
+        }
+
+        return chamberName switch
+        {
+            "PenA1" => plannedChambers.Contains("PenA"),
+            "PenB1" => plannedChambers.Contains("PenB"),
+            _ => false
+        };
     }
 
     private static DateTime? GetFirstStepTimeInRange(IReadOnlyList<DateTime?> stepTimes, int startStep, int endStep)

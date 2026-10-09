@@ -586,12 +586,14 @@ public class Chamber : BindableBase
         };
 
         string? waferInfo = null;
+        var trackingReadOk = false;
 
         if (!string.IsNullOrWhiteSpace(trackingAddress) && GlobalService.plcComm.IsPLCConnected)
         {
             try
             {
                 var value = GlobalService.plcComm.ReadShortVari(trackingAddress);
+                trackingReadOk = true;
                 TryFormatTrackingWafer(value, out waferInfo);
             }
             catch (Exception ex)
@@ -600,7 +602,7 @@ public class Chamber : BindableBase
             }
         }
 
-        if (string.IsNullOrEmpty(waferInfo))
+        if (!trackingReadOk && string.IsNullOrEmpty(waferInfo))
         {
             var wafer = GetCurrentWaferSafely();
             if (wafer != null)
@@ -1242,10 +1244,7 @@ public class Chamber : BindableBase
         UpdateDisplay();
     }
 
-    // private bool IsPolishChamber()
-    // {
-    //     return _name is "PolishA" or "PolishB" or "PolishC" or "PolishD";
-    // }
+   
 
     private async Task LogOtherChamberDataAsync(LogContext context, CancellationToken token)
     {
@@ -2003,6 +2002,23 @@ public class DataLoggerHelper
         "BSide_Discharge_Arm3"
     ];
 
+    /// <summary>
+    /// LTP 日志只记轴当前值。名字与 SV_STCtrl.csv 一致（Postion 是表里的拼写）。
+    /// </summary>
+    private static readonly string[] LtpLogPointNames =
+    [
+        "XAxisCurrentPostion",
+        "XAxisCurrentSpeed",
+        "XAxisCurrentTorque",
+        "ZAxisCurrentPostion",
+        "ZAxisCurrentSpeed",
+        "ZAxisCurrentTorque",
+        "SensorPower",
+        "SensorL",
+        "SensorC",
+        "SensorR"
+    ];
+
     private static List<DataLogField> CreateDataLogRow(string logTime, string timeSpan)
     {
         return
@@ -2230,31 +2246,66 @@ public class DataLoggerHelper
         }
 
         var usedKeys = new HashSet<string>(StringComparer.Ordinal);
+        // 同一 Module 在表里会再出现一次，轴和传感器在后面那段。
+        // 多出来的同名点（B 侧 Discharge 的 X 位置被标成了 Feed Arm2）留给后面缺这个点的模块。
+        var extraPoints = new List<SV_PLC>();
         foreach (var moduleName in moduleNames)
         {
-            STCtrl? stCtrl = null;
+            var moduleItems = new List<SV_PLC>();
             for (var i = 0; i < stCtrls.Count; i++)
             {
-                if (string.Equals(stCtrls[i].ModuleName, moduleName, StringComparison.Ordinal))
-                {
-                    stCtrl = stCtrls[i];
-                    break;
-                }
-            }
-
-            if (stCtrl == null)
-            {
-                continue;
-            }
-
-            foreach (var item in stCtrl.listDataInSingleStCtrl)
-            {
-                if (string.IsNullOrWhiteSpace(item.Name))
+                if (!string.Equals(stCtrls[i].ModuleName, moduleName, StringComparison.Ordinal))
                 {
                     continue;
                 }
 
-                var key = $"{moduleName}.{item.Name}";
+                foreach (var candidate in stCtrls[i].listDataInSingleStCtrl)
+                {
+                    moduleItems.Add(candidate);
+                }
+            }
+
+            foreach (var pointName in LtpLogPointNames)
+            {
+                SV_PLC? item = null;
+                for (var i = 0; i < moduleItems.Count; i++)
+                {
+                    if (!string.Equals(moduleItems[i].Name, pointName, StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    if (item == null)
+                    {
+                        item = moduleItems[i];
+                    }
+                    else
+                    {
+                        extraPoints.Add(moduleItems[i]);
+                    }
+                }
+
+                if (item == null)
+                {
+                    for (var i = 0; i < extraPoints.Count; i++)
+                    {
+                        if (!string.Equals(extraPoints[i].Name, pointName, StringComparison.Ordinal))
+                        {
+                            continue;
+                        }
+
+                        item = extraPoints[i];
+                        extraPoints.RemoveAt(i);
+                        break;
+                    }
+                }
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var key = $"{moduleName}.{pointName}";
                 if (!usedKeys.Add(key))
                 {
                     continue;

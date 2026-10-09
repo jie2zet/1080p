@@ -134,6 +134,7 @@
                         <RowDefinition Height="32"/>
                         <RowDefinition Height="32"/>
                         <RowDefinition Height="32"/>
+                        <RowDefinition Height="32"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
@@ -238,8 +239,18 @@
                     <ToggleButton Grid.Row="4" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
                             Width="55" Height="28" Margin="5,0" IsChecked="{Binding LtpPlacePositionMoveToggle, Mode=OneWay}" Command="{Binding LtpPlacePositionMoveCommand}"/>
 
+                    <!-- Speed When Has Wafer -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1"
+                                                 Value="{Binding SpeedWhenHasWafer}"
+                                                 DecimalPlaces="3"
+                                                 Increment="0.001"
+                                                 IsDirty="{Binding IsSpeedWhenHasWaferDirty, Mode=OneWay}"
+                                                 SetCommand="{Binding SpeedWhenHasWaferSetCommand}"
+                                                 CancelCommand="{Binding SpeedWhenHasWaferCancelCommand}"/>
+
                     <!-- 鍙充晶鎺у埗鍖猴細Enable銆佷笂绠ご銆佷腑闂翠俊鍙风伅銆佷笅绠ご銆丱rigin 鍨傜洿鎺掑垪 -->
-                    <StackPanel Grid.Row="5" Grid.RowSpan="2" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,0,0">
+                    <StackPanel Grid.Row="6" Grid.RowSpan="2" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,0,0">
                         <!-- Enable -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,10">
                             <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding IsEnabled}" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -296,10 +307,10 @@
                     </StackPanel>
 
                     <!-- Alarm Code -->
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding AlarmCode}" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding AlarmCode}" VerticalAlignment="Center" Margin="0,5,0,0"/>
                     
                     <!-- Alarm Status -->
-                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
+                    <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="24"/>

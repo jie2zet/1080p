@@ -259,7 +259,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 foreach (var wafer in _waferList)
                 {
                     // 只选择有 Wafer 的槽位（非空槽位）
-                    if (wafer.WaferStatus == WaferStatus.NormalExistence && string.IsNullOrEmpty(wafer.SequenceRecipe))
+                    if (wafer.CanSelectForAssign)
                     {
                         wafer.IsSelected = true;
                     }
@@ -310,7 +310,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
             }
 
             var selectedWafers = _waferList?
-                .Where(w => w.IsSelected && w.WaferStatus == WaferStatus.NormalExistence && string.IsNullOrEmpty(w.SequenceRecipe))
+                .Where(w => w.IsSelected && w.CanSelectForAssign)
                 .OrderBy(w => w.SlotID)
                 .ToList();
 
@@ -343,7 +343,10 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
         private async void ExecuteAssignRecipe()
         {
-            var selectedWafers = _waferList?.Where(w => w.IsSelected && w.WaferStatus == WaferStatus.NormalExistence).OrderBy(w=>w.SlotID).ToList();
+            var selectedWafers = _waferList?
+                .Where(w => w.IsSelected && w.CanSelectForAssign)
+                .OrderBy(w => w.SlotID)
+                .ToList();
 
             if (selectedWafers == null || selectedWafers.Count == 0)
             {
@@ -540,7 +543,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
             }
 
             var normalizedName = BatchWaferName.Trim();
-            foreach (var wafer in _waferList.Where(w => w.IsSelected && w.WaferStatus == WaferStatus.NormalExistence && string.IsNullOrEmpty(w.SequenceRecipe)))
+            foreach (var wafer in _waferList.Where(w => w.IsSelected && w.CanSelectForAssign))
             {
                 wafer.WaferName = BuildBatchWaferName(normalizedName, wafer.SlotID);
             }
@@ -631,7 +634,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
         private bool CanExecuteAssignRecipe()
         {
             return _waferList != null &&
-                   _waferList.Any(w => w.IsSelected) && SelectedSequence != null;
+                   _waferList.Any(w => w.IsSelected && w.CanSelectForAssign) && SelectedSequence != null;
         }
 
         private void ExecuteCancel()
@@ -667,7 +670,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
         {
             if (_waferList != null)
             {
-                SelectedWaferCount = _waferList.Count(w => w.IsSelected && w.WaferStatus == WaferStatus.NormalExistence);
+                SelectedWaferCount = _waferList.Count(w => w.IsSelected && w.CanSelectForAssign);
             }
             else
             {

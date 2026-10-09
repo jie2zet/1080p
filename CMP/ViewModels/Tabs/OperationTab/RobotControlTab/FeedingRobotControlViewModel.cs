@@ -894,6 +894,38 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         set => SetProperty(ref _stationIsStopped, value);
     }
 
+    private bool _stopLoadToggle;
+
+    public bool StopLoadToggle
+    {
+        get => _stopLoadToggle;
+        set => SetProperty(ref _stopLoadToggle, value);
+    }
+
+    private bool _resumeLoadToggle;
+
+    public bool ResumeLoadToggle
+    {
+        get => _resumeLoadToggle;
+        set => SetProperty(ref _resumeLoadToggle, value);
+    }
+
+    private bool _sideAHealthy;
+
+    public bool SideAHealthy
+    {
+        get => _sideAHealthy;
+        set => SetProperty(ref _sideAHealthy, value);
+    }
+
+    private bool _sideBHealthy;
+
+    public bool SideBHealthy
+    {
+        get => _sideBHealthy;
+        set => SetProperty(ref _sideBHealthy, value);
+    }
+
     // Station Operation Toggle 属性
     private bool _stationResetToggle;
 
@@ -1176,6 +1208,8 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
     public DelegateCommand StationResetCommand { get; }
     public DelegateCommand StationStartCommand { get; }
     public DelegateCommand StationStopCommand { get; }
+    public DelegateCommand StopLoadCommand { get; }
+    public DelegateCommand ResumeLoadCommand { get; }
     public DelegateCommand TransferCommand { get; }
     public DelegateCommand PressJogUpCommand { get; }
     public DelegateCommand ReleaseJogUpCommand { get; }
@@ -1323,6 +1357,8 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "FeedingRobot");
         StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "FeedingRobot");
         StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "FeedingRobot");
+        StopLoadCommand = OperationAudit.Create("StopLoad", () => _plc.Write(FeedingRobotAddress.StopLoad, !StopLoadToggle), () => "FeedingRobot");
+        ResumeLoadCommand = OperationAudit.Create("ResumeLoad", () => _plc.Write(FeedingRobotAddress.ResumeLoad, !ResumeLoadToggle), () => "FeedingRobot");
         TransferCommand = OperationAudit.Create("Transfer", ExecuteTransfer, () => "FeedingRobot");
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
         ReleaseJogUpCommand = new DelegateCommand(ExecuteReleaseJogUp);
@@ -1474,6 +1510,10 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
                 new()
                 {
                     new PlcBatchReadItem<bool>(FeedingRobotAddress.GlobalAlarm, assign: v => GlobalAlarm = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.StopLoadStatus, assign: v => StopLoadToggle = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.ResumeLoadStatus, assign: v => ResumeLoadToggle = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.SideAHealthy, assign: v => SideAHealthy = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.SideBHealthy, assign: v => SideBHealthy = v),
                     new PlcBatchReadItem<bool>(FeedingRobotAddress.EmergencyStop, assign: v => EmergencyStopToggle = v)
                 },
                 new()
