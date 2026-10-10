@@ -2484,4 +2484,13 @@
   <data name="ActionMfcCalibration" xml:space="preserve">
     <value>MFC Calibration</value>
   </data>
+  <data name="PolishSlurryAndPlatenWash" xml:space="preserve">
+    <value>All Slurry &amp; Platen Wash</value>
+  </data>
+  <data name="PolishSlurrySetFlowrate" xml:space="preserve">
+    <value>Set Flow</value>
+  </data>
+  <data name="PolishSlurryActualFlowrate" xml:space="preserve">
+    <value>Actual Flow</value>
+  </data>
 </root>

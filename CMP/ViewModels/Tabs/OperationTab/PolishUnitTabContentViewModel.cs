@@ -11,6 +11,7 @@ using CMP.Models.Resource;
 using CMP.Services.Log;
 using CMP.Utils;
 using CMP.ViewModels.Common;
+using CMP.ViewModels.Tabs.OperationTab.PolishUnitTab;
 using Dm.util;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HandyControl.Controls;
@@ -266,18 +267,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
     private string _configUnloadRetryRecipe = "";
 
-    private ObservableCollection<SlurryDiw> _slurryDiwOptions =
-    [
-        new() { Diw = false, Slurry = false },
-        new() { Diw = false, Slurry = false },
-        new() { Diw = false, Slurry = false }
-    ];
-
-    public ObservableCollection<SlurryDiw> SlurryDiwOptions
-    {
-        get => _slurryDiwOptions;
-        set => SetProperty(ref _slurryDiwOptions, value);
-    }
+    public PolishSlurryContentViewModel SlurryControl { get; }
 
     public DelegateCommand<string> AutoCommand { get; set; }
     public DelegateCommand<string> AbortUnitCommand { get; set; }
@@ -301,7 +291,6 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     public DelegateCommand<string>? ConditionCommand { get; set; }
     public DelegateCommand<string>? UnloadCommand { get; set; }
     public DelegateCommand<string>? DechuckCommand { get; set; }
-    public DelegateCommand<string>? SlurrySwitchCommand { get; set; }
     public DelegateCommand<string>? PositionCommand { get; set; }
 
     // Servo button text properties
@@ -435,11 +424,11 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         ConditionCommand = OperationAudit.Create<string>("BreakIn", BreakInCommandExecute, () => TabTitle ?? string.Empty);
         UnloadCommand = OperationAudit.Create<string>("Unload", UnloadCommandExecute, () => TabTitle ?? string.Empty);
         DechuckCommand = OperationAudit.Create<string>("Dechuck", DechuckCommandExecute, () => TabTitle ?? string.Empty);
-        SlurrySwitchCommand = OperationAudit.Create<string>("SlurrySwitch", SlurrySwitchCommandExecute, () => TabTitle ?? string.Empty);
         PositionCommand = OperationAudit.Create<string>("Position", PositionCommandExecute, () => TabTitle ?? string.Empty);
 
 
         kvLink = link;
+        SlurryControl = new PolishSlurryContentViewModel(() => kvLink.sock, () => TabTitle ?? string.Empty);
         err = KHL.KHLWriteVariable(kvLink.sock, "PLCStartPermition", writeTrue, true);
         err = KHL.KHLWriteVariable(kvLink.sock, "PLCReady", writeTrue, true);
         //err = KHL.KHLWriteVariable(sock, "PLCAutoStart", writeTrue, true);
@@ -576,73 +565,6 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private void SlurrySwitchCommandExecute(string obj)
-    {
-        SlurryDiwOptions[0].FlowRate = PolishUnit.Slurry.Slurry1Set;
-        SlurryDiwOptions[1].FlowRate = PolishUnit.Slurry.Slurry2Set;
-        SlurryDiwOptions[2].FlowRate = PolishUnit.Slurry.Slurry3Set;
-
-        for (var i = 0; i < SlurryDiwOptions.Count; i++)
-        {
-            var option = SlurryDiwOptions[i];
-            if (option.FlowRate == 0) continue;
-            byte[] writeBufTemp;
-            uint plcHandle;
-
-            if (obj.Equals("On"))
-            {
-                writeBufTemp = option.Slurry ? i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Open.Value() :
-                    i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Open.Value() :
-                    PlcHandle.CmdPolish.Liquid.Slurry3.Open.Value()
-                    : i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Diw.Open.Value()
-                    : i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Diw.Open.Value()
-                    : PlcHandle.CmdPolish.Liquid.Slurry3.Diw.Open.Value();
-                plcHandle = option.Slurry ? i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Open.Handle() :
-                    i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Open.Handle() :
-                    PlcHandle.CmdPolish.Liquid.Slurry3.Open.Handle()
-                    : i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Diw.Open.Handle()
-                    : i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Diw.Open.Handle()
-                    : PlcHandle.CmdPolish.Liquid.Slurry3.Diw.Open.Handle();
-            }
-            else
-            {
-                writeBufTemp = option.Slurry ? i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Close.Value() :
-                    i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Close.Value() :
-                    PlcHandle.CmdPolish.Liquid.Slurry3.Close.Value()
-                    : i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Diw.Close.Value()
-                    : i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Diw.Close.Value()
-                    : PlcHandle.CmdPolish.Liquid.Slurry3.Diw.Close.Value();
-                plcHandle = option.Slurry ? i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Close.Handle() :
-                    i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Close.Handle() :
-                    PlcHandle.CmdPolish.Liquid.Slurry3.Close.Handle()
-                    : i == 0 ? PlcHandle.CmdPolish.Liquid.Slurry1.Diw.Close.Handle()
-                    : i == 1 ? PlcHandle.CmdPolish.Liquid.Slurry2.Diw.Close.Handle()
-                    : PlcHandle.CmdPolish.Liquid.Slurry3.Diw.Close.Handle();
-            }
-
-            // set param
-            var paramHandle = i switch
-            {
-                0 => PlcHandle.CmdPolish.Liquid.Slurry1.Param.Flowrate.ParamHandle(),
-                1 => PlcHandle.CmdPolish.Liquid.Slurry2.Param.Flowrate.ParamHandle(),
-                _ => PlcHandle.CmdPolish.Liquid.Slurry3.Param.Flowrate.ParamHandle()
-            };
-            var paramValue = BitConverter.GetBytes(option.FlowRate);
-            var err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, paramHandle, 2, paramValue);
-            if (err != (int)KHLUserError.KHL_ERR_NONE)
-            {
-                Growl.ErrorGlobal($"Set Slurry{i + 1} Flowrate Failed!");
-            }
-            // send command
-            err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, plcHandle, 1, writeBufTemp);
-            if (err != (int)KHLUserError.KHL_ERR_NONE)
-            {
-                Growl.ErrorGlobal($"Slurry{i + 1} {(obj.Equals("Open") ? "Open" : "Close")} Command Failed!");
-            }
-        }
-    }
-
-
     private async void Monitor()
     {
         //Thread.Sleep(2000);
@@ -712,6 +634,9 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.Slurry.Slurry1Act = snapshot.Slurry1OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry2Act = snapshot.Slurry2OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry3Act = snapshot.Slurry3OrDIWFlowrateAct;
+        SlurryControl.Lines[0].ActualFlowrate = snapshot.Slurry1OrDIWFlowrateAct;
+        SlurryControl.Lines[1].ActualFlowrate = snapshot.Slurry2OrDIWFlowrateAct;
+        SlurryControl.Lines[2].ActualFlowrate = snapshot.Slurry3OrDIWFlowrateAct;
 
         PolishUnit.PlatenMotor.IsServoOn = snapshot.PlatenRotationMotorServoOn;
         PolishUnit.HeadRotateMotor.IsServoOn = snapshot.HeadRotationMotorServoOn;
@@ -2990,30 +2915,5 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         {
             return default;
         }
-    }
-}
-
-public class SlurryDiw : BindableBase
-{
-    private bool _diw;
-    private bool _slurry;
-    private float _flowRate;
-
-    public bool Diw
-    {
-        get => _diw;
-        set => SetProperty(ref _diw, value);
-    }
-
-    public bool Slurry
-    {
-        get => _slurry;
-        set => SetProperty(ref _slurry, value);
-    }
-
-    public float FlowRate
-    {
-        get => _flowRate;
-        set => SetProperty(ref _flowRate, value);
     }
 }
