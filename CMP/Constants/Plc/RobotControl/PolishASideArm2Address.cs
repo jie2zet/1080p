@@ -293,7 +293,7 @@ public static class PolishASideArm2Address
     /// <summary>
     /// 有片速度
     /// </summary>
-    public const string SpeedWhenHasWafer = "D10702";
+    public const string SpeedWhenHasWafer = "ZR10702";
     /// <summary>
     /// 加速度时间
     /// </summary>

@@ -263,15 +263,15 @@ public static class PolishASideArm1Address
     /// <summary>
     /// 速度(有晶圆)
     /// </summary>
-    public const string SpeedWhenHasWafer = "D10502";
+    public const string SpeedWhenHasWafer = "ZR10502";
     /// <summary>
     /// 加速时间
     /// </summary>
-    public const string AccelerationTime = "D10512";
+    public const string AccelerationTime = "ZR10512";
     /// <summary>
     /// 减速时间
     /// </summary>
-    public const string DecelerationTime = "D10514";
+    public const string DecelerationTime = "ZR10514";
 
     #endregion
 

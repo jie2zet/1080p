@@ -39,7 +39,7 @@ public static class PolishASideTransferAddress
     /// <summary>
     /// 有片速度
     /// </summary>
-    public const string SpeedWhenHasWafer = "D10302";
+    public const string SpeedWhenHasWafer = "ZR10302";
 
     #region 轴位置调整 - 移动命令 (M)
 
