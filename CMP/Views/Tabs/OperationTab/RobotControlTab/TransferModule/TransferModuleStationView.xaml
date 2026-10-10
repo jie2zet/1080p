@@ -13,25 +13,6 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="600" d:DesignWidth="900">
     
-    <UserControl.Resources>
-        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#DC3545"/>
-                    <Setter Property="BorderBrush" Value="#DC3545"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsChecked" Value="True"/>
-                        <Condition Property="IsMouseOver" Value="True"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid Background="#C8E6E6">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -106,13 +87,13 @@
                     <!-- Load Operation -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding LoadOperationActive}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc LoadOperation}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="8,0" IsChecked="{Binding LoadOperationToggle, Mode=TwoWay}" Command="{Binding LoadOperationCommand}"/>
+                        <Button Content="{lex:Loc LoadOperation}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="8,0" Command="{Binding LoadOperationCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding LoadOperationDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- Unload Operation -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding UnloadOperationActive}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc UnloadOperation}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="8,0" IsChecked="{Binding UnloadOperationToggle, Mode=TwoWay}" Command="{Binding UnloadOperationCommand}"/>
+                        <Button Content="{lex:Loc UnloadOperation}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="8,0" Command="{Binding UnloadOperationCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding UnloadOperationDone}" VerticalAlignment="Center"/>
                     </StackPanel>
 
@@ -125,35 +106,35 @@
                     
                     <!-- Door Control Buttons -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc LoadDoorOpen}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding LoadDoorOpenToggle, Mode=TwoWay}" Command="{Binding LoadDoorOpenCommand}"/>
+                        <Button Content="{lex:Loc LoadDoorOpen}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding LoadDoorOpenCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding LoadDoorOpenDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc LoadDoorClose}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding LoadDoorCloseToggle, Mode=TwoWay}" Command="{Binding LoadDoorCloseCommand}"/>
+                        <Button Content="{lex:Loc LoadDoorClose}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding LoadDoorCloseCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding LoadDoorCloseDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc SideDoorOpen}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding SideDoorOpenToggle, Mode=TwoWay}" Command="{Binding SideDoorOpenCommand}"/>
+                        <Button Content="{lex:Loc SideDoorOpen}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding SideDoorOpenCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding SideDoorOpenDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc SideDoorClose}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding SideDoorCloseToggle, Mode=TwoWay}" Command="{Binding SideDoorCloseCommand}"/>
+                        <Button Content="{lex:Loc SideDoorClose}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding SideDoorCloseCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding SideDoorCloseDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc UnloadDoorOpen}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding UnloadDoorOpenToggle, Mode=TwoWay}" Command="{Binding UnloadDoorOpenCommand}"/>
+                        <Button Content="{lex:Loc UnloadDoorOpen}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding UnloadDoorOpenCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding UnloadDoorOpenDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                        <ToggleButton Content="{lex:Loc UnloadDoorClose}" Style="{StaticResource MoveToggleButtonStyle}" Width="120" Height="28" Margin="28,0,8,0" IsChecked="{Binding UnloadDoorCloseToggle, Mode=TwoWay}" Command="{Binding UnloadDoorCloseCommand}"/>
+                        <Button Content="{lex:Loc UnloadDoorClose}" Style="{StaticResource ButtonPrimary}" Width="120" Height="28" Margin="28,0,8,0" Command="{Binding UnloadDoorCloseCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding UnloadDoorCloseDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
                 
                 <!-- Right: Manual/Auto Buttons -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top" extensions:StackPanelHelpers.Spacing="10">
-                    <ToggleButton Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding ManualModeToggle, Mode=OneWay}" Command="{Binding ManualModeCommand}"/>
-                    <ToggleButton Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding AutoModeToggle, Mode=OneWay}" Command="{Binding AutoModeCommand}"/>
+                    <Button Content="{lex:Loc Manual}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding ManualModeCommand}"/>
+                    <Button Content="{lex:Loc Auto}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding AutoModeCommand}"/>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -861,10 +861,10 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
 
         // Station Control
-        StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(PolishASideArm2Address.StationReset, true), () => "PolishASideArm2");
-        StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(PolishASideArm2Address.StationStart, true), () => "PolishASideArm2");
-        StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(PolishASideArm2Address.StationStop, true), () => "PolishASideArm2");
-        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(PolishASideArm2Address.StationAlarmReset, true), () => "PolishASideArm2");
+        StationResetCommand = OperationAudit.CreateAsync("StationReset", () => _plc.PulseAsync(PolishASideArm2Address.StationReset), () => "PolishASideArm2");
+        StationStartCommand = OperationAudit.CreateAsync("StationStart", () => _plc.PulseAsync(PolishASideArm2Address.StationStart), () => "PolishASideArm2");
+        StationStopCommand = OperationAudit.CreateAsync("StationStop", () => _plc.PulseAsync(PolishASideArm2Address.StationStop), () => "PolishASideArm2");
+        StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", () => _plc.PulseAsync(PolishASideArm2Address.StationAlarmReset), () => "PolishASideArm2");
 
         // JOG Commands
         XPressJogUpCommand = OperationAudit.Create("XPressJogUp", () => _plc.Write(PolishASideArm2Address.XJogUp, true), () => "PolishASideArm2");
@@ -913,48 +913,18 @@ public class PolishASideArm2ControlViewModel : TabContentViewModelBase
         }, () => "PolishASideArm2");
 
         EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(PolishASideArm2Address.EmergencyStop, !EmergencyStopToggle), () => "PolishASideArm2");
-        PowerOffCommand = OperationAudit.Create("PowerOff", () => _plc.Write(PolishASideArm2Address.PowerOff, !PowerOffToggle), () => "PolishASideArm2");
-        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishASideArm2Address.AlarmReset, !AlarmResetToggle), () => "PolishASideArm2");
+        PowerOffCommand = OperationAudit.CreateAsync("PowerOff", () => _plc.PulseAsync(PolishASideArm2Address.PowerOff), () => "PolishASideArm2");
+        AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(PolishASideArm2Address.AlarmReset), () => "PolishASideArm2");
         SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishASideArm2Address.Save, !SaveToggle), () => "PolishASideArm2");
 
-        PickFromTransferCommand = OperationAudit.Create("PickFromTransfer", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PickFromTransfer, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PickFromTransfer, false);
-        }, () => "PolishASideArm2");
-        PickFromPolishACommand = OperationAudit.Create("PickFromPolishA", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PickFromPolishA, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PickFromPolishA, false);
-        }, () => "PolishASideArm2");
-        PickFromPolishBCommand = OperationAudit.Create("PickFromPolishB", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PickFromPolishB, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PickFromPolishB, false);
-        }, () => "PolishASideArm2");
-        PlaceToTransferArmCommand = OperationAudit.Create("PlaceToTransferArm", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PlaceToTransferArm, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PlaceToTransferArm, false);
-        }, () => "PolishASideArm2");
-        PickFromPolishBMaterialCommand = OperationAudit.Create("PickFromPolishBMaterial", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PickFromPolishBMaterial, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PickFromPolishBMaterial, false);
-        }, () => "PolishASideArm2");
-        PolishBLoadUnloadCommand = OperationAudit.Create("PolishBLoadUnload", () =>
-        {
-            _plc.Write(PolishASideArm2Address.PolishBLoadUnload, true);
-            Thread.Sleep(50);
-            _plc.Write(PolishASideArm2Address.PolishBLoadUnload, false);
-        }, () => "PolishASideArm2");
-        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishASideArm2Address.ManualMode, !ManualModeToggle), () => "PolishASideArm2");
-        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishASideArm2Address.AutoMode, !AutoModeToggle), () => "PolishASideArm2");
+        PickFromTransferCommand = OperationAudit.CreateAsync("PickFromTransfer", () => _plc.PulseAsync(PolishASideArm2Address.PickFromTransfer), () => "PolishASideArm2");
+        PickFromPolishACommand = OperationAudit.CreateAsync("PickFromPolishA", () => _plc.PulseAsync(PolishASideArm2Address.PickFromPolishA), () => "PolishASideArm2");
+        PickFromPolishBCommand = OperationAudit.CreateAsync("PickFromPolishB", () => _plc.PulseAsync(PolishASideArm2Address.PickFromPolishB), () => "PolishASideArm2");
+        PlaceToTransferArmCommand = OperationAudit.CreateAsync("PlaceToTransferArm", () => _plc.PulseAsync(PolishASideArm2Address.PlaceToTransferArm), () => "PolishASideArm2");
+        PickFromPolishBMaterialCommand = OperationAudit.CreateAsync("PickFromPolishBMaterial", () => _plc.PulseAsync(PolishASideArm2Address.PickFromPolishBMaterial), () => "PolishASideArm2");
+        PolishBLoadUnloadCommand = OperationAudit.CreateAsync("PolishBLoadUnload", () => _plc.PulseAsync(PolishASideArm2Address.PolishBLoadUnload), () => "PolishASideArm2");
+        ManualModeCommand = OperationAudit.CreateAsync("ManualMode", () => _plc.PulseAsync(PolishASideArm2Address.ManualMode), () => "PolishASideArm2");
+        AutoModeCommand = OperationAudit.CreateAsync("AutoMode", () => _plc.PulseAsync(PolishASideArm2Address.AutoMode), () => "PolishASideArm2");
     }
 
     private async void ReadTimer_Tick(object? sender, EventArgs e)

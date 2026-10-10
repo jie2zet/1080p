@@ -12,57 +12,6 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="600" d:DesignWidth="900">
     
-    <UserControl.Resources>
-        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#DC3545"/>
-                    <Setter Property="BorderBrush" Value="#DC3545"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsChecked" Value="True"/>
-                        <Condition Property="IsMouseOver" Value="True"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!-- Green ToggleButton Style (Start/Success) -->
-        <Style x:Key="ToggleButtonSuccess" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Setter Property="Background" Value="#28A745"/>
-            <Setter Property="BorderBrush" Value="#28A745"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#1E7E34"/>
-                    <Setter Property="BorderBrush" Value="#1C7430"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#218838"/>
-                    <Setter Property="BorderBrush" Value="#1E7E34"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!-- Red ToggleButton Style (Stop/Danger) -->
-        <Style x:Key="ToggleButtonDanger" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Setter Property="Background" Value="#DC3545"/>
-            <Setter Property="BorderBrush" Value="#DC3545"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#BD2130"/>
-                    <Setter Property="BorderBrush" Value="#B21F2D"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid Background="#C8E6E6">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -135,47 +84,47 @@
                     
                     <!-- Module Pick -->
                     <controls:SignalLight Grid.Row="0" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationModulePickActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="0" Grid.Column="2" Content="{lex:Loc PickFromModule}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationModulePickToggle, Mode=TwoWay}" Command="{Binding StationModulePickCommand}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="{lex:Loc PickFromModule}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationModulePickCommand}"/>
                     <controls:SignalLight Grid.Row="0" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationModulePickDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Transfer A Place -->
                     <controls:SignalLight Grid.Row="1" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationTransferAPlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="1" Grid.Column="2" Content="{lex:Loc PlaceToTransferA}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationTransferAPlaceToggle, Mode=TwoWay}" Command="{Binding StationTransferAPlaceCommand}"/>
+                    <Button Grid.Row="1" Grid.Column="2" Content="{lex:Loc PlaceToTransferA}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationTransferAPlaceCommand}"/>
                     <controls:SignalLight Grid.Row="1" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationTransferAPlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Transfer A Pick -->
                     <controls:SignalLight Grid.Row="2" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationTransferAPickActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc PickFromTransferA}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationTransferAPickToggle, Mode=TwoWay}" Command="{Binding StationTransferAPickCommand}"/>
+                    <Button Grid.Row="2" Grid.Column="2" Content="{lex:Loc PickFromTransferA}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationTransferAPickCommand}"/>
                     <controls:SignalLight Grid.Row="2" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationTransferAPickDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Transfer B Place -->
                     <controls:SignalLight Grid.Row="3" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationTransferBPlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc PlaceToTransferB}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationTransferBPlaceToggle, Mode=TwoWay}" Command="{Binding StationTransferBPlaceCommand}"/>
+                    <Button Grid.Row="3" Grid.Column="2" Content="{lex:Loc PlaceToTransferB}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationTransferBPlaceCommand}"/>
                     <controls:SignalLight Grid.Row="3" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationTransferBPlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Transfer B Pick -->
                     <controls:SignalLight Grid.Row="4" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationTransferBPickActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="4" Grid.Column="2" Content="{lex:Loc PickFromTransferB}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationTransferBPickToggle, Mode=TwoWay}" Command="{Binding StationTransferBPickCommand}"/>
+                    <Button Grid.Row="4" Grid.Column="2" Content="{lex:Loc PickFromTransferB}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationTransferBPickCommand}"/>
                     <controls:SignalLight Grid.Row="4" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationTransferBPickDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Roller A1 -->
                     <controls:SignalLight Grid.Row="5" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationRollerA1PlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="5" Grid.Column="2" Content="{lex:Loc PlaceToRollerA1}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationRollerA1PlaceToggle, Mode=TwoWay}" Command="{Binding StationRollerA1PlaceCommand}"/>
+                    <Button Grid.Row="5" Grid.Column="2" Content="{lex:Loc PlaceToRollerA1}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationRollerA1PlaceCommand}"/>
                     <controls:SignalLight Grid.Row="5" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationRollerA1PlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Roller A2 -->
                     <controls:SignalLight Grid.Row="6" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationRollerA2PlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="6" Grid.Column="2" Content="{lex:Loc PlaceToRollerA2}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationRollerA2PlaceToggle, Mode=TwoWay}" Command="{Binding StationRollerA2PlaceCommand}"/>
+                    <Button Grid.Row="6" Grid.Column="2" Content="{lex:Loc PlaceToRollerA2}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationRollerA2PlaceCommand}"/>
                     <controls:SignalLight Grid.Row="6" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationRollerA2PlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Roller B1 -->
                     <controls:SignalLight Grid.Row="7" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationRollerB1PlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="7" Grid.Column="2" Content="{lex:Loc PlaceToRollerB1}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationRollerB1PlaceToggle, Mode=TwoWay}" Command="{Binding StationRollerB1PlaceCommand}"/>
+                    <Button Grid.Row="7" Grid.Column="2" Content="{lex:Loc PlaceToRollerB1}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationRollerB1PlaceCommand}"/>
                     <controls:SignalLight Grid.Row="7" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationRollerB1PlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <!-- Roller B2 -->
                     <controls:SignalLight Grid.Row="8" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding StationRollerB2PlaceActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="8" Grid.Column="2" Content="{lex:Loc PlaceToRollerB2}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding StationRollerB2PlaceToggle, Mode=TwoWay}" Command="{Binding StationRollerB2PlaceCommand}"/>
+                    <Button Grid.Row="8" Grid.Column="2" Content="{lex:Loc PlaceToRollerB2}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding StationRollerB2PlaceCommand}"/>
                     <controls:SignalLight Grid.Row="8" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding StationRollerB2PlaceDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>
@@ -214,9 +163,9 @@
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition Width="24"/>
                     </Grid.ColumnDefinitions>
-                    <ToggleButton Grid.Column="0" Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Height="32" IsChecked="{Binding ManualModeStationToggle, Mode=OneWay}" Command="{Binding ManualModeStationCommand}"/>
+                    <Button Grid.Column="0" Content="{lex:Loc Manual}" Style="{StaticResource ButtonPrimary}" Height="32" Command="{Binding ManualModeStationCommand}"/>
                     <controls:SignalLight Grid.Column="2" Width="20" Height="20" LightColor="Blue" IsOn="{Binding ManualModeStationToggle}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Column="4" Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Height="32" IsChecked="{Binding AutoModeStationToggle, Mode=OneWay}" Command="{Binding AutoModeStationCommand}"/>
+                    <Button Grid.Column="4" Content="{lex:Loc Auto}" Style="{StaticResource ButtonPrimary}" Height="32" Command="{Binding AutoModeStationCommand}"/>
                     <controls:SignalLight Grid.Column="6" Width="20" Height="20" LightColor="Green" IsOn="{Binding AutoModeStationToggle}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>

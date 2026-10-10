@@ -13,25 +13,6 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="600" d:DesignWidth="900">
     
-    <UserControl.Resources>
-        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#DC3545"/>
-                    <Setter Property="BorderBrush" Value="#DC3545"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsChecked" Value="True"/>
-                        <Condition Property="IsMouseOver" Value="True"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid Background="#C8E6E6">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -106,25 +87,25 @@
                     <!-- Pick From Polish A (从PolishA取) -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromPolishAActive}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromPolishA}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromPolishAToggle, Mode=TwoWay}" Command="{Binding PickFromPolishACommand}"/>
+                        <Button Content="{lex:Loc PickFromPolishA}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PickFromPolishACommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromPolishADone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- Pick From Polish A 2 (从PolishA取2) -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromPolishA2Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromPolishA2}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromPolishA2Toggle, Mode=TwoWay}" Command="{Binding PickFromPolishA2Command}"/>
+                        <Button Content="{lex:Loc PickFromPolishA2}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PickFromPolishA2Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromPolishA2Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- Place To Transfer Arm (放回中转手臂) -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToTransferArmActive}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PlaceToTransferArm}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PlaceToTransferArmToggle, Mode=TwoWay}" Command="{Binding PlaceToTransferArmCommand}"/>
+                        <Button Content="{lex:Loc PlaceToTransferArm}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PlaceToTransferArmCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToTransferArmDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- Reserve (备用) -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding ReserveActive}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc Reserve}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding ReserveToggle, Mode=TwoWay}" Command="{Binding ReserveCommand}"/>
+                        <Button Content="{lex:Loc Reserve}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding ReserveCommand}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding ReserveDone}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
@@ -132,8 +113,8 @@
                 <!-- Right: Manual/Auto Buttons and Sensor Data -->
                 <StackPanel Grid.Column="2" VerticalAlignment="Top" extensions:StackPanelHelpers.Spacing="10">
                     <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                        <ToggleButton Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding ManualModeToggle, Mode=OneWay}" Command="{Binding ManualModeCommand}"/>
-                        <ToggleButton Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding AutoModeToggle, Mode=OneWay}" Command="{Binding AutoModeCommand}"/>
+                        <Button Content="{lex:Loc Manual}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding ManualModeCommand}"/>
+                        <Button Content="{lex:Loc Auto}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding AutoModeCommand}"/>
                     </StackPanel>
 
                     <!-- Spacing -->

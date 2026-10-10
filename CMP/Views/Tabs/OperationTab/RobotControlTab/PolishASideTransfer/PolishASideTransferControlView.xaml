@@ -340,7 +340,7 @@
         <!-- Bottom Status Bar -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,5,10,10" VerticalAlignment="Top">
             <ToggleButton Content="{lex:Loc EmergencyStop}" Style="{StaticResource ToggleButtonDanger}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding EmergencyStopToggle, Mode=OneWay}" Command="{Binding EmergencyStopCommand}"/>
-            <ToggleButton Content="{lex:Loc Alarm}" Style="{StaticResource ToggleButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding AlarmResetToggle, Mode=OneWay}" Command="{Binding AlarmResetCommand}"/>
+            <Button Content="{lex:Loc Alarm}" Style="{StaticResource ButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" Command="{Binding AlarmResetCommand}"/>
             <ToggleButton Content="{lex:Loc Save}" Style="{StaticResource ToggleButtonSuccess}" MinWidth="70" Height="28" IsChecked="{Binding SaveToggle, Mode=OneWay}" Command="{Binding SaveCommand}"/>
         </StackPanel>
             </Grid>
