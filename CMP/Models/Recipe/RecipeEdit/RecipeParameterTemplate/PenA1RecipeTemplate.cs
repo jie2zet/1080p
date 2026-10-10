@@ -164,7 +164,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Max = 1500.00,
             Default = "1000.00",
             Options = [],
-            CompatibleName = [],
+            CompatibleName = ["WFUpperFaceDIWFlow","WFUpperDIWFlow"],
             Steps = []
           },
              new()
@@ -177,7 +177,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             Max = 1500.00,
             Default = "1000.00",
             Options = [],
-            CompatibleName = [],
+            CompatibleName = ["WFLowerFaceDIWFlow","WFLowerDIWFlow"],
             Steps = []
           },
              new()
