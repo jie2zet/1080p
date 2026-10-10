@@ -702,7 +702,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.Zone3.ActPress = snapshot.Zone3PressureAct;
         PolishUnit.Zone4.ActPress = snapshot.Zone4PressureAct;
         
-        PolishUnit.Zone4.ActVacuum = snapshot.Zone4PressurePVAct;
+        PolishUnit.Zone4.ActVacuum = snapshot.VacuumPressAct;
         
         PolishUnit.Zone5.ActPress = snapshot.Zone5PressureAct;
         PolishUnit.Zone6.ActPress = snapshot.Zone6PressureAct;
