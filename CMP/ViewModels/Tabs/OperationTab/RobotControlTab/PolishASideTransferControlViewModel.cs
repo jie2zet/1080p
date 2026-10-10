@@ -25,6 +25,7 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     private readonly EditableFloatItem _ltpPickPositionItem = new(PolishASideTransferAddress.LtpPickPosition, nameof(LtpPickPosition), nameof(IsLtpPickPositionDirty));
     private readonly EditableFloatItem _robotLowerArmPositionItem = new(PolishASideTransferAddress.RobotLowerArmPosition, nameof(RobotLowerArmPosition), nameof(IsRobotLowerArmPositionDirty));
     private readonly EditableFloatItem _ltpPlacePositionItem = new(PolishASideTransferAddress.LtpPlacePosition, nameof(LtpPlacePosition), nameof(IsLtpPlacePositionDirty));
+    private readonly EditableFloatItem _speedWhenHasWaferItem = new(PolishASideTransferAddress.SpeedWhenHasWafer, nameof(SpeedWhenHasWafer), nameof(IsSpeedWhenHasWaferDirty));
     private readonly EditableFloatItem _jogSpeedItem = new(PolishASideTransferAddress.JogSpeed, nameof(JogSpeed), nameof(IsJogSpeedDirty));
     private readonly EditableFloatItem _autoSpeedItem = new(PolishASideTransferAddress.AutoSpeed, nameof(AutoSpeed), nameof(IsAutoSpeedDirty));
     private readonly List<EditableFloatItem> _editableItems;
@@ -159,6 +160,14 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     {
         get => _autoSpeedItem.Value;
         set => EditableFloatItemHelper.SetValue(_autoSpeedItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsSpeedWhenHasWaferDirty => _speedWhenHasWaferItem.IsDirty;
+
+    public double SpeedWhenHasWafer
+    {
+        get => _speedWhenHasWaferItem.Value;
+        set => EditableFloatItemHelper.SetValue(_speedWhenHasWaferItem, value, RaisePropertyChanged);
     }
 
     private double _currentCoordinate;
@@ -579,6 +588,8 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
     public DelegateCommand JogSpeedCancelCommand => _jogSpeedItem.CancelCommand;
     public DelegateCommand AutoSpeedSetCommand => _autoSpeedItem.SetCommand;
     public DelegateCommand AutoSpeedCancelCommand => _autoSpeedItem.CancelCommand;
+    public DelegateCommand SpeedWhenHasWaferSetCommand => _speedWhenHasWaferItem.SetCommand;
+    public DelegateCommand SpeedWhenHasWaferCancelCommand => _speedWhenHasWaferItem.CancelCommand;
 
     #endregion
 
@@ -592,6 +603,7 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
             _ltpPickPositionItem,
             _robotLowerArmPositionItem,
             _ltpPlacePositionItem,
+            _speedWhenHasWaferItem,
             _jogSpeedItem,
             _autoSpeedItem
         };
@@ -612,10 +624,10 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(ExecuteBack);
 
         // Station Commands
-        StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "PolishASideTransfer");
-        StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "PolishASideTransfer");
-        StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "PolishASideTransfer");
-        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", ExecuteStationAlarmReset, () => "PolishASideTransfer");
+        StationResetCommand = OperationAudit.CreateAsync("StationReset", ExecuteStationReset, () => "PolishASideTransfer");
+        StationStartCommand = OperationAudit.CreateAsync("StationStart", ExecuteStationStart, () => "PolishASideTransfer");
+        StationStopCommand = OperationAudit.CreateAsync("StationStop", ExecuteStationStop, () => "PolishASideTransfer");
+        StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", ExecuteStationAlarmReset, () => "PolishASideTransfer");
 
         // Jog Commands
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
@@ -642,25 +654,25 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
             OriginToggle = false;
         }, () => "PolishASideTransfer");
         EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(PolishASideTransferAddress.EmergencyStop, !EmergencyStopToggle), () => "PolishASideTransfer");
-        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishASideTransferAddress.AlarmReset, !AlarmResetToggle), () => "PolishASideTransfer");
+        AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(PolishASideTransferAddress.AlarmReset), () => "PolishASideTransfer");
         SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishASideTransferAddress.Save, !SaveToggle), () => "PolishASideTransfer");
 
-        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishASideTransferAddress.ManualMode, !ManualModeToggle), () => "PolishASideTransfer");
-        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishASideTransferAddress.AutoMode, !AutoModeToggle), () => "PolishASideTransfer");
+        ManualModeCommand = OperationAudit.CreateAsync("ManualMode", () => _plc.PulseAsync(PolishASideTransferAddress.ManualMode), () => "PolishASideTransfer");
+        AutoModeCommand = OperationAudit.CreateAsync("AutoMode", () => _plc.PulseAsync(PolishASideTransferAddress.AutoMode), () => "PolishASideTransfer");
 
         // New Left Operations Commands
-        PickFromRobot2Command = OperationAudit.Create("PickFromRobot2", () => _plc.Write(PolishASideTransferAddress.PickFromRobot2, !PickFromRobot2Toggle), () => "PolishASideTransfer");
-        PlaceToArm1Command = OperationAudit.Create("PlaceToArm1", () => _plc.Write(PolishASideTransferAddress.PlaceToArm1, !PlaceToArm1Toggle), () => "PolishASideTransfer");
-        PlaceToArm2Command = OperationAudit.Create("PlaceToArm2", () => _plc.Write(PolishASideTransferAddress.PlaceToArm2, !PlaceToArm2Toggle), () => "PolishASideTransfer");
-        PickFromArm3Command = OperationAudit.Create("PickFromArm3", () => _plc.Write(PolishASideTransferAddress.PickFromArm3, !PickFromArm3Toggle), () => "PolishASideTransfer");
-        PlaceToRobotCommand = OperationAudit.Create("PlaceToRobot", () => _plc.Write(PolishASideTransferAddress.PlaceToRobot, !PlaceToRobotToggle), () => "PolishASideTransfer");
-        PickFromArm2Command = OperationAudit.Create("PickFromArm2", () => _plc.Write(PolishASideTransferAddress.PickFromArm2, !PickFromArm2Toggle), () => "PolishASideTransfer");
+        PickFromRobot2Command = OperationAudit.CreateAsync("PickFromRobot2", () => _plc.PulseAsync(PolishASideTransferAddress.PickFromRobot2), () => "PolishASideTransfer");
+        PlaceToArm1Command = OperationAudit.CreateAsync("PlaceToArm1", () => _plc.PulseAsync(PolishASideTransferAddress.PlaceToArm1), () => "PolishASideTransfer");
+        PlaceToArm2Command = OperationAudit.CreateAsync("PlaceToArm2", () => _plc.PulseAsync(PolishASideTransferAddress.PlaceToArm2), () => "PolishASideTransfer");
+        PickFromArm3Command = OperationAudit.CreateAsync("PickFromArm3", () => _plc.PulseAsync(PolishASideTransferAddress.PickFromArm3), () => "PolishASideTransfer");
+        PlaceToRobotCommand = OperationAudit.CreateAsync("PlaceToRobot", () => _plc.PulseAsync(PolishASideTransferAddress.PlaceToRobot), () => "PolishASideTransfer");
+        PickFromArm2Command = OperationAudit.CreateAsync("PickFromArm2", () => _plc.PulseAsync(PolishASideTransferAddress.PickFromArm2), () => "PolishASideTransfer");
 
         // New Right Operations Commands
-        ClampCloseCommand = OperationAudit.Create("ClampClose", () => _plc.Write(PolishASideTransferAddress.ClampCloseWrite, !ClampCloseToggle), () => "PolishASideTransfer");
-        ClampOpenCommand = OperationAudit.Create("ClampOpen", () => _plc.Write(PolishASideTransferAddress.ClampOpenWrite, !ClampOpenToggle), () => "PolishASideTransfer");
-        PolishADoorOpenCommand = OperationAudit.Create("PolishADoorOpen", () => _plc.Write(PolishASideTransferAddress.PolishADoorWrite, !PolishADoorOpenToggle), () => "PolishASideTransfer");
-        PolishADoorCloseCommand = OperationAudit.Create("PolishADoorClose", () => _plc.Write(PolishASideTransferAddress.PolishADoorCloseWrite, !PolishADoorCloseToggle), () => "PolishASideTransfer");
+        ClampCloseCommand = OperationAudit.CreateAsync("ClampClose", () => _plc.PulseAsync(PolishASideTransferAddress.ClampCloseWrite), () => "PolishASideTransfer");
+        ClampOpenCommand = OperationAudit.CreateAsync("ClampOpen", () => _plc.PulseAsync(PolishASideTransferAddress.ClampOpenWrite), () => "PolishASideTransfer");
+        PolishADoorOpenCommand = OperationAudit.CreateAsync("PolishADoorOpen", () => _plc.PulseAsync(PolishASideTransferAddress.PolishADoorWrite), () => "PolishASideTransfer");
+        PolishADoorCloseCommand = OperationAudit.CreateAsync("PolishADoorClose", () => _plc.PulseAsync(PolishASideTransferAddress.PolishADoorCloseWrite), () => "PolishASideTransfer");
     }
 
     #region PLC 读取
@@ -835,13 +847,13 @@ public class PolishASideTransferControlViewModel : TabContentViewModelBase
 
     private void ExecuteBack() => CurrentViewIndex = 0;
 
-    private void ExecuteStationReset() => _plc.Write(PolishASideTransferAddress.StationReset, true);
+    private Task ExecuteStationReset() => _plc.PulseAsync(PolishASideTransferAddress.StationReset);
 
-    private void ExecuteStationStart() => _plc.Write(PolishASideTransferAddress.StationStart, true);
+    private Task ExecuteStationStart() => _plc.PulseAsync(PolishASideTransferAddress.StationStart);
 
-    private void ExecuteStationStop() => _plc.Write(PolishASideTransferAddress.StationStop, true);
+    private Task ExecuteStationStop() => _plc.PulseAsync(PolishASideTransferAddress.StationStop);
 
-    private void ExecuteStationAlarmReset() => _plc.Write(PolishASideTransferAddress.StationAlarmReset, true);
+    private Task ExecuteStationAlarmReset() => _plc.PulseAsync(PolishASideTransferAddress.StationAlarmReset);
 
     private void ExecutePressJogUp() => _plc.Write(PolishASideTransferAddress.JogUp, true);
 

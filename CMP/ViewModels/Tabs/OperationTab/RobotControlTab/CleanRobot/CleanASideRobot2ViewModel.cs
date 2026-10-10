@@ -740,14 +740,14 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
 
             //急停按下、报警复位、保存
             EmergencyCommand = OperationAudit.Create("Emergency", () => _plc.Write(CleanRobotA2Address.EmergencyStop, !EmergencyStopToggle), () => "CleanASideRobot2");
-            AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(CleanRobotA2Address.AlarmReset, true), () => "CleanASideRobot2");
+            AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(CleanRobotA2Address.AlarmReset), () => "CleanASideRobot2");
             SaveCommand = OperationAudit.Create("Save", OnSaveCommand, () => "CleanASideRobot2");
 
             //RobotControl - 程序区
-            StartCommand = OperationAudit.Create("Start", () => _plc.Write(CleanRobotA2Address.Start, true), () => "CleanASideRobot2");
+            StartCommand = OperationAudit.CreateAsync("Start", () => _plc.PulseAsync(CleanRobotA2Address.Start), () => "CleanASideRobot2");
             PauseCommand = OperationAudit.Create("Pause", () => _plc.Write(CleanRobotA2Address.Pause, !IsPaused), () => "CleanASideRobot2");
-            StopCommand = OperationAudit.Create("Stop", () => _plc.Write(CleanRobotA2Address.Stop, !IsStopped), () => "CleanASideRobot2");
-            ResetCommand = OperationAudit.Create("Reset", () => _plc.Write(CleanRobotA2Address.Reset, true), () => "CleanASideRobot2");
+            StopCommand = OperationAudit.CreateAsync("Stop", () => _plc.PulseAsync(CleanRobotA2Address.Stop), () => "CleanASideRobot2");
+            ResetCommand = OperationAudit.CreateAsync("Reset", () => _plc.PulseAsync(CleanRobotA2Address.Reset), () => "CleanASideRobot2");
 
             //RobotControl - 工作区
             RollerA1_1Command = OperationAudit.Create("RollerA1_1", () => _plc.Write(CleanRobotA2Address.RollA1_Const, 0), () => "CleanASideRobot2");
@@ -768,61 +768,41 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
 
             //Station Operation
             BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
-            StationResetCommand = OperationAudit.Create("StationReset", () => { _plc.Write(CleanRobotA2Address.StationReset, true); }, () => "CleanASideRobot2");
-            StationStartCommand = OperationAudit.Create("StationStart", () => { _plc.Write(CleanRobotA2Address.StationStart, true); }, () => "CleanASideRobot2");
-            StationStopCommand = OperationAudit.Create("StationStop", () => { _plc.Write(CleanRobotA2Address.StationStop, true); }, () => "CleanASideRobot2");
-            StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => { _plc.Write(CleanRobotA2Address.StationAlarmReset, true); }, () => "CleanASideRobot2");
+            StationResetCommand = OperationAudit.CreateAsync("StationReset", () => _plc.PulseAsync(CleanRobotA2Address.StationReset), () => "CleanASideRobot2");
+            StationStartCommand = OperationAudit.CreateAsync("StationStart", () => _plc.PulseAsync(CleanRobotA2Address.StationStart), () => "CleanASideRobot2");
+            StationStopCommand = OperationAudit.CreateAsync("StationStop", () => _plc.PulseAsync(CleanRobotA2Address.StationStop), () => "CleanASideRobot2");
+            StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", () => _plc.PulseAsync(CleanRobotA2Address.StationAlarmReset), () => "CleanASideRobot2");
 
-            PickFromRoller3Command = OperationAudit.Create("PickFromRoller3", () =>
-            {
-                _plc.Write(CleanRobotA2Address.PickFromRoller3, true);
-                Thread.Sleep(50);
-                _plc.Write(CleanRobotA2Address.PickFromRoller3, false);
-            }, () => "CleanASideRobot2");
+            PickFromRoller3Command = OperationAudit.CreateAsync("PickFromRoller3", () => _plc.PulseAsync(CleanRobotA2Address.PickFromRoller3), () => "CleanASideRobot2");
             PlaceToPen2Command = OperationAudit.Create("PlaceToPen2", () =>
             {
                 _plc.Write(CleanRobotA2Address.PlaceToPen2, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotA2Address.PlaceToPen2, false);
             }, () => "CleanASideRobot2");
-            PickFromPen1Command = OperationAudit.Create("PickFromPen1", () =>
-            {
-                _plc.Write(CleanRobotA2Address.PickFromPen1, true);
-                Thread.Sleep(50);
-                _plc.Write(CleanRobotA2Address.PickFromPen1, false);
-            }, () => "CleanASideRobot2");
+            PickFromPen1Command = OperationAudit.CreateAsync("PickFromPen1", () => _plc.PulseAsync(CleanRobotA2Address.PickFromPen1), () => "CleanASideRobot2");
             PickFromPen2Command = OperationAudit.Create("PickFromPen2", () =>
             {
                 _plc.Write(CleanRobotA2Address.PickFromPen2, true);
                 Thread.Sleep(50);
                 _plc.Write(CleanRobotA2Address.PickFromPen2, false);
             }, () => "CleanASideRobot2");
-            PlaceToDryCommand = OperationAudit.Create("PlaceToDry", () =>
-            {
-                _plc.Write(CleanRobotA2Address.PlaceToDry, true);
-                Thread.Sleep(50);
-                _plc.Write(CleanRobotA2Address.PlaceToDry, false);
-            }, () => "CleanASideRobot2");            
-            PlaceToPen1Command = OperationAudit.Create("PlaceToPen1", () =>
-            {
-                _plc.Write(CleanRobotA2Address.PlaceToPen1, true);
-                Thread.Sleep(50);
-                _plc.Write(CleanRobotA2Address.PlaceToPen1, false);
-            }, () => "CleanASideRobot2");
+            PlaceToDryCommand = OperationAudit.CreateAsync("PlaceToDry", () => _plc.PulseAsync(CleanRobotA2Address.PlaceToDry), () => "CleanASideRobot2");
+            PlaceToPen1Command = OperationAudit.CreateAsync("PlaceToPen1", () => _plc.PulseAsync(CleanRobotA2Address.PlaceToPen1), () => "CleanASideRobot2");
 
-            StationManualModeCommand = OperationAudit.Create("StationManualMode", () =>
+            StationManualModeCommand = OperationAudit.CreateAsync("StationManualMode", async () =>
             {
                 StationManualModeToggle = true;
                 StationAutoModeToggle = false;
-                _plc.Write(CleanRobotA2Address.StationManualMode, true);
                 _plc.Write(CleanRobotA2Address.StationAutoMode, false);
+                await _plc.PulseAsync(CleanRobotA2Address.StationManualMode);
             }, () => "CleanASideRobot2");
-            StationAutoModeCommand = OperationAudit.Create("StationAutoMode", () =>
+            StationAutoModeCommand = OperationAudit.CreateAsync("StationAutoMode", async () =>
             {
                 StationManualModeToggle = false;
                 StationAutoModeToggle = true;
                 _plc.Write(CleanRobotA2Address.StationManualMode, false);
-                _plc.Write(CleanRobotA2Address.StationAutoMode, true);
+                await _plc.PulseAsync(CleanRobotA2Address.StationAutoMode);
             }, () => "CleanASideRobot2");
         }
 

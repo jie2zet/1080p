@@ -173,6 +173,13 @@
                                 CancelCommand="{Binding PolishDPosition_3xCancelCommand}"/>
                             <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
 Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_3x}" Command="{Binding PolishDMoveX3Command}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1" Value="{Binding SpeedWhenHasWafer3x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsSpeedWhenHasWafer3xDirty, Mode=OneWay}" SetCommand="{Binding SpeedWhenHasWafer3xSetCommand}" CancelCommand="{Binding SpeedWhenHasWafer3xCancelCommand}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1" Value="{Binding AccelerationTime3x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsAccelerationTime3xDirty, Mode=OneWay}" SetCommand="{Binding AccelerationTime3xSetCommand}" CancelCommand="{Binding AccelerationTime3xCancelCommand}"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1" Value="{Binding DeaccelerationTime3x}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsDeaccelerationTime3xDirty, Mode=OneWay}" SetCommand="{Binding DeaccelerationTime3xSetCommand}" CancelCommand="{Binding DeaccelerationTime3xCancelCommand}"/>
                             <!-- Current Coordinate -->
                             <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="{lex:Loc CurrentCoordinate}" VerticalAlignment="Center" Margin="0,0,5,0" />
@@ -336,6 +343,13 @@ IsOn="{Binding LimitAlarm_3x}" HorizontalAlignment="Center" VerticalAlignment="C
                                 CancelCommand="{Binding PolishDPosition_3zCancelCommand}"/>
                             <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
 Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_3z}" Command="{Binding PolishDMoveZ3Command}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1" Value="{Binding SpeedWhenHasWafer3z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsSpeedWhenHasWafer3zDirty, Mode=OneWay}" SetCommand="{Binding SpeedWhenHasWafer3zSetCommand}" CancelCommand="{Binding SpeedWhenHasWafer3zCancelCommand}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1" Value="{Binding AccelerationTime3z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsAccelerationTime3zDirty, Mode=OneWay}" SetCommand="{Binding AccelerationTime3zSetCommand}" CancelCommand="{Binding AccelerationTime3zCancelCommand}"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1" Value="{Binding DeaccelerationTime3z}" DecimalPlaces="3" Increment="0.001" IsDirty="{Binding IsDeaccelerationTime3zDirty, Mode=OneWay}" SetCommand="{Binding DeaccelerationTime3zSetCommand}" CancelCommand="{Binding DeaccelerationTime3zCancelCommand}"/>
                             <!-- Current Coordinate -->
                             <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock Text="{lex:Loc CurrentCoordinate}" VerticalAlignment="Center" Margin="0,0,5,0" />
@@ -449,7 +463,7 @@ Width="55" Height="28" Margin="5,0" IsChecked="{Binding PolishDPosMoveToggle_3z}
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,10,5" VerticalAlignment="Center">
                     <ToggleButton Content="{lex:Loc EmergencyStop}" Style="{StaticResource ToggleButtonDanger}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding EmergencyStopToggle, Mode=OneWay}" Command="{Binding EmergencyCommand}"/>
-                    <ToggleButton Content="{lex:Loc Alarm}" Style="{StaticResource ToggleButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding AlarmResetToggle, Mode=OneWay}" Command="{Binding AlarmResetCommand}"/>
+                    <Button Content="{lex:Loc Alarm}" Style="{StaticResource ButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" Command="{Binding AlarmResetCommand}"/>
                     <ToggleButton Content="{lex:Loc Save}" Style="{StaticResource ToggleButtonSuccess}" MinWidth="70" Height="28" IsChecked="{Binding SaveToggle,Mode=OneWay}" Command="{Binding SaveCommand}"/>
                 </StackPanel>
             </Grid>

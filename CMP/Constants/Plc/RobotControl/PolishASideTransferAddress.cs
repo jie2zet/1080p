@@ -36,6 +36,11 @@ public static class PolishASideTransferAddress
 
     #endregion
 
+    /// <summary>
+    /// 有片速度
+    /// </summary>
+    public const string SpeedWhenHasWafer = "D10302";
+
     #region 轴位置调整 - 移动命令 (M)
 
     /// <summary>

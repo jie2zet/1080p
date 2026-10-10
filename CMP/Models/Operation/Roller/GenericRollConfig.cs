@@ -15,6 +15,8 @@ public class GenericRollConfig : IRollerConfig
 
     private readonly Type _plcHandleType;
 
+    public string PlcHandleTypeName => _plcHandleType.Name;
+
     public GenericRollConfig(string rollType, uint plcHandleName, string plcAddress = "192.168.2.20", ushort plcPort = 8500)
     {
         RollType = rollType;
@@ -193,10 +195,62 @@ public class GenericRollConfig : IRollerConfig
         {
             "ChemicalEnterMainValve_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalEnterMainValve")!, "Open"),
             "ChemicalEnterMainValve_Close" => GetCommandValue(liquidType.GetNestedType("ChemicalEnterMainValve")!, "Close"),
+            "ChemicalEnterFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("ChemicalEnterFlow")!, "Flowrate"),
+            "ChemicalEnterFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("ChemicalEnterFlow")!, "FlowrateReset"),
+            "ChemicalEnterFlow_ClfcCalibration" => GetCommandValue(liquidType.GetNestedType("ChemicalEnterFlow")!, "ClfcCalibration"),
+            "PipeDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("PipeDiwWash")!, "Open"),
+            "PipeDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("PipeDiwWash")!, "Close"),
             "DiwEnterMainValve_Open" => GetCommandValue(liquidType.GetNestedType("DiwEnterMainValve")!, "Open"),
             "DiwEnterMainValve_Close" => GetCommandValue(liquidType.GetNestedType("DiwEnterMainValve")!, "Close"),
+            "DiwEnterFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("DiwEnterFlow")!, "Flowrate"),
+            "DiwEnterFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("DiwEnterFlow")!, "FlowrateReset"),
+            "DiwEnterFlow_ClfcCalibration" => GetCommandValue(liquidType.GetNestedType("DiwEnterFlow")!, "ClfcCalibration"),
+            "WfLowerFaceChemicalWash_Open" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceChemicalWash")!, "Open"),
+            "WfLowerFaceChemicalWash_Close" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceChemicalWash")!, "Close"),
+            "WfUpperFaceChemicalWash_Open" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceChemicalWash")!, "Open"),
+            "WfUpperFaceChemicalWash_Close" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceChemicalWash")!, "Close"),
+            "QuartzChemicalWash_Open" => GetCommandValue(liquidType.GetNestedType("QuartzChemicalWash")!, "Open"),
+            "QuartzChemicalWash_Close" => GetCommandValue(liquidType.GetNestedType("QuartzChemicalWash")!, "Close"),
+            "ChemicalInletMainValve1_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalInletMainValve1")!, "Open"),
+            "ChemicalInletMainValve1_Close" => GetCommandValue(liquidType.GetNestedType("ChemicalInletMainValve1")!, "Close"),
+            "ChemicalInletMainValve2_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalInletMainValve2")!, "Open"),
+            "WfUpperFaceDiwWashInlet_Open" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceDiwWashInlet")!, "Open"),
+            "WfUpperFaceDiwWashInlet_Close" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceDiwWashInlet")!, "Close"),
+            "WfUpperFaceDiwWashOutlet_Open" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceDiwWashOutlet")!, "Open"),
+            "WfUpperFaceDiwWashOutlet_Close" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceDiwWashOutlet")!, "Close"),
+            "WfUpperFaceWashDiwFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceWashDiwFlow")!, "Flowrate"),
+            "WfUpperFaceWashDiwFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceWashDiwFlow")!, "FlowrateReset"),
+            "WfUpperFaceWashDiwFlow_ClfcCalibration" => GetCommandValue(liquidType.GetNestedType("WfUpperFaceWashDiwFlow")!, "ClfcCalibration"),
+            "WfLowerFaceDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceDiwWash")!, "Open"),
+            "WfLowerFaceDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceDiwWash")!, "Close"),
+            "WfLowerFaceDiwWashFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceDiwWashFlow")!, "Flowrate"),
+            "WfLowerFaceDiwWashFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceDiwWashFlow")!, "FlowrateReset"),
+            "WfLowerFaceDiwWashFlow_ClfcCalibration" => GetCommandValue(liquidType.GetNestedType("WfLowerFaceDiwWashFlow")!, "ClfcCalibration"),
+            "UpperRollerDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("UpperRollerDiwWash")!, "Open"),
+            "UpperRollerDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("UpperRollerDiwWash")!, "Close"),
+            "QuartzDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("QuartzDiwWash")!, "Open"),
+            "QuartzDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("QuartzDiwWash")!, "Close"),
+            "UpperRollerInsideDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("UpperRollerInsideDiwWash")!, "Open"),
+            "UpperRollerInsideDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("UpperRollerInsideDiwWash")!, "Close"),
+            "LowerRollerInsideDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("LowerRollerInsideDiwWash")!, "Open"),
+            "LowerRollerInsideDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("LowerRollerInsideDiwWash")!, "Close"),
+            "MageSonicDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("MageSonicDiwWash")!, "Open"),
+            "MageSonicDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("MageSonicDiwWash")!, "Close"),
+            "ChamberDiwWash_Open" => GetCommandValue(liquidType.GetNestedType("ChamberDiwWash")!, "Open"),
+            "ChamberDiwWash_Close" => GetCommandValue(liquidType.GetNestedType("ChamberDiwWash")!, "Close"),
+            "PillarWash_Open" => GetCommandValue(liquidType.GetNestedType("PillarWash")!, "Open"),
+            "PillarWash_Close" => GetCommandValue(liquidType.GetNestedType("PillarWash")!, "Close"),
             "CoolingWaterCirculation_Open" => GetCommandValue(liquidType.GetNestedType("CoolingWaterCirculation")!, "Open"),
             "CoolingWaterCirculation_Close" => GetCommandValue(liquidType.GetNestedType("CoolingWaterCirculation")!, "Close"),
+            "UltrasonicVibrationStartup_Open" => GetCommandValue(liquidType.GetNestedType("UltrasonicVibrationStartup")!, "Open"),
+            "UltrasonicVibrationStartup_Close" => GetCommandValue(liquidType.GetNestedType("UltrasonicVibrationStartup")!, "Close"),
+            "UltrasonicVibrationStartup_Power" => GetCommandValue(liquidType.GetNestedType("UltrasonicVibrationStartup")!, "Power"),
+            "UltrasonicVibration_Open" => GetCommandValue(liquidType.GetNestedType("UltrasonicVibration")!, "Open"),
+            "UltrasonicVibration_Close" => GetCommandValue(liquidType.GetNestedType("UltrasonicVibration")!, "Close"),
+            "RollerManualDiwWash_Open" => GetFlushCommand("Open"),
+            "RollerManualDiwWash_Close" => GetFlushCommand("Close"),
+            "CylinderOneTouchAction_Open" => GetCommandValue(liquidType.GetNestedType("CylinderOneTouchAction")!, "Open"),
+            "CylinderOneTouchAction_Close" => GetCommandValue(liquidType.GetNestedType("CylinderOneTouchAction")!, "Close"),
             _ => throw new ArgumentException($"Unknown liquid command: {liquidCommand}")
         };
     }
@@ -235,12 +289,12 @@ public static class RollerConfigFactory
     public static GenericRollConfig CreateRollA3Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
         => new("Roll A3", Handle.CmdRollA3, plcAddress, plcPort);
 
-    public static GenericRollConfig CreateRollB1Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
+    public static GenericRollConfig CreateRollB1Config(string plcAddress = "192.168.2.23", ushort plcPort = 8500)
         => new("Roll B1", Handle.CmdRollB1, plcAddress, plcPort);
 
-    public static GenericRollConfig CreateRollB2Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
+    public static GenericRollConfig CreateRollB2Config(string plcAddress = "192.168.2.23", ushort plcPort = 8500)
         => new("Roll B2", Handle.CmdRollB2, plcAddress, plcPort);
 
-    public static GenericRollConfig CreateRollB3Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
+    public static GenericRollConfig CreateRollB3Config(string plcAddress = "192.168.2.23", ushort plcPort = 8500)
         => new("Roll B3", Handle.CmdRollB3, plcAddress, plcPort);
 }

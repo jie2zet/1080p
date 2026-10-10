@@ -13,6 +13,7 @@
              xmlns:vm="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
              xmlns:mainVm="clr-namespace:CMP.ViewModels.Tabs.MainTab.Content"
              xmlns:controls="clr-namespace:CMP.Controls"
+             xmlns:mainContent="clr-namespace:CMP.Views.Tabs.MainTab.Content"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DataContext="{d:DesignInstance viewModels:OperationContentViewModel}"
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
@@ -123,6 +124,10 @@
                     </DataTemplate>
                 </TabControl.ContentTemplate>
             </TabControl>
+        </TabItem>
+
+        <TabItem Header="{lex:Loc LiquidControl}" Style="{StaticResource SecondaryTabItemStyle}">
+            <mainContent:LiquidContentView DataContext="{Binding Liquid}" />
         </TabItem>
 
         <!-- 安全联锁 -->

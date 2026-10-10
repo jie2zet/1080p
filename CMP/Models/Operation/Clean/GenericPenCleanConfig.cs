@@ -9,6 +9,7 @@ public class GenericPenCleanConfig : IPenCleanConfig
 {
     public string PenType { get; }
     public uint PlcHandleName { get; }
+    public string PlcHandleTypeName => _plcHandleType.Name;
     public string PlcAddress { get; }
     public ushort PlcPort { get; }
     public PenCleanParams Params { get; }
@@ -203,6 +204,49 @@ public class GenericPenCleanConfig : IPenCleanConfig
             "DIWInletValve_Close" => GetCommandValue(liquidType.GetNestedType("DIWInletValve")!, "Close"),
             "DIWOutletValve_Open" => GetCommandValue(liquidType.GetNestedType("DIWOutletValve")!, "Open"),
             "DIWOutletValve_Close" => GetCommandValue(liquidType.GetNestedType("DIWOutletValve")!, "Close"),
+            "ChemicalFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("ChemicalFlow")!, "Flowrate"),
+            "ChemicalFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("ChemicalFlow")!, "FlowrateReset"),
+            "ChemicalFlow_FCCalibration" => GetCommandValue(liquidType.GetNestedType("ChemicalFlow")!, "FCCalibration"),
+            "DIWFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("DIWFlow")!, "Flowrate"),
+            "DIWFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("DIWFlow")!, "FlowrateReset"),
+            "DIWFlow_FCCalibration" => GetCommandValue(liquidType.GetNestedType("DIWFlow")!, "FCCalibration"),
+            "WFUpperFaceDIWWashValve_Open" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDIWWashValve")!, "Open"),
+            "WFUpperFaceDIWWashValve_Close" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDIWWashValve")!, "Close"),
+            "WFUpperFaceDIWFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDIWFlow")!, "Flowrate"),
+            "WFUpperFaceDIWFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDIWFlow")!, "FlowrateReset"),
+            "WFUpperFaceDIWFlow_FCCalibration" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDIWFlow")!, "FCCalibration"),
+            "WFLowerFaceDIWWashValve_Open" => GetCommandValue(liquidType.GetNestedType("WFLowerFaceDIWWashValve")!, "Open"),
+            "WFLowerFaceDIWWashValve_Close" => GetCommandValue(liquidType.GetNestedType("WFLowerFaceDIWWashValve")!, "Close"),
+            "WFLowerFaceDIWFlow_Flowrate" => GetCommandValue(liquidType.GetNestedType("WFLowerFaceDIWFlow")!, "Flowrate"),
+            "WFLowerFaceDIWFlow_FlowrateReset" => GetCommandValue(liquidType.GetNestedType("WFLowerFaceDIWFlow")!, "FlowrateReset"),
+            "WFLowerFaceDIWFlow_FCCalibration" => GetCommandValue(liquidType.GetNestedType("WFLowerFaceDIWFlow")!, "FCCalibration"),
+            "DIWSupplyValve_Open" => GetCommandValue(liquidType.GetNestedType("DIWSupplyValve")!, "Open"),
+            "DIWSupplyValve_Close" => GetCommandValue(liquidType.GetNestedType("DIWSupplyValve")!, "Close"),
+            "DIWPressure_Pressure" => GetCommandValue(liquidType.GetNestedType("DIWPressure")!, "Pressure"),
+            "DIWPressure_PressureReset" => GetCommandValue(liquidType.GetNestedType("DIWPressure")!, "PressureReset"),
+            "DIWPressure_EVCalibration" => GetCommandValue(liquidType.GetNestedType("DIWPressure")!, "EVCalibration"),
+            "ChemicalInletValve2_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalInletValve2")!, "Open"),
+            "ChemicalInletValve2_Close" => GetCommandValue(liquidType.GetNestedType("ChemicalInletValve2")!, "Close"),
+            "ChemicalInletValve3_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalInletValve3")!, "Open"),
+            "ChemicalInletValve3_Close" => GetCommandValue(liquidType.GetNestedType("ChemicalInletValve3")!, "Close"),
+            "PenDIWWashValve_Open" => GetCommandValue(liquidType.GetNestedType("PenDIWWashValve")!, "Open"),
+            "PenDIWWashValve_Close" => GetCommandValue(liquidType.GetNestedType("PenDIWWashValve")!, "Close"),
+            "QuartzDIWWashValve_Open" => GetCommandValue(liquidType.GetNestedType("QuartzDIWWashValve")!, "Open"),
+            "QuartzDIWWashValve_Close" => GetCommandValue(liquidType.GetNestedType("QuartzDIWWashValve")!, "Close"),
+            "ChemicalPipelineWashValve_Open" => GetCommandValue(liquidType.GetNestedType("ChemicalPipelineWashValve")!, "Open"),
+            "ChemicalPipelineWashValve_Close" => GetCommandValue(liquidType.GetNestedType("ChemicalPipelineWashValve")!, "Close"),
+            "QuartzChemicalWashValve_Open" => GetCommandValue(liquidType.GetNestedType("QuartzChemicalWashValve")!, "Open"),
+            "QuartzChemicalWashValve_Close" => GetCommandValue(liquidType.GetNestedType("QuartzChemicalWashValve")!, "Close"),
+            "WFUpperLowerFacesChemicalWashValve_Open" => GetCommandValue(liquidType.GetNestedType("WFUpperLowerFacesChemicalWashValve")!, "Open"),
+            "WFUpperLowerFacesChemicalWashValve_Close" => GetCommandValue(liquidType.GetNestedType("WFUpperLowerFacesChemicalWashValve")!, "Close"),
+            "WFUpperFacesChemicalWashValve_Open" => GetCommandValue(liquidType.GetNestedType("WFUpperFacesChemicalWashValve")!, "Open"),
+            "WFUpperFacesChemicalWashValve_Close" => GetCommandValue(liquidType.GetNestedType("WFUpperFacesChemicalWashValve")!, "Close"),
+            "DIWChamberValve_Open" => GetCommandValue(liquidType.GetNestedType("DIWChamberValve")!, "Open"),
+            "DIWChamberValve_Close" => GetCommandValue(liquidType.GetNestedType("DIWChamberValve")!, "Close"),
+            "WFUpperFaceDICO2WashValve_Open" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDICO2WashValve")!, "Open"),
+            "WFUpperFaceDICO2WashValve_Close" => GetCommandValue(liquidType.GetNestedType("WFUpperFaceDICO2WashValve")!, "Close"),
+            "Flush_Open" => GetFlushCommand("Open"),
+            "Flush_Close" => GetFlushCommand("Close"),
             _ => throw new ArgumentException($"Unknown liquid command: {liquidCommand}")
         };
     }
@@ -250,13 +294,13 @@ public class GenericPenCleanConfig : IPenCleanConfig
 /// </summary>
 public static class PenCleanConfigFactory
 {
-    public static GenericPenCleanConfig CreatePenA1Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
+    public static GenericPenCleanConfig CreatePenA1Config(string plcAddress = "192.168.2.30", ushort plcPort = 8500)
         => new("Pen A1", Handle.CmdPenA1, plcAddress, plcPort);
 
     public static GenericPenCleanConfig CreatePenA2Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
         => new("Pen A2", Handle.CmdPenA2, plcAddress, plcPort);
 
-    public static GenericPenCleanConfig CreatePenB1Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)
+    public static GenericPenCleanConfig CreatePenB1Config(string plcAddress = "192.168.2.32", ushort plcPort = 8500)
         => new("Pen B1", Handle.CmdPenB1, plcAddress, plcPort);
 
     public static GenericPenCleanConfig CreatePenB2Config(string plcAddress = "192.168.2.20", ushort plcPort = 8500)

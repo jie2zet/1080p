@@ -23,6 +23,8 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _polishDPosition1xItem = new(PolishBSideArm1Address.PolishDPosition_1x, nameof(PolishDPosition_1x), nameof(IsPolishDPosition_1xDirty));
         private readonly EditableFloatItem _jogSpeed1xItem = new(PolishBSideArm1Address.JogSpeed_1x, nameof(JogSpeed_1x), nameof(IsJogSpeed_1xDirty));
         private readonly EditableFloatItem _autoSpeed1xItem = new(PolishBSideArm1Address.AutoSpeed_1x, nameof(AutoSpeed_1x), nameof(IsAutoSpeed_1xDirty));
+        private readonly EditableFloatItem _accelerationTime1xItem = new(PolishBSideArm1Address.AccelerationTime_1x, nameof(AccelerationTime_1x), nameof(IsAccelerationTime_1xDirty));
+        private readonly EditableFloatItem _deaccelerationTime1xItem = new(PolishBSideArm1Address.DeaccelerationTime_1x, nameof(DeaccelerationTime_1x), nameof(IsDeaccelerationTime_1xDirty));
 
         private readonly EditableFloatItem _standbyPosition1zItem = new(PolishBSideArm1Address.StandbyPosition_1z, nameof(StandbyPosition_1z), nameof(IsStandbyPosition_1zDirty));
         private readonly EditableFloatItem _transferArmPosition1zItem = new(PolishBSideArm1Address.TransferArmPosition_1z, nameof(TransferArmPosition_1z), nameof(IsTransferArmPosition_1zDirty));
@@ -30,6 +32,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _polishDPosition1zItem = new(PolishBSideArm1Address.PolishDPosition_1z, nameof(PolishDPosition_1z), nameof(IsPolishDPosition_1zDirty));
         private readonly EditableFloatItem _jogSpeed1zItem = new(PolishBSideArm1Address.JogSpeed_1z, nameof(JogSpeed_1z), nameof(IsJogSpeed_1zDirty));
         private readonly EditableFloatItem _autoSpeed1zItem = new(PolishBSideArm1Address.AutoSpeed_1z, nameof(AutoSpeed_1z), nameof(IsAutoSpeed_1zDirty));
+        private readonly EditableFloatItem _speedWhenHasWaferItem = new(PolishBSideArm1Address.SpeedWhenHasWafer, nameof(SpeedWhenHasWafer), nameof(IsSpeedWhenHasWaferDirty));
+        private readonly EditableFloatItem _accelerationTime1zItem = new(PolishBSideArm1Address.AccelerationTime1z, nameof(AccelerationTime_1z), nameof(IsAccelerationTime_1zDirty));
+        private readonly EditableFloatItem _deaccelerationTime1zItem = new(PolishBSideArm1Address.DeaccelerationTime1z, nameof(DeaccelerationTime_1z), nameof(IsDeaccelerationTime_1zDirty));
 
         private readonly List<EditableFloatItem> _editableItems;
 
@@ -106,6 +111,20 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         {
             get => _autoSpeed1xItem.Value;
             set => EditableFloatItemHelper.SetValue(_autoSpeed1xItem, value, RaisePropertyChanged);
+        }
+
+        public bool IsAccelerationTime_1xDirty => _accelerationTime1xItem.IsDirty;
+        public double AccelerationTime_1x
+        {
+            get => _accelerationTime1xItem.Value;
+            set => EditableFloatItemHelper.SetValue(_accelerationTime1xItem, value, RaisePropertyChanged);
+        }
+
+        public bool IsDeaccelerationTime_1xDirty => _deaccelerationTime1xItem.IsDirty;
+        public double DeaccelerationTime_1x
+        {
+            get => _deaccelerationTime1xItem.Value;
+            set => EditableFloatItemHelper.SetValue(_deaccelerationTime1xItem, value, RaisePropertyChanged);
         }
 
         private double _currentCoordinate_1x;
@@ -250,6 +269,27 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         {
             get => _autoSpeed1zItem.Value;
             set => EditableFloatItemHelper.SetValue(_autoSpeed1zItem, value, RaisePropertyChanged);
+        }
+
+        public bool IsSpeedWhenHasWaferDirty => _speedWhenHasWaferItem.IsDirty;
+        public double SpeedWhenHasWafer
+        {
+            get => _speedWhenHasWaferItem.Value;
+            set => EditableFloatItemHelper.SetValue(_speedWhenHasWaferItem, value, RaisePropertyChanged);
+        }
+
+        public bool IsAccelerationTime_1zDirty => _accelerationTime1zItem.IsDirty;
+        public double AccelerationTime_1z
+        {
+            get => _accelerationTime1zItem.Value;
+            set => EditableFloatItemHelper.SetValue(_accelerationTime1zItem, value, RaisePropertyChanged);
+        }
+
+        public bool IsDeaccelerationTime_1zDirty => _deaccelerationTime1zItem.IsDirty;
+        public double DeaccelerationTime_1z
+        {
+            get => _deaccelerationTime1zItem.Value;
+            set => EditableFloatItemHelper.SetValue(_deaccelerationTime1zItem, value, RaisePropertyChanged);
         }
 
         private double _currentCoordinate_1z;
@@ -472,6 +512,10 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_1xCancelCommand => _jogSpeed1xItem.CancelCommand;
         public DelegateCommand AutoSpeed_1xSetCommand => _autoSpeed1xItem.SetCommand;
         public DelegateCommand AutoSpeed_1xCancelCommand => _autoSpeed1xItem.CancelCommand;
+        public DelegateCommand AccelerationTime_1xSetCommand => _accelerationTime1xItem.SetCommand;
+        public DelegateCommand AccelerationTime_1xCancelCommand => _accelerationTime1xItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime_1xSetCommand => _deaccelerationTime1xItem.SetCommand;
+        public DelegateCommand DeaccelerationTime_1xCancelCommand => _deaccelerationTime1xItem.CancelCommand;
 
         public DelegateCommand StandbyPosition_1zSetCommand => _standbyPosition1zItem.SetCommand;
         public DelegateCommand StandbyPosition_1zCancelCommand => _standbyPosition1zItem.CancelCommand;
@@ -485,6 +529,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_1zCancelCommand => _jogSpeed1zItem.CancelCommand;
         public DelegateCommand AutoSpeed_1zSetCommand => _autoSpeed1zItem.SetCommand;
         public DelegateCommand AutoSpeed_1zCancelCommand => _autoSpeed1zItem.CancelCommand;
+        public DelegateCommand SpeedWhenHasWaferSetCommand => _speedWhenHasWaferItem.SetCommand;
+        public DelegateCommand SpeedWhenHasWaferCancelCommand => _speedWhenHasWaferItem.CancelCommand;
+        public DelegateCommand AccelerationTime_1zSetCommand => _accelerationTime1zItem.SetCommand;
+        public DelegateCommand AccelerationTime_1zCancelCommand => _accelerationTime1zItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime_1zSetCommand => _deaccelerationTime1zItem.SetCommand;
+        public DelegateCommand DeaccelerationTime_1zCancelCommand => _deaccelerationTime1zItem.CancelCommand;
 
         #endregion
 
@@ -498,12 +548,17 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 _polishDPosition1xItem,
                 _jogSpeed1xItem,
                 _autoSpeed1xItem,
+                _accelerationTime1xItem,
+                _deaccelerationTime1xItem,
                 _standbyPosition1zItem,
                 _transferArmPosition1zItem,
                 _polishCPosition1zItem,
                 _polishDPosition1zItem,
                 _jogSpeed1zItem,
-                _autoSpeed1zItem
+                _autoSpeed1zItem,
+                _speedWhenHasWaferItem,
+                _accelerationTime1zItem,
+                _deaccelerationTime1zItem
             };
             EditableFloatItemHelper.InitializeCommands(_editableItems, _plc, RaisePropertyChanged);
 
@@ -564,48 +619,23 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             }, () => "PolishBSideArm1");
 
             EmergencyCommand = OperationAudit.Create("Emergency", () => _plc.Write(PolishBSideArm1Address.EmergencyStop, !EmergencyStopToggle), () => "PolishBSideArm1");
-            AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishBSideArm1Address.AlarmReset, !AlarmResetToggle), () => "PolishBSideArm1");
+            AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(PolishBSideArm1Address.AlarmReset), () => "PolishBSideArm1");
             SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishBSideArm1Address.Save, !SaveToggle), () => "PolishBSideArm1");
 
             BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
-            StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(PolishBSideArm1Address.StationReset, true), () => "PolishBSideArm1");
-            StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(PolishBSideArm1Address.StationStart, true), () => "PolishBSideArm1");
-            StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(PolishBSideArm1Address.StationStop, true), () => "PolishBSideArm1");
-            StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(PolishBSideArm1Address.StationAlarmReset, true), () => "PolishBSideArm1");
+            StationResetCommand = OperationAudit.CreateAsync("StationReset", () => _plc.PulseAsync(PolishBSideArm1Address.StationReset), () => "PolishBSideArm1");
+            StationStartCommand = OperationAudit.CreateAsync("StationStart", () => _plc.PulseAsync(PolishBSideArm1Address.StationStart), () => "PolishBSideArm1");
+            StationStopCommand = OperationAudit.CreateAsync("StationStop", () => _plc.PulseAsync(PolishBSideArm1Address.StationStop), () => "PolishBSideArm1");
+            StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", () => _plc.PulseAsync(PolishBSideArm1Address.StationAlarmReset), () => "PolishBSideArm1");
 
-            PickFromTransferCommand = OperationAudit.Create("PickFromTransfer", () =>
-            {
-                _plc.Write(PolishBSideArm1Address.PickFromTransfer, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm1Address.PickFromTransfer, false);
-            }, () => "PolishBSideArm1");
-            PlaceToPolishCCommand = OperationAudit.Create("PlaceToPolishC", () =>
-            {
-                _plc.Write(PolishBSideArm1Address.PlaceToPolishC, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm1Address.PlaceToPolishC, false);
-            }, () => "PolishBSideArm1");
-            PlaceToPolishDCommand = OperationAudit.Create("PlaceToPolishD", () =>
-            {
-                _plc.Write(PolishBSideArm1Address.PlaceToPolishD, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm1Address.PlaceToPolishD, false);
-            }, () => "PolishBSideArm1");
-            Spare1Command = OperationAudit.Create("Spare1", () =>
-            {
-                _plc.Write(PolishBSideArm1Address.Spare1, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm1Address.Spare1, false);
-            }, () => "PolishBSideArm1");
-            Spare2Command = OperationAudit.Create("Spare2", () =>
-            {
-                _plc.Write(PolishBSideArm1Address.Spare2, true);
-                Thread.Sleep(50);   
-                _plc.Write(PolishBSideArm1Address.Spare2, false);
-            }, () => "PolishBSideArm1");
+            PickFromTransferCommand = OperationAudit.CreateAsync("PickFromTransfer", () => _plc.PulseAsync(PolishBSideArm1Address.PickFromTransfer), () => "PolishBSideArm1");
+            PlaceToPolishCCommand = OperationAudit.CreateAsync("PlaceToPolishC", () => _plc.PulseAsync(PolishBSideArm1Address.PlaceToPolishC), () => "PolishBSideArm1");
+            PlaceToPolishDCommand = OperationAudit.CreateAsync("PlaceToPolishD", () => _plc.PulseAsync(PolishBSideArm1Address.PlaceToPolishD), () => "PolishBSideArm1");
+            Spare1Command = OperationAudit.CreateAsync("Spare1", () => _plc.PulseAsync(PolishBSideArm1Address.Spare1), () => "PolishBSideArm1");
+            Spare2Command = OperationAudit.CreateAsync("Spare2", () => _plc.PulseAsync(PolishBSideArm1Address.Spare2), () => "PolishBSideArm1");
 
-            ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishBSideArm1Address.ManualMode, !ManualModeToggle), () => "PolishBSideArm1");
-            AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishBSideArm1Address.AutoMode, !AutoModeToggle), () => "PolishBSideArm1");
+            ManualModeCommand = OperationAudit.CreateAsync("ManualMode", () => _plc.PulseAsync(PolishBSideArm1Address.ManualMode), () => "PolishBSideArm1");
+            AutoModeCommand = OperationAudit.CreateAsync("AutoMode", () => _plc.PulseAsync(PolishBSideArm1Address.AutoMode), () => "PolishBSideArm1");
         }
 
         private async void ReadTimer_Tick(object? sender, EventArgs e)

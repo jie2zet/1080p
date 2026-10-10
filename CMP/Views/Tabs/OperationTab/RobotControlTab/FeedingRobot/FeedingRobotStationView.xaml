@@ -12,57 +12,6 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="600" d:DesignWidth="900">
     
-    <UserControl.Resources>
-        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#DC3545"/>
-                    <Setter Property="BorderBrush" Value="#DC3545"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsChecked" Value="True"/>
-                        <Condition Property="IsMouseOver" Value="True"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!-- 绿色 ToggleButton 样式 (Start/Success) -->
-        <Style x:Key="ToggleButtonSuccess" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Setter Property="Background" Value="#28A745"/>
-            <Setter Property="BorderBrush" Value="#28A745"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#1E7E34"/>
-                    <Setter Property="BorderBrush" Value="#1C7430"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#218838"/>
-                    <Setter Property="BorderBrush" Value="#1E7E34"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        
-        <!-- 红色 ToggleButton 样式 (Stop/Danger) -->
-        <Style x:Key="ToggleButtonDanger" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Setter Property="Background" Value="#DC3545"/>
-            <Setter Property="BorderBrush" Value="#DC3545"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#BD2130"/>
-                    <Setter Property="BorderBrush" Value="#B21F2D"/>
-                </Trigger>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid Background="#C8E6E6">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -131,23 +80,23 @@
                     </Grid.RowDefinitions>
                     
                     <controls:SignalLight Grid.Row="0" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromBoxActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="0" Grid.Column="2" Content="{lex:Loc PickFromBox}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding PickFromBoxToggle, Mode=TwoWay}" Command="{Binding PickFromBoxToggleCommand}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="{lex:Loc PickFromBox}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding PickFromBoxToggleCommand}"/>
                     <controls:SignalLight Grid.Row="0" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromBoxDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <controls:SignalLight Grid.Row="1" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToModuleActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="1" Grid.Column="2" Content="{lex:Loc PlaceToModule}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding PlaceToModuleToggle, Mode=TwoWay}" Command="{Binding PlaceToModuleToggleCommand}"/>
+                    <Button Grid.Row="1" Grid.Column="2" Content="{lex:Loc PlaceToModule}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding PlaceToModuleToggleCommand}"/>
                     <controls:SignalLight Grid.Row="1" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToModuleDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <controls:SignalLight Grid.Row="2" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromDryAActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="2" Grid.Column="2" Content="{lex:Loc PickFromDryA}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding PickFromDryAToggle, Mode=TwoWay}" Command="{Binding PickFromDryAToggleCommand}"/>
+                    <Button Grid.Row="2" Grid.Column="2" Content="{lex:Loc PickFromDryA}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding PickFromDryAToggleCommand}"/>
                     <controls:SignalLight Grid.Row="2" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromDryADone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <controls:SignalLight Grid.Row="3" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromDryBActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="3" Grid.Column="2" Content="{lex:Loc PickFromDryB}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding PickFromDryBToggle, Mode=TwoWay}" Command="{Binding PickFromDryBToggleCommand}"/>
+                    <Button Grid.Row="3" Grid.Column="2" Content="{lex:Loc PickFromDryB}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding PickFromDryBToggleCommand}"/>
                     <controls:SignalLight Grid.Row="3" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromDryBDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     
                     <controls:SignalLight Grid.Row="4" Grid.Column="0" Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToBoxActive}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Row="4" Grid.Column="2" Content="{lex:Loc PlaceToBox}" Style="{StaticResource MoveToggleButtonStyle}" Height="28" IsChecked="{Binding PlaceToBoxToggle, Mode=TwoWay}" Command="{Binding PlaceToBoxToggleCommand}"/>
+                    <Button Grid.Row="4" Grid.Column="2" Content="{lex:Loc PlaceToBox}" Style="{StaticResource ButtonPrimary}" Height="28" Command="{Binding PlaceToBoxToggleCommand}"/>
                     <controls:SignalLight Grid.Row="4" Grid.Column="4" Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToBoxDone}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
             </StackPanel>
@@ -174,6 +123,30 @@
                     <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Content="{lex:Loc AlarmReset}" Style="{StaticResource ButtonWarning}" 
                             Width="100" Height="40" FontSize="12" Command="{Binding AlarmResetCommand}" VerticalAlignment="Center"/>
                 </Grid>
+
+                <!-- Load Control and Side Status -->
+                <Grid Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="24"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="28"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0" Grid.Column="0" Content="{lex:Loc StopLoad}" Style="{StaticResource ButtonDanger}"
+                                  Height="28" Command="{Binding StopLoadCommand}"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="{lex:Loc ResumeLoad}" Style="{StaticResource ButtonSuccess}"
+                                  Height="28" Command="{Binding ResumeLoadCommand}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc SideAHealthy}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="1" Width="18" Height="18" LightColor="Green"
+                                          IsOn="{Binding SideAHealthy}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{lex:Loc SideBHealthy}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,8,0"/>
+                    <controls:SignalLight Grid.Row="1" Grid.Column="3" Width="18" Height="18" LightColor="Green"
+                                          IsOn="{Binding SideBHealthy}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
                 
                 <!-- Manual/Auto Buttons -->
                 <Grid Margin="0,0,0,20">
@@ -186,9 +159,9 @@
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition Width="24"/>
                     </Grid.ColumnDefinitions>
-                    <ToggleButton Grid.Column="0" Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Height="32" IsChecked="{Binding ManualModeToggle, Mode=OneWay}" Command="{Binding ManualModeToggleCommand}"/>
+                    <Button Grid.Column="0" Content="{lex:Loc Manual}" Style="{StaticResource ButtonPrimary}" Height="32" Command="{Binding StationManualModeCommand}"/>
                     <controls:SignalLight Grid.Column="2" Width="20" Height="20" LightColor="Blue" IsOn="{Binding IsManualMode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Column="4" Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Height="32" IsChecked="{Binding AutoModeToggle, Mode=OneWay}" Command="{Binding AutoModeToggleCommand}"/>
+                    <Button Grid.Column="4" Content="{lex:Loc Auto}" Style="{StaticResource ButtonPrimary}" Height="32" Command="{Binding StationAutoModeCommand}"/>
                     <controls:SignalLight Grid.Column="6" Width="20" Height="20" LightColor="Green" IsOn="{Binding IsAutoMode}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
                 
@@ -239,7 +212,7 @@
                     
                     <!-- Transfer Arrow -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
-                        <ToggleButton Content="{lex:Loc Transfer}" Style="{StaticResource MoveToggleButtonStyle}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="13" IsChecked="{Binding TransferToggle, Mode=OneWay}" Command="{Binding TransferToggleCommand}"/>
+                        <Button Content="{lex:Loc Transfer}" Style="{StaticResource ButtonPrimary}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="13" Command="{Binding TransferToggleCommand}"/>
                         <Path Data="M0,10 L30,10 L30,5 L45,12.5 L30,20 L30,15 L0,15 Z" 
                               Fill="#404040" Stretch="Uniform" Width="40" Height="20"/>
                     </StackPanel>

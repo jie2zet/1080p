@@ -327,6 +327,7 @@
                         <RowDefinition Height="32"/>
                         <RowDefinition Height="32"/>
                         <RowDefinition Height="32"/>
+                        <RowDefinition Height="32"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
@@ -398,8 +399,38 @@
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding ZPolishBPositionArrived}" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
 
-                    <!-- UNIFIED Right-Side Panel: Spanning all rows (0 to 6) -->
-                    <StackPanel Grid.Row="0" Grid.RowSpan="7" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0">
+                    <!-- SpeedWhenHasWafer -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{lex:Loc SpeedWhenHasWafer}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1"
+                                                 Value="{Binding SpeedWhenHasWafer}"
+                                                 DecimalPlaces="3"
+                                                 Increment="0.001"
+                                                 IsDirty="{Binding IsSpeedWhenHasWaferDirty, Mode=OneWay}"
+                                                 SetCommand="{Binding SpeedWhenHasWaferSetCommand}"
+                                                 CancelCommand="{Binding SpeedWhenHasWaferCancelCommand}"/>
+
+                    <!-- AccelerationTime -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc AccelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <controls:EditableNumericWithActions Grid.Row="5" Grid.Column="1"
+                                                 Value="{Binding AccelerationTime}"
+                                                 DecimalPlaces="3"
+                                                 Increment="0.001"
+                                                 IsDirty="{Binding IsAccelerationTimeDirty, Mode=OneWay}"
+                                                 SetCommand="{Binding AccelerationTimeSetCommand}"
+                                                 CancelCommand="{Binding AccelerationTimeCancelCommand}"/>
+
+                    <!-- DecelerationTime -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{lex:Loc DecelerationTime}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <controls:EditableNumericWithActions Grid.Row="6" Grid.Column="1"
+                                                 Value="{Binding DecelerationTime}"
+                                                 DecimalPlaces="3"
+                                                 Increment="0.001"
+                                                 IsDirty="{Binding IsDecelerationTimeDirty, Mode=OneWay}"
+                                                 SetCommand="{Binding DecelerationTimeSetCommand}"
+                                                 CancelCommand="{Binding DecelerationTimeCancelCommand}"/>
+
+                    <!-- UNIFIED Right-Side Panel: Spanning all rows (0 to 7) -->
+                    <StackPanel Grid.Row="0" Grid.RowSpan="8" Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,0,0">
                          <!-- Row 0: JOG Speed -->
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Height="32" Margin="0,0,0,0">
                             <TextBlock Text="{lex:Loc JogSpeed}" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -489,10 +520,10 @@
                     </StackPanel>
 
                     <!-- Alarm Code -->
-                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding ZAlarmCode}" VerticalAlignment="Center" Margin="0,5,0,0"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding ZAlarmCode}" VerticalAlignment="Center" Margin="0,5,0,0"/>
                     
                     <!-- Alarm Status -->
-                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
+                    <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="24"/>
@@ -517,7 +548,7 @@
         <!-- Bottom Status Bar -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,5,10,10" VerticalAlignment="Top">
             <ToggleButton Content="{lex:Loc EmergencyStop}" Style="{StaticResource ToggleButtonDanger}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding EmergencyStopToggle, Mode=OneWay}" Command="{Binding EmergencyStopCommand}"/>
-            <ToggleButton Content="{lex:Loc Alarm}" Style="{StaticResource ToggleButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" IsChecked="{Binding AlarmResetToggle, Mode=OneWay}" Command="{Binding AlarmResetCommand}"/>
+            <Button Content="{lex:Loc Alarm}" Style="{StaticResource ButtonWarning}" MinWidth="70" Height="28" Margin="0,0,10,0" Command="{Binding AlarmResetCommand}"/>
             <ToggleButton Content="{lex:Loc Save}" Style="{StaticResource ToggleButtonSuccess}" MinWidth="70" Height="28" IsChecked="{Binding SaveToggle, Mode=OneWay}" Command="{Binding SaveCommand}"/>
         </StackPanel>
             </Grid>

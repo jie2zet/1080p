@@ -894,6 +894,38 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         set => SetProperty(ref _stationIsStopped, value);
     }
 
+    private bool _stopLoadToggle;
+
+    public bool StopLoadToggle
+    {
+        get => _stopLoadToggle;
+        set => SetProperty(ref _stopLoadToggle, value);
+    }
+
+    private bool _resumeLoadToggle;
+
+    public bool ResumeLoadToggle
+    {
+        get => _resumeLoadToggle;
+        set => SetProperty(ref _resumeLoadToggle, value);
+    }
+
+    private bool _sideAHealthy;
+
+    public bool SideAHealthy
+    {
+        get => _sideAHealthy;
+        set => SetProperty(ref _sideAHealthy, value);
+    }
+
+    private bool _sideBHealthy;
+
+    public bool SideBHealthy
+    {
+        get => _sideBHealthy;
+        set => SetProperty(ref _sideBHealthy, value);
+    }
+
     // Station Operation Toggle 属性
     private bool _stationResetToggle;
 
@@ -1176,6 +1208,10 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
     public DelegateCommand StationResetCommand { get; }
     public DelegateCommand StationStartCommand { get; }
     public DelegateCommand StationStopCommand { get; }
+    public DelegateCommand StationManualModeCommand { get; }
+    public DelegateCommand StationAutoModeCommand { get; }
+    public DelegateCommand StopLoadCommand { get; }
+    public DelegateCommand ResumeLoadCommand { get; }
     public DelegateCommand TransferCommand { get; }
     public DelegateCommand PressJogUpCommand { get; }
     public DelegateCommand ReleaseJogUpCommand { get; }
@@ -1303,9 +1339,9 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
             () => Logger.For("RobotControl")
                 .Debug("FeedingRobotControlViewModel deactivated, stopped PLC read timer."));
 
-        StartCommand = OperationAudit.Create("Start", ExecuteStart, () => "FeedingRobot");
-        StopCommand = OperationAudit.Create("Stop", ExecuteStop, () => "FeedingRobot");
-        ResetCommand = OperationAudit.Create("Reset", ExecuteReset, () => "FeedingRobot");
+        StartCommand = OperationAudit.CreateAsync("Start", ExecuteStart, () => "FeedingRobot");
+        StopCommand = OperationAudit.CreateAsync("Stop", ExecuteStop, () => "FeedingRobot");
+        ResetCommand = OperationAudit.CreateAsync("Reset", ExecuteReset, () => "FeedingRobot");
         ModulePositionCommand = OperationAudit.Create("ModulePosition", ExecuteModulePosition, () => "FeedingRobot");
         DryACommand = OperationAudit.Create("DryA", ExecuteDryA, () => "FeedingRobot");
         DryBCommand = OperationAudit.Create("DryB", ExecuteDryB, () => "FeedingRobot");
@@ -1313,16 +1349,18 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         SaveCommand = OperationAudit.Create("Save", ExecuteSave, () => "FeedingRobot");
         StationOperationCommand = new DelegateCommand(ExecuteStationOperation);
         BackCommand = new DelegateCommand(ExecuteBack);
-        AlarmResetCommand = OperationAudit.Create("AlarmReset", ExecuteAlarmReset, () => "FeedingRobot");
+        AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", ExecuteAlarmReset, () => "FeedingRobot");
         BackToRobotCommand = OperationAudit.Create("BackToRobot", ExecuteBackToRobot, () => "FeedingRobot");
         CacheADoorOpenCommand = OperationAudit.Create("CacheADoorOpen", ExecuteCacheADoorOpen, () => "FeedingRobot");
         CacheADoorCloseCommand = OperationAudit.Create("CacheADoorClose", ExecuteCacheADoorClose, () => "FeedingRobot");
         CacheBDoorOpenCommand = OperationAudit.Create("CacheBDoorOpen", ExecuteCacheBDoorOpen, () => "FeedingRobot");
         CacheBDoorCloseCommand = OperationAudit.Create("CacheBDoorClose", ExecuteCacheBDoorClose, () => "FeedingRobot");
         BackFromCacheBodyCommand = OperationAudit.Create("BackFromCacheBody", ExecuteBackFromCacheBody, () => "FeedingRobot");
-        StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "FeedingRobot");
-        StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "FeedingRobot");
-        StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "FeedingRobot");
+        StationResetCommand = OperationAudit.CreateAsync("StationReset", ExecuteStationReset, () => "FeedingRobot");
+        StationStartCommand = OperationAudit.CreateAsync("StationStart", ExecuteStationStart, () => "FeedingRobot");
+        StationStopCommand = OperationAudit.CreateAsync("StationStop", ExecuteStationStop, () => "FeedingRobot");
+        StopLoadCommand = OperationAudit.CreateAsync("StopLoad", () => _plc.PulseAsync(FeedingRobotAddress.StopLoad), () => "FeedingRobot");
+        ResumeLoadCommand = OperationAudit.CreateAsync("ResumeLoad", () => _plc.PulseAsync(FeedingRobotAddress.ResumeLoad), () => "FeedingRobot");
         TransferCommand = OperationAudit.Create("Transfer", ExecuteTransfer, () => "FeedingRobot");
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
         ReleaseJogUpCommand = new DelegateCommand(ExecuteReleaseJogUp);
@@ -1366,48 +1404,15 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
             OperationAudit.Create("WorkAreaPlace", () => _plc.Write(FeedingRobotAddress.WorkAreaPlace, !WorkAreaPlaceToggle), () => "FeedingRobot");
         WaitConfirmCommand = OperationAudit.Create("WaitConfirm", () => _plc.Write(FeedingRobotAddress.WaitConfirm, !WaitConfirmToggle), () => "FeedingRobot");
 
-        // Station Operation Toggle Commands
-        PickFromBoxToggleCommand =
-            OperationAudit.Create("PickFromBoxToggle", () =>
-            {
-                _plc.Write(FeedingRobotAddress.PickFromBox, true);
-                Thread.Sleep(50);
-                _plc.Write(FeedingRobotAddress.PickFromBox, false);
-            }, () => "FeedingRobot");
-        PlaceToModuleToggleCommand =
-            OperationAudit.Create("PlaceToModuleToggle", () =>
-            {
-                _plc.Write(FeedingRobotAddress.PlaceToModule, true);
-                Thread.Sleep(50);
-                _plc.Write(FeedingRobotAddress.PlaceToModule, false);
-            }, () => "FeedingRobot");
-        PickFromDryAToggleCommand =
-            OperationAudit.Create("PickFromDryAToggle", () =>
-            {
-                _plc.Write(FeedingRobotAddress.PickFromDryA, true);
-                Thread.Sleep(50);
-                _plc.Write(FeedingRobotAddress.PickFromDryA, false);
-            }, () => "FeedingRobot");
-        PickFromDryBToggleCommand =
-            OperationAudit.Create("PickFromDryBToggle", () =>
-            {
-                _plc.Write(FeedingRobotAddress.PickFromDryB, true);
-                Thread.Sleep(50);
-                _plc.Write(FeedingRobotAddress.PickFromDryB, false);
-            }, () => "FeedingRobot");
-        PlaceToBoxToggleCommand =
-            OperationAudit.Create("PlaceToBoxToggle", () =>
-            {
-                _plc.Write(FeedingRobotAddress.PlaceToBox, true);
-                Thread.Sleep(50);                
-                _plc.Write(FeedingRobotAddress.PlaceToBox, false);
-            }, () => "FeedingRobot");
-        TransferToggleCommand = OperationAudit.Create("TransferToggle", () =>
-        {
-            _plc.Write(FeedingRobotAddress.Transfer, true);
-            Thread.Sleep(50);
-            _plc.Write(FeedingRobotAddress.Transfer, false);
-        }, () => "FeedingRobot");
+        // Station Operation Commands
+        StationManualModeCommand = OperationAudit.CreateAsync("ManualModeToggle", () => _plc.PulseAsync(FeedingRobotAddress.ManualMode), () => "FeedingRobot");
+        StationAutoModeCommand = OperationAudit.CreateAsync("AutoModeToggle", () => _plc.PulseAsync(FeedingRobotAddress.AutoMode), () => "FeedingRobot");
+        PickFromBoxToggleCommand = OperationAudit.CreateAsync("PickFromBoxToggle", () => _plc.PulseAsync(FeedingRobotAddress.PickFromBox), () => "FeedingRobot");
+        PlaceToModuleToggleCommand = OperationAudit.CreateAsync("PlaceToModuleToggle", () => _plc.PulseAsync(FeedingRobotAddress.PlaceToModule), () => "FeedingRobot");
+        PickFromDryAToggleCommand = OperationAudit.CreateAsync("PickFromDryAToggle", () => _plc.PulseAsync(FeedingRobotAddress.PickFromDryA), () => "FeedingRobot");
+        PickFromDryBToggleCommand = OperationAudit.CreateAsync("PickFromDryBToggle", () => _plc.PulseAsync(FeedingRobotAddress.PickFromDryB), () => "FeedingRobot");
+        PlaceToBoxToggleCommand = OperationAudit.CreateAsync("PlaceToBoxToggle", () => _plc.PulseAsync(FeedingRobotAddress.PlaceToBox), () => "FeedingRobot");
+        TransferToggleCommand = OperationAudit.CreateAsync("TransferToggle", () => _plc.PulseAsync(FeedingRobotAddress.Transfer), () => "FeedingRobot");
 
         // Robot Control Toggle Commands
         StartToggleCommand = OperationAudit.Create("StartToggle", () => _plc.Write(FeedingRobotAddress.Start, !StartToggle), () => "FeedingRobot");
@@ -1474,6 +1479,10 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
                 new()
                 {
                     new PlcBatchReadItem<bool>(FeedingRobotAddress.GlobalAlarm, assign: v => GlobalAlarm = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.StopLoadStatus, assign: v => StopLoadToggle = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.ResumeLoadStatus, assign: v => ResumeLoadToggle = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.SideAHealthy, assign: v => SideAHealthy = v),
+                    new PlcBatchReadItem<bool>(FeedingRobotAddress.SideBHealthy, assign: v => SideBHealthy = v),
                     new PlcBatchReadItem<bool>(FeedingRobotAddress.EmergencyStop, assign: v => EmergencyStopToggle = v)
                 },
                 new()
@@ -1698,19 +1707,19 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
 
     #region Command 实现
 
-    private void ExecuteStart()
+    private async Task ExecuteStart()
     {
-        _plc.Write(FeedingRobotAddress.Start, true);
+        await _plc.PulseAsync(FeedingRobotAddress.Start);
     }
 
-    private void ExecuteStop()
+    private async Task ExecuteStop()
     {
-        _plc.Write(FeedingRobotAddress.Stop, true);
+        await _plc.PulseAsync(FeedingRobotAddress.Stop);
     }
 
-    private void ExecuteReset()
+    private async Task ExecuteReset()
     {
-        _plc.Write(FeedingRobotAddress.Reset, true);
+        await _plc.PulseAsync(FeedingRobotAddress.Reset);
     }
 
     private void ExecuteModulePosition()
@@ -1755,9 +1764,9 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         CurrentViewIndex = 0;
     }
 
-    private void ExecuteAlarmReset()
+    private async Task ExecuteAlarmReset()
     {
-        _plc.Write(FeedingRobotAddress.ResetAlarm, true);
+        await _plc.PulseAsync(FeedingRobotAddress.ResetAlarm);
         ModuleAlarm = false;
         GlobalAlarm = false;
     }
@@ -1788,19 +1797,19 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
         CurrentViewIndex = 0;
     }
 
-    private void ExecuteStationReset()
+    private async Task ExecuteStationReset()
     {
-        _plc.Write(FeedingRobotAddress.StationReset, true);
+        await _plc.PulseAsync(FeedingRobotAddress.StationReset);
     }
 
-    private void ExecuteStationStart()
+    private async Task ExecuteStationStart()
     {
-        _plc.Write(FeedingRobotAddress.StationStart, true);
+        await _plc.PulseAsync(FeedingRobotAddress.StationStart);
     }
 
-    private void ExecuteStationStop()
+    private async Task ExecuteStationStop()
     {
-        _plc.Write(FeedingRobotAddress.StationStop, true);
+        await _plc.PulseAsync(FeedingRobotAddress.StationStop);
     }
 
     private void ExecuteTransfer()

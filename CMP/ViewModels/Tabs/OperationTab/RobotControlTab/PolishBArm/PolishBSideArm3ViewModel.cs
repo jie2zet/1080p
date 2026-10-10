@@ -23,6 +23,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _transferArmPosition3xItem = new(PolishBSideArm3Address.TransferArmPosition_3x, nameof(TransferArmPosition_3x), nameof(IsTransferArmPosition_3xDirty));
         private readonly EditableFloatItem _jogSpeed3xItem = new(PolishBSideArm3Address.JogSpeed_3x, nameof(JogSpeed_3x), nameof(IsJogSpeed_3xDirty));
         private readonly EditableFloatItem _autoSpeed3xItem = new(PolishBSideArm3Address.AutoSpeed_3x, nameof(AutoSpeed_3x), nameof(IsAutoSpeed_3xDirty));
+        private readonly EditableFloatItem _speedWhenHasWafer3xItem = new(PolishBSideArm3Address.SpeedWhenHasWafer3x, nameof(SpeedWhenHasWafer3x), nameof(IsSpeedWhenHasWafer3xDirty));
+        private readonly EditableFloatItem _accelerationTime3xItem = new(PolishBSideArm3Address.AccelerationTime3x, nameof(AccelerationTime3x), nameof(IsAccelerationTime3xDirty));
+        private readonly EditableFloatItem _deaccelerationTime3xItem = new(PolishBSideArm3Address.DeaccelerationTime3x, nameof(DeaccelerationTime3x), nameof(IsDeaccelerationTime3xDirty));
 
         private readonly EditableFloatItem _standbyPosition3zItem = new(PolishBSideArm3Address.StandbyPosition_3z, nameof(StandbyPosition_3z), nameof(IsStandbyPosition_3zDirty));
         private readonly EditableFloatItem _polishCPosition3zItem = new(PolishBSideArm3Address.PolishCPosition_3z, nameof(PolishCPosition_3z), nameof(IsPolishCPosition_3zDirty));
@@ -30,6 +33,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         private readonly EditableFloatItem _transferArmPosition3zItem = new(PolishBSideArm3Address.TransferArmPosition_3z, nameof(TransferArmPosition_3z), nameof(IsTransferArmPosition_3zDirty));
         private readonly EditableFloatItem _jogSpeed3zItem = new(PolishBSideArm3Address.JogSpeed_3z, nameof(JogSpeed_3z), nameof(IsJogSpeed_3zDirty));
         private readonly EditableFloatItem _autoSpeed3zItem = new(PolishBSideArm3Address.AutoSpeed_3z, nameof(AutoSpeed_3z), nameof(IsAutoSpeed_3zDirty));
+        private readonly EditableFloatItem _speedWhenHasWafer3zItem = new(PolishBSideArm3Address.SpeedWhenHasWafer3z, nameof(SpeedWhenHasWafer3z), nameof(IsSpeedWhenHasWafer3zDirty));
+        private readonly EditableFloatItem _accelerationTime3zItem = new(PolishBSideArm3Address.AccelerationTime3z, nameof(AccelerationTime3z), nameof(IsAccelerationTime3zDirty));
+        private readonly EditableFloatItem _deaccelerationTime3zItem = new(PolishBSideArm3Address.DeaccelerationTime3z, nameof(DeaccelerationTime3z), nameof(IsDeaccelerationTime3zDirty));
 
         private readonly List<EditableFloatItem> _editableItems;
 
@@ -132,6 +138,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             get => _autoSpeed3xItem.Value;
             set => EditableFloatItemHelper.SetValue(_autoSpeed3xItem, value, RaisePropertyChanged);
         }
+        public bool IsSpeedWhenHasWafer3xDirty => _speedWhenHasWafer3xItem.IsDirty;
+        public double SpeedWhenHasWafer3x { get => _speedWhenHasWafer3xItem.Value; set => EditableFloatItemHelper.SetValue(_speedWhenHasWafer3xItem, value, RaisePropertyChanged); }
+        public bool IsAccelerationTime3xDirty => _accelerationTime3xItem.IsDirty;
+        public double AccelerationTime3x { get => _accelerationTime3xItem.Value; set => EditableFloatItemHelper.SetValue(_accelerationTime3xItem, value, RaisePropertyChanged); }
+        public bool IsDeaccelerationTime3xDirty => _deaccelerationTime3xItem.IsDirty;
+        public double DeaccelerationTime3x { get => _deaccelerationTime3xItem.Value; set => EditableFloatItemHelper.SetValue(_deaccelerationTime3xItem, value, RaisePropertyChanged); }
 
         private double _currentCoordinate_3x;
         public double CurrentCoordinate_3x
@@ -303,6 +315,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             get => _autoSpeed3zItem.Value;
             set => EditableFloatItemHelper.SetValue(_autoSpeed3zItem, value, RaisePropertyChanged);
         }
+        public bool IsSpeedWhenHasWafer3zDirty => _speedWhenHasWafer3zItem.IsDirty;
+        public double SpeedWhenHasWafer3z { get => _speedWhenHasWafer3zItem.Value; set => EditableFloatItemHelper.SetValue(_speedWhenHasWafer3zItem, value, RaisePropertyChanged); }
+        public bool IsAccelerationTime3zDirty => _accelerationTime3zItem.IsDirty;
+        public double AccelerationTime3z { get => _accelerationTime3zItem.Value; set => EditableFloatItemHelper.SetValue(_accelerationTime3zItem, value, RaisePropertyChanged); }
+        public bool IsDeaccelerationTime3zDirty => _deaccelerationTime3zItem.IsDirty;
+        public double DeaccelerationTime3z { get => _deaccelerationTime3zItem.Value; set => EditableFloatItemHelper.SetValue(_deaccelerationTime3zItem, value, RaisePropertyChanged); }
 
         private double _currentCoordinate_3z;
         public double CurrentCoordinate_3z
@@ -471,6 +489,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 
         private bool _arm3Fiber3;
         public bool Arm3Fiber3 { get => _arm3Fiber3; set => SetProperty(ref _arm3Fiber3, value); }
+        private bool _powerOffToggle;
+        public bool PowerOffToggle { get => _powerOffToggle; set => SetProperty(ref _powerOffToggle, value); }
+        private int _foupSlot;
+        public int FoupSlot { get => _foupSlot; set => SetProperty(ref _foupSlot, value); }
+        private int _waferIndex;
+        public int WaferIndex { get => _waferIndex; set => SetProperty(ref _waferIndex, value); }
 
         #endregion
 
@@ -519,6 +543,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
 
         public DelegateCommand ManualModeCommand { get; }
         public DelegateCommand AutoModeCommand { get; }
+        public DelegateCommand PowerOffCommand { get; }
 
         public DelegateCommand StandbyPosition_3xSetCommand => _standbyPosition3xItem.SetCommand;
         public DelegateCommand StandbyPosition_3xCancelCommand => _standbyPosition3xItem.CancelCommand;
@@ -532,6 +557,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_3xCancelCommand => _jogSpeed3xItem.CancelCommand;
         public DelegateCommand AutoSpeed_3xSetCommand => _autoSpeed3xItem.SetCommand;
         public DelegateCommand AutoSpeed_3xCancelCommand => _autoSpeed3xItem.CancelCommand;
+        public DelegateCommand SpeedWhenHasWafer3xSetCommand => _speedWhenHasWafer3xItem.SetCommand;
+        public DelegateCommand SpeedWhenHasWafer3xCancelCommand => _speedWhenHasWafer3xItem.CancelCommand;
+        public DelegateCommand AccelerationTime3xSetCommand => _accelerationTime3xItem.SetCommand;
+        public DelegateCommand AccelerationTime3xCancelCommand => _accelerationTime3xItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime3xSetCommand => _deaccelerationTime3xItem.SetCommand;
+        public DelegateCommand DeaccelerationTime3xCancelCommand => _deaccelerationTime3xItem.CancelCommand;
 
         public DelegateCommand StandbyPosition_3zSetCommand => _standbyPosition3zItem.SetCommand;
         public DelegateCommand StandbyPosition_3zCancelCommand => _standbyPosition3zItem.CancelCommand;
@@ -545,6 +576,12 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
         public DelegateCommand JogSpeed_3zCancelCommand => _jogSpeed3zItem.CancelCommand;
         public DelegateCommand AutoSpeed_3zSetCommand => _autoSpeed3zItem.SetCommand;
         public DelegateCommand AutoSpeed_3zCancelCommand => _autoSpeed3zItem.CancelCommand;
+        public DelegateCommand SpeedWhenHasWafer3zSetCommand => _speedWhenHasWafer3zItem.SetCommand;
+        public DelegateCommand SpeedWhenHasWafer3zCancelCommand => _speedWhenHasWafer3zItem.CancelCommand;
+        public DelegateCommand AccelerationTime3zSetCommand => _accelerationTime3zItem.SetCommand;
+        public DelegateCommand AccelerationTime3zCancelCommand => _accelerationTime3zItem.CancelCommand;
+        public DelegateCommand DeaccelerationTime3zSetCommand => _deaccelerationTime3zItem.SetCommand;
+        public DelegateCommand DeaccelerationTime3zCancelCommand => _deaccelerationTime3zItem.CancelCommand;
         #endregion
 
         public PolishBSideArm3ViewModel() : base(10, "Polish B Side Arm3")
@@ -557,12 +594,18 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 _transferArmPosition3xItem,
                 _jogSpeed3xItem,
                 _autoSpeed3xItem,
+                _speedWhenHasWafer3xItem,
+                _accelerationTime3xItem,
+                _deaccelerationTime3xItem,
                 _standbyPosition3zItem,
                 _polishCPosition3zItem,
                 _polishDPosition3zItem,
                 _transferArmPosition3zItem,
                 _jogSpeed3zItem,
-                _autoSpeed3zItem
+                _autoSpeed3zItem,
+                _speedWhenHasWafer3zItem,
+                _accelerationTime3zItem,
+                _deaccelerationTime3zItem
             };
             EditableFloatItemHelper.InitializeCommands(_editableItems, _plc, RaisePropertyChanged);
 
@@ -623,48 +666,24 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             }, () => "PolishBSideArm3");
 
             EmergencyCommand = OperationAudit.Create("Emergency", () => _plc.Write(PolishBSideArm3Address.EmergencyStop, !EmergencyStopToggle), () => "PolishBSideArm3");
-            AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(PolishBSideArm3Address.AlarmReset, !AlarmResetToggle), () => "PolishBSideArm3");
+            AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(PolishBSideArm3Address.AlarmReset), () => "PolishBSideArm3");
             SaveCommand = OperationAudit.Create("Save", () => _plc.Write(PolishBSideArm3Address.Save, !SaveToggle), () => "PolishBSideArm3");
 
             BackCommand = new DelegateCommand(() => CurrentViewIndex = 0);
-            StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(PolishBSideArm3Address.StationReset, true), () => "PolishBSideArm3");
-            StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(PolishBSideArm3Address.StationStart, true), () => "PolishBSideArm3");
-            StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(PolishBSideArm3Address.StationStop, true), () => "PolishBSideArm3");
-            StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(PolishBSideArm3Address.StationAlarmReset, true), () => "PolishBSideArm3");
+            StationResetCommand = OperationAudit.CreateAsync("StationReset", () => _plc.PulseAsync(PolishBSideArm3Address.StationReset), () => "PolishBSideArm3");
+            StationStartCommand = OperationAudit.CreateAsync("StationStart", () => _plc.PulseAsync(PolishBSideArm3Address.StationStart), () => "PolishBSideArm3");
+            StationStopCommand = OperationAudit.CreateAsync("StationStop", () => _plc.PulseAsync(PolishBSideArm3Address.StationStop), () => "PolishBSideArm3");
+            StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", () => _plc.PulseAsync(PolishBSideArm3Address.StationAlarmReset), () => "PolishBSideArm3");
 
-            PickFromPolishCCommand = OperationAudit.Create("PickFromPolishC", () =>
-            {
-                _plc.Write(PolishBSideArm3Address.PickFromPolishC, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm3Address.PickFromPolishC, false);
-            }, () => "PolishBSideArm3");
-            PickFromPolishDCommand = OperationAudit.Create("PickFromPolishD", () =>
-            {
-                _plc.Write(PolishBSideArm3Address.PickFromPolishD, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm3Address.PickFromPolishD, false);
-            }, () => "PolishBSideArm3");
-            PlaceToTransferArmCommand = OperationAudit.Create("PlaceToTransferArm", () =>
-            {
-                _plc.Write(PolishBSideArm3Address.PlaceToTransferArm, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm3Address.PlaceToTransferArm, false);
-            }, () => "PolishBSideArm3");
-            Spare1Command = OperationAudit.Create("Spare1", () =>
-            {
-                _plc.Write(PolishBSideArm3Address.Spare1, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm3Address.Spare1, false);
-            }, () => "PolishBSideArm3");
-            Spare2Command = OperationAudit.Create("Spare2", () =>
-            {
-                _plc.Write(PolishBSideArm3Address.Spare2, true);
-                Thread.Sleep(50);
-                _plc.Write(PolishBSideArm3Address.Spare2, false);
-            }, () => "PolishBSideArm3");
+            PickFromPolishCCommand = OperationAudit.CreateAsync("PickFromPolishC", () => _plc.PulseAsync(PolishBSideArm3Address.PickFromPolishC), () => "PolishBSideArm3");
+            PickFromPolishDCommand = OperationAudit.CreateAsync("PickFromPolishD", () => _plc.PulseAsync(PolishBSideArm3Address.PickFromPolishD), () => "PolishBSideArm3");
+            PlaceToTransferArmCommand = OperationAudit.CreateAsync("PlaceToTransferArm", () => _plc.PulseAsync(PolishBSideArm3Address.PlaceToTransferArm), () => "PolishBSideArm3");
+            Spare1Command = OperationAudit.CreateAsync("Spare1", () => _plc.PulseAsync(PolishBSideArm3Address.Spare1), () => "PolishBSideArm3");
+            Spare2Command = OperationAudit.CreateAsync("Spare2", () => _plc.PulseAsync(PolishBSideArm3Address.Spare2), () => "PolishBSideArm3");
 
-            ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(PolishBSideArm3Address.ManualMode, !ManualModeToggle), () => "PolishBSideArm3");
-            AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(PolishBSideArm3Address.AutoMode, !AutoModeToggle), () => "PolishBSideArm3");
+            ManualModeCommand = OperationAudit.CreateAsync("ManualMode", () => _plc.PulseAsync(PolishBSideArm3Address.ManualMode), () => "PolishBSideArm3");
+            AutoModeCommand = OperationAudit.CreateAsync("AutoMode", () => _plc.PulseAsync(PolishBSideArm3Address.AutoMode), () => "PolishBSideArm3");
+            PowerOffCommand = OperationAudit.CreateAsync("PowerOff", () => _plc.PulseAsync(PolishBSideArm3Address.PowerOff), () => "PolishBSideArm3");
         }
 
         private async void ReadTimer_Tick(object? sender, EventArgs e)
@@ -696,6 +715,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
                 new PlcBatchReadItem<bool>(PolishBSideArm3Address.GlobalAlarm, assign: v => GlobalAlarm = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm3Address.Save, assign: v => SaveToggle = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm3Address.EmergencyStop, assign: v => EmergencyStopToggle = v),
+                new PlcBatchReadItem<bool>(PolishBSideArm3Address.PowerOff, assign: v => PowerOffToggle = v),
 
                 new PlcBatchReadItem<bool>(PolishBSideArm3Address.Origin_3x, assign: v => OriginToggle_3x = v),
                 new PlcBatchReadItem<bool>(PolishBSideArm3Address.StandbyPosMove_3x, assign: v => StandbyPosMoveToggle_3x = v),
@@ -780,8 +800,9 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             var editableBatchTask = _plc.BatchReadAsync(editableBatchItems);
             var x1026Task = _plc.ReadAsync<bool[]>(PolishBSideArm3Address.Arm3Fiber1, 3);
             var b0bTask = _plc.ReadAsync<bool>(PolishBSideArm3Address.AlarmReset);
+            var waferTask = _plc.ReadAsync<short[]>(PolishBSideArm3Address.FoupSlot, 2);
 
-            await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, x1026Task, b0bTask);
+            await Task.WhenAll(mBatchTask, dStatusBatchTask, editableBatchTask, x1026Task, b0bTask, waferTask);
 
             if (!mBatchTask.Result.IsSuccess)
                 Logger.For("RobotControl").Warn($"[PolishBSideArm3] M batch read failed: {mBatchTask.Result.Message}");
@@ -810,6 +831,11 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             if (b0bTask.Result.IsSuccess)
             {
                 AlarmResetToggle = b0bTask.Result.Content;
+            }
+            if (waferTask.Result.IsSuccess && waferTask.Result.Content.Length >= 2)
+            {
+                FoupSlot = waferTask.Result.Content[0];
+                WaferIndex = waferTask.Result.Content[1];
             }
         }
 

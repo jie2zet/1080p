@@ -88,6 +88,46 @@ public static partial class PlcHandle
         public string Unit { get; }
 
         /// <summary>
+        /// 浮点参数的默认值。旧参数继续使用整数属性，新增参数可使用浮点元数据。
+        /// </summary>
+        public double NumericDefaultValue { get; }
+
+        /// <summary>
+        /// 浮点参数的最小值。
+        /// </summary>
+        public double NumericMinValue { get; }
+
+        /// <summary>
+        /// 浮点参数的最大值。
+        /// </summary>
+        public double NumericMaxValue { get; }
+
+        /// <summary>
+        /// 显示的小数位数。
+        /// </summary>
+        public int DecimalPlaces { get; set; }
+
+        /// <summary>
+        /// 图纸标识。
+        /// </summary>
+        public string DrawingTag { get; set; } = string.Empty;
+
+        /// <summary>
+        /// PLC 数据类型，例如 ZR 或 ZF。
+        /// </summary>
+        public string ZrZf { get; set; } = "ZF";
+
+        /// <summary>
+        /// PLC 写入字数。
+        /// </summary>
+        public int WordCount { get; set; } = 2;
+
+        /// <summary>
+        /// 参数显示名称资源键。
+        /// </summary>
+        public string DisplayNameKey { get; set; } = string.Empty;
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="handle">Handle 值</param>
@@ -104,6 +144,27 @@ public static partial class PlcHandle
             DefaultValue = defaultValue;
             MinValue = minValue;
             MaxValue = maxValue;
+            NumericDefaultValue = defaultValue;
+            NumericMinValue = minValue;
+            NumericMaxValue = maxValue;
+            Description = description;
+            Label = label;
+            Unit = unit;
+        }
+
+        /// <summary>
+        /// 浮点参数构造函数，保留整数属性以兼容既有调用方。
+        /// </summary>
+        public ParamAttribute(uint handle, double defaultValue, double minValue, double maxValue,
+            string description = "", string label = "", string unit = "")
+        {
+            Handle = handle;
+            DefaultValue = (int)Math.Round(defaultValue);
+            MinValue = (int)Math.Round(minValue);
+            MaxValue = (int)Math.Round(maxValue);
+            NumericDefaultValue = defaultValue;
+            NumericMinValue = minValue;
+            NumericMaxValue = maxValue;
             Description = description;
             Label = label;
             Unit = unit;
@@ -114,7 +175,7 @@ public static partial class PlcHandle
 /// <summary>
 /// PLC Handle 帮助类
 /// </summary>
-public static class PlcHandleHelper
+public static partial class PlcHandleHelper
 {
     private static Dictionary<int, (string Name, PlcHandleAttribute Attr)>? _handleCache;
     private static Dictionary<uint, PlcHandle.ParamAttribute>? _paramCacheByHandle;

@@ -13,25 +13,6 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
              d:DesignHeight="600" d:DesignWidth="900">
     
-    <UserControl.Resources>
-        <Style x:Key="MoveToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonPrimary}">
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="#DC3545"/>
-                    <Setter Property="BorderBrush" Value="#DC3545"/>
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsChecked" Value="True"/>
-                        <Condition Property="IsMouseOver" Value="True"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" Value="#C82333"/>
-                    <Setter Property="BorderBrush" Value="#BD2130"/>
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid Background="#C8E6E6">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -106,37 +87,37 @@
                     <!-- PickFromRoller1 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromRoller1Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromRoller1}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromRoller1Toggle, Mode=TwoWay}" Command="{Binding PickFromRoller1Command}"/>
+                        <Button Content="{lex:Loc PickFromRoller1}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PickFromRoller1Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromRoller1Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PickFromRoller2 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromRoller2Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromRoller2}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromRoller2Toggle, Mode=TwoWay}" Command="{Binding PickFromRoller2Command}"/>
+                        <Button Content="{lex:Loc PickFromRoller2}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PickFromRoller2Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromRoller2Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PlaceToRoller3 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToRoller3Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PlaceToRoller3}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PlaceToRoller3Toggle, Mode=TwoWay}" Command="{Binding PlaceToRoller3Command}"/>
+                        <Button Content="{lex:Loc PlaceToRoller3}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PlaceToRoller3Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToRoller3Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PickFromRoller3 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PickFromRoller3Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PickFromRoller3}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PickFromRoller3Toggle, Mode=TwoWay}" Command="{Binding PickFromRoller3Command}"/>
+                        <Button Content="{lex:Loc PickFromRoller3}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PickFromRoller3Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PickFromRoller3Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PlaceToPen1 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToPen1Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PlaceToPen1}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PlaceToPen1Toggle, Mode=TwoWay}" Command="{Binding PlaceToPen1Command}"/>
+                        <Button Content="{lex:Loc PlaceToPen1}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PlaceToPen1Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToPen1Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <!-- PlaceToRollerB2 -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                         <controls:SignalLight Width="20" Height="20" LightColor="Blue" IsOn="{Binding PlaceToRollerB2Active}" VerticalAlignment="Center"/>
-                        <ToggleButton Content="{lex:Loc PlaceToRollerB2}" Style="{StaticResource MoveToggleButtonStyle}" Width="130" Height="28" Margin="8,0" IsChecked="{Binding PlaceToRollerB2Toggle, Mode=TwoWay}" Command="{Binding PlaceToRollerB2Command}"/>
+                        <Button Content="{lex:Loc PlaceToRollerB2}" Style="{StaticResource ButtonPrimary}" Width="130" Height="28" Margin="8,0" Command="{Binding PlaceToRollerB2Command}"/>
                         <controls:SignalLight Width="20" Height="20" LightColor="Green" IsOn="{Binding PlaceToRollerB2Done}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
@@ -144,8 +125,8 @@
                 <!-- Right: Manual/Auto Buttons and Sensor Data -->
                 <StackPanel Grid.Column="2" VerticalAlignment="Top" extensions:StackPanelHelpers.Spacing="10">
                     <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                        <ToggleButton Content="{lex:Loc Manual}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding StationManualModeToggle, Mode=OneWay}" Command="{Binding StationManualModeCommand}"/>
-                        <ToggleButton Content="{lex:Loc Auto}" Style="{StaticResource MoveToggleButtonStyle}" Width="70" Height="32" IsChecked="{Binding StationAutoModeToggle, Mode=OneWay}" Command="{Binding StationAutoModeCommand}"/>
+                        <Button Content="{lex:Loc Manual}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding StationManualModeCommand}"/>
+                        <Button Content="{lex:Loc Auto}" Style="{StaticResource ButtonPrimary}" Width="70" Height="32" Command="{Binding StationAutoModeCommand}"/>
                     </StackPanel>
 
                     <!-- Spacing -->
