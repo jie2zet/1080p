@@ -538,10 +538,10 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         BackCommand = new DelegateCommand(ExecuteBack);
 
         // Station Commands
-        StationResetCommand = OperationAudit.Create("StationReset", ExecuteStationReset, () => "TransferModule");
-        StationStartCommand = OperationAudit.Create("StationStart", ExecuteStationStart, () => "TransferModule");
-        StationStopCommand = OperationAudit.Create("StationStop", ExecuteStationStop, () => "TransferModule");
-        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", ExecuteStationAlarmReset, () => "TransferModule");
+        StationResetCommand = OperationAudit.CreateAsync("StationReset", ExecuteStationReset, () => "TransferModule");
+        StationStartCommand = OperationAudit.CreateAsync("StationStart", ExecuteStationStart, () => "TransferModule");
+        StationStopCommand = OperationAudit.CreateAsync("StationStop", ExecuteStationStop, () => "TransferModule");
+        StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", ExecuteStationAlarmReset, () => "TransferModule");
 
         // Jog Commands
         PressJogUpCommand = new DelegateCommand(ExecutePressJogUp);
@@ -565,58 +565,18 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
             OriginToggle = false;
         }, () => "TransferModule");
         EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(TransferModuleAddress.EmergencyStop, !EmergencyStopToggle), () => "TransferModule");
-        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(TransferModuleAddress.AlarmReset, !AlarmResetToggle), () => "TransferModule");
+        AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(TransferModuleAddress.AlarmReset), () => "TransferModule");
         SaveCommand = OperationAudit.Create("Save", () => _plc.Write(TransferModuleAddress.Save, !SaveToggle), () => "TransferModule");
-        LoadOperationCommand = OperationAudit.Create("LoadOperation", () =>
-        {
-            _plc.Write(TransferModuleAddress.LoadOperation, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.LoadOperation, false);
-        }, () => "TransferModule");
-        UnloadOperationCommand = OperationAudit.Create("UnloadOperation", () =>
-        {
-            _plc.Write(TransferModuleAddress.UnloadOperation, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.UnloadOperation, false);
-        }, () => "TransferModule");
-        ManualModeCommand = OperationAudit.Create("ManualMode", () => _plc.Write(TransferModuleAddress.ManualMode, !ManualModeToggle), () => "TransferModule");
-        AutoModeCommand = OperationAudit.Create("AutoMode", () => _plc.Write(TransferModuleAddress.AutoMode, !AutoModeToggle), () => "TransferModule");
-        LoadDoorOpenCommand = OperationAudit.Create("LoadDoorOpen", () =>
-        {
-            _plc.Write(TransferModuleAddress.LoadDoorOpenWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.LoadDoorOpenWrite, false);
-        }, () => "TransferModule");
-        LoadDoorCloseCommand = OperationAudit.Create("LoadDoorClose", () =>
-        {
-            _plc.Write(TransferModuleAddress.LoadDoorCloseWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.LoadDoorCloseWrite, false);
-        }, () => "TransferModule");
-        SideDoorOpenCommand = OperationAudit.Create("SideDoorOpen", () =>
-        {
-            _plc.Write(TransferModuleAddress.SideDoorOpenWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.SideDoorOpenWrite, false);
-        }, () => "TransferModule");
-        SideDoorCloseCommand = OperationAudit.Create("SideDoorClose", () =>
-        {
-            _plc.Write(TransferModuleAddress.SideDoorCloseWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.SideDoorCloseWrite, false);
-        }, () => "TransferModule");
-        UnloadDoorOpenCommand = OperationAudit.Create("UnloadDoorOpen", () =>
-        {
-            _plc.Write(TransferModuleAddress.UnloadDoorOpenWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.UnloadDoorOpenWrite, false);
-        }, () => "TransferModule");
-        UnloadDoorCloseCommand = OperationAudit.Create("UnloadDoorClose", () =>
-        {
-            _plc.Write(TransferModuleAddress.UnloadDoorCloseWrite, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferModuleAddress.UnloadDoorCloseWrite, false);
-        }, () => "TransferModule");
+        LoadOperationCommand = OperationAudit.CreateAsync("LoadOperation", () => _plc.PulseAsync(TransferModuleAddress.LoadOperation), () => "TransferModule");
+        UnloadOperationCommand = OperationAudit.CreateAsync("UnloadOperation", () => _plc.PulseAsync(TransferModuleAddress.UnloadOperation), () => "TransferModule");
+        ManualModeCommand = OperationAudit.CreateAsync("ManualMode", () => _plc.PulseAsync(TransferModuleAddress.ManualMode), () => "TransferModule");
+        AutoModeCommand = OperationAudit.CreateAsync("AutoMode", () => _plc.PulseAsync(TransferModuleAddress.AutoMode), () => "TransferModule");
+        LoadDoorOpenCommand = OperationAudit.CreateAsync("LoadDoorOpen", () => _plc.PulseAsync(TransferModuleAddress.LoadDoorOpenWrite), () => "TransferModule");
+        LoadDoorCloseCommand = OperationAudit.CreateAsync("LoadDoorClose", () => _plc.PulseAsync(TransferModuleAddress.LoadDoorCloseWrite), () => "TransferModule");
+        SideDoorOpenCommand = OperationAudit.CreateAsync("SideDoorOpen", () => _plc.PulseAsync(TransferModuleAddress.SideDoorOpenWrite), () => "TransferModule");
+        SideDoorCloseCommand = OperationAudit.CreateAsync("SideDoorClose", () => _plc.PulseAsync(TransferModuleAddress.SideDoorCloseWrite), () => "TransferModule");
+        UnloadDoorOpenCommand = OperationAudit.CreateAsync("UnloadDoorOpen", () => _plc.PulseAsync(TransferModuleAddress.UnloadDoorOpenWrite), () => "TransferModule");
+        UnloadDoorCloseCommand = OperationAudit.CreateAsync("UnloadDoorClose", () => _plc.PulseAsync(TransferModuleAddress.UnloadDoorCloseWrite), () => "TransferModule");
     }
 
     #region PLC 读取
@@ -780,13 +740,13 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
 
     private void ExecuteBack() => CurrentViewIndex = 0;
 
-    private void ExecuteStationReset() => _plc.Write(TransferModuleAddress.StationReset, true);
+    private Task ExecuteStationReset() => _plc.PulseAsync(TransferModuleAddress.StationReset);
 
-    private void ExecuteStationStart() => _plc.Write(TransferModuleAddress.StationStart, true);
+    private Task ExecuteStationStart() => _plc.PulseAsync(TransferModuleAddress.StationStart);
 
-    private void ExecuteStationStop() => _plc.Write(TransferModuleAddress.StationStop, true);
+    private Task ExecuteStationStop() => _plc.PulseAsync(TransferModuleAddress.StationStop);
 
-    private void ExecuteStationAlarmReset() => _plc.Write(TransferModuleAddress.StationAlarmReset, true);
+    private Task ExecuteStationAlarmReset() => _plc.PulseAsync(TransferModuleAddress.StationAlarmReset);
 
     private void ExecutePressJogUp() => _plc.Write(TransferModuleAddress.JogUp, true);
 

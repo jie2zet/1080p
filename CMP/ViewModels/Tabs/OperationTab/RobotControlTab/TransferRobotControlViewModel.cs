@@ -609,10 +609,10 @@ public class TransferRobotControlViewModel : TabContentViewModelBase
         ReleaseJogDownCommand = new DelegateCommand(() => _plc.Write(TransferRobotAddress.JogDown, false));
 
         // Robot Control
-        RobotStartCommand = OperationAudit.Create("RobotStart", () => _plc.Write(TransferRobotAddress.RobotStart, true), () => "TransferRobot");
+        RobotStartCommand = OperationAudit.CreateAsync("RobotStart", () => _plc.PulseAsync(TransferRobotAddress.RobotStart), () => "TransferRobot");
         RobotPauseCommand = OperationAudit.Create("RobotPause", () => _plc.Write(TransferRobotAddress.RobotPause, !RobotPauseToggle), () => "TransferRobot");
-        RobotStopCommand = OperationAudit.Create("RobotStop", () => _plc.Write(TransferRobotAddress.RobotStop, true), () => "TransferRobot");
-        RobotResetCommand = OperationAudit.Create("RobotReset", () => _plc.Write(TransferRobotAddress.RobotReset, true), () => "TransferRobot");
+        RobotStopCommand = OperationAudit.CreateAsync("RobotStop", () => _plc.PulseAsync(TransferRobotAddress.RobotStop), () => "TransferRobot");
+        RobotResetCommand = OperationAudit.CreateAsync("RobotReset", () => _plc.PulseAsync(TransferRobotAddress.RobotReset), () => "TransferRobot");
 
         WorkAreaPickCommand = OperationAudit.Create("WorkAreaPick", () => _plc.Write(TransferRobotAddress.WorkAreaPick, !WorkAreaPickToggle), () => "TransferRobot");
         WorkAreaPlaceCommand = OperationAudit.Create("WorkAreaPlace", () => _plc.Write(TransferRobotAddress.WorkAreaPlace, !WorkAreaPlaceToggle), () => "TransferRobot");
@@ -627,72 +627,27 @@ public class TransferRobotControlViewModel : TabContentViewModelBase
 
         // Bottom Bar
         EmergencyStopCommand = OperationAudit.Create("EmergencyStop", () => _plc.Write(TransferRobotAddress.EmergencyStop, !EmergencyStopToggle), () => "TransferRobot");
-        AlarmResetCommand = OperationAudit.Create("AlarmReset", () => _plc.Write(TransferRobotAddress.AxisAlarmReset, !AlarmResetToggle), () => "TransferRobot");
+        AlarmResetCommand = OperationAudit.CreateAsync("AlarmReset", () => _plc.PulseAsync(TransferRobotAddress.AxisAlarmReset), () => "TransferRobot");
         SaveCommand = OperationAudit.Create("Save", () => _plc.Write(TransferRobotAddress.Save, !SaveToggle), () => "TransferRobot");
 
         // Station Operation
-        StationResetCommand = OperationAudit.Create("StationReset", () => _plc.Write(TransferRobotAddress.StationReset, true), () => "TransferRobot");
-        StationStartCommand = OperationAudit.Create("StationStart", () => _plc.Write(TransferRobotAddress.StationStart, true), () => "TransferRobot");
-        StationStopCommand = OperationAudit.Create("StationStop", () => _plc.Write(TransferRobotAddress.StationStop, true), () => "TransferRobot");
-        StationAlarmResetCommand = OperationAudit.Create("StationAlarmReset", () => _plc.Write(TransferRobotAddress.GlobalAlarmReset, true), () => "TransferRobot"); // Using GlobalAlarmReset (B0B)
+        StationResetCommand = OperationAudit.CreateAsync("StationReset", () => _plc.PulseAsync(TransferRobotAddress.StationReset), () => "TransferRobot");
+        StationStartCommand = OperationAudit.CreateAsync("StationStart", () => _plc.PulseAsync(TransferRobotAddress.StationStart), () => "TransferRobot");
+        StationStopCommand = OperationAudit.CreateAsync("StationStop", () => _plc.PulseAsync(TransferRobotAddress.StationStop), () => "TransferRobot");
+        StationAlarmResetCommand = OperationAudit.CreateAsync("StationAlarmReset", () => _plc.PulseAsync(TransferRobotAddress.GlobalAlarmReset), () => "TransferRobot"); // Using GlobalAlarmReset (B0B)
 
-        StationModulePickCommand = OperationAudit.Create("StationModulePick", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationModulePick, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationModulePick, false);
-        }, () => "TransferRobot");
-        StationTransferAPlaceCommand = OperationAudit.Create("StationTransferAPlace", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationTransferAPlace, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationTransferAPlace, false);
-        }, () => "TransferRobot");
-        StationTransferAPickCommand = OperationAudit.Create("StationTransferAPick", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationTransferAPick, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationTransferAPick, false);
-        }, () => "TransferRobot");
-        StationTransferBPlaceCommand = OperationAudit.Create("StationTransferBPlace", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationTransferBPlace, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationTransferBPlace, false);
-        }, () => "TransferRobot");
-        StationTransferBPickCommand = OperationAudit.Create("StationTransferBPick", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationTransferBPick, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationTransferBPick, false);
-        }, () => "TransferRobot");
-        StationRollerA1PlaceCommand = OperationAudit.Create("StationRollerA1Place", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationRollerA1Place, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationRollerA1Place, false);
-        }, () => "TransferRobot");
-        StationRollerA2PlaceCommand = OperationAudit.Create("StationRollerA2Place", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationRollerA2Place, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationRollerA2Place, false);
-        }, () => "TransferRobot");
-        StationRollerB1PlaceCommand = OperationAudit.Create("StationRollerB1Place", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationRollerB1Place, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationRollerB1Place, false);
-        }, () => "TransferRobot");
-        StationRollerB2PlaceCommand = OperationAudit.Create("StationRollerB2Place", () =>
-        {
-            _plc.Write(TransferRobotAddress.StationRollerB2Place, true);
-            Thread.Sleep(50);
-            _plc.Write(TransferRobotAddress.StationRollerB2Place, false);
-        }, () => "TransferRobot");
+        StationModulePickCommand = OperationAudit.CreateAsync("StationModulePick", () => _plc.PulseAsync(TransferRobotAddress.StationModulePick), () => "TransferRobot");
+        StationTransferAPlaceCommand = OperationAudit.CreateAsync("StationTransferAPlace", () => _plc.PulseAsync(TransferRobotAddress.StationTransferAPlace), () => "TransferRobot");
+        StationTransferAPickCommand = OperationAudit.CreateAsync("StationTransferAPick", () => _plc.PulseAsync(TransferRobotAddress.StationTransferAPick), () => "TransferRobot");
+        StationTransferBPlaceCommand = OperationAudit.CreateAsync("StationTransferBPlace", () => _plc.PulseAsync(TransferRobotAddress.StationTransferBPlace), () => "TransferRobot");
+        StationTransferBPickCommand = OperationAudit.CreateAsync("StationTransferBPick", () => _plc.PulseAsync(TransferRobotAddress.StationTransferBPick), () => "TransferRobot");
+        StationRollerA1PlaceCommand = OperationAudit.CreateAsync("StationRollerA1Place", () => _plc.PulseAsync(TransferRobotAddress.StationRollerA1Place), () => "TransferRobot");
+        StationRollerA2PlaceCommand = OperationAudit.CreateAsync("StationRollerA2Place", () => _plc.PulseAsync(TransferRobotAddress.StationRollerA2Place), () => "TransferRobot");
+        StationRollerB1PlaceCommand = OperationAudit.CreateAsync("StationRollerB1Place", () => _plc.PulseAsync(TransferRobotAddress.StationRollerB1Place), () => "TransferRobot");
+        StationRollerB2PlaceCommand = OperationAudit.CreateAsync("StationRollerB2Place", () => _plc.PulseAsync(TransferRobotAddress.StationRollerB2Place), () => "TransferRobot");
 
-        ManualModeStationCommand = OperationAudit.Create("ManualModeStation", () => _plc.Write(TransferRobotAddress.ManualMode, !ManualModeStationToggle), () => "TransferRobot");
-        AutoModeStationCommand = OperationAudit.Create("AutoModeStation", () => _plc.Write(TransferRobotAddress.AutoModeStation, !AutoModeStationToggle), () => "TransferRobot");
+        ManualModeStationCommand = OperationAudit.CreateAsync("ManualModeStation", () => _plc.PulseAsync(TransferRobotAddress.ManualMode), () => "TransferRobot");
+        AutoModeStationCommand = OperationAudit.CreateAsync("AutoModeStation", () => _plc.PulseAsync(TransferRobotAddress.AutoModeStation), () => "TransferRobot");
     }
 
     private async void ReadTimer_Tick(object? sender, EventArgs e)
