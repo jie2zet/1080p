@@ -13,27 +13,27 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 1x轴待机位
         /// </summary>
-        public const string StandbyPosition_1x = "D11118";
+        public const string StandbyPosition_1x = "ZR11118";
         /// <summary>
         /// 1x轴中转手臂位
         /// </summary>
-        public const string TransferArmPosition_1x = "D11120";
+        public const string TransferArmPosition_1x = "ZR11120";
         /// <summary>
         /// 1x轴研磨C位
         /// </summary>
-        public const string PolishCPosition_1x = "D11122";
+        public const string PolishCPosition_1x = "ZR11122";
         /// <summary>
         /// 1x轴研磨D位
         /// </summary>
-        public const string PolishDPosition_1x = "D11124";
+        public const string PolishDPosition_1x = "ZR11124";
         /// <summary>
         /// 1x轴加速时间
         /// </summary>
-        public const string AccelerationTime_1x = "D11112";
+        public const string AccelerationTime_1x = "ZR11112";
         /// <summary>
         /// 1x轴减速时间
         /// </summary>
-        public const string DeaccelerationTime_1x = "D11114";
+        public const string DeaccelerationTime_1x = "ZR11114";
         #endregion
 
         #region 移动命令 (M)
@@ -63,7 +63,7 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 1x轴自动速度
         /// </summary>
-        public const string AutoSpeed_1x = "D11100";
+        public const string AutoSpeed_1x = "ZR11100";
         #endregion
 
         #region 当前坐标 (D)
@@ -141,31 +141,31 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 1z轴待机位
         /// </summary>
-        public const string StandbyPosition_1z = "D11218";
+        public const string StandbyPosition_1z = "ZR11218";
         /// <summary>
         /// 1z轴中转手臂位
         /// </summary>
-        public const string TransferArmPosition_1z = "D11220";
+        public const string TransferArmPosition_1z = "ZR11220";
         /// <summary>
         /// 1z轴研磨C位
         /// </summary>
-        public const string PolishCPosition_1z = "D11222";
+        public const string PolishCPosition_1z = "ZR11222";
         /// <summary>
         /// 1z轴研磨D位
         /// </summary>
-        public const string PolishDPosition_1z = "D11224";
+        public const string PolishDPosition_1z = "ZR11224";
         /// <summary>
         /// 有晶圆时速度
         /// </summary>
-        public const string SpeedWhenHasWafer = "D11202";
+        public const string SpeedWhenHasWafer = "ZR11202";
         /// <summary>
         /// 1z轴加速时间
         /// </summary>
-        public const string AccelerationTime1z = "D11212";
+        public const string AccelerationTime = "ZR11212";
         /// <summary>
         /// 1z轴减速时间
         /// </summary>
-        public const string DeaccelerationTime1z = "D11214";
+        public const string DeaccelerationTime = "ZR11214";
         #endregion
 
         #region 移动命令 (M)
@@ -195,7 +195,7 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 1z轴Jog速度
         /// </summary>
-        public const string AutoSpeed_1z = "D11200";
+        public const string AutoSpeed_1z = "ZR11200";
         #endregion
 
         #region 当前坐标 (D)

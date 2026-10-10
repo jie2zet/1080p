@@ -10,27 +10,27 @@ public static class PolishBSideTransferAddress
     /// <summary>
     /// 待机位
     /// </summary>
-    public const string StandbyPosition = "D11018";
+    public const string StandbyPosition = "ZR11018";
 
     /// <summary>
     /// Robot上手臂
     /// </summary>
-    public const string RobotUpperArmPosition = "D11020";
+    public const string RobotUpperArmPosition = "ZR11020";
 
     /// <summary>
     /// LTP取料位
     /// </summary>
-    public const string LtpPickPosition = "D11022";
+    public const string LtpPickPosition = "ZR11022";
 
     /// <summary>
     /// Robot下手臂
     /// </summary>
-    public const string RobotLowerArmPosition = "D11024";
+    public const string RobotLowerArmPosition = "ZR11024";
 
     /// <summary>
     /// LTP放料位
     /// </summary>
-    public const string LtpPlacePosition = "D11026";
+    public const string LtpPlacePosition = "ZR11026";
 
     #endregion
 
@@ -73,7 +73,7 @@ public static class PolishBSideTransferAddress
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string AutoSpeed = "D11000";
+    public const string AutoSpeed = "ZR11000";
 
     #endregion
 

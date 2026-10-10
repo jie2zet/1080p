@@ -115,10 +115,10 @@ public class WaferTest
         Assert.IsTrue(d1040Single.IsSuccess, d1040Single.Message);
 
         const double tolerance = 1e-4;
-        Assert.AreEqual(d1000Single.Content, _d10418, tolerance, "D10418 批量读取与单独读取不一致");
-        Assert.AreEqual(d1020Single.Content, _d10420, tolerance, "D10420 批量读取与单独读取不一致");
-        Assert.AreEqual(d1030Single.Content, _d10422, tolerance, "D10422 批量读取与单独读取不一致");
-        Assert.AreEqual(d1040Single.Content, _d10424, tolerance, "D10424 批量读取与单独读取不一致");
+        Assert.AreEqual(d1000Single.Content, _d10418, tolerance, "ZR10418 批量读取与单独读取不一致");
+        Assert.AreEqual(d1020Single.Content, _d10420, tolerance, "ZR10420 批量读取与单独读取不一致");
+        Assert.AreEqual(d1030Single.Content, _d10422, tolerance, "ZR10422 批量读取与单独读取不一致");
+        Assert.AreEqual(d1040Single.Content, _d10424, tolerance, "ZR10424 批量读取与单独读取不一致");
     }
 
     [TestMethod]

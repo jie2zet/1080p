@@ -210,7 +210,7 @@ namespace CMP.Models.Resource
         }
         public string GetParameterPLCAddress(int baseAddress)
         {
-            return "D" + (baseAddress + axisID * OffsetParameter);
+            return "ZR" + (baseAddress + axisID * OffsetParameter);
         }
 
         public string GetCommandPLCAddress(int baseAddress, PLCDataType type)
@@ -220,7 +220,7 @@ namespace CMP.Models.Resource
                 case PLCDataType.Bite:
                     return "M" + (baseAddress + axisID * OffsetCommandForBite);
                 case PLCDataType.Double:
-                    return "D" + (baseAddress + axisID * OffsetCommandForDouble);
+                    return "ZR" + (baseAddress + axisID * OffsetCommandForDouble);
                 default:
                     return "Undefined Type";
             }

@@ -12,37 +12,37 @@ public static class TransferRobotAddress
     /// <summary>
     /// 模组取料位
     /// </summary>
-    public const string ModulePickPosition = "D10218";
+    public const string ModulePickPosition = "ZR10218";
 
     /// <summary>
     /// A侧中转位
     /// </summary>
-    public const string TransferAPosition = "D10220";
+    public const string TransferAPosition = "ZR10220";
 
     /// <summary>
     /// B侧中转位
     /// </summary>
-    public const string TransferBPosition = "D10222";
+    public const string TransferBPosition = "ZR10222";
 
     /// <summary>
     /// RollerA1位置
     /// </summary>
-    public const string RollerA1Position = "D10224";
+    public const string RollerA1Position = "ZR10224";
 
     /// <summary>
     /// RollerA2位置
     /// </summary>
-    public const string RollerA2Position = "D10226";
+    public const string RollerA2Position = "ZR10226";
 
     /// <summary>
     /// RollerB1位置
     /// </summary>
-    public const string RollerB1Position = "D10228";
+    public const string RollerB1Position = "ZR10228";
 
     /// <summary>
     /// RollerB2位置
     /// </summary>
-    public const string RollerB2Position = "D10230";
+    public const string RollerB2Position = "ZR10230";
 
     #endregion
 
@@ -80,7 +80,7 @@ public static class TransferRobotAddress
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string AutoSpeed = "D10200";
+    public const string AutoSpeed = "ZR10200";
 
     /// <summary>
     /// 当前坐标

@@ -12,42 +12,42 @@ public static class FeedingRobotAddress
     /// <summary>
     /// LoadPort1# 位置
     /// </summary>
-    public const string LoadPort1Position = "D10018";
+    public const string LoadPort1Position = "ZR10018";
 
     /// <summary>
     /// LoadPort2# 位置
     /// </summary>
-    public const string LoadPort2Position = "D10020";
+    public const string LoadPort2Position = "ZR10020";
 
     /// <summary>
     /// LoadPort3# 位置
     /// </summary>
-    public const string LoadPort3Position = "D10022";
+    public const string LoadPort3Position = "ZR10022";
 
     /// <summary>
     /// LoadPort4# 位置
     /// </summary>
-    public const string LoadPort4Position = "D10024";
+    public const string LoadPort4Position = "ZR10024";
 
     /// <summary>
     /// LoadPort5# 位置
     /// </summary>
-    public const string LoadPort5Position = "D10026";
+    public const string LoadPort5Position = "ZR10026";
 
     /// <summary>
     /// 中间模块位置
     /// </summary>
-    public const string MiddleModulePosition = "D10028";
+    public const string MiddleModulePosition = "ZR10028";
 
     /// <summary>
     /// DryA 位置
     /// </summary>
-    public const string DryAPosition = "D10030";
+    public const string DryAPosition = "ZR10030";
 
     /// <summary>
     /// DryB 位置
     /// </summary>
-    public const string DryBPosition = "D10032";
+    public const string DryBPosition = "ZR10032";
 
     #endregion
 
@@ -105,7 +105,7 @@ public static class FeedingRobotAddress
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string AutoSpeed = "D10000";
+    public const string AutoSpeed = "ZR10000";
 
     #endregion
 
