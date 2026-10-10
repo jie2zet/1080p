@@ -10,7 +10,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 待机位
     /// </summary>
-    public const string XStandbyPosition = "D10818";
+    public const string XStandbyPosition = "ZR10818";
 
     /// <summary>
     /// 待机位移动
@@ -20,7 +20,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 研磨A位
     /// </summary>
-    public const string XPolishAPosition = "D10820";
+    public const string XPolishAPosition = "ZR10820";
 
     /// <summary>
     /// 研磨A位移动
@@ -30,7 +30,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 研磨B位
     /// </summary>
-    public const string XPolishBPosition = "D10822";
+    public const string XPolishBPosition = "ZR10822";
 
     /// <summary>
     /// 研磨B位移动
@@ -40,7 +40,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 中转手臂位
     /// </summary>
-    public const string XTransferArmPosition = "D10824";
+    public const string XTransferArmPosition = "ZR10824";
 
     /// <summary>
     /// 中转手臂位移动
@@ -55,7 +55,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string XAutoSpeed = "D10800";
+    public const string XAutoSpeed = "ZR10800";
 
     /// <summary>
     /// 当前坐标
@@ -129,7 +129,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 待机位
     /// </summary>
-    public const string ZStandbyPosition = "D10918";
+    public const string ZStandbyPosition = "ZR10918";
 
     /// <summary>
     /// 待机位移动
@@ -139,7 +139,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 研磨A位
     /// </summary>
-    public const string ZPolishAPosition = "D10920";
+    public const string ZPolishAPosition = "ZR10920";
 
     /// <summary>
     /// 研磨A位移动
@@ -149,7 +149,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 研磨B位
     /// </summary>
-    public const string ZPolishBPosition = "D10922";
+    public const string ZPolishBPosition = "ZR10922";
 
     /// <summary>
     /// 研磨B位移动
@@ -159,7 +159,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 中转手臂位
     /// </summary>
-    public const string ZTransferArmPosition = "D10924";
+    public const string ZTransferArmPosition = "ZR10924";
 
     /// <summary>
     /// 中转手臂位移动
@@ -174,7 +174,7 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string ZAutoSpeed = "D10900";
+    public const string ZAutoSpeed = "ZR10900";
 
     /// <summary>
     /// 当前坐标
@@ -263,15 +263,15 @@ public static class PolishASideArm3Address
     /// <summary>
     /// 有晶圆时的速度
     /// </summary>
-    public const string SpeedWhenHasWafer = "D10902";
+    public const string SpeedWhenHasWafer = "ZR10902";
     /// <summary>
     /// 减速度时间
     /// </summary>
-    public const string DeaccelerationTime = "D10914";
+    public const string DeaccelerationTime = "ZR10914";
     /// <summary>
     /// 加速度时间
     /// </summary>
-    public const string AccelerationTime = "D10912";    
+    public const string AccelerationTime = "ZR10912";    
     #endregion
 
     #region 底部状态栏

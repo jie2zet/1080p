@@ -12,17 +12,17 @@ public static class TransferModuleAddress
     /// <summary>
     /// Load 位置
     /// </summary>
-    public const string LoadPosition = "D10118";
+    public const string LoadPosition = "ZR10118";
 
     /// <summary>
     /// Unload 位置
     /// </summary>
-    public const string UnloadPosition = "D10120";
+    public const string UnloadPosition = "ZR10120";
 
     /// <summary>
     /// 备用位置
     /// </summary>
-    public const string SparePosition = "D10122";
+    public const string SparePosition = "ZR10122";
 
     #endregion
 
@@ -55,7 +55,7 @@ public static class TransferModuleAddress
     /// <summary>
     /// 自动速度
     /// </summary>
-    public const string AutoSpeed = "D10100";
+    public const string AutoSpeed = "ZR10100";
 
     #endregion
 

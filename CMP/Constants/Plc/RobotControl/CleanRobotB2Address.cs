@@ -13,19 +13,19 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 清洗B侧机器人2 rollerA1/A2
         /// </summary>
-        public const string RollerB3 = "D11918";
+        public const string RollerB3 = "ZR11918";
         /// <summary>
         /// 清洗B侧机器人2 RollerA3
         /// </summary>
-        public const string PenB2 = "D11920";
+        public const string PenB2 = "ZR11920";
         /// <summary>
         /// 清洗B侧机器人2 PenA1
         /// </summary>
-        public const string PenB1 = "D11922";
+        public const string PenB1 = "ZR11922";
         /// <summary>
         /// 清洗B侧机器人2 DryA
         /// </summary>
-        public const string Dry = "D11924";
+        public const string Dry = "ZR11924";
         #endregion
 
         #region 移动命令 (M)
@@ -55,7 +55,7 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 清洗B侧机器人2 自动速度
         /// </summary>
-        public const string AutoSpeed = "D11900";
+        public const string AutoSpeed = "ZR11900";
         #endregion
 
         #region 当前坐标 (D)
