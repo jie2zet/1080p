@@ -571,7 +571,7 @@ namespace CMP.Models.Resource
             try
             {
                 // D5600-D5687 共87个D寄存器，每个寄存器包含16个字（words）
-                for (int i = 0; i < 87; i++) // 87个D寄存器
+                for (int i = 0; i < 87; i++) // 87个D寄存器 
                 {
                     string address = $"D{5600 + i}";
                     // 读取1个字（words），每个word为2个字节，总共32字节
