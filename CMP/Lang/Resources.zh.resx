@@ -2484,4 +2484,13 @@
   <data name="ActionMfcCalibration" xml:space="preserve">
     <value>MFC 校准</value>
   </data>
+  <data name="PolishSlurryAndPlatenWash" xml:space="preserve">
+    <value>全部研磨液与大盘清洗</value>
+  </data>
+  <data name="PolishSlurrySetFlowrate" xml:space="preserve">
+    <value>设定流量</value>
+  </data>
+  <data name="PolishSlurryActualFlowrate" xml:space="preserve">
+    <value>实际流量</value>
+  </data>
 </root>

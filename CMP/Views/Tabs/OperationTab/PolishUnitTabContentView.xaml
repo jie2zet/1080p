@@ -8,6 +8,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:viewModel="clr-namespace:CMP.ViewModels.Tabs.OperationTab"
+             xmlns:polishUnit="clr-namespace:CMP.Views.Tabs.OperationTab.PolishUnitTab"
              d:DataContext="{d:DesignInstance viewModel:PolishUnitTabContentViewModel}"
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources">
@@ -296,65 +297,7 @@
                                 </StackPanel>
                             </GroupBox.Header>
                             <Border Padding="10">
-                                <StackPanel extensions:StackPanelHelpers.Spacing="10">
-                                    <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                        <TextBlock Text="{lex:Loc Slurry1}" Width="60" VerticalAlignment="Center" />
-                                        <RadioButton GroupName="Slurry1Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[0].Diw}">
-                                            DIW
-                                        </RadioButton>
-                                        <RadioButton GroupName="Slurry1Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[0].Slurry}">
-                                            Slurry
-                                        </RadioButton>
-                                        <TextBox Width="100" Text="{Binding PolishUnit.Slurry.Slurry1Set}" />
-                                        <TextBlock Text="{Binding PolishUnit.Slurry.Slurry1Act}" Width="60"
-                                                   VerticalAlignment="Center" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                        <TextBlock Text="{lex:Loc Slurry2}" Width="60" VerticalAlignment="Center" />
-                                        <RadioButton GroupName="Slurry2Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[1].Diw}">
-                                            DIW
-                                        </RadioButton>
-                                        <RadioButton GroupName="Slurry2Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[1].Slurry}">
-                                            Slurry
-                                        </RadioButton>
-                                        <TextBox Width="100" Text="{Binding PolishUnit.Slurry.Slurry2Set}" />
-                                        <TextBlock Text="{Binding PolishUnit.Slurry.Slurry2Act}" Width="60"
-                                                   VerticalAlignment="Center" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                        <TextBlock Text="{lex:Loc Slurry3}" Width="60" VerticalAlignment="Center" />
-                                        <RadioButton GroupName="Slurry3Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[2].Diw}">
-                                            DIW
-                                        </RadioButton>
-                                        <RadioButton GroupName="Slurry3Type"
-                                                     IsChecked="{Binding SlurryDiwOptions[2].Slurry}">
-                                            Slurry
-                                        </RadioButton>
-                                        <TextBox Width="100" Text="{Binding PolishUnit.Slurry.Slurry3Set}" />
-                                        <TextBlock Text="{Binding PolishUnit.Slurry.Slurry3Act}" Width="60"
-                                                   VerticalAlignment="Center" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10"
-                                                Visibility="Hidden">
-                                        <TextBlock Text="{lex:Loc Slurry4}" Width="60" VerticalAlignment="Center" />
-                                        <TextBox Width="140" Text="{Binding PolishUnit.Slurry.Slurry4Set}" />
-                                    </StackPanel>
-                                    <StackPanel Margin="0 2 0 0" Orientation="Horizontal"
-                                                extensions:StackPanelHelpers.Spacing="70"
-                                                HorizontalAlignment="Center">
-                                        <Button Content="{lex:Loc TurnOn}" Style="{StaticResource ButtonPrimary}"
-                                                Command="{Binding SlurrySwitchCommand}"
-                                                CommandParameter="On" />
-                                        <Button Content="{lex:Loc TurnOff}" Style="{StaticResource ButtonDanger}"
-                                                Command="{Binding SlurrySwitchCommand}"
-                                                CommandParameter="Off" />
-                                    </StackPanel>
-                                </StackPanel>
+                                <polishUnit:PolishSlurryContentView DataContext="{Binding SlurryControl}" />
                             </Border>
                         </GroupBox>
                         <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"

@@ -1018,10 +1018,123 @@ public static partial class PlcHandle
             public static class ConditionHead
             {
                 [PlcHandle(Handle.CmdPolish, "气缸升")]
-                public const int Up = 1140;
+                public const int Up = 1670;
 
                 [PlcHandle(Handle.CmdPolish, "气缸降")]
-                public const int Down = 1141;
+                public const int Down = 1671;
+            }
+
+            public static class SlurryAndPlatenWash
+            {
+                [PlcHandle(Handle.CmdPolish, "所有Slurry和清洗大盘打开")]
+                public const int Open = 1692;
+
+                [PlcHandle(Handle.CmdPolish, "所有Slurry和清洗大盘关闭")]
+                public const int Close = 1693;
+            }
+
+            public static class Slurry1
+            {
+                [PlcHandle(Handle.CmdPolish, "Slurry1打开")]
+                public const int Open = 1722;
+
+                [PlcHandle(Handle.CmdPolish, "Slurry1关闭")]
+                public const int Close = 1723;
+
+                public static class Slurry
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry1药液打开")]
+                    public const int Open = 1710;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry1药液关闭")]
+                    public const int Close = 1711;
+                }
+
+                public static class Diw
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry1纯水打开")]
+                    public const int Open = 1716;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry1纯水关闭")]
+                    public const int Close = 1717;
+                }
+            }
+
+            public static class Slurry2
+            {
+                [PlcHandle(Handle.CmdPolish, "Slurry2打开")]
+                public const int Open = 1724;
+
+                [PlcHandle(Handle.CmdPolish, "Slurry2关闭")]
+                public const int Close = 1725;
+
+                public static class Slurry
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry2药液打开")]
+                    public const int Open = 1712;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry2药液关闭")]
+                    public const int Close = 1713;
+                }
+
+                public static class Diw
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry2纯水打开")]
+                    public const int Open = 1718;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry2纯水关闭")]
+                    public const int Close = 1719;
+                }
+            }
+
+            public static class Slurry3
+            {
+                [PlcHandle(Handle.CmdPolish, "Slurry3打开")]
+                public const int Open = 1726;
+
+                [PlcHandle(Handle.CmdPolish, "Slurry3关闭")]
+                public const int Close = 1727;
+
+                public static class Slurry
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry3药液打开")]
+                    public const int Open = 1714;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry3药液关闭")]
+                    public const int Close = 1715;
+                }
+
+                public static class Diw
+                {
+                    [PlcHandle(Handle.CmdPolish, "Slurry3纯水打开")]
+                    public const int Open = 1720;
+
+                    [PlcHandle(Handle.CmdPolish, "Slurry3纯水关闭")]
+                    public const int Close = 1721;
+                }
+            }
+
+            /// <summary>Operation Polish 页 Slurry 区域的组合开关，不属于 Liquid 页命令集合。</summary>
+            public sealed record SlurrySwitchDefinition(string DisplayNameKey, string CommandPath, uint? ParameterHandle = null)
+            {
+                public string OpenPath => $"{CommandPath}.Open";
+                public string ClosePath => $"{CommandPath}.Close";
+            }
+
+            public static IEnumerable<SlurrySwitchDefinition> GetSlurryControls()
+            {
+                const string root = "CmdPolish.Cylinder";
+                yield return new SlurrySwitchDefinition("PolishSlurryAndPlatenWash", $"{root}.SlurryAndPlatenWash");
+
+                for (var line = 1; line <= 3; line++)
+                {
+                    var path = $"{root}.Slurry{line}";
+                    var parameter = PlcHandleHelper.GetParamByPath($"CmdPolish.Liquid.Slurry{line}.Param.Flowrate")
+                        ?? throw new InvalidOperationException($"Missing Slurry{line} flowrate metadata.");
+                    yield return new SlurrySwitchDefinition($"PolishSlurry{line}Slurry", $"{path}.Slurry", parameter.Handle);
+                    yield return new SlurrySwitchDefinition($"PolishSlurry{line}Diw", $"{path}.Diw", parameter.Handle);
+                    yield return new SlurrySwitchDefinition($"Slurry{line}", path, parameter.Handle);
+                }
             }
 
             public static class ConditionHeadPressure
