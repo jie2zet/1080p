@@ -161,11 +161,11 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 1z轴加速时间
         /// </summary>
-        public const string AccelerationTime = "ZR11212";
+        public const string AccelerationTime1z = "ZR11212";
         /// <summary>
         /// 1z轴减速时间
         /// </summary>
-        public const string DeaccelerationTime = "ZR11214";
+        public const string DeaccelerationTime1z = "ZR11214";
         #endregion
 
         #region 移动命令 (M)
