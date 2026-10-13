@@ -170,15 +170,15 @@ namespace CMP.Constants.Plc.RobotControl
         /// <summary>
         /// 2z轴有晶圆时速度
         /// </summary>
-        public const string SpeedWhenHasWafer = "ZR11402";
+        public const string SpeedWhenHasWafer2z = "ZR11402";
         /// <summary>
         /// 2z轴加速时间
         /// </summary>
-        public const string AccelerationTime = "ZR11412";
+        public const string AccelerationTime2z = "ZR11412";
         /// <summary>
         /// 2z轴减速时间
         /// </summary>
-        public const string DeaccelerationTime = "ZR11414";
+        public const string DeaccelerationTime2z = "ZR11414";
         #endregion
 
         #region 移动命令 (M)
