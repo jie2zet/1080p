@@ -243,4 +243,66 @@ public class RecipeOperabilityTests
         Assert.AreEqual(content.Data!.Count, roundTrip!.Data!.Count);
         Assert.IsTrue(roundTrip.Data[0].Steps[0].IsOperable);   // 反序列化后派生态回到默认 true
     }
+
+    // ---------- Task 3: 模板注册表 ----------
+
+    [TestMethod]
+    public void ResolveReturnsDryTemplateForDryFolder()
+    {
+        var template = RecipeTemplateRegistry.Resolve(DryFolder);
+        Assert.IsNotNull(template);
+        Assert.IsTrue(template!.Count > 0);
+        Assert.IsNull(RecipeTemplateRegistry.Resolve("No Such Folder"));
+        Assert.IsNull(RecipeTemplateRegistry.Resolve(null));
+    }
+
+    [TestMethod]
+    public void DecorateWithUnknownFolderIsNoOp()
+    {
+        var content = new Recipe.Content { Data = [] };
+        content.Data!.Add(Row("Process Time", "10"));
+
+        var decorated = RecipeTemplateRegistry.Decorate(content, "No Such Folder");
+
+        Assert.IsFalse(decorated);
+        Assert.IsNull(content.Data[0].OperableRule);
+    }
+
+    [TestMethod]
+    public void LegacyParameterNamesStillReceiveRulesAfterDecorate()
+    {
+        var content = new Recipe.Content { Data = [] };
+        // 现场 111.json 形态：只有 legacy 名
+        content.Data!.Add(Row("Process Type", "2: Sweep"));
+        content.Data.Add(Row("Chuck Rotate Velocity", "300"));      // -> Wafer Rotation Speed
+        content.Data.Add(Row("WF Upper Face N2 Flow", "4"));        // -> Dilution N2 Gas Flow
+        content.Data.Add(Row("Pen Arm  Cycle", "3"));               // 未知参数
+
+        RecipeTemplateRegistry.Decorate(content, DryFolder);
+        RecipeOperabilityResolver.Recalculate(content);
+
+        var legacy = Find(content, "Chuck Rotate Velocity");
+        Assert.IsNotNull(legacy.OperableRule);
+        Assert.IsFalse(legacy.Steps[0].IsOperable);                                  // {1,3} 不含 2
+        Assert.AreEqual("Process Type=1或3时允许", legacy.Steps[0].OperableReason);
+
+        Assert.IsFalse(Find(content, "WF Upper Face N2 Flow").Steps[0].IsOperable);  // {1,3} 不含 2
+        Assert.IsTrue(Find(content, "Pen Arm  Cycle").Steps[0].IsOperable);          // 无规则 -> 可操作
+        Assert.IsTrue(Find(content, "Process Type").Steps[0].IsOperable);
+
+        // 反向：Process Type=3 时两行都允许
+        var dry = new Recipe.Content { Data = [] };
+        dry.Data!.Add(Row("Process Type", "3: Dry"));
+        dry.Data.Add(Row("Chuck Rotate Velocity", "300"));
+        RecipeTemplateRegistry.Decorate(dry, DryFolder);
+        RecipeOperabilityResolver.Recalculate(dry);
+        Assert.IsTrue(Find(dry, "Chuck Rotate Velocity").Steps[0].IsOperable);
+    }
+
+    [TestMethod]
+    public void DecorateDoesNotThrowOnEmptyContent()
+    {
+        Assert.IsFalse(RecipeTemplateRegistry.Decorate(null, DryFolder));
+        Assert.IsFalse(RecipeTemplateRegistry.Decorate(new Recipe.Content(), DryFolder));
+    }
 }
