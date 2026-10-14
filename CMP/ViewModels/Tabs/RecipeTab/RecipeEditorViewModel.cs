@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SqlSugar;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.IO;
@@ -34,6 +35,10 @@ namespace CMP.ViewModels.Tabs.RecipeTab;
 public class RecipeEditorViewModel : BindableBase
 {
     private readonly IEventAggregator _eventAggregator;
+
+    /// <summary>已订阅 Value 变更的规则来源 Step（Process Type 等），用于退订与状态重算。</summary>
+    private readonly List<Recipe.Step> _operabilitySourceSteps = [];
+
     private bool newItemVisible;
 
     public bool NewItemVisible
@@ -517,6 +522,9 @@ public class RecipeEditorViewModel : BindableBase
             }
         }
 
+        // 保证界面状态与待落盘数据一致
+        RefreshOperability();
+
         // 先做与写盘相同的默认值补齐，再 Diff，保证审计与落盘一致
         CheckRecipeDefualtValue();
 
@@ -706,6 +714,9 @@ public class RecipeEditorViewModel : BindableBase
                         }
                     }
                 }
+
+                // 按文件夹名把模板上的可操作性规则贴回（含 legacy 参数名经 CompatibleName 命中）
+                RecipeTemplateRegistry.Decorate(RecipeData, unit.Name);
 
                 RefreshEditor();
                 return;
@@ -1273,12 +1284,64 @@ public class RecipeEditorViewModel : BindableBase
     }
 
     /// <summary>
+    /// 重算每一步参数的可操作性，并重建规则来源 Step 的变更订阅。
+    /// 所有结构性变化（载入 / 增删步 / 粘贴 / 列重排）都必须经过这里。
+    /// </summary>
+    private void RefreshOperability()
+    {
+        RecipeOperabilityResolver.Recalculate(RecipeData);
+        AttachOperabilityTracking();
+    }
+
+    /// <summary>
+    /// 订阅规则来源参数（如 Process Type）每个 Step 的 Value 变更，实现"改 Process Type 立即灰显"。
+    /// 每次调用先退订，避免重复订阅与旧对象滞留（本方法是唯一订阅入口）。
+    /// </summary>
+    private void AttachOperabilityTracking()
+    {
+        DetachOperabilityTracking();
+
+        var sourceNames = RecipeOperabilityResolver.GetSourceParameterNames(RecipeData);
+        if (sourceNames.Count == 0 || RecipeData?.Data == null) return;
+
+        foreach (var data in RecipeData.Data)
+        {
+            if (data?.Steps == null) continue;
+            if (!RecipeOperabilityResolver.MatchesAnyName(data, sourceNames)) continue;
+
+            foreach (var step in data.Steps)
+            {
+                step.PropertyChanged += OnOperabilitySourceStepChanged;
+                _operabilitySourceSteps.Add(step);
+            }
+        }
+    }
+
+    private void DetachOperabilityTracking()
+    {
+        foreach (var step in _operabilitySourceSteps)
+        {
+            step.PropertyChanged -= OnOperabilitySourceStepChanged;
+        }
+        _operabilitySourceSteps.Clear();
+    }
+
+    private void OnOperabilitySourceStepChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(Recipe.Step.Value)) return;
+        RecipeOperabilityResolver.Recalculate(RecipeData);
+    }
+
+    /// <summary>
     /// Refreshes the editor by updating the DataGrid columns based on the current recipe data.
     /// </summary>
     public void RefreshEditor()
     {
         if (RecipeData == null || RecipeData!.Data!.Count == 0)
             return;
+
+        // 列结构即将重建，先按当前数据重算可操作性并重建订阅
+        RefreshOperability();
 
         var steps = RecipeData!.Data![0].Steps;
 
@@ -1291,19 +1354,14 @@ public class RecipeEditorViewModel : BindableBase
         for (int stepIndex = 0; stepIndex < steps.Count; stepIndex++)
         {
             var step = steps[stepIndex];
+
             // Create a template column for each step
             var templateColumn = new DataGridTemplateColumn
             {
                 Header = $"Step {step.Id}",
                 CellTemplateSelector = new RecipeCellTemplateSelector(stepIndex),
                 CellEditingTemplateSelector = new RecipeCellTemplateSelector(stepIndex),
-                CellStyle = new Style(typeof(DataGridCell))
-                {
-                    Setters =
-                    {
-                       new Setter(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Center)
-                    }
-                }
+                CellStyle = RecipeStepCellStyle.CreateCellStyle(stepIndex)
             };
             _dataGrid.Columns.Add(templateColumn);
         }
@@ -1430,6 +1488,18 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
     }
 
     /// <summary>
+    /// 统一的编辑控件装饰：可操作性绑定。
+    /// IsEnabled=false 让灰显单元格无法编辑；ToolTip 显示 Excel「说明」原文作为原因。
+    /// </summary>
+    private static void ApplyOperabilityBindings(FrameworkElementFactory factory, int stepIndex)
+    {
+        factory.SetBinding(UIElement.IsEnabledProperty,
+            RecipeStepCellStyle.CreateIsOperableBinding(stepIndex));
+        factory.SetBinding(FrameworkElement.ToolTipProperty,
+            RecipeStepCellStyle.CreateOperableReasonBinding(stepIndex));
+    }
+
+    /// <summary>
     /// Selects the appropriate template based on the item and container.
     /// </summary>
     /// <param name="item"></param>
@@ -1452,6 +1522,7 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             // Create and return a ComboBox template
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(ComboBox));
+            ApplyOperabilityBindings(factory, _stepIndex);
             factory.SetBinding(ItemsControl.ItemsSourceProperty, new Binding("Options"));
             factory.SetBinding(Selector.SelectedItemProperty,
                 new Binding($"Steps[{_stepIndex}].Value")
@@ -1475,6 +1546,7 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             // Create and return a NumericUpDown template
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(NumericUpDown));
+            ApplyOperabilityBindings(factory, _stepIndex);
             // 超出 [Min, Max] 的非 0 输入，1 秒后自动恢复为 Min/Max
             factory.AddHandler(
                 NumericUpDown.ValueChangedEvent,
@@ -1518,6 +1590,7 @@ public class RecipeCellTemplateSelector : DataTemplateSelector
             // Create and return a TextBox template
             var template = new DataTemplate();
             var factory = new FrameworkElementFactory(typeof(TextBox));
+            ApplyOperabilityBindings(factory, _stepIndex);
             factory.SetBinding(TextBox.TextProperty,
                 new Binding($"Steps[{_stepIndex}].Value")
                 {

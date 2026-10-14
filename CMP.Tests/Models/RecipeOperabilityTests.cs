@@ -4,8 +4,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate;
+using CMP.Tests.Services;
+using CMP.Views.Tabs.RecipeTab;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
@@ -390,5 +395,34 @@ public class RecipeOperabilityTests
             var key = RecipeOperabilityResolver.Normalize(spec.Parameter);
             Assert.IsFalse(templateByKey.ContainsKey(key), $"{spec.Parameter} 标为不使用但模板中存在");
         }
+    }
+
+    // ---------- Task 5: 视图接线 ----------
+
+    [WpfTestMethod]
+    public void StepCellStyleGreysOutOnlyWhenNotOperable()
+    {
+        var style = RecipeStepCellStyle.CreateCellStyle(2);
+
+        Assert.AreEqual(typeof(DataGridCell), style.TargetType);
+
+        var trigger = style.Triggers.OfType<DataTrigger>().Single();
+        Assert.AreEqual("Steps[2].IsOperable", ((Binding)trigger.Binding!).Path.Path);
+        Assert.AreEqual(false, trigger.Value);
+
+        var background = trigger.Setters.OfType<Setter>()
+            .Single(s => s.Property == Control.BackgroundProperty);
+        Assert.AreSame(RecipeStepCellStyle.DisabledBackground, background.Value);
+
+        var foreground = trigger.Setters.OfType<Setter>()
+            .Single(s => s.Property == Control.ForegroundProperty);
+        Assert.AreSame(RecipeStepCellStyle.DisabledForeground, foreground.Value);
+    }
+
+    [WpfTestMethod]
+    public void OperabilityBindingsPointAtTheSameStepIndex()
+    {
+        Assert.AreEqual("Steps[1].IsOperable", RecipeStepCellStyle.CreateIsOperableBinding(1).Path.Path);
+        Assert.AreEqual("Steps[1].OperableReason", RecipeStepCellStyle.CreateOperableReasonBinding(1).Path.Path);
     }
 }
