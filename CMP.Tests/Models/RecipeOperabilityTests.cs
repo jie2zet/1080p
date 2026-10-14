@@ -305,4 +305,90 @@ public class RecipeOperabilityTests
         Assert.IsFalse(RecipeTemplateRegistry.Decorate(null, DryFolder));
         Assert.IsFalse(RecipeTemplateRegistry.Decorate(new Recipe.Content(), DryFolder));
     }
+
+    // ---------- Task 4: 模板规则与 Excel 对账 ----------
+
+    private sealed class Fixture
+    {
+        public List<FixtureRow> Rows { get; set; } = [];
+    }
+
+    private sealed class FixtureRow
+    {
+        public int Index { get; set; }
+        public string Parameter { get; set; } = string.Empty;
+        public int NotUsed { get; set; }
+        public string? Reason { get; set; }
+    }
+
+    private static Fixture LoadFixture()
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "Resources", "dry-operability-fixture.json");
+        Assert.IsTrue(File.Exists(path), $"缺少夹具文件: {path}");
+        return JsonConvert.DeserializeObject<Fixture>(File.ReadAllText(path))!;
+    }
+
+    [TestMethod]
+    public void DryTemplateIdsAndNormalizedNamesAreUnique()
+    {
+        var ids = DryRecipeTemplate.Template.Select(d => d.Id).ToList();
+        CollectionAssert.AllItemsAreUnique(ids);
+
+        var names = DryRecipeTemplate.Template
+            .Select(d => RecipeOperabilityResolver.Normalize(d.Name))
+            .ToList();
+        CollectionAssert.AllItemsAreUnique(names);
+    }
+
+    [TestMethod]
+    public void EveryOperableRuleSourceExistsInTheSameTemplate()
+    {
+        var index = DryRecipeTemplate.Template
+            .SelectMany(d => new[] { RecipeOperabilityResolver.Normalize(d.Name) }
+                .Concat((d.CompatibleName ?? []).Select(RecipeOperabilityResolver.Normalize)))
+            .ToHashSet(StringComparer.Ordinal);
+
+        foreach (var row in DryRecipeTemplate.Template.Where(d => d.OperableRule != null))
+        {
+            var source = RecipeOperabilityResolver.Normalize(row.OperableRule!.SourceParameter);
+            Assert.IsTrue(index.Contains(source),
+                $"{row.Name} 的规则来源 {row.OperableRule.SourceParameter} 不在模板中");
+        }
+    }
+
+    [TestMethod]
+    public void DryTemplateRulesMatchExcelFixture()
+    {
+        var fixture = LoadFixture();
+        var template = DryRecipeTemplate.Template;
+        var templateByKey = template.ToDictionary(
+            d => RecipeOperabilityResolver.Normalize(d.Name), d => d);
+
+        // 1) 模板里有规则的每条，必须在夹具中找到同名条目，且 reason 一致
+        foreach (var row in template.Where(d => d.OperableRule != null))
+        {
+            var key = RecipeOperabilityResolver.Normalize(row.Name);
+            var spec = fixture.Rows.FirstOrDefault(r =>
+                RecipeOperabilityResolver.Normalize(r.Parameter) == key);
+
+            Assert.IsNotNull(spec, $"夹具缺少参数 {row.Name}");
+            Assert.AreEqual(0, spec!.NotUsed, $"{row.Name} 在 Excel 中标为不使用");
+            Assert.AreEqual(spec.Reason, row.OperableRule!.Reason, $"{row.Name} 的说明原文不一致");
+        }
+
+        // 2) 夹具中所有「启用且带条件」的行，模板必须已实现
+        foreach (var spec in fixture.Rows.Where(r => r.NotUsed == 0 && r.Reason != null))
+        {
+            var key = RecipeOperabilityResolver.Normalize(spec.Parameter);
+            Assert.IsTrue(templateByKey.ContainsKey(key), $"模板缺少参数 {spec.Parameter}");
+            Assert.IsNotNull(templateByKey[key].OperableRule, $"{spec.Parameter} 未挂规则");
+        }
+
+        // 3) 夹具中「不使用=1」的行，模板不得存在
+        foreach (var spec in fixture.Rows.Where(r => r.NotUsed == 1))
+        {
+            var key = RecipeOperabilityResolver.Normalize(spec.Parameter);
+            Assert.IsFalse(templateByKey.ContainsKey(key), $"{spec.Parameter} 标为不使用但模板中存在");
+        }
+    }
 }

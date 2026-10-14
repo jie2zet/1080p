@@ -27,6 +27,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 2,
             Name = "Process Time",
+            OperableRule = new OperableRule("Process Type", ["3"], "Process Type=3时允许"),
             Unit = "s",
             Type = "float",
             Min = 0,
@@ -39,6 +40,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 3,
             Name = "Wafer Rotation Speed",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "r/min",
             Type = "float",
             Min = 0.00,
@@ -52,6 +54,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 4,
             Name = "IPA Arm  Sweep Start Position",
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg",
             Type = "option",
             Min = 1.00,
@@ -64,6 +67,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 5,
             Name = "IPA Arm  Sweep End Position",
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg",
             Type = "option",
             Min = 1.00,
@@ -100,6 +104,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 6,
             Name = "IPA Arm Sweep Speed",
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -112,6 +117,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 7,
             Name = "IPA Arm Cycle",
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "Times",
             Type = "int",
             Min = 0,
@@ -124,6 +130,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 8,
             Name = "Dilution N2 Gas Flow",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "L/min",
             Type = "float",
             Min = 0.00,
@@ -137,6 +144,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 9,
             Name = "N2 For WF Backside Flow",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "L/min",
             Type = "float",
             Min = 2.00,
@@ -150,6 +158,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 10,
             Name = "Outer Rinse Flow",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "ml/min",
             Type = "float",
             Min = 0.00,
@@ -163,6 +172,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 11,
             Name = "Bubbling N2 Gas Flow",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "L/min",
             Type = "float",
             Min = 0.00,
@@ -176,6 +186,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 12,
             Name = "Upper Rinse Supply",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "",
             Type = "option",
             Min = 0,
@@ -189,6 +200,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 13,
             Name = "Lower Rinse Supply",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "",
             Type = "option",
             Min = 0,
@@ -202,6 +214,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 14,
             Name = "Wafer Rotation Acceleration",
+            OperableRule = new OperableRule("Process Type", ["1", "3"], "Process Type=1或3时允许"),
             Unit = "",
             Type = "float",
             Min = 0,
