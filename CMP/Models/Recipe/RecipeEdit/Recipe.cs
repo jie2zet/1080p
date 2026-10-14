@@ -50,6 +50,14 @@ public class Recipe
         public string Default { get; set; } = string.Empty;
         public List<string>? Options { get; set; }
         public List<string>? CompatibleName { get; set; }
+
+        /// <summary>
+        /// 参数可操作性规则（规格元数据，来自模板 / Excel「说明」列）。null 表示无限制。
+        /// 派生于规格而非数据，不落盘。
+        /// </summary>
+        [JsonIgnore]
+        public OperableRule? OperableRule { get; set; }
+
         private ObservableCollection<Step> _steps = new ObservableCollection<Step>();
         public ObservableCollection<Step> Steps
         {
@@ -74,6 +82,30 @@ public class Recipe
         {
             get => _value;
             set => SetProperty(ref _value, value);
+        }
+
+        private bool _isOperable = true;
+
+        /// <summary>
+        /// 当前步骤上该参数是否可操作（派生态，由 RecipeOperabilityResolver 计算）。不落盘。
+        /// </summary>
+        [JsonIgnore]
+        public bool IsOperable
+        {
+            get => _isOperable;
+            set => SetProperty(ref _isOperable, value);
+        }
+
+        private string? _operableReason;
+
+        /// <summary>
+        /// 不可操作的原因原文（Excel「说明」列），仅 IsOperable 为 false 时有值。不落盘。
+        /// </summary>
+        [JsonIgnore]
+        public string? OperableReason
+        {
+            get => _operableReason;
+            set => SetProperty(ref _operableReason, value);
         }
     }
 }
