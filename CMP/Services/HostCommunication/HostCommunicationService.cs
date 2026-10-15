@@ -1,31 +1,28 @@
 ﻿using CMP.Extensions;
 using CMP.Models.HostCommunication;
+using CMP.Models.kvsPlc;
 using CMP.Models.Resource;
 using CMP.Services.LoadPort;
 using Dm.util;
-using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office2013.WebExtension;
-using DocumentFormat.OpenXml.Wordprocessing;
+using DryIoc.ImTools;
 using FabConnect;
 using FabConnect.SecsGemInterface.Application.MessageServices;
 using FabConnect.SecsGemInterface.Common;
 using FabConnect.SecsGemInterface.Common.ToolModel;
 using FabConnect.SecsGemInterface.GemModel;
-using SqlSugar.DistributedSystem.Snowflake;
-using System.Collections;
+using Newtonsoft.Json;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using static CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
-using static CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using static CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
-using KHSTPolishCollectData = CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
 using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
 using Logger = CMP.Services.Log.Logger;
+using KHL = CMP.Models.kvsPlc.KvHostLink;
+using KST = CMP.Models.kvsPlc.Clean.KvStruct;
 namespace CMP.Services.HostCommunication
 {
     public class HostCommunicationService : IHostCommunicationService
@@ -154,6 +151,7 @@ namespace CMP.Services.HostCommunication
                 _systemBuildInEc.Add("MaxSpoolCapacity");
                 _systemBuildInEc.Add("SpoolEnabled");
                 _systemBuildInEc.Add("TimeFormat");
+                InitailSystemBuildInEc();
 
                 //initial system build in variable
                 _systemBuildInVariables.Add("AlarmsEnabled");
@@ -206,6 +204,62 @@ namespace CMP.Services.HostCommunication
 
         }
 
+        private ConcurrentDictionary<string, List<ECModel>> _ECDic =  new ConcurrentDictionary<string, List<ECModel>>();
+        private string ECPath = "D:\\CMP\\Configuration\\Configs";
+
+        private void InitailSystemBuildInEc()
+        {
+            string[] jsonFiles = Directory.GetFiles(ECPath, "*.json");
+  
+            foreach (string path in jsonFiles)
+            {
+                if (path.Contains("Roller") || path.Contains("Pen") || path.Contains("Dry") || path.Contains("Polish"))
+                {
+
+                    string modelName = System.IO.Path.GetFileName(path).Replace("Config", "").Replace(".json", "");
+                    Dictionary<int, ECModel> listModels = ReadECFile(modelName, path);
+                    foreach (ECModel item in listModels.Values)
+                    {
+                        if (_ECDic.ContainsKey(modelName))
+                        {
+                            _ECDic[modelName].Add(item);
+                        }
+                        else
+                        {
+                            _ECDic[modelName] = new List<ECModel>() { item };
+                        }
+
+                    }
+                }
+
+
+            }
+
+        }
+
+        private Dictionary<int, ECModel> ReadECFile(string name, string filePath)
+        {
+            Dictionary<int, ECModel> tempModels = new Dictionary<int, ECModel>();
+            string jsonString = File.ReadAllText(filePath);
+            var result = JsonConvert.DeserializeObject<List<ECModel>>(jsonString);
+            if (result != null)
+            {
+                foreach (ECModel item in result)
+                {
+                    if (!tempModels.ContainsKey(item.ECID) && (!item.SheetName.Contains("DA") && !item.SheetName.Contains("AD")))
+                    {
+                        if (item.Name != "a" && item.Name != "b" && item.Name != "c" && item.Name != "d")
+                        {
+                            item.Name = name + item.Class.Replace(" ", "") + item.Name.Replace(" ", "");
+                            tempModels.Add(item.ECID, item);
+                        }
+                    }
+
+                }
+
+            }
+            return tempModels;
+        }
 
         /// <summary>
         /// 加载SV变量
@@ -373,6 +427,7 @@ namespace CMP.Services.HostCommunication
         {
 
             // PrintfSVValue();
+            //PrintfECValue();
 
             if (queue.TryDequeue(out SendEventModel? result))
             {
@@ -1020,6 +1075,7 @@ namespace CMP.Services.HostCommunication
                 SetPenSVData();
                 SetDrySVData();
                 // SetPolishSVDataTest();
+                SetEquipmentConstants();
 
             }
 
@@ -1083,6 +1139,49 @@ namespace CMP.Services.HostCommunication
             }
 
             Thread.Sleep(500);
+
+        }
+
+
+
+        private void SetEquipmentConstants()
+        {
+            foreach (string key in _ECDic.Keys)
+            {
+                foreach (ECModel m in _ECDic[key])
+                {
+                    SetECIDValue(m.Name, m.SetValue);
+                }
+
+
+            }
+
+
+        }
+
+
+
+
+        private void SetECIDValue(string localName, object value)
+        {
+            
+            if (value == null || string.IsNullOrEmpty(localName)) return;
+
+            if (_gem.EquipmentModel == null || !_gem.EquipmentModel.EquipmentConstants.ECIDCollection.IsExistLogicalName(localName))
+                return;
+
+            //if (_systemBuildInVariables.Contains(localName) &&
+            //    (localName.Contains("Polish", StringComparison.OrdinalIgnoreCase)
+            //    || localName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+            //    || localName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+            //    || localName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+            //    ))
+
+            if (_systemBuildInEc.Contains(localName))
+            {
+                _gem.SetAttribute(localName, AttributeType.EC, Convert.ToString(value));
+
+            }
 
         }
 
@@ -1344,6 +1443,345 @@ namespace CMP.Services.HostCommunication
 
         }
 
+        private void PrintfECValue()
+        {
+            if (!_isOnline) return;
+
+
+            foreach (ECID ec in _gem.EquipmentModel.EquipmentConstants.ECIDCollection)
+            {
+
+                //if (sv != null && _systemBuildInEc.Contains(sv.logicalName) &&
+                //    (sv.logicalName.Contains("Polish", StringComparison.OrdinalIgnoreCase)
+                //    || sv.logicalName.Contains("Roller", StringComparison.OrdinalIgnoreCase)
+                //    || sv.logicalName.Contains("Pen", StringComparison.OrdinalIgnoreCase)
+                //    || sv.logicalName.Contains("Dry", StringComparison.OrdinalIgnoreCase)
+                //    ))
+                if (ec != null && _systemBuildInEc.Contains(ec.logicalName))
+                {
+                    string str = _gem.GetAttribute(ec.logicalName, AttributeType.EC);
+                    lock (_fileLock)
+                    {
+                        string path = $"{modelFilePath}{DateTime.Now.ToString("yyyy-MM-dd")}.txt";
+                        File.AppendAllText(path, $"读取到的数据名称：{ec.logicalName} --{str}" + Environment.NewLine, Encoding.UTF8);
+                    }
+
+                }
+            }
+
+        }
+
+
+        /// <summary>
+        /// 从PLC读取EC数据
+        /// </summary>
+        private void ReadECVariablesData()
+        {
+
+            if (_ECDic.Count > 0)
+            {
+
+                int hSocket = 0;
+                foreach (string modelName in _ECDic.Keys)
+                {
+
+                    switch (modelName)
+                    {
+                        case "DryA":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkDryA.sock;
+                            break;
+                        case "DryB":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkDryB.sock;
+                            break;
+                        case "PenA":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPenA.sock;
+                            break;
+                        case "PenB":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPenB.sock;
+                            break;
+                        case "RollerA":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkRollerA.sock;
+                            break;
+                        case "RollerB":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkRollerB.sock;
+                            break;
+
+                        case "PolishA":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPolishA.sock;
+                            break;
+                        case "PolishB":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPolishB.sock;
+                            break;
+                        case "PolishC":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPolishC.sock;
+                            break;
+                        case "PolishD":
+                             hSocket = GlobalService.kvHostLinkInit.kvLinkPolishD.sock;
+                            break;
+                    }
+
+
+
+                    foreach (ECModel model in _ECDic[modelName])
+                    {
+
+                        //todo: 遍历读取PLC地址的值
+
+                        byte[] readData = new byte[256];
+                        if (model.PLCLink.StartsWith("ZF"))
+                        {
+                            uint devTopNo = Convert.ToUInt32(model.PLCLink.Replace("ZF", ""));
+                            if (model.Words <= 0 || model.Words >= 3)
+                            {
+                                model.Words = model.TemplateType switch
+                                {
+                                    1 => 1,
+                                    1 or 2 => 2,
+                                    _ => 2,
+                                };
+                            }
+                            int error = KHL.KHLReadDevicesAsWords(hSocket, KHLDevType.DEV_ZF, devTopNo, model.Words, readData);
+                            if (error == (int)KHLUserError.KHL_ERR_NONE)
+                            {
+                                switch (model.TemplateType)
+                                {
+                                    case 1:
+                                        {
+                                            short val = 0;
+                                            KST.ByteToShort(ref val, readData);
+                                            model.SetValue = val.toString();
+                                        }
+                                        break;
+                                    case 2:
+                                        {
+                                            int val = 0;
+                                            KST.ByteToInt(ref val, readData);
+                                            model.SetValue = val.toString();
+                                        }
+                                        break;
+                                    case 3:
+                                        {
+                                            float val = 0;
+                                            KST.ByteToFloat(ref val, readData);
+                                            model.SetValue = val.toString();
+                                        }
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+
+                        if (model.PLCLink.StartsWith("ZR"))
+                        {
+                            switch (model.TemplateType)
+                            {
+                                case 1:
+                                    {
+                                        var result = GlobalService.plcComm.ReadShortVari(model.PLCLink);
+                                        model.SetValue = result.ToString();
+                                    }
+                                    break;
+                                case 2:
+                                    {
+                                        var result = GlobalService.plcComm.ReadIntVari(model.PLCLink);
+                                        model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
+                                    }
+                                    break;
+                                case 3:
+                                    {
+                                        var result = GlobalService.plcComm.ReadFloatVari(model.PLCLink);
+                                        model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                    }
+
+                }
+
+
+
+
+            }
+
+            //if (ConfigModels != null && ConfigModels.Count > 0)
+            //{
+            //    int hSocket = 0;
+            //    if (SelectedNode.Name!.StartsWith("PolishA"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPolishA.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("PolishB"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPolishB.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("PolishC"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPolishC.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("PolishD"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPolishD.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("RollerA") || SelectedNode.Name.StartsWith("RollA"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkRollerA.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("RollerB") || SelectedNode.Name.StartsWith("RollB"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkRollerB.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("PenA"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPenA.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("PenB"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkPenB.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("DryA"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkDryA.sock;
+            //    }
+            //    if (SelectedNode.Name.StartsWith("DryB"))
+            //    {
+            //        hSocket = GlobalService.kvHostLinkInit.kvLinkDryB.sock;
+            //    }
+
+            //    var oldValues = ConfigModels.Select(m => m.SetValue ?? string.Empty).ToList();
+
+            //    foreach (var model in ConfigModels)
+            //    {
+            //        byte[] readData = new byte[256];
+            //        if (model.PLCLink.startsWith("ZF"))
+            //        {
+            //            uint devTopNo = Convert.ToUInt32(model.PLCLink.Replace("ZF", ""));
+            //            if (model.Words <= 0 || model.Words >= 3)
+            //            {
+            //                model.Words = model.TemplateType switch
+            //                {
+            //                    ConfigDataType.Enum => 1,
+            //                    ConfigDataType.Int or ConfigDataType.Double => 2,
+            //                    _ => 2,
+            //                };
+            //            }
+            //            int error = KHL.KHLReadDevicesAsWords(hSocket, KHLDevType.DEV_ZF, devTopNo, model.Words, readData);
+            //            if (error == (int)KHLUserError.KHL_ERR_NONE)
+            //            {
+            //                switch (model.TemplateType)
+            //                {
+            //                    case ConfigDataType.Enum:
+            //                        {
+            //                            short val = 0;
+            //                            KST.ByteToShort(ref val, readData);
+            //                            model.SetValue = val.toString();
+            //                        }
+            //                        break;
+            //                    case ConfigDataType.Int:
+            //                        {
+            //                            int val = 0;
+            //                            KST.ByteToInt(ref val, readData);
+            //                            model.SetValue = val.toString();
+            //                        }
+            //                        break;
+            //                    case ConfigDataType.Double:
+            //                        {
+            //                            float val = 0;
+            //                            KST.ByteToFloat(ref val, readData);
+            //                            model.SetValue = val.toString();
+            //                        }
+            //                        break;
+            //                    default:
+            //                        break;
+            //                }
+            //            }
+            //        }
+
+            //        if (model.PLCLink.startsWith("ZR"))
+            //        {
+            //            switch (model.TemplateType)
+            //            {
+            //                case ConfigDataType.Enum:
+            //                    {
+            //                        var result = GlobalService.plcComm.ReadShortVari(model.PLCLink);
+            //                        model.SetValue = result.ToString();
+            //                    }
+            //                    break;
+            //                case ConfigDataType.Int:
+            //                    {
+            //                        var result = GlobalService.plcComm.ReadIntVari(model.PLCLink);
+            //                        model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
+            //                    }
+            //                    break;
+            //                case ConfigDataType.Double:
+            //                    {
+            //                        var result = GlobalService.plcComm.ReadFloatVari(model.PLCLink);
+            //                        model.SetValue = result.IsSuccess ? result.Content.ToString() : model.SetValue;
+            //                    }
+            //                    break;
+            //                default:
+            //                    break;
+            //            }
+            //        }
+            //    }
+
+            //    // Save to JSON file
+            //    string polisherJsonFile = $"D:\\CMP\\Configuration\\Configs\\{SelectedNode.Name}.json";
+            //    foreach (var item in ConfigModels)
+            //    {
+            //        if (item.TemplateType == ConfigDataType.Enum)
+            //        {
+            //            foreach (var val in item.Option)
+            //            {
+            //                if (val.startsWith(item.SetValue))
+            //                {
+            //                    item.SetValue = val;
+            //                    break;
+            //                }
+            //            }
+            //            continue;
+            //        }
+            //        item.NewValue = "";
+            //    }
+            //    var json = JsonConvert.SerializeObject(ConfigModels, Formatting.Indented);
+            //    FileUtil.WriteFile(polisherJsonFile, json);
+            //    Growl.SuccessGlobal(new GrowlInfo
+            //    {
+            //        Message = Lang.Resources.SaveSuccessful,
+            //        ShowCloseButton = true,
+            //    });
+
+            //    var unitName = SelectedNode?.Name ?? string.Empty;
+            //    for (int i = 0; i < ConfigModels.Count && i < oldValues.Count; i++)
+            //    {
+            //        var item = ConfigModels[i];
+            //        var oldValue = oldValues[i];
+            //        var newValue = item.SetValue ?? string.Empty;
+            //        if (string.Equals(oldValue, newValue, StringComparison.Ordinal))
+            //            continue;
+
+            //        AuditLogService.WriteChange(
+            //            AuditModules.EC,
+            //            AuditActions.ConfigSyncPlc,
+            //            FormatEcTarget(unitName, item),
+            //            oldValue,
+            //            newValue,
+            //            "Success",
+            //            item.PLCLink);
+            //    }
+
+            //    AuditLogService.WriteCurrentUser(
+            //        AuditActions.ConfigSyncPlc,
+            //        "Success",
+            //        unitName,
+            //        AuditModules.EC,
+            //        unitName);
+            //}
+        }
 
 
         private void SendHello()
