@@ -1,40 +1,25 @@
 ﻿using CMP.Extensions;
-using CMP.Models.Config;
 using CMP.Models.HostCommunication;
 using CMP.Models.kvsPlc;
 using CMP.Models.Resource;
-using CMP.Services.Auth;
 using CMP.Services.LoadPort;
-using CMP.Utils;
 using Dm.util;
-using DocumentFormat.OpenXml.EMMA;
-using DocumentFormat.OpenXml.Office2013.WebExtension;
-using DocumentFormat.OpenXml.Wordprocessing;
 using DryIoc.ImTools;
 using FabConnect;
 using FabConnect.SecsGemInterface.Application.MessageServices;
 using FabConnect.SecsGemInterface.Common;
 using FabConnect.SecsGemInterface.Common.ToolModel;
 using FabConnect.SecsGemInterface.GemModel;
-using HandyControl.Controls;
-using HandyControl.Data;
 using Newtonsoft.Json;
-using SqlSugar.DistributedSystem.Snowflake;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using static CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
-using static CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using static CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
-using KHSTPolishCollectData = CMP.Models.kvsPlc.Polish.KvsStructPolishCollectData;
 using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
 using KHSTDryCollectData = CMP.Models.kvsPlc.Dry.KvsStructDryCollectData;
-using KHSTPenCollectData = CMP.Models.kvsPlc.Pen.KvsStructPenCollectData;
-using KHSTRollerCollectData = CMP.Models.kvsPlc.Roll.KvsStructRollerCollectData;
 using Logger = CMP.Services.Log.Logger;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Clean.KvStruct;
@@ -1085,10 +1070,10 @@ namespace CMP.Services.HostCommunication
             if (_isOnline)
             {
 
-                //SetPolishSVData();
-                //SetRollerSVData();
-                //SetPenSVData();
-                //SetDrySVData();
+                SetPolishSVData();
+                SetRollerSVData();
+                SetPenSVData();
+                SetDrySVData();
                 // SetPolishSVDataTest();
                 SetEquipmentConstants();
 
