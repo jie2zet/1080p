@@ -81,19 +81,91 @@ namespace CMP.Models.Resource
                 return;
             }
 
-            var batchItems = boolItems
-                .Select(item => PlcBatchReadItem<bool>.Bind(item.PLCLink, value => item.Value = value, addressType: PlcBatchAddressType.M))
-                .Cast<PlcBatchReadItem<bool>>()
-                .ToList();
-
-            var result = _plc.BatchReadBool(batchItems);
-            if (!result.IsSuccess)
+            var mItems = new List<SV_PLC>();
+            var dBitItems = new List<(SV_PLC Item, DBitAddress DBit)>();
+            foreach (var item in boolItems)
             {
-                foreach (var item in boolItems)
+                if (TryParseDBit(item.PLCLink, out var dBit))
                 {
-                    item.Value = _plc.ReadBoolVari(item.PLCLink);
+                    dBitItems.Add((item, dBit));
+                }
+                else
+                {
+                    mItems.Add(item);
                 }
             }
+
+            if (mItems.Count > 0)
+            {
+                var mBatch = mItems
+                    .Select(item => PlcBatchReadItem<bool>.Bind(item.PLCLink, value => item.Value = value, addressType: PlcBatchAddressType.M))
+                    .ToList();
+                var mResult = _plc.BatchReadBool(mBatch);
+                if (!mResult.IsSuccess)
+                {
+                    foreach (var item in mItems)
+                    {
+                        item.Value = _plc.ReadBoolVari(item.PLCLink);
+                    }
+                }
+            }
+
+            if (dBitItems.Count == 0)
+            {
+                return;
+            }
+
+            var dBatch = new List<PlcBatchReadItemBase>(dBitItems.Count);
+            foreach (var pair in dBitItems)
+            {
+                var item = pair.Item;
+                var dBit = pair.DBit;
+                dBatch.Add(PlcBatchReadItem<bool>.Bind(
+                    dBit.Address,
+                    value => item.Value = value,
+                    converter: MitsubishiPlcService.ToBitConverter(dBit),
+                    addressType: PlcBatchAddressType.D));
+            }
+
+            var dResult = _plc.BatchRead(dBatch);
+            if (dResult.IsSuccess)
+            {
+                return;
+            }
+
+            foreach (var pair in dBitItems)
+            {
+                var result = _plc.ReadDBit(pair.DBit);
+                if (result.IsSuccess)
+                {
+                    pair.Item.Value = result.Content;
+                }
+            }
+        }
+
+        private static bool TryParseDBit(string? link, out DBitAddress dBit)
+        {
+            dBit = null!;
+            if (string.IsNullOrWhiteSpace(link))
+            {
+                return false;
+            }
+
+            var raw = link.Trim();
+            var dot = raw.IndexOf('.');
+            if (dot <= 0 || !raw.StartsWith('D') && !raw.StartsWith('d'))
+            {
+                return false;
+            }
+
+            var address = raw[..dot];
+            if (!int.TryParse(raw[(dot + 1)..], out var bit) || bit is < 0 or > 15)
+            {
+                return false;
+            }
+
+            dBit = new DBitAddress(address, bit);
+            return true;
         }
 
         private void RefreshWordItems(IReadOnlyCollection<SV_PLC> wordItems)
@@ -169,7 +241,18 @@ namespace CMP.Models.Resource
             switch (item.Type)
             {
                 case "Bool":
-                    item.Value = _plc.ReadBoolVari(item.PLCLink);
+                    if (TryParseDBit(item.PLCLink, out var dBit))
+                    {
+                        var result = _plc.ReadDBit(dBit);
+                        if (result.IsSuccess)
+                        {
+                            item.Value = result.Content;
+                        }
+                    }
+                    else
+                    {
+                        item.Value = _plc.ReadBoolVari(item.PLCLink);
+                    }
                     break;
                 case "INT_32":
                     {
@@ -185,8 +268,20 @@ namespace CMP.Models.Resource
 
         public void WriteSingleStCtrlData(int index, string value)
         {
-            if (listDataInSingleStCtrl[index].Type == "Bool")
-                _plc.WriteBoolVari(listDataInSingleStCtrl[index].PLCLink, Convert.ToBoolean(value));
+            var item = listDataInSingleStCtrl[index];
+            if (item.Type != "Bool")
+            {
+                return;
+            }
+
+            var bitValue = Convert.ToBoolean(value);
+            if (TryParseDBit(item.PLCLink, out var dBit))
+            {
+                _plc.WriteDBit(dBit, bitValue);
+                return;
+            }
+
+            _plc.WriteBoolVari(item.PLCLink, bitValue);
         }
     }
 }

@@ -61,7 +61,7 @@
                                                  Width="150" />
                                     <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
                                             Command="{Binding ExecuteRecipeCommand}"
-                                            CommandParameter="" Width="65"/>
+                                            CommandParameter="Manual" Width="65"/>
                                 </StackPanel>
                                 <StackPanel Margin="0 40 0 0" Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="70"
                                             HorizontalAlignment="Center">
@@ -315,6 +315,10 @@
                                 <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
                                 <TextBlock Width="100" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity}"/>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
+                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActTorque}" />
+                            </StackPanel>
                             <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
                                         extensions:StackPanelHelpers.Spacing="50"
                                         HorizontalAlignment="Center">
@@ -351,6 +355,10 @@
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
                                 <TextBlock Width="100" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActVelocity}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
+                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActTorque}" />
                             </StackPanel>
                             <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
                                         extensions:StackPanelHelpers.Spacing="70"
@@ -389,6 +397,10 @@
                                 <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
                                 <TextBlock Width="100" Text="{Binding RollerViewPoco.UpperRollerRotateMotor.ActVelocity}"/>
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
+                                <TextBlock Width="100" Text="{Binding RollerViewPoco.UpperRollerRotateMotor.ActTorque}" />
+                            </StackPanel>
                             <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
                                         extensions:StackPanelHelpers.Spacing="70"
                                         HorizontalAlignment="Center">
@@ -425,6 +437,10 @@
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
                                 <TextBlock Width="100" Text="{Binding RollerViewPoco.LowerRollerRotateMotor.ActVelocity}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                                <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
+                                <TextBlock Width="100" Text="{Binding RollerViewPoco.LowerRollerRotateMotor.ActTorque}" />
                             </StackPanel>
                             <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
                                 extensions:StackPanelHelpers.Spacing="70"

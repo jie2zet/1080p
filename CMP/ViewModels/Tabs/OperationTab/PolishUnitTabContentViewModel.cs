@@ -701,10 +701,14 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.Zone2.ActPress = snapshot.Zone2PressureAct;
         PolishUnit.Zone3.ActPress = snapshot.Zone3PressureAct;
         PolishUnit.Zone4.ActPress = snapshot.Zone4PressureAct;
+        
+        PolishUnit.Zone4.ActVacuum = snapshot.Zone4PressurePVAct;
+        
         PolishUnit.Zone5.ActPress = snapshot.Zone5PressureAct;
         PolishUnit.Zone6.ActPress = snapshot.Zone6PressureAct;
         PolishUnit.Zone7.ActPress = snapshot.Zone7PressureAct;
         PolishUnit.Zone8.ActPress = snapshot.Zone8PressureAct;
+        PolishUnit.Retain.ActPress = snapshot.RetainerRingPressureAct;
         PolishUnit.Slurry.Slurry1Act = snapshot.Slurry1OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry2Act = snapshot.Slurry2OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry3Act = snapshot.Slurry3OrDIWFlowrateAct;
@@ -717,6 +721,13 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.ConditionSweepMotor.IsServoOn = snapshot.ConditionSweepMotorServoOn;
         PolishUnit.SlurrySweepMotor.IsServoOn = snapshot.SlurrySweepMotorServoOn;
 
+        PolishUnit.PlatenMotor.ActTorque = snapshot.PlatenRotationMotorTorqueAct;
+        PolishUnit.HeadRotateMotor.ActTorque = snapshot.HeadRotationMotorTorqueAct;
+        PolishUnit.HeadSweepMotor.ActTorque = snapshot.HeadSweepMotorTorqueAct;
+        PolishUnit.HeadLiftMotor.ActTorque = snapshot.HeadZ_AxisMotorTorqueAct;
+        PolishUnit.DiskRotateMotor.ActTorque = snapshot.ConditionRotationMotorTorqueAct;
+        PolishUnit.ConditionSweepMotor.ActTorque = snapshot.ConditionSweepMotorTorqueAct;
+        PolishUnit.SlurrySweepMotor.ActTorque = snapshot.SlurryNozzleMotorTorqueAct;
 
         RaisePropertyChanged(nameof(PlatenMotorServoText));
         RaisePropertyChanged(nameof(ConditionSweepMotorServoText));
@@ -1547,6 +1558,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 Growl.SuccessGlobal($"PressCommandExecute: {name}");
             }
+            // sleep for a short duration to allow the press command to take effect before moving to the next zone
+            Thread.Sleep(100); 
         }
     }
 
@@ -1567,6 +1580,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 Growl.SuccessGlobal($"VentCommandExecute: {name}");
             }
+            // sleep for 100ms to allow the vent command to take effect before moving on to the next zone
+            Thread.Sleep(100);
         }
     }
 
@@ -1587,6 +1602,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             {
                 Growl.SuccessGlobal($"VacuumCommandExecute: {name}");
             }
+            // sleep for a short duration to allow the vacuum command to take effect before moving to the next zone
+            Thread.Sleep(100);
         }
     }
 

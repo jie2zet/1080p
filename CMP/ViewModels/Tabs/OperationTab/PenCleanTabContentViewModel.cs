@@ -271,6 +271,9 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             float PenArmSweepSpeed,
             float PenArmSweepAngle,
             float PenHeadRotationSpeed,
+            float ChuckRotationTorque,
+            float PenArmSweepTorque,
+            float PenHeadRotationTorque,
             float DiwOpenTime,
             bool ChuckServoOn,
             bool PenArmSweepServoOn,
@@ -281,6 +284,9 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                 snapshot._1PenArmSweepSpeedAct,
                 snapshot._1PenArmSweepAngleAct,
                 snapshot._1PenHeadRotationSpeedAct,
+                snapshot._1ChuckRotationTorqueAct,
+                snapshot._1PenArmSweepTorqueAct,
+                snapshot._1PenHeadRotationTorqueAct,
                 snapshot._1DIWAllOpenTimeAct,
                 snapshot._1ChuckMotorServoOn,
                 snapshot._1PenArmSweepMotorServoOn,
@@ -290,6 +296,9 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                 snapshot._2PenArmSweepSpeedAct,
                 snapshot._2PenArmSweepAngleAct,
                 snapshot._2PenHeadRotationSpeedAct,
+                snapshot._2ChuckRotationTorqueAct,
+                snapshot._2PenArmSweepTorqueAct,
+                snapshot._2PenHeadRotationTorqueAct,
                 snapshot._2DIWAllOpenTimeAct,
                 snapshot._2ChuckMotorServoOn,
                 snapshot._2PenArmSweepMotorServoOn,
@@ -300,6 +309,9 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         PenClean.PenArmSweepMotor.ActVelocity = stationData.PenArmSweepSpeed;
         PenClean.PenArmSweepMotor.ActPosition = stationData.PenArmSweepAngle;
         PenClean.PenRotationMotor.ActVelocity = stationData.PenHeadRotationSpeed;
+        PenClean.ChuckRotationMotor.ActTorque = stationData.ChuckRotationTorque;
+        PenClean.PenArmSweepMotor.ActTorque = stationData.PenArmSweepTorque;
+        PenClean.PenRotationMotor.ActTorque = stationData.PenHeadRotationTorque;
         PenClean.Flush.OpenDelayAct = stationData.DiwOpenTime;
 
         PenClean.ChuckRotationMotor.IsServoOn = stationData.ChuckServoOn;
@@ -584,6 +596,23 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         {
             Growl.WarningGlobal("Please select a Pen recipe first");
             return;
+        }
+        if (obj.Equals("Manual", StringComparison.OrdinalIgnoreCase))
+        {
+            uint addr = TabId switch
+            {
+                0 => 1012,
+                1 => 11012,
+                2 => 1012,
+                3 => 11012,
+                _ => 1012
+            };
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_D, addr, 1, 10.Value());
+            if (_err != (int)KHLUserError.KHL_ERR_NONE)
+            {
+                Growl.ErrorGlobal($"Failed to send run command for recipe execution: {_err}");
+                return;
+            }
         }
         //byte[] data = new byte[20480];
         try

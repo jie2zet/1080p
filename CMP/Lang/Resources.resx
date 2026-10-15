@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1916,5 +1916,41 @@
   </data>
   <data name="PasswordRequiredOnAdd" xml:space="preserve">
     <value>Password is required when adding a user.</value>
+  </data>
+  <data name="G3Head" xml:space="preserve">
+    <value>Alarm Limit</value>
+  </data>
+  <data name="Equipment" xml:space="preserve">
+    <value>Equipment</value>
+  </data>
+  <data name="PolisherA" xml:space="preserve">
+    <value>PolisherA</value>
+  </data>
+  <data name="PolisherB" xml:space="preserve">
+    <value>PolisherB</value>
+  </data>
+  <data name="PolisherC" xml:space="preserve">
+    <value>PolisherC</value>
+  </data>
+  <data name="PolisherD" xml:space="preserve">
+    <value>PolisherD</value>
+  </data>
+  <data name="ModuleParts" xml:space="preserve">
+    <value>Module/Parts</value>
+  </data>
+  <data name="ProcessedWaferLightFault" xml:space="preserve">
+    <value>Processed Wafer Light Fault</value>
+  </data>
+  <data name="ProcessedWaferProcessIL" xml:space="preserve">
+    <value>Processed Wafer Process I/L</value>
+  </data>
+  <data name="ProcessedWaferPresent" xml:space="preserve">
+    <value>Processed Wafer Present</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Torque" xml:space="preserve">
+    <value>Torque</value>
   </data>
 </root>

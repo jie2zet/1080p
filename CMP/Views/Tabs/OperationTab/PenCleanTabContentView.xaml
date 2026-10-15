@@ -56,7 +56,7 @@
                                                  SelectedItem="{Binding SelectedPenRecipe}" 
                                                  Width="150" />
                                     <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
-                                            Command="{Binding ExecuteRecipeCommand}" CommandParameter="" Width="65"/>
+                                            Command="{Binding ExecuteRecipeCommand}" CommandParameter="Manual" Width="65"/>
                                 </StackPanel>
                                 <StackPanel Margin="0 40 0 0" Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="70"
                                             HorizontalAlignment="Center">
@@ -92,6 +92,10 @@
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
                                 <TextBlock Width="65" Text="{Binding PenClean.ChuckRotationMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Torque}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.ChuckRotationMotor.ActTorque}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
@@ -133,6 +137,10 @@
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
                                 <TextBlock Width="65" Text="{Binding PenClean.PenArmSweepMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Torque}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.PenArmSweepMotor.ActTorque}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActPos}" Width="65" VerticalAlignment="Center" />
@@ -186,6 +194,10 @@
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
                                 <TextBlock Width="65" Text="{Binding PenClean.PenRotationMotor.ActVelocity}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc Torque}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding PenClean.PenRotationMotor.ActTorque}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"

@@ -15,11 +15,23 @@ namespace CMP.Models.DataCenter
     {
         private const int StCtrlFastRefreshIntervalMs = 500;
         private const int StCtrlSlowRefreshIntervalMs = 2000;
+        private const int LtpStCtrlRefreshIntervalMs = 500;
+
+        private static readonly HashSet<string> LtpStCtrlModules = new(StringComparer.Ordinal)
+        {
+            "ASide_Feed_Arm1",
+            "ASide_Feed_Arm2",
+            "ASide_Discharge_Arm3",
+            "BSide_Feed_Arm1",
+            "BSide_Feed_Arm2",
+            "BSide_Discharge_Arm3",
+        };
 
         Task th_CollectData;
         Task th_CollectAlarm;
         Task th_CollectAxisData;
         Task th_CollectStCtrlData;
+        Task th_CollectLtpStCtrlData;
         public List<SV> listSV;
         public Dictionary<string, Axis> dicAxis;
         public List<Robot> listRobot;
@@ -115,6 +127,7 @@ namespace CMP.Models.DataCenter
             th_CollectAlarm = Task.Run(() => CollectAlarm());
             th_CollectAxisData = Task.Run(() => CollectAxisData());
             th_CollectStCtrlData = Task.Run(() => CollectStCtrlData());
+            th_CollectLtpStCtrlData = Task.Run(() => CollectLtpStCtrlData());
         }
 
         private void CreateRobotAlarmManage(out RobotAlarmManage alarmManage, string name, int sock)
@@ -188,6 +201,11 @@ namespace CMP.Models.DataCenter
 
                 foreach (var st in listSTCtrl)
                 {
+                    if (IsLtpStCtrl(st))
+                    {
+                        continue;
+                    }
+
                     st.RefreshStCtrlDataFast();
                 }
 
@@ -199,12 +217,45 @@ namespace CMP.Models.DataCenter
 
                 foreach (var st in listSTCtrl)
                 {
+                    if (IsLtpStCtrl(st))
+                    {
+                        continue;
+                    }
+
                     st.RefreshStCtrlDataSlow();
                 }
 
                 slowElapsedMs = 0;
             }
         }
+
+        /// <summary>
+        /// LTP（A/B 侧 Feed Arm1/2、Discharge Arm3）单独采集，快点和慢点都按 500ms 刷新。
+        /// </summary>
+        public async Task CollectLtpStCtrlData()
+        {
+            await Task.Delay(1000);
+
+            while (_collecting)
+            {
+                bool plcOk = MitsubishiPlcService.RobotCtrlInstance.IsPLCConnected;
+                await Task.Delay(plcOk ? LtpStCtrlRefreshIntervalMs : 2000);
+
+                foreach (var st in listSTCtrl)
+                {
+                    if (!IsLtpStCtrl(st))
+                    {
+                        continue;
+                    }
+
+                    st.RefreshStCtrlDataFast();
+                    st.RefreshStCtrlDataSlow();
+                }
+            }
+        }
+
+        private static bool IsLtpStCtrl(STCtrl st) =>
+            st != null && LtpStCtrlModules.Contains(st.ModuleName);
 
         public async Task CollectAlarm()
         {
