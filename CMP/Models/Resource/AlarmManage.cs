@@ -102,33 +102,33 @@ namespace CMP.Models.Resource
                 while (csv.Read())
                 {
                     alarm = new Alarm();
-                    alarm.AlarmCode = csv.GetField<string>(0);
+                    alarm.AlarmId = Convert.ToInt32(csv.GetField<string>(0));
 
-                    if (csv.TryGetField(5, out bool EnabledValue))
+                    if (csv.TryGetField(6, out bool EnabledValue))
                     {
                         alarm.Enabled = EnabledValue;
                     }
-                    if (csv.TryGetField(3, out string? DescValue))
+                    if (csv.TryGetField(4, out string? DescValue))
                     {
                         alarm.Description = DescValue;
                     }
-                    if (csv.TryGetField(6, out string? TypeValue))
+                    if (csv.TryGetField(7, out string? TypeValue))
                     {
                         alarm.Type = TypeValue;
                     }
-                    if (csv.TryGetField(7, out string unitValue))
+                    if (csv.TryGetField(8, out string unitValue))
                     {
                         alarm.Unit = (Unit)Enum.Parse(typeof(Unit), unitValue);
                     }
-                    if (csv.TryGetField(1, out string? NameValue))
+                    if (csv.TryGetField(2, out string? NameValue))
                     {
                         alarm.AlarmName = NameValue;
                     }
-                    if (csv.TryGetField(0, out string? value))
+                    if (csv.TryGetField(1, out string? value))
                     {
                         if (value != null)
                         {
-
+                            alarm.AlarmCode = value;
                             alarm.PropertyName = value.Replace(" ", "");
                         }
                     }
@@ -593,8 +593,6 @@ namespace CMP.Models.Resource
                                 {
                                     if (CanRaiseAlarm(alarmTemp))
                                     {
-                                        //alarmTemp.Type = "Alarm";
-                                        alarmTemp.AlarmId = Convert.ToInt32(alarmTemp.AlarmName.substring(1, alarmTemp.AlarmName.length()));
                                         alarmTemp.DefaultOperation = "None";
                                         alarmTemp.AlarmTime = DateTime.Now;
                                         listAlarm.Add(alarmTemp);
