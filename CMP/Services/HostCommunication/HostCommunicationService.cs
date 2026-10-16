@@ -246,11 +246,12 @@ namespace CMP.Services.HostCommunication
             {
                 foreach (ECModel item in result)
                 {
+                      
                     if (!tempModels.ContainsKey(item.ECID) && (!item.SheetName.Contains("DA") && !item.SheetName.Contains("AD")))
                     {
                         if (item.Name != "a" && item.Name != "b" && item.Name != "c" && item.Name != "d")
                         {
-                            item.Name = name + item.Class.Replace(" ", "") + item.Name.Replace(" ", "");
+                            item.Name = name + item.Class.Replace(" ", "") + item.Name.Replace(" ", "").Replace("&", "");
                             tempModels.Add(item.ECID, item);
                         }
                     }
