@@ -312,7 +312,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
 
         try
         {
-            var recipeContent = LoadRecipeContent("Dry Recipe", SelectedDryRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.DryRecipeFolder, SelectedDryRecipe);
             if (recipeContent != null)
             {
                 KST.stDryRecipeFormat plcRecipe = new KST.stDryRecipeFormat();
@@ -495,7 +495,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
         }
         try
         {
-            var recipeContent = LoadRecipeContent("Dry Recipe", SelectedDryRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.DryRecipeFolder, SelectedDryRecipe);
             if (recipeContent != null)
             {
                 KST.stDryRecipeFormat plcRecipe = new KST.stDryRecipeFormat();
@@ -808,7 +808,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
                 return;
             }
 
-            LoadRecipesFromFolder("Dry Recipe", DryRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.DryRecipeFolder, DryRecipes);
 
             // 设置默认选择
             if (DryRecipes.Count > 0)
@@ -899,6 +899,10 @@ public class DryTabContentViewModel : TabContentViewModelBase
                 return null;
             }
 
+            // 按文件夹名把模板上的规格元数据（IsUsed / OperableRule）贴回行上，
+            // 供 GetRealVal 判定"不使用"参数：IsUsed=false 的参数按 0（default）下发
+            RecipeTemplateRegistry.Decorate(content, folderName);
+
             return content;
         }
         catch (Exception ex)
@@ -919,9 +923,9 @@ public class DryTabContentViewModel : TabContentViewModelBase
             if (args == null || string.IsNullOrEmpty(args.RecipeType))
                 return;
 
-            if (args.RecipeType == "Dry Recipe")
+            if (args.RecipeType == RecipeTemplateRegistry.DryRecipeFolder)
             {
-                LoadRecipesFromFolder("Dry Recipe", DryRecipes);
+                LoadRecipesFromFolder(RecipeTemplateRegistry.DryRecipeFolder, DryRecipes);
                 if (!string.IsNullOrEmpty(args.RecipeName) && DryRecipes.Contains(args.RecipeName))
                 {
                     SelectedDryRecipe = args.RecipeName;
@@ -981,7 +985,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
             }
                 );
 
-        if (model == null) return default;
+        if (model == null || !model.IsUsed) return default;
         if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
 
         var value = model.Steps[stepIndex].Value;
@@ -990,8 +994,10 @@ public class DryTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
-            var arr = value.Split(':');
-            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
+            // 统一用 RecipeOptionValue 解析（兼容全角冒号）
+            value = targetType == typeof(string)
+                ? RecipeOptionValue.LabelPart(value)
+                : RecipeOptionValue.NumericPart(value);
         }
 
 

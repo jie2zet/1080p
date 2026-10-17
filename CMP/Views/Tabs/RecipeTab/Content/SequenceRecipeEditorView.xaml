@@ -419,7 +419,7 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" Width="250" SelectedValue="{Binding PolishAExsituRecipe}"
-                                          IsEnabled="{Binding PolishASideOperationAChecked}" ItemsSource="{Binding ConditionRecipeItems}" />
+                                          IsEnabled="{Binding PolishASideOperationAChecked}" ItemsSource="{Binding ExsituConditionRecipeItems}" />
                             </StackPanel>
                             <!-- Polish B -->
                             <StackPanel Orientation="Horizontal">
@@ -445,7 +445,7 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishBExsituRecipe}"
-                                          IsEnabled="{Binding PolishASideOperationBChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                                          IsEnabled="{Binding PolishASideOperationBChecked}" ItemsSource="{Binding ExsituConditionRecipeItems}"/>
                             </StackPanel>
                             <!-- Polish C -->
                             <StackPanel Orientation="Horizontal">
@@ -471,7 +471,7 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishCExsituRecipe}"
-                                          IsEnabled="{Binding PolishBSideOperationCChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                                          IsEnabled="{Binding PolishBSideOperationCChecked}" ItemsSource="{Binding ExsituConditionRecipeItems}"/>
                             </StackPanel>
                             <!-- Polish D -->
                             <StackPanel Orientation="Horizontal">
@@ -497,7 +497,7 @@
                                     </TextBlock.Text>
                                 </TextBlock>
                                 <ComboBox DisplayMemberPath="Name" SelectedValuePath="Value" MinWidth="250" SelectedValue="{Binding PolishDExsituRecipe}"
-                                          IsEnabled="{Binding PolishBSideOperationDChecked}" ItemsSource="{Binding ConditionRecipeItems}"/>
+                                          IsEnabled="{Binding PolishBSideOperationDChecked}" ItemsSource="{Binding ExsituConditionRecipeItems}"/>
                             </StackPanel>
                             <!-- Roller A1 -->
                             <StackPanel Orientation="Horizontal">

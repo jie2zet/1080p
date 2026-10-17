@@ -1,0 +1,377 @@
+{
+  "recipeType": "ExsituCondition Recipe",
+  "source": "Polish A_For_Recipe_Rev15.xls / ExsitCondition Recipe_Polish A / 显示条件说明列",
+  "rows": [
+    {
+      "index": 1,
+      "parameter": "Process Type",
+      "excelName": "Process Type",
+      "notUsed": 0,
+      "reason": null,
+      "conditions": [],
+      "excelMin": 1,
+      "excelMax": 2,
+      "excelDefault": 1,
+      "valueNote": "Excel 初期值 1 与该表自己的选项集 {25:Condition, -1:Recipe End} 冲突，取唯一有效过程值 25"
+    },
+    {
+      "index": 2,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": null,
+      "conditions": [],
+      "excelMin": "",
+      "excelMax": "",
+      "excelDefault": ""
+    },
+    {
+      "index": 3,
+      "parameter": "Process Time",
+      "excelName": "Process Time",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 9999,
+      "excelDefault": 100
+    },
+    {
+      "index": 4,
+      "parameter": "InSitu",
+      "excelName": "InSitu",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": -1,
+      "excelMax": 26,
+      "excelDefault": 5
+    },
+    {
+      "index": 5,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": "",
+      "excelMax": "",
+      "excelDefault": ""
+    },
+    {
+      "index": 6,
+      "parameter": "Platen Rotation",
+      "excelName": "Platen Rotation",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 180,
+      "excelDefault": 10
+    },
+    {
+      "index": 7,
+      "parameter": "Conditioner Head Rotation",
+      "excelName": "Conditioner Head Rotation",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 100,
+      "excelDefault": 10
+    },
+    {
+      "index": 8,
+      "parameter": "Condition Pressure",
+      "excelName": "Condition Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 3,
+      "excelMax": 78,
+      "excelDefault": 10
+    },
+    {
+      "index": 9,
+      "parameter": "Condition Sweep Recipe",
+      "excelName": "Condition Sweep Recipe",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 5,
+      "excelDefault": 0
+    },
+    {
+      "index": 10,
+      "parameter": "Platen Wash Selection",
+      "excelName": "Platen Wash Selection",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 1,
+      "excelDefault": 0.1,
+      "valueNote": "Excel 初期值 0.1 对 option/list 参数非法（选项为 0:Close/1:Open 等），未照抄；CheckRecipeDefualtValue 会将其归一到 Options[0]，与当前模板值等效"
+    },
+    {
+      "index": 11,
+      "parameter": "Slurry Line 1 Type",
+      "excelName": "Slurry Line 1 Type",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 1,
+      "excelDefault": 0.1,
+      "valueNote": "Excel 初期值 0.1 对 option/list 参数非法（选项为 0:Close/1:Open 等），未照抄；CheckRecipeDefualtValue 会将其归一到 Options[0]，与当前模板值等效"
+    },
+    {
+      "index": 12,
+      "parameter": "Slurry Line 2 Type",
+      "excelName": "Slurry Line 2 Type",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 1,
+      "excelDefault": 0.1,
+      "valueNote": "Excel 初期值 0.1 对 option/list 参数非法（选项为 0:Close/1:Open 等），未照抄；CheckRecipeDefualtValue 会将其归一到 Options[0]，与当前模板值等效"
+    },
+    {
+      "index": 13,
+      "parameter": "Slurry Line 3 Type",
+      "excelName": "Slurry Line 3 Type",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 1,
+      "excelDefault": 0.1,
+      "valueNote": "Excel 初期值 0.1 对 option/list 参数非法（选项为 0:Close/1:Open 等），未照抄；CheckRecipeDefualtValue 会将其归一到 Options[0]，与当前模板值等效"
+    },
+    {
+      "index": 14,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": "",
+      "excelMax": "",
+      "excelDefault": ""
+    },
+    {
+      "index": 15,
+      "parameter": "Slurry Line 1 Flow",
+      "excelName": "Slurry Line 1 Flow",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 500,
+      "excelDefault": 100
+    },
+    {
+      "index": 16,
+      "parameter": "Slurry Line 2 Flow",
+      "excelName": "Slurry Line 2 Flow",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 500,
+      "excelDefault": 100
+    },
+    {
+      "index": 17,
+      "parameter": "Slurry Line 3 Flow",
+      "excelName": "Slurry Line 3 Flow",
+      "notUsed": 0,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 500,
+      "excelDefault": 100
+    },
+    {
+      "index": 18,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": "",
+      "excelMax": "",
+      "excelDefault": ""
+    },
+    {
+      "index": 19,
+      "parameter": "Sweep Stop Time Type",
+      "excelName": "Sweep Stop Time Type",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 1,
+      "excelDefault": 0.1,
+      "valueNote": "Excel 初期值 0.1 对 option/list 参数非法（选项为 0:Close/1:Open 等），未照抄；CheckRecipeDefualtValue 会将其归一到 Options[0]，与当前模板值等效"
+    },
+    {
+      "index": 20,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": "",
+      "excelMax": "",
+      "excelDefault": ""
+    },
+    {
+      "index": 21,
+      "parameter": "Ratio",
+      "excelName": "Ratio",
+      "notUsed": 1,
+      "reason": "Process Type=25时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "25"
+          ]
+        }
+      ],
+      "excelMin": 0,
+      "excelMax": 100,
+      "excelDefault": 30
+    }
+  ],
+  "note": "ExsituCondition Recipe 使用独立模板 ExsituConditionRecipeTemplate，允许值按 Excel 字面取 {25}。Condition Recipe 由 InsituConditionRecipeTemplate 承载，该 sheet 的显示条件说明全为空，不产生规则。"
+}

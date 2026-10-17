@@ -1,0 +1,30 @@
+{
+  "recipeType": "Dry Recipe",
+  "source": "Dry A_For_Recipe_Rev01.xls / Recipe_Dry A / AG 列(说明)",
+  "rows": [
+    { "index": 1, "parameter": "Process Type", "notUsed": 0, "reason": null, "conditions": [] },
+    { "index": 2, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 3, "parameter": "Process Time", "notUsed": 0, "reason": "Process Type=3时允许", "conditions": [{ "source": "Process Type", "allow": ["3"] }] },
+    { "index": 4, "parameter": "Wafer Rotation Speed", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 5, "parameter": "IPA Arm  Sweep Start Position", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 6, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 7, "parameter": "IPA Arm  Sweep End Position", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 8, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 9, "parameter": "IPA Arm  Sweep Center Velocity", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 10, "parameter": "IPA Arm  Sweep Edge Velocity", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 11, "parameter": "IPA Arm  Sweep Speed", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 12, "parameter": "IPA Arm  Cycle", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 13, "parameter": "Reserved", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 14, "parameter": "Reserved", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 15, "parameter": "Reserved", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 16, "parameter": "Reserved", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 17, "parameter": "Reserved", "notUsed": 1, "reason": "Process Type=2时允许", "conditions": [{ "source": "Process Type", "allow": ["2"] }] },
+    { "index": 18, "parameter": "Dilution N2 Gas Flow", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 19, "parameter": "N2 For WF Backside Flow", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 20, "parameter": "Outer Rinse Flow", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 21, "parameter": "Bubbling N2 Gas Flow", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 22, "parameter": "Upper Rinse Supply", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 23, "parameter": "Lower Rinse Supply", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] },
+    { "index": 24, "parameter": "Wafer Rotation  Acceleration", "notUsed": 0, "reason": "Process Type=1或3时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "3"] }] }
+  ]
+}

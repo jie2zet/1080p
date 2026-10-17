@@ -514,6 +514,10 @@ namespace CMP.ViewModels.Tabs.OperationTab
             }
             var recipe = JsonConvert.DeserializeObject<Recipe.Content>(FileUtil.ReadFile(selection.Value.ToString()!))!;
 
+            // 按文件夹名把模板上的规格元数据贴回行上（不使用的参数按 0 下发）
+            RecipeTemplateRegistry.Decorate(recipe,
+                Path.GetFileName(Path.GetDirectoryName(selection.Value.ToString()!)));
+
             if (!b3003Value)
             {
                 if (GetRealVal<short>(recipe, "ProcessType", 0) != 64)
@@ -734,7 +738,7 @@ namespace CMP.ViewModels.Tabs.OperationTab
                 }
                     );
 
-            if (model == null) return default;
+            if (model == null || !model.IsUsed) return default;
             if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
 
             var value = model.Steps[stepIndex].Value;
@@ -743,8 +747,10 @@ namespace CMP.ViewModels.Tabs.OperationTab
 
             if (type == "option" || type == "list")
             {
-                var arr = value.Split(':');
-                value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
+                // 统一用 RecipeOptionValue 解析（兼容全角冒号）
+                value = targetType == typeof(string)
+                    ? RecipeOptionValue.LabelPart(value)
+                    : RecipeOptionValue.NumericPart(value);
             }
 
 

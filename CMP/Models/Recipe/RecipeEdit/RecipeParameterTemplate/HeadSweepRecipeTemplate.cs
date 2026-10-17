@@ -15,6 +15,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 1,
             Name = "Head Sweep Type",
+            IsUsed = true,
             Unit = "",
             Type = "option",
             Min = 1,
@@ -28,6 +29,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 2,
             Name = "Head Sweep Count",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "count/min",
             Type = "float",
             Min = 0.00,
@@ -41,6 +44,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 3,
             Name = "Start Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["1", "2"], "Head Sweep Type=1或2时允许"),
             Unit = "mm",
             Type = "float",
             Min = 0.00,
@@ -54,6 +59,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 4,
             Name = "End Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["1", "2"], "Head Sweep Type=1或2时允许"),
             Unit = "mm",
             Type = "float",
             Min = 0.00,
@@ -67,6 +74,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 5,
             Name = "Zone Count",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "int",
             Min = 0,
@@ -80,6 +89,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 6,
             Name = "Zone 1 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -93,6 +104,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 7,
             Name = "Zone 2 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -106,6 +119,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 8,
             Name = "Zone 3 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -119,6 +134,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 9,
             Name = "Zone 4 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -132,6 +149,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 10,
             Name = "Zone 5 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -145,6 +164,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 11,
             Name = "Zone 6 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -158,6 +179,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 12,
             Name = "Zone 7 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -171,6 +194,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 13,
             Name = "Zone 8 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -184,6 +209,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 14,
             Name = "Zone 9 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -197,6 +224,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 15,
             Name = "Zone 10 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -210,6 +239,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 16,
             Name = "Zone 11 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -223,6 +254,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 17,
             Name = "Zone 12 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -236,6 +269,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 18,
             Name = "Zone 13 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -249,6 +284,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 19,
             Name = "Zone 14 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -262,6 +299,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 20,
             Name = "Zone 15 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -275,6 +314,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 21,
             Name = "Zone 16 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -288,6 +329,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 22,
             Name = "Zone 17 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -301,6 +344,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 23,
             Name = "Zone 18 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -314,6 +359,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 24,
             Name = "Zone 19 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -327,6 +374,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 25,
             Name = "Zone 20 Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule("Head Sweep Type", ["2"], "Head Sweep Type=2时允许"),
             Unit = "",
             Type = "float",
             Min = 0.00,

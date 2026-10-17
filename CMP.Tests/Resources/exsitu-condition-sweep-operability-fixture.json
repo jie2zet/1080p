@@ -1,0 +1,772 @@
+{
+  "recipeType": "ExsituCondition Sweep Recipe",
+  "source": "Polish A_For_Recipe_Rev15.xls / Recipe_ExsituCondition Sweep / 显示条件说明列",
+  "rows": [
+    {
+      "index": 1,
+      "parameter": "Condition Sweep Type",
+      "excelName": "Condition Sweep Type",
+      "notUsed": 0,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 2,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 3,
+      "parameter": "Start Position",
+      "excelName": "Start Position",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "parameter": "End Position",
+      "excelName": "End Position",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "parameter": "Zone Count",
+      "excelName": "Zone Count",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "parameter": "Zone 1 Ratio",
+      "excelName": "Zone 1 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "parameter": "Zone 2 Ratio",
+      "excelName": "Zone 2 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "parameter": "Zone 3 Ratio",
+      "excelName": "Zone 3 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "parameter": "Zone 4 Ratio",
+      "excelName": "Zone 4 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "parameter": "Zone 5 Ratio",
+      "excelName": "Zone 5 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "parameter": "Zone 6 Ratio",
+      "excelName": "Zone 6 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "parameter": "Zone 7 Ratio",
+      "excelName": "Zone 7 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "parameter": "Zone 8 Ratio",
+      "excelName": "Zone 8 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "parameter": "Zone 9 Ratio",
+      "excelName": "Zone 9 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "parameter": "Zone 10 Ratio",
+      "excelName": "Zone 10 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "parameter": "Zone 11 Ratio",
+      "excelName": "Zone 11 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "parameter": "Zone 12 Ratio",
+      "excelName": "Zone 12 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "parameter": "Zone 13 Ratio",
+      "excelName": "Zone 13 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "parameter": "Zone 14 Ratio",
+      "excelName": "Zone 14 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "parameter": "Zone 15 Ratio",
+      "excelName": "Zone 15 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "parameter": "Zone 16 Ratio",
+      "excelName": "Zone 16 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "parameter": "Zone 17 Ratio",
+      "excelName": "Zone 17 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "parameter": "Zone 18 Ratio",
+      "excelName": "Zone 18 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "parameter": "Zone 19 Ratio",
+      "excelName": "Zone 19 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "parameter": "Zone 20 Ratio",
+      "excelName": "Zone 20 Ratio",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 40,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 41,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 42,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 43,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 44,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 45,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 46,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 47,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 48,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 49,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 50,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 51,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 52,
+      "parameter": "Condition Sweep Count",
+      "excelName": "Condition Sweep Count",
+      "notUsed": 0,
+      "reason": "Condition Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Condition Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    }
+  ]
+}

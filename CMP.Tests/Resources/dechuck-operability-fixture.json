@@ -1,0 +1,449 @@
+{
+  "recipeType": "Dechuck Recipe",
+  "source": "Polish A_For_Recipe_Rev15.xls / Dechuck Recipe_Polish A / 显示条件说明列",
+  "rows": [
+    {
+      "index": 1,
+      "parameter": "Process Type",
+      "excelName": "Process Type",
+      "notUsed": 0,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 2,
+      "parameter": "Step Control",
+      "excelName": "Step Control",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "parameter": "Zone Min Pressure",
+      "excelName": "Zone Min Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "parameter": "Zone Max Pressure",
+      "excelName": "Zone Max Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "parameter": "Max Time",
+      "excelName": "Max Time",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "parameter": "Platen Rotation",
+      "excelName": "Platen Rotation",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "parameter": "Head Rotation",
+      "excelName": "Head Rotation",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "parameter": "Zone 1 Type",
+      "excelName": "Zone 1 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "parameter": "Zone 2 Type",
+      "excelName": "Zone 2 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "parameter": "Zone 3 Type",
+      "excelName": "Zone 3 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "parameter": "Zone 4 Type",
+      "excelName": "Zone 4 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "parameter": "Zone 5 Type",
+      "excelName": "Zone 5 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "parameter": "Zone 6 Type",
+      "excelName": "Zone 6 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "parameter": "Zone 7 Type",
+      "excelName": "Zone 7 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "parameter": "Zone 8 Type",
+      "excelName": "Zone 8 Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "parameter": "Retainer Ring Type",
+      "excelName": "Retainer Ring  Type",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "parameter": "Zone 1 Pressure",
+      "excelName": "Zone 1 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "parameter": "Zone 2 Pressure",
+      "excelName": "Zone 2 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "parameter": "Zone 3 Pressure",
+      "excelName": "Zone 3 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "parameter": "Zone 4 Pressure",
+      "excelName": "Zone 4 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "parameter": "Zone 5 Pressure",
+      "excelName": "Zone 5 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "parameter": "Zone 6 Pressure",
+      "excelName": "Zone 6 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "parameter": "Zone 7 Pressure",
+      "excelName": "Zone 7 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "parameter": "Zone 8 Pressure",
+      "excelName": "Zone 8 Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "parameter": "Retainer Ring Pressure",
+      "excelName": "Retainer Ring Pressure",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "parameter": "Plant Wash Selection",
+      "excelName": "Platen Wash Selection",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "parameter": "Membrane Height",
+      "excelName": "Membrane Height",
+      "notUsed": 0,
+      "reason": "Process Type=20时允许",
+      "conditions": [
+        {
+          "source": "Process Type",
+          "allow": [
+            "20"
+          ]
+        }
+      ]
+    }
+  ]
+}

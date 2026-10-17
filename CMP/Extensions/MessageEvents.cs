@@ -118,12 +118,21 @@ namespace CMP.Extensions
 
     public class GetRecipeConfigEventArgs
     {
+        /// <summary>
+        /// Recipe类型/文件夹名称（如 "Load Recipe", "Polish Recipe" 等）
+        /// </summary>
         public string? RecipeType { get; set; }
-
+        /// <summary>
+        /// Recipe的文件名称
+        /// </summary>
         public string? RecipeName { get;set; }
-
+        /// <summary>
+        /// 对应的EC配置文件名称
+        /// </summary>
         public string? ConfigFileName { get; set; }
-
+        /// <summary>
+        /// 是否需要提示用户，默认不提示
+        /// </summary>
         public bool IsNeedTip { get; set; }
     }
 }

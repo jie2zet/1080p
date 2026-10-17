@@ -1,4 +1,4 @@
-﻿using CMP.Services.Auth;
+using CMP.Services.Auth;
 using CMP.Constants.Plc;
 using CMP.Extensions;
 using CMP.Lang;
@@ -85,6 +85,15 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         set => SetProperty(ref _conditionRecipes, value);
     }
 
+    private ObservableCollection<string> _exsituConditionRecipes = new();
+
+    /// <summary>ExsituCondition Recipe 文件夹下的配方（与 In-situ 的 ConditionRecipes 分开）。</summary>
+    public ObservableCollection<string> ExsituConditionRecipes
+    {
+        get => _exsituConditionRecipes;
+        set => SetProperty(ref _exsituConditionRecipes, value);
+    }
+
     private ObservableCollection<string> _dechuckRecipes = new();
 
     public ObservableCollection<string> DechuckRecipes
@@ -93,12 +102,12 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         set => SetProperty(ref _dechuckRecipes, value);
     }
 
-    private ObservableCollection<string> _headRecipes = new();
+    private ObservableCollection<string> _headSweepRecipes = new();
 
-    public ObservableCollection<string> HeadRecipes
+    public ObservableCollection<string> HeadSweepRecipes
     {
-        get => _headRecipes;
-        set => SetProperty(ref _headRecipes, value);
+        get => _headSweepRecipes;
+        set => SetProperty(ref _headSweepRecipes, value);
     }
 
     private ObservableCollection<string> _polishRecipes = new();
@@ -158,12 +167,13 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         set => SetProperty(ref _selectedPreCondRecipe, value);
     }
 
-    private string? _selectedConditionRecipe;
+    private string? _selectedExsituConditionRecipe;
 
-    public string? SelectedConditionRecipe
+    /// <summary>ExsituCondition Recipe 下拉框选中项（BreakIn 执行用）。</summary>
+    public string? SelectedExsituConditionRecipe
     {
-        get => _selectedConditionRecipe;
-        set => SetProperty(ref _selectedConditionRecipe, value);
+        get => _selectedExsituConditionRecipe;
+        set => SetProperty(ref _selectedExsituConditionRecipe, value);
     }
 
     private string? _selectedDechuckRecipe;
@@ -288,7 +298,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     public DelegateCommand<string>? AutoModeCommand { get; set; }
     public DelegateCommand<string>? ManualModeCommand { get; set; }
     public DelegateCommand<string>? AutoRunCommand { get; set; }
-    public DelegateCommand<string>? ConditionCommand { get; set; }
+    public DelegateCommand<string>? ExsituConditionCommand { get; set; }
     public DelegateCommand<string>? UnloadCommand { get; set; }
     public DelegateCommand<string>? DechuckCommand { get; set; }
     public DelegateCommand<string>? PositionCommand { get; set; }
@@ -322,9 +332,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     /// </summary>
     bool isResetRecipeState = false;
 
-    //private string _plcAddr;
-    //private ushort _plcPort;
-    private string _recipeBasePath = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\";
+    /// <summary>
+    /// "D:\CMP\Configuration\Recipes\UnitRecipe\"
+    /// </summary>
+    private readonly string _recipeBasePath = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\";
 
     Task thMonitor;
 
@@ -421,7 +432,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         AutoModeCommand = OperationAudit.Create<string>("AutoMode", AutoModeCommandExecute, () => TabTitle ?? string.Empty);
         ManualModeCommand = OperationAudit.Create<string>("ManualMode", ManualModeCommandExecute, () => TabTitle ?? string.Empty);
         AutoRunCommand = OperationAudit.Create<string>("AutoRun", AutoRunCommandExecute, () => TabTitle ?? string.Empty);
-        ConditionCommand = OperationAudit.Create<string>("BreakIn", BreakInCommandExecute, () => TabTitle ?? string.Empty);
+        ExsituConditionCommand = OperationAudit.Create<string>("BreakIn", BreakInCommandExecute, () => TabTitle ?? string.Empty);
         UnloadCommand = OperationAudit.Create<string>("Unload", UnloadCommandExecute, () => TabTitle ?? string.Empty);
         DechuckCommand = OperationAudit.Create<string>("Dechuck", DechuckCommandExecute, () => TabTitle ?? string.Empty);
         PositionCommand = OperationAudit.Create<string>("Position", PositionCommandExecute, () => TabTitle ?? string.Empty);
@@ -481,8 +492,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             bool isSuccess = false;
             switch (args.RecipeType)
             {
-                case "Load Recipe":
-                    LoadRecipesFromFolder("Load Recipe", LoadRecipes);
+                case RecipeTemplateRegistry.LoadRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.LoadRecipeFolder, LoadRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && LoadRecipes.Contains(args.RecipeName))
                     {
                         Application.Current.Dispatcher.Invoke(() => {
@@ -493,8 +504,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                     }
 
                     break;                               
-                case "UnLoad Recipe":
-                    LoadRecipesFromFolder("UnLoad Recipe", UnloadRecipes);
+                case RecipeTemplateRegistry.UnloadRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.UnloadRecipeFolder, UnloadRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && UnloadRecipes.Contains(args.RecipeName))
                     {
                        Application.Current.Dispatcher.Invoke(() => {  
@@ -504,8 +515,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                         isSuccess = true;
                     }
                     break;
-                case "Dechuck Recipe":
-                    LoadRecipesFromFolder("Dechuck Recipe", DechuckRecipes);
+                case RecipeTemplateRegistry.DechuckRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.DechuckRecipeFolder, DechuckRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && DechuckRecipes.Contains(args.RecipeName))
                     {
                         Application.Current.Dispatcher.Invoke(() => { 
@@ -515,8 +526,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                         isSuccess = true;
                     }
                     break;
-                case "Load Retry Recipe":
-                    LoadRecipesFromFolder("Load Recipe", LoadRetryRecipes);
+                case RecipeTemplateRegistry.LoadRetryRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.LoadRetryRecipeFolder, LoadRetryRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && LoadRetryRecipes.Contains(args.RecipeName))
                     {
                         Application.Current.Dispatcher.Invoke(() => { 
@@ -525,8 +536,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                         isSuccess = true;
                     }
                     break;
-                case "Dechuck Retry Recipe":
-                    LoadRecipesFromFolder("Dechuck Recipe", DechuckRetryRecipes);
+                case RecipeTemplateRegistry.DechuckRetryRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.DechuckRetryRecipeFolder, DechuckRetryRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && DechuckRetryRecipes.Contains(args.RecipeName))
                     {
                         Application.Current.Dispatcher.Invoke(() => {
@@ -535,8 +546,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                         isSuccess = true;
                     }
                     break;
-                case "UnLoad Retry Recipe":
-                    LoadRecipesFromFolder("UnLoad Recipe", UnloadRetryRecipes);
+                case RecipeTemplateRegistry.UnloadRetryRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.UnloadRetryRecipeFolder, UnloadRetryRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && UnloadRetryRecipes.Contains(args.RecipeName))
                     {
                         Application.Current.Dispatcher.Invoke(() => {
@@ -703,10 +714,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             //byte[] writeBufTemp;
             try
             {
-                var (polishRecipeName, conditionRecipeName) =
+                var (polishRecipeName, exsituConditionRecipeName) =
                     GetRecipe(GlobalService.dicWaferIndex[waferIndex], this.Id);
 
-                AssignWaferToPLC(polishRecipeName, conditionRecipeName);
+                AssignWaferToPLC(polishRecipeName, exsituConditionRecipeName);
 
                 //向地址中写入wafer的sequence数值
                 var wafer = GlobalService.dicWaferIndex[waferIndex];
@@ -754,10 +765,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
     }
 
-    private void AssignWaferToPLC(string polishRecipeName, string conditionRecipeName)
+    private void AssignWaferToPLC(string polishRecipeName, string exsituConditionRecipeName)
     {
         SelectedPolishRecipe = polishRecipeName;
-        SelectedConditionRecipe = conditionRecipeName;
+        SelectedExsituConditionRecipe = exsituConditionRecipeName;
 
         LoadCommandExecute("Auto");
 
@@ -1751,7 +1762,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         AssignLoadRetryRecipe();
         try
         {
-            var recipeContent = LoadRecipeContent("Load Recipe", SelectedLoadRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.LoadRecipeFolder, SelectedLoadRecipe);
             if (recipeContent != null)
             {
                 // TODO: Use the recipe content to execute load operation
@@ -1852,7 +1863,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             err = KHL.KHLWriteVariable(kvLink.sock, "structEPD", writeBuf, true);
             Thread.Sleep(50);
 
-            var recipeContent = LoadRecipeContent("Polish Recipe", SelectedPolishRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.PolishRecipeFolder, SelectedPolishRecipe);
 
 
             if (recipeContent != null)
@@ -1940,7 +1951,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         List<string> listConditionSweepRecipe = new List<string>();
         listConditionSweepRecipe.add("None");
 
-        if (string.IsNullOrEmpty(SelectedConditionRecipe))
+        if (string.IsNullOrEmpty(SelectedExsituConditionRecipe))
         {
             Growl.WarningGlobal("Please select a Condition recipe first");
             return;
@@ -1948,20 +1959,20 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
         try
         {
-            var recipeContent = LoadRecipeContent("Condition Recipe", SelectedConditionRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.ExsituConditionRecipeFolder, SelectedExsituConditionRecipe);
             if (recipeContent != null)
             {
-                KST.stExsituRecipeFormat exsituConditionRecipe = new KST.stExsituRecipeFormat();
+                KST.stExsituConditionRecipeFormat exsituConditionRecipe = new KST.stExsituConditionRecipeFormat();
                 for (int i = 0; i < recipeContent.Data?[0].Steps.Count; i++)
                 {
                     exsituConditionRecipe.ProcessType[i] = GetRealVal<short>(recipeContent, "ProcessType", i);
                     exsituConditionRecipe.ProcessTime[i] = GetRealVal<float>(recipeContent, "ProcessTime", i);
                     exsituConditionRecipe.InSitu[i] = GetRealVal<short>(recipeContent, "InSitu", i);
                     exsituConditionRecipe.PlatenRotation[i] = GetRealVal<float>(recipeContent, "PlatenRotation", i);
-                    exsituConditionRecipe.ConditionHeadRotation[i] = GetRealVal<float>(recipeContent, "ConditionHeadRotation", i);
+                    exsituConditionRecipe.ConditionerHeadRotation[i] = GetRealVal<float>(recipeContent, "ConditionerHeadRotation", i);
                     exsituConditionRecipe.ConditionPressure[i] = GetRealVal<float>(recipeContent, "ConditionPressure", i);
-                    exsituConditionRecipe.ConditionRecipe[i] = AssignConditionSweepRecipe(ref listConditionSweepRecipe, GetRealVal<string>(recipeContent, "ConditionSweepRecipe", i)!, "Exsitu");
-                    exsituConditionRecipe.PlantWash[i] = GetRealVal<short>(recipeContent, "PlantWash", i);
+                    exsituConditionRecipe.ConditionSweepRecipe[i] = AssignExsituConditionSweepRecipe(ref listConditionSweepRecipe, GetRealVal<string>(recipeContent, "ConditionSweepRecipe", i)!);
+                    exsituConditionRecipe.PlatenWashSelection[i] = GetRealVal<short>(recipeContent, "PlatenWashSelection", i);
                     exsituConditionRecipe.SlurryLine1Type[i] = GetRealVal<short>(recipeContent, "SlurryLine1Type", i);
                     exsituConditionRecipe.SlurryLine2Type[i] = GetRealVal<short>(recipeContent, "SlurryLine2Type", i);
                     exsituConditionRecipe.SlurryLine3Type[i] = GetRealVal<short>(recipeContent, "SlurryLine3Type", i);
@@ -1969,14 +1980,14 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                     exsituConditionRecipe.SlurryLine2Flow[i] = GetRealVal<float>(recipeContent, "SlurryLine2Flow", i);
                     exsituConditionRecipe.SlurryLine3Flow[i] = GetRealVal<float>(recipeContent, "SlurryLine3Flow", i);
                     exsituConditionRecipe.SweepStopTimeType[i] = GetRealVal<short>(recipeContent, "SweepStopTimeType", i);
-                    exsituConditionRecipe.Ratio[i] = GetRealVal<float>(recipeContent, "Ratio", i);
+                    exsituConditionRecipe.Ratio[i] = GetRealVal<short>(recipeContent, "Ratio", i);
                 }
 
-                KST.stExsituRecipeFormat_ToByte(ref writeBuf, exsituConditionRecipe, 1, 0);
+                KST.stExsituConditionRecipeFormat_ToByte(ref writeBuf, exsituConditionRecipe, 1, 0);
                 err = KHLConnectAndOperation("structExsituRecipe", writeBuf);
                 if (err == (int)KHLUserError.KHL_ERR_NONE)
                 {
-                    Growl.SuccessGlobal($"Assign BreadIn Recipe {SelectedConditionRecipe} Successful");
+                    Growl.SuccessGlobal($"Assign BreadIn Recipe {SelectedExsituConditionRecipe} Successful");
 
                     if (obj == "Chamber")
                     {
@@ -1987,12 +1998,12 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 }
                 else
                 {
-                    Growl.ErrorGlobal($"Assign BreadIn Recipe {SelectedConditionRecipe} Successful:{err}");
+                    Growl.ErrorGlobal($"Assign BreadIn Recipe {SelectedExsituConditionRecipe} Successful:{err}");
                 }
             }
             else
             {
-                Growl.ErrorGlobal($"Cannot Find BreakIn Recipe: {SelectedConditionRecipe}");
+                Growl.ErrorGlobal($"Cannot Find BreakIn Recipe: {SelectedExsituConditionRecipe}");
             }
         }
         catch (Exception ex)
@@ -2016,7 +2027,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         AssignUnloadRetryRecipe();
         try
         {
-            var recipeContent = LoadRecipeContent("Unload Recipe", SelectedUnloadRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.UnloadRecipeFolder, SelectedUnloadRecipe);
             if (recipeContent != null)
             {
                 // TODO: Use the recipe content to execute load operation
@@ -2096,7 +2107,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         AssignDechuckRetryRecipe();
         try
         {
-            var recipeContent = LoadRecipeContent("Dechuck Recipe", SelectedDechuckRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.DechuckRecipeFolder, SelectedDechuckRecipe);
             if (recipeContent != null)
             {
                 // TODO: Use the recipe content to execute load operation
@@ -2170,7 +2181,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
         try
         {
-            var recipeContent = LoadRecipeContent("Load Recipe", SelectedLoadRetryRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.LoadRetryRecipeFolder, SelectedLoadRetryRecipe);
             if (recipeContent != null)  
             {
                 KST.stLoadRecipeFormat loadRecipe = new KST.stLoadRecipeFormat();
@@ -2234,7 +2245,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
         try
         {
-            var recipeContent = LoadRecipeContent("Unload Recipe", SelectedUnloadRetryRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.UnloadRetryRecipeFolder, SelectedUnloadRetryRecipe);
             if (recipeContent != null)
             {
                 KST.stUnloadRecipeFormat unloadRecipe = new KST.stUnloadRecipeFormat();
@@ -2300,7 +2311,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
         try
         {
-            var recipeContent = LoadRecipeContent("Dechuck Recipe", SelectedDechuckRetryRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.DechuckRetryRecipeFolder, SelectedDechuckRetryRecipe);
             if (recipeContent != null)
             {
                 KST.stChuckRecipeFormat dechuckRecipe = new KST.stChuckRecipeFormat();
@@ -2359,15 +2370,12 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
     private short AssignHeadSweepRecipe(ref List<string> listHeadSweepRecipe, string headSweepRecipeName)
     {
-        if (headSweepRecipeName == "None")
-        {
-            return 0;
-        }
+        if (headSweepRecipeName == "None") return 0;
 
         if (!listHeadSweepRecipe.Contains(headSweepRecipeName))
         {
             listHeadSweepRecipe.Add(headSweepRecipeName);
-            var recipeContent = LoadRecipeContent("Head Sweep Recipe", headSweepRecipeName);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.HeadSweepRecipeFolder, headSweepRecipeName);
             if (recipeContent != null)
             {
                 KST.stHeadSweepRecipeFormat headSweepRecipe = new KST.stHeadSweepRecipeFormat();
@@ -2399,14 +2407,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 KST.stHeadSweepRecipeFormat_ToByte(ref writeBuf, headSweepRecipe, 1, 0);
                 string variableName = $"structHeadSweepRecipe{listHeadSweepRecipe.IndexOf(headSweepRecipeName)}";
                 err = KHLConnectAndOperation(variableName, writeBuf);
-                if (err == (int)KHLUserError.KHL_ERR_NONE)
-                {
-                    Growl.SuccessGlobal($"Assign HeadSweep Recipe {headSweepRecipeName} Successful");
-                }
-                else
-                {
-                    Growl.ErrorGlobal($"Assign HeadSweep Recipe {headSweepRecipeName} Failed:{err}");
-                }
+                if (err == (int)KHLUserError.KHL_ERR_NONE) Growl.SuccessGlobal($"Assign HeadSweep Recipe {headSweepRecipeName} Successful");
+                else Growl.ErrorGlobal($"Assign HeadSweep Recipe {headSweepRecipeName} Failed:{err}");
             }
             else
             {
@@ -2419,18 +2421,14 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
     private short AssignConditionRecipe(ref List<string> listConditionRecipe, string conditionRecipeName)
     {
-        if (conditionRecipeName == "None")
-        {
-            return 0;
-        }
-
-        List<string> listConditionSweepRecipe = new List<string>();
-        listConditionSweepRecipe.add("None");
+        if (conditionRecipeName == "None") return 0;
+        List<string> listConditionSweepRecipe = [];
+        listConditionSweepRecipe.Add("None");
 
         if (!listConditionRecipe.Contains(conditionRecipeName))
         {
-            listConditionRecipe.add(conditionRecipeName);
-            var recipeContent = LoadRecipeContent("Condition Recipe", conditionRecipeName);
+            listConditionRecipe.Add(conditionRecipeName);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.InsituConditionRecipeFolder, conditionRecipeName);
             if (recipeContent != null)
             {
                 KST.stInsituConditionRecipeFormat conditionRecipe = new KST.stInsituConditionRecipeFormat();
@@ -2438,10 +2436,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 conditionRecipe.ProcessTime = GetRealVal<float>(recipeContent, "ProcessTime", 0);
                 conditionRecipe.InSitu = GetRealVal<short>(recipeContent, "InSitu", 0);
                 conditionRecipe.PlatenRotation = GetRealVal<float>(recipeContent, "PlatenRotation", 0);
-                conditionRecipe.ConditionHeadRotation = GetRealVal<float>(recipeContent, "ConditionHeadRotation", 0);
+                conditionRecipe.ConditionerHeadRotation = GetRealVal<float>(recipeContent, "ConditionerHeadRotation", 0);
                 conditionRecipe.ConditionPressure = GetRealVal<float>(recipeContent, "ConditionPressure", 0);
-                conditionRecipe.ConditionRecipe = AssignConditionSweepRecipe(ref listConditionSweepRecipe, GetRealVal<string>(recipeContent, "ConditionSweepRecipe", 0)!, "Insitu");
-                conditionRecipe.PlatenWash = GetRealVal<short>(recipeContent, "PlatenWash", 0);
+                conditionRecipe.ConditionSweepRecipe = AssignInsituConditionSweepRecipe(ref listConditionSweepRecipe, GetRealVal<string>(recipeContent, "ConditionSweepRecipe", 0)!);
+                conditionRecipe.PlatenWashSelection = GetRealVal<short>(recipeContent, "PlatenWashSelection", 0);
                 conditionRecipe.SlurryLine1Type = GetRealVal<short>(recipeContent, "SlurryLine1Type", 0);
                 conditionRecipe.SlurryLine2Type = GetRealVal<short>(recipeContent, "SlurryLine2Type", 0);
                 conditionRecipe.SlurryLine3Type = GetRealVal<short>(recipeContent, "SlurryLine3Type", 0);
@@ -2453,14 +2451,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 KST.stInsituConditionRecipeFormat_ToByte(ref writeBuf, conditionRecipe, 1, 0);
                 string variableName = $"structConditionRecipe{listConditionRecipe.IndexOf(conditionRecipeName)}";
                 err = KHLConnectAndOperation(variableName, writeBuf);
-                if (err == (int)KHLUserError.KHL_ERR_NONE)
-                {
-                    Growl.SuccessGlobal($"Assign Condition Recipe {conditionRecipeName} Successful");
-                }
-                else
-                {
-                    Growl.ErrorGlobal($"Assign Condition Recipe {conditionRecipeName} Failed:{err}");
-                }
+                if (err == (int)KHLUserError.KHL_ERR_NONE) Growl.SuccessGlobal($"Assign Condition Recipe {conditionRecipeName} Successful");
+                else Growl.ErrorGlobal($"Assign Condition Recipe {conditionRecipeName} Failed:{err}");
             }
             else
             {
@@ -2471,99 +2463,128 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         return (short)listConditionRecipe.IndexOf(conditionRecipeName);
     }
 
-    private short AssignConditionSweepRecipe(ref List<string> listConditionSweepRecipe, string conditionSweepRecipeName,
-        string type)
+    /// <summary>
+    /// Insitu Condition 用 Sweep 配方下发（读 InsituCondition Sweep Recipe 文件夹，
+    /// 组包成 <c>stInsituConditionSweepRecipeFormat</c>）。与 Exsitu 版本各自独立，不再靠 type 字符串分流。
+    /// </summary>
+    private short AssignInsituConditionSweepRecipe(ref List<string> listConditionSweepRecipe,
+        string conditionSweepRecipeName)
     {
-        if (conditionSweepRecipeName == "None")
-        {
-            return 0;
-        }
+        if (conditionSweepRecipeName == "None") return 0;
 
         if (!listConditionSweepRecipe.Contains(conditionSweepRecipeName))
         {
             listConditionSweepRecipe.Add(conditionSweepRecipeName);
-            var recipeContent = LoadRecipeContent("Condition Sweep Recipe", conditionSweepRecipeName);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.InsituConditionSweepRecipeFolder, conditionSweepRecipeName);
             if (recipeContent != null)
-            {                
-                string variableName = string.Empty;
-                if (type == "Insitu")
-                {
-                    KST.stInsituConditionSweepRecipeFormat insituConditionSweepRecipe = new KST.stInsituConditionSweepRecipeFormat();
-                    insituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
-                    insituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
-                    insituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
-                    insituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
-                    insituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
-                    insituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
-                    insituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
-                    insituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
-                    insituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
-                    insituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
-                    insituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
-                    insituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
-                    insituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
-                    insituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
-                    insituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
-                    insituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
-                    insituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
-                    insituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
-                    insituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
-                    insituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
-                    insituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
-                    insituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
-                    insituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
-                    insituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
-                    insituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
-                    KST.stInsituConditionSweepRecipeFormat_ToByte(ref writeBuf, insituConditionSweepRecipe, 1, 0);
-                    variableName =
-                        $"structConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
-                }
-                else
-                {
-                    KST.stExsituConditionSweepRecipeFormat exsituConditionSweepRecipe = new KST.stExsituConditionSweepRecipeFormat();
-                    exsituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
-                    exsituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
-                    exsituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
-                    exsituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
-                    exsituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
-                    exsituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
-                    exsituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
-                    exsituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
-                    exsituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
-                    exsituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
-                    exsituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
-                    exsituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
-                    exsituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
-                    exsituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
-                    exsituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
-                    exsituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
-                    exsituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
-                    exsituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
-                    exsituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
-                    exsituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
-                    exsituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
-                    exsituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
-                    exsituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
-                    exsituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
-                    exsituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
-                    KST.stExsituConditionSweepRecipeFormat_ToByte(ref writeBuf, exsituConditionSweepRecipe, 1, 0);
-                    variableName =
-                        $"structExsituConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
-                }
+            {
+                KST.stInsituConditionSweepRecipeFormat insituConditionSweepRecipe = new KST.stInsituConditionSweepRecipeFormat();
+                insituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                insituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                insituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                insituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                insituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                insituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                insituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                insituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                insituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                insituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                insituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                insituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                insituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                insituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                insituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                insituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                insituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                insituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                insituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                insituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                insituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                insituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                insituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                insituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                insituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                KST.stInsituConditionSweepRecipeFormat_ToByte(ref writeBuf, insituConditionSweepRecipe, 1, 0);
+                string variableName =
+                    $"structConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
 
                 err = KHLConnectAndOperation(variableName, writeBuf);
                 if (err == (int)KHLUserError.KHL_ERR_NONE)
                 {
-                    Growl.SuccessGlobal($"Assign ConditionSweep Recipe {conditionSweepRecipeName} Successful");
+                    Growl.SuccessGlobal($"Assign Insitu ConditionSweep Recipe {conditionSweepRecipeName} Successful");
                 }
                 else
                 {
-                    Growl.ErrorGlobal($"Assign ConditionSweep Recipe {conditionSweepRecipeName} Failed:{err}");
+                    Growl.ErrorGlobal($"Assign Insitu ConditionSweep Recipe {conditionSweepRecipeName} Failed:{err}");
                 }
             }
             else
             {
-                Growl.ErrorGlobal($"Cannot Find ConditionSweep Recipe: {conditionSweepRecipeName}");
+                Growl.ErrorGlobal($"Cannot Find Insitu ConditionSweep Recipe: {conditionSweepRecipeName}");
+            }
+        }
+
+        return (short)listConditionSweepRecipe.IndexOf(conditionSweepRecipeName);
+    }
+
+    /// <summary>
+    /// Exsitu Condition 用 Sweep 配方下发（读 ExsituCondition Sweep Recipe 文件夹，
+    /// 组包成 <c>stExsituConditionSweepRecipeFormat</c>）。
+    /// </summary>
+    private short AssignExsituConditionSweepRecipe(ref List<string> listConditionSweepRecipe,
+        string conditionSweepRecipeName)
+    {
+        if (conditionSweepRecipeName == "None") return 0;
+
+        if (!listConditionSweepRecipe.Contains(conditionSweepRecipeName))
+        {
+            listConditionSweepRecipe.Add(conditionSweepRecipeName);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.ExsituConditionSweepRecipeFolder, conditionSweepRecipeName);
+            if (recipeContent != null)
+            {
+                KST.stExsituConditionSweepRecipeFormat exsituConditionSweepRecipe = new KST.stExsituConditionSweepRecipeFormat();
+                exsituConditionSweepRecipe.ConditionSweepType = GetRealVal<short>(recipeContent, "ConditionSweepType", 0);
+                exsituConditionSweepRecipe.ConditionSweepCount = GetRealVal<float>(recipeContent, "ConditionSweepCount", 0);
+                exsituConditionSweepRecipe.StartPosition = GetRealVal<float>(recipeContent, "StartPosition", 0);
+                exsituConditionSweepRecipe.EndPosition = GetRealVal<float>(recipeContent, "EndPosition", 0);
+                exsituConditionSweepRecipe.ZoneCount = GetRealVal<short>(recipeContent, "ZoneCount", 0);
+                exsituConditionSweepRecipe.Zone1Ratio = GetRealVal<float>(recipeContent, "Zone1Ratio", 0);
+                exsituConditionSweepRecipe.Zone2Ratio = GetRealVal<float>(recipeContent, "Zone2Ratio", 0);
+                exsituConditionSweepRecipe.Zone3Ratio = GetRealVal<float>(recipeContent, "Zone3Ratio", 0);
+                exsituConditionSweepRecipe.Zone4Ratio = GetRealVal<float>(recipeContent, "Zone4Ratio", 0);
+                exsituConditionSweepRecipe.Zone5Ratio = GetRealVal<float>(recipeContent, "Zone5Ratio", 0);
+                exsituConditionSweepRecipe.Zone6Ratio = GetRealVal<float>(recipeContent, "Zone6Ratio", 0);
+                exsituConditionSweepRecipe.Zone7Ratio = GetRealVal<float>(recipeContent, "Zone7Ratio", 0);
+                exsituConditionSweepRecipe.Zone8Ratio = GetRealVal<float>(recipeContent, "Zone8Ratio", 0);
+                exsituConditionSweepRecipe.Zone9Ratio = GetRealVal<float>(recipeContent, "Zone9Ratio", 0);
+                exsituConditionSweepRecipe.Zone10Ratio = GetRealVal<float>(recipeContent, "Zone10Ratio", 0);
+                exsituConditionSweepRecipe.Zone11Ratio = GetRealVal<float>(recipeContent, "Zone11Ratio", 0);
+                exsituConditionSweepRecipe.Zone12Ratio = GetRealVal<float>(recipeContent, "Zone12Ratio", 0);
+                exsituConditionSweepRecipe.Zone13Ratio = GetRealVal<float>(recipeContent, "Zone13Ratio", 0);
+                exsituConditionSweepRecipe.Zone14Ratio = GetRealVal<float>(recipeContent, "Zone14Ratio", 0);
+                exsituConditionSweepRecipe.Zone15Ratio = GetRealVal<float>(recipeContent, "Zone15Ratio", 0);
+                exsituConditionSweepRecipe.Zone16Ratio = GetRealVal<float>(recipeContent, "Zone16Ratio", 0);
+                exsituConditionSweepRecipe.Zone17Ratio = GetRealVal<float>(recipeContent, "Zone17Ratio", 0);
+                exsituConditionSweepRecipe.Zone18Ratio = GetRealVal<float>(recipeContent, "Zone18Ratio", 0);
+                exsituConditionSweepRecipe.Zone19Ratio = GetRealVal<float>(recipeContent, "Zone19Ratio", 0);
+                exsituConditionSweepRecipe.Zone20Ratio = GetRealVal<float>(recipeContent, "Zone20Ratio", 0);
+                KST.stExsituConditionSweepRecipeFormat_ToByte(ref writeBuf, exsituConditionSweepRecipe, 1, 0);
+                string variableName =
+                    $"structExsituConditionSweepRecipe{listConditionSweepRecipe.IndexOf(conditionSweepRecipeName)}";
+
+                err = KHLConnectAndOperation(variableName, writeBuf);
+                if (err == (int)KHLUserError.KHL_ERR_NONE)
+                {
+                    Growl.SuccessGlobal($"Assign Exsitu ConditionSweep Recipe {conditionSweepRecipeName} Successful");
+                }
+                else
+                {
+                    Growl.ErrorGlobal($"Assign Exsitu ConditionSweep Recipe {conditionSweepRecipeName} Failed:{err}");
+                }
+            }
+            else
+            {
+                Growl.ErrorGlobal($"Cannot Find Exsitu ConditionSweep Recipe: {conditionSweepRecipeName}");
             }
         }
 
@@ -2663,8 +2684,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             // 根据Recipe类型重新加载对应的列表
             switch (args.RecipeType)
             {
-                case "Load Recipe":
-                    LoadRecipesFromFolder("Load Recipe", LoadRecipes);
+                case RecipeTemplateRegistry.LoadRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.LoadRecipeFolder, LoadRecipes);
                     // 如果当前选择的Recipe被修改了，保持选择
                     if (!string.IsNullOrEmpty(args.RecipeName) && LoadRecipes.Contains(args.RecipeName))
                     {
@@ -2672,36 +2693,42 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                     }
 
                     break;
-                case "Condition Recipe":
-                    LoadRecipesFromFolder("Condition Recipe", ConditionRecipes);
+                case RecipeTemplateRegistry.InsituConditionRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.InsituConditionRecipeFolder, ConditionRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && ConditionRecipes.Contains(args.RecipeName))
                     {
-                        // 如果保存的Recipe是当前Pre_Cond或Condition选中的，则保持选中
+                        // 如果保存的Recipe是当前 Pre_Cond 选中的，则保持选中
                         if (SelectedPreCondRecipe == args.RecipeName)
                             SelectedPreCondRecipe = args.RecipeName;
-                        if (SelectedConditionRecipe == args.RecipeName)
-                            SelectedConditionRecipe = args.RecipeName;
                     }
 
                     break;
-                case "Polish Recipe":
-                    LoadRecipesFromFolder("Polish Recipe", PolishRecipes);
+                case RecipeTemplateRegistry.ExsituConditionRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.ExsituConditionRecipeFolder, ExsituConditionRecipes);
+                    if (!string.IsNullOrEmpty(args.RecipeName) && ExsituConditionRecipes.Contains(args.RecipeName))
+                    {
+                        SelectedExsituConditionRecipe = args.RecipeName;
+                    }
+
+                    break;
+                case RecipeTemplateRegistry.PolishRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.PolishRecipeFolder, PolishRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && PolishRecipes.Contains(args.RecipeName))
                     {
                         SelectedPolishRecipe = args.RecipeName;
                     }
 
                     break;
-                case "Unload Recipe":
-                    LoadRecipesFromFolder("Unload Recipe", UnloadRecipes);
+                case RecipeTemplateRegistry.UnloadRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.UnloadRecipeFolder, UnloadRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && UnloadRecipes.Contains(args.RecipeName))
                     {
                         SelectedUnloadRecipe = args.RecipeName;
                     }
 
                     break;
-                case "Dechuck Recipe":
-                    LoadRecipesFromFolder("Dechuck Recipe", DechuckRecipes);
+                case RecipeTemplateRegistry.DechuckRecipeFolder:
+                    LoadRecipesFromFolder(RecipeTemplateRegistry.DechuckRecipeFolder, DechuckRecipes);
                     if (!string.IsNullOrEmpty(args.RecipeName) && DechuckRecipes.Contains(args.RecipeName))
                     {
                         SelectedDechuckRecipe = args.RecipeName;
@@ -2744,13 +2771,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
             // Load recipes from specific folders
 
-            //LoadRecipesFromFolder("Load Recipe", LoadRecipes);
-            //LoadRecipesFromFolder("Unload Recipe", UnloadRecipes);
-            //LoadRecipesFromFolder("Dechuck Recipe", DechuckRecipes);
-
-            LoadRecipesFromFolder("Condition Recipe", ConditionRecipes);
-            LoadRecipesFromFolder("Polish Recipe", PolishRecipes);
-            LoadRecipesFromFolder("Head Sweep Recipe", HeadRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.InsituConditionRecipeFolder, ConditionRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.ExsituConditionRecipeFolder, ExsituConditionRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.PolishRecipeFolder, PolishRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.HeadSweepRecipeFolder, HeadSweepRecipes);
 
             // Set default selections if available
 
@@ -2764,7 +2788,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             if (ConditionRecipes.Count > 0)
             {
                 SelectedPreCondRecipe = ConditionRecipes[0];
-                SelectedConditionRecipe = ConditionRecipes[0];
+            }
+            if (ExsituConditionRecipes.Count > 0)
+            {
+                SelectedExsituConditionRecipe = ExsituConditionRecipes[0];
             }
             if (PolishRecipes.Count > 0)
                 SelectedPolishRecipe = PolishRecipes[0];
@@ -2864,6 +2891,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 return null;
             }
 
+            // 按文件夹名把模板上的规格元数据（IsUsed / OperableRule）贴回行上，
+            // 供 GetRealVal 判定"不使用"参数：IsUsed=false 的参数按 0（default）下发
+            RecipeTemplateRegistry.Decorate(content, folderName);
+
             return content;
         }
         catch (Exception ex)
@@ -2886,7 +2917,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             }
                 );
 
-        if (model == null) return default;
+        if (model == null || !model.IsUsed) return default;
         if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
 
         var value = model.Steps[stepIndex].Value;
@@ -2895,9 +2926,10 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
-            value.Replace("：",":");
-            var arr = value.Split(':');
-            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
+            // 统一用 RecipeOptionValue 解析（兼容全角冒号）
+            value = targetType == typeof(string)
+                ? RecipeOptionValue.LabelPart(value)
+                : RecipeOptionValue.NumericPart(value);
         }
 
 

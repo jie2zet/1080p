@@ -1,0 +1,26 @@
+{
+  "recipeType": "Roll Recipe",
+  "source": "Roll A1_For_Recipe_Rev01 (2).xls / Recipe_Roll A1 / AG 列(说明)",
+  "note": "修订版：说明列已与 Process Type 选项集 {1,5,0,-1} 自洽（原版引用未定义的 2/3/4 已修正）。idx16/17 改为跨参数条件 WF Upper Face Chemical Supply=1。",
+  "rows": [
+    { "index": 1, "parameter": "Process Type", "notUsed": 0, "reason": null, "conditions": [] },
+    { "index": 2, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 3, "parameter": "Process Time", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 4, "parameter": "Upper Roller Rotate Speed", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 5, "parameter": "Lower Roller Rotate Speed", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 6, "parameter": "Wafer Rotation", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 7, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 8, "parameter": "Upper Roller Pressure", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 9, "parameter": "Lower Roller Pressure", "notUsed": 0, "reason": "Process Type=1时允许", "conditions": [{ "source": "Process Type", "allow": ["1"] }] },
+    { "index": 10, "parameter": "WF Upper Face DIW Flowrate", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 11, "parameter": "WF Lower Face DIW Flowrate", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 12, "parameter": "WF Upper Face Chemical Supply", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 13, "parameter": "WF Lower Face Chemical Supply", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 14, "parameter": "Mega Sonic Supply", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 15, "parameter": "Reserved", "notUsed": 1, "reason": null, "conditions": [] },
+    { "index": 16, "parameter": "Total Diluted Chemical Flow Rate", "notUsed": 0, "reason": "WF Upper Face Chemical Supply=1时允许", "conditions": [{ "source": "WF Upper Face Chemical Supply", "allow": ["1"] }] },
+    { "index": 17, "parameter": "Chemical Dilution Ratio", "notUsed": 0, "reason": "WF Upper Face Chemical Supply=1时允许", "conditions": [{ "source": "WF Upper Face Chemical Supply", "allow": ["1"] }] },
+    { "index": 18, "parameter": "Upper Roll Inner Rinse Supply", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] },
+    { "index": 19, "parameter": "Down Roll Inner Rinse Supply", "notUsed": 0, "reason": "Process Type=1、5时允许", "conditions": [{ "source": "Process Type", "allow": ["1", "5"] }] }
+  ]
+}
