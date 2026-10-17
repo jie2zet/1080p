@@ -1,0 +1,767 @@
+{
+  "recipeType": "Head Sweep Recipe",
+  "source": "Polish A_For_Recipe_Rev15.xls / Recipe_Head Sweep / 显示条件说明列",
+  "rows": [
+    {
+      "index": 1,
+      "parameter": "Head Sweep Type",
+      "excelName": "Head Sweep Type",
+      "notUsed": 0,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 2,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 3,
+      "parameter": "Start Position",
+      "excelName": "Start Position",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=1或2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "1",
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "parameter": "End Position",
+      "excelName": "End Position",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=1或2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "1",
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "parameter": "Zone Count",
+      "excelName": "Zone Count",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "parameter": "Reserve",
+      "excelName": "Reserve",
+      "notUsed": 1,
+      "reason": null,
+      "conditions": []
+    },
+    {
+      "index": 7,
+      "parameter": "Zone 1 Ratio",
+      "excelName": "Zone 1 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "parameter": "Zone 2 Ratio",
+      "excelName": "Zone 2 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "parameter": "Zone 3 Ratio",
+      "excelName": "Zone 3 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "parameter": "Zone 4 Ratio",
+      "excelName": "Zone 4 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "parameter": "Zone 5 Ratio",
+      "excelName": "Zone 5 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "parameter": "Zone 6 Ratio",
+      "excelName": "Zone 6 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "parameter": "Zone 7 Ratio",
+      "excelName": "Zone 7 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "parameter": "Zone 8 Ratio",
+      "excelName": "Zone 8 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "parameter": "Zone 9 Ratio",
+      "excelName": "Zone 9 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "parameter": "Zone 10 Ratio",
+      "excelName": "Zone 10 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "parameter": "Zone 11 Ratio",
+      "excelName": "Zone 11 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "parameter": "Zone 12 Ratio",
+      "excelName": "Zone 12 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "parameter": "Zone 13 Ratio",
+      "excelName": "Zone 13 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "parameter": "Zone 14 Ratio",
+      "excelName": "Zone 14 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "parameter": "Zone 15 Ratio",
+      "excelName": "Zone 15 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "parameter": "Zone 16 Ratio",
+      "excelName": "Zone 16 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "parameter": "Zone 17 Ratio",
+      "excelName": "Zone 17 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "parameter": "Zone 18 Ratio",
+      "excelName": "Zone 18 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "parameter": "Zone 19 Ratio",
+      "excelName": "Zone 19 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "parameter": "Zone 20 Ratio",
+      "excelName": "Zone 20 Ratio",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "parameter": "Zone 21 Ratio",
+      "excelName": "Zone 21 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "parameter": "Zone 22 Ratio",
+      "excelName": "Zone 22 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "parameter": "Zone 23 Ratio",
+      "excelName": "Zone 23 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "parameter": "Zone 24 Ratio",
+      "excelName": "Zone 24 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "parameter": "Zone 25 Ratio",
+      "excelName": "Zone 25 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "parameter": "Zone 26 Ratio",
+      "excelName": "Zone 26 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "parameter": "Zone 27 Ratio",
+      "excelName": "Zone 27 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "parameter": "Zone 28 Ratio",
+      "excelName": "Zone 28 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "parameter": "Zone 29 Ratio",
+      "excelName": "Zone 29 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "parameter": "Zone 30 Ratio",
+      "excelName": "Zone 30 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "parameter": "Zone 31 Ratio",
+      "excelName": "Zone 31 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "parameter": "Zone 32 Ratio",
+      "excelName": "Zone 32 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "parameter": "Zone 33 Ratio",
+      "excelName": "Zone 33 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 40,
+      "parameter": "Zone 34 Ratio",
+      "excelName": "Zone 34 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 41,
+      "parameter": "Zone 35 Ratio",
+      "excelName": "Zone 35 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 42,
+      "parameter": "Zone 36 Ratio",
+      "excelName": "Zone 36 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 43,
+      "parameter": "Zone 37 Ratio",
+      "excelName": "Zone 37 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 44,
+      "parameter": "Zone 38 Ratio",
+      "excelName": "Zone 38 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 45,
+      "parameter": "Zone 39 Ratio",
+      "excelName": "Zone 39 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 46,
+      "parameter": "Zone 40 Ratio",
+      "excelName": "Zone 40 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 47,
+      "parameter": "Zone 41 Ratio",
+      "excelName": "Zone 41 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 48,
+      "parameter": "Zone 42 Ratio",
+      "excelName": "Zone 42 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 49,
+      "parameter": "Zone 43 Ratio",
+      "excelName": "Zone 43 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 50,
+      "parameter": "Zone 44 Ratio",
+      "excelName": "Zone 44 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 51,
+      "parameter": "Zone 45 Ratio",
+      "excelName": "Zone 45 Ratio",
+      "notUsed": 1,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    },
+    {
+      "index": 52,
+      "parameter": "Head Sweep Count",
+      "excelName": "Head Sweep Count",
+      "notUsed": 0,
+      "reason": "Head Sweep Type=2时允许",
+      "conditions": [
+        {
+          "source": "Head Sweep Type",
+          "allow": [
+            "2"
+          ]
+        }
+      ]
+    }
+  ]
+}
