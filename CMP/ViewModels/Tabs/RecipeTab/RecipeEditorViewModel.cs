@@ -1007,7 +1007,6 @@ public class RecipeEditorViewModel : BindableBase
                 Level = 2,
                 Tag = newContent.Uuid
             };
-            parentTreeNode.Children?.Add(contentNode);
             string jsonFilePath = recipeBasePath + folder + "\\" + newContent.Name + ".json";
             if (File.Exists(jsonFilePath))
             {
@@ -1016,6 +1015,7 @@ public class RecipeEditorViewModel : BindableBase
             }
             else
             {
+                parentTreeNode.Children?.Add(contentNode);
                 FileUtil.WriteFile(jsonFilePath, JsonConvert.SerializeObject(newContent, Formatting.Indented));
             }
 
