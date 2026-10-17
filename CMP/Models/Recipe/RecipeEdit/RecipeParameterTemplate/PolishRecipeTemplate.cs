@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,6 +15,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 1,
             Name = "Process Type",
+            IsUsed = true,
             Unit = "",
             Type = "list",
             Min = 1,
@@ -28,6 +29,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 2,
             Name = "Process Time",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "s",
             Type = "float",
             Min = 0.00,
@@ -41,6 +44,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 3,
             Name = "Jump Step No.",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = -1,
@@ -83,6 +88,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 4,
             Name = "Platen Rotation",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "r/min",
             Type = "float",
             Min = 0.00,
@@ -96,6 +103,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 5,
             Name = "Head Rotation",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "r/min",
             Type = "float",
             Min = 0.00,
@@ -109,6 +118,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 6,
             Name = "Head Sweep Recipe",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -129,6 +140,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 7,
             Name = "Zone 1 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -146,6 +159,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 8,
             Name = "Zone 2 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -163,6 +178,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 9,
             Name = "Zone 3 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -180,6 +197,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 10,
             Name = "Zone 4 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -197,6 +216,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 11,
             Name = "Zone 5 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -214,6 +235,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 12,
             Name = "Zone 6 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -231,6 +254,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 13,
             Name = "Zone 7 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -248,6 +273,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 14,
             Name = "Zone 8 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -265,6 +292,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 15,
             Name = "Retainer Ring Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 1,
@@ -285,6 +314,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 16,
             Name = "Zone 1 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -298,6 +329,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 17,
             Name = "Zone 2 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -311,6 +344,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 18,
             Name = "Zone 3 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -324,6 +359,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 19,
             Name = "Zone 4 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -337,6 +374,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 20,
             Name = "Zone 5 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -350,6 +389,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 21,
             Name = "Zone 6 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -363,6 +404,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 22,
             Name = "Zone 7 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -376,6 +419,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 23,
             Name = "Zone 8 Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -389,6 +434,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 24,
             Name = "Retainer Ring Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "Kpa",
             Type = "float",
             Min = 0.00,
@@ -405,6 +452,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 25,
             Name = "Condition Recipe",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -425,6 +474,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 26,
             Name = "Plant Wash Selection",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -436,7 +487,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             ],
             CompatibleName = [
               "PlantWash",
-              "PlantWashSelection"
+              "PlantWashSelection",
+              "PlatenWashSelection"
             ],
             Steps = []
           },
@@ -444,6 +496,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 27,
             Name = "Slurry Line 1 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -461,6 +515,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 28,
             Name = "Slurry Line 2 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -478,6 +534,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 29,
             Name = "Slurry Line 3 Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -495,6 +553,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 30,
             Name = "Slurry Line 1 Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "mL/min",
             Type = "float",
             Min = 0.00,
@@ -508,6 +568,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 31,
             Name = "Slurry Line 2 Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "mL/min",
             Type = "float",
             Min = 0.00,
@@ -521,6 +583,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 32,
             Name = "Slurry Line 3 Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "mL/min",
             Type = "float",
             Min = 0.00,
@@ -534,6 +598,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 33,
             Name = "Dressing Water Selection",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "",
             Type = "list",
             Min = 0,
@@ -553,6 +619,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 34,
             Name = "Algorithm",
+            IsUsed = true,
             Unit = "",
             Type = "list",
             Min = 0,
@@ -568,6 +635,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 35,
             Name = "Model",
+            IsUsed = true,
             Unit = "",
             Type = "list",
             Min = 0,
@@ -581,6 +649,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 36,
             Name = "Membrane Height",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "mm",
             Type = "float",
             Min = 0.00,
@@ -597,6 +667,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 37,
             Name = "Slurry Nozzle Start Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "deg",
             Type = "float",
             Min = 0.00,
@@ -613,6 +685,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 38,
             Name = "Slurry Nozzle End Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "deg",
             Type = "float",
             Min = 0.00,
@@ -629,6 +703,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 39,
             Name = "Slurry Nozzle Sweep Speed",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "2"], "Process Type=1或2时允许"),
             Unit = "deg/s",
             Type = "float",
             Min = 0.00,

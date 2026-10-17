@@ -1,4 +1,4 @@
-﻿using CMP.Extensions;
+using CMP.Extensions;
 using CMP.Models.Config;
 using CMP.Models.Dialog;
 using CMP.Models.kvsPlc;
@@ -480,12 +480,13 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                 {
                     if (item.TemplateType == ConfigDataType.Enum)
                     {
-                        if (item.Name == "Load Recipe" || item.Name == "UnLoad Recipe" || item.Name == "Dechuck Recipe" ||
-                            item.Name == "Load Retry Recipe" || item.Name == "UnLoad Retry Recipe" || item.Name == "Dechuck Retry Recipe" )
+                        if (item.Name == RecipeTemplateRegistry.LoadRecipeFolder || item.Name == RecipeTemplateRegistry.UnloadRecipeFolder || item.Name == RecipeTemplateRegistry.DechuckRecipeFolder ||
+                            item.Name == RecipeTemplateRegistry.LoadRetryRecipeFolder || item.Name == RecipeTemplateRegistry.UnloadRetryRecipeFolder || item.Name == RecipeTemplateRegistry.DechuckRetryRecipeFolder )
                         {
                             item.Option = new List<string>();
-                            string folderName = item.Name.Replace("Retry ", "");
-                            var list = LoadRecipesFromFolder(folderName);
+                            // Retry 已有各自的文件夹（Load/UnLoad/Dechuck Retry Recipe），
+                            // 不再从非 Retry 文件夹借列表 —— item.Name 本身就是文件夹名。
+                            var list = LoadRecipesFromFolder(item.Name);
                             item.Option.AddRange(list);
                         }
                         if (string.IsNullOrEmpty(item.SetValue) || item.SetValue == "" || !item.Option.Contains(item.SetValue))
@@ -629,7 +630,13 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             #region 保存时，并将配置参数中Recipe相关部分发给送工位
             foreach (var item in ConfigModels)
             {
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "Load Recipe")
+                if (item.TemplateType == ConfigDataType.Enum 
+                    && (item.Name == RecipeTemplateRegistry.LoadRecipeFolder 
+                    || item.Name == RecipeTemplateRegistry.LoadRetryRecipeFolder
+                    || item.Name == RecipeTemplateRegistry.DechuckRecipeFolder
+                    || item.Name == RecipeTemplateRegistry.DechuckRetryRecipeFolder
+                    || item.Name == RecipeTemplateRegistry.UnloadRecipeFolder
+                    || item.Name == RecipeTemplateRegistry.UnloadRetryRecipeFolder))
                 {
                     _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
                     {
@@ -638,57 +645,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                         ConfigFileName = SelectedNode!.Name,
                         IsNeedTip = true,
                     });
-                }
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "Dechuck Recipe")
-                {
-                    _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
-                    {
-                        RecipeType = item.Name,
-                        RecipeName = item.SetValue,
-                        ConfigFileName = SelectedNode!.Name,
-                        IsNeedTip = true,
-                    });
-                }
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "UnLoad Recipe")
-                {
-                    _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
-                    {
-                        RecipeType = item.Name,
-                        RecipeName = item.SetValue,
-                        ConfigFileName = SelectedNode!.Name,
-                        IsNeedTip = true,
-                    });
-                }
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "Load Retry Recipe")
-                {
-                    _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
-                    {
-                        RecipeType = item.Name,
-                        RecipeName = item.SetValue,
-                        ConfigFileName = SelectedNode!.Name,
-                        IsNeedTip = true,
-                    });
-                }
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "Dechuck Retry Recipe")
-                {
-                    _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
-                    {
-                        RecipeType = item.Name,
-                        RecipeName = item.SetValue,
-                        ConfigFileName = SelectedNode!.Name,
-                        IsNeedTip = true,
-                    });
-                }
-                if (item.TemplateType == ConfigDataType.Enum && item.Name == "UnLoad Retry Recipe")
-                {
-                    _eventAggregator.GetEvent<GetRecipeConfigEvent>().Publish(new GetRecipeConfigEventArgs()
-                    {
-                        RecipeType = item.Name,
-                        RecipeName = item.SetValue,
-                        ConfigFileName = SelectedNode!.Name,
-                        IsNeedTip = true,
-                    });
-                }
+                }                
             }
             #endregion
         }
@@ -880,11 +837,11 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     {
                         if (item.TemplateType == ConfigDataType.Enum)
                         {
-                            if (item.Name == "Load Recipe" || item.Name == "UnLoad Recipe" || item.Name == "Dechuck Recipe" ||
-                                item.Name == "Load Retry Recipe" || item.Name == "UnLoad Retry Recipe" || item.Name == "Dechuck Retry Recipe")
+                            if (item.Name == RecipeTemplateRegistry.LoadRecipeFolder || item.Name == RecipeTemplateRegistry.UnloadRecipeFolder || item.Name == RecipeTemplateRegistry.DechuckRecipeFolder ||
+                                item.Name == RecipeTemplateRegistry.LoadRetryRecipeFolder || item.Name == RecipeTemplateRegistry.UnloadRetryRecipeFolder || item.Name == RecipeTemplateRegistry.DechuckRetryRecipeFolder)
                             {
                                 item.Option = new List<string>();
-                                string folderName = item.Name.Replace("Retry ", "");
+                                string folderName = item.Name;
                                 var list = LoadRecipesFromFolder(folderName);
                                 item.Option.AddRange(list);
                                 if (item.Option.Count > 0)

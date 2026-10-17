@@ -58,6 +58,19 @@ public class Recipe
         [JsonIgnore]
         public OperableRule? OperableRule { get; set; }
 
+        private bool _isUsed = true;
+
+        /// <summary>
+        /// 该参数是否启用（来自模板 / Excel「不使用」列：不使用=1 → false）。不落盘。
+        /// false 时界面上**不显示**该行；行数据仍保留并照常落盘与下发。
+        /// </summary>
+        [JsonIgnore]
+        public bool IsUsed
+        {
+            get => _isUsed;
+            set => SetProperty(ref _isUsed, value);
+        }
+
         private ObservableCollection<Step> _steps = new ObservableCollection<Step>();
         public ObservableCollection<Step> Steps
         {

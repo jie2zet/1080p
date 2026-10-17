@@ -1,4 +1,4 @@
-﻿using CMP.Models.Recipe.RecipeEdit;
+using CMP.Models.Recipe.RecipeEdit;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HandyControl.Tools.Extension;
 using SqlSugar;
@@ -76,43 +76,49 @@ namespace CMP.ViewModels.Tabs.RecipeTab
         {
             switch (Message)
             {
-                case "Condition Recipe":
-                    ModelTemplate = RecipeModelTemplate.ConditionRecipeTemplate;
+                case RecipeTemplateRegistry.InsituConditionRecipeFolder:
+                    ModelTemplate = RecipeModelTemplate.InsituConditionRecipeTemplate;
                     break;
-                case "Condition Sweep Recipe":
+                case RecipeTemplateRegistry.ExsituConditionRecipeFolder:
+                    ModelTemplate = RecipeModelTemplate.ExsituConditionRecipeTemplate;
+                    break;
+                case RecipeTemplateRegistry.InsituConditionSweepRecipeFolder:
+                    ModelTemplate = RecipeModelTemplate.InsituContidionSweepRecipeTemplate;
+                    break;
+                case RecipeTemplateRegistry.ExsituConditionSweepRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.ExsituContidionSweepRecipeTemplate;
                     break;
-                case "Dechuck Recipe":
+                case RecipeTemplateRegistry.DechuckRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.DechuckRecipeTemplate;
                     break;
-                case "Dry Recipe":
+                case RecipeTemplateRegistry.DryRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.DryRecipeTemplate;
                     break;
-                case "Head Sweep Recipe":
+                case RecipeTemplateRegistry.HeadSweepRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.HeadSweepRecipeTemplate;
                     break;
-                case "Load Recipe":
+                case RecipeTemplateRegistry.LoadRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.LoadRecipeTemplate;
                     break;
-                case "Pen Recipe":
+                case RecipeTemplateRegistry.PenRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.PenA1RecipeTemplate;
                     break;
-                case "Polish Recipe":
+                case RecipeTemplateRegistry.PolishRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.PolishRecipeTemplate;
                     break;
-                case "Roll Recipe":
+                case RecipeTemplateRegistry.RollRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.RollRecipeTemplate;
                     break;
-                case "UnLoad Recipe":
+                case RecipeTemplateRegistry.UnloadRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.UnloadRecipeTemplate;
                     break;
-                case "Load Retry Recipe":
+                case RecipeTemplateRegistry.LoadRetryRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.LoadRetryRecipeTemplate;
                     break;
-                case "Dechuck Retry Recipe":
+                case RecipeTemplateRegistry.DechuckRetryRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.DechuckRetryRecipeTemplate;
                     break;
-                case "UnLoad Retry Recipe":
+                case RecipeTemplateRegistry.UnloadRetryRecipeFolder:
                     ModelTemplate = RecipeModelTemplate.UnloadRetryRecipeTemplate;
                     break;
                 default:

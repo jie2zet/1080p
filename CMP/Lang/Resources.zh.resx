@@ -2493,4 +2493,7 @@
   <data name="PolishSlurryActualFlowrate" xml:space="preserve">
     <value>实际流量</value>
   </data>
+  <data name="ExsituCondition" xml:space="preserve">
+    <value>离线条件</value>
+  </data>
 </root>

@@ -15,6 +15,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 1,
             Name = "Process Type",
+            IsUsed = true,
             Unit = "",
             Type = "option",
             Min = 0,
@@ -28,6 +29,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 2,
             Name = "Process Time",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["5"], "Process Type=5时允许"),
             Unit = "s",
             Type = "float",
             Min = 0.00,
@@ -41,6 +44,7 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 3,
             Name = "Wafer Rotation Speed",
+            IsUsed = true,
             Unit = "r/min",
             Type = "float",
             Min = 50.00,
@@ -54,6 +58,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 4,
             Name = "Pen Head Rotation Speed",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "r/min",
             Type = "float",
             Min = 10.00,
@@ -67,6 +73,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 5,
             Name = "Pen Arm  Sweep Start Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg",
             Type = "option",
             Min = 1,
@@ -80,6 +88,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 6,
             Name = "Pen Arm  Sweep End Position",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg",
             Type = "option",
             Min = 1,
@@ -93,6 +103,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 7,
             Name = "Pen Arm  Sweep Center Speed",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg/s",
             Type = "float",
             Min = 0.00,
@@ -106,6 +118,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 8,
             Name = "Pen Arm  Sweep Edge Speed",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "deg/s",
             Type = "float",
             Min = 0.00,
@@ -119,6 +133,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 9,
             Name = "Pen Arm  Cycle",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "Times",
             Type = "int",
             Min = 0,
@@ -132,6 +148,8 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           {
             Id = 10,
             Name = "Pen Pressure",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "N",
             Type = "float",
             Min = 1.00,
@@ -141,23 +159,26 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = [],
             Steps = []
           },
-          //  new()
-          //{
-          //  Id = 11,
-          //  Name = "WF Upper Face N2 Flow",
-          //  Unit = "L/min",
-          //  Type = "float",
-          //  Min = 0.00,
-          //  Max = 100.00,
-          //  Default = "30.00",
-          //  Options = [],
-          //  CompatibleName = [],
-          //  Steps = []
-          //},
             new()
           {
             Id = 11,
+            Name = "WF Upper Face N2 Flow",
+            IsUsed = false,
+            Unit = "L/min",
+            Type = "float",
+            Min = 0.00,
+            Max = 100.00,
+            Default = "30.00",
+            Options = [],
+            CompatibleName = [],
+            Steps = []
+          },
+            new()
+          {
+            Id = 12,
             Name = "WF Upper Face DIW Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "5"], "Process Type=1或5时允许"),
             Unit = "mL/min",
             Type = "float",
             Min = 0.00,
@@ -169,8 +190,10 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 12,
+            Id = 13,
             Name = "WF Lower Face DIW Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "5"], "Process Type=1或5时允许"),
             Unit = "mL/min",
             Type = "float",
             Min = 0.00,
@@ -180,23 +203,26 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = ["WFLowerFaceDIWFlow","WFLowerDIWFlow"],
             Steps = []
           },
-          //   new()
-          //{
-          //  Id = 14,
-          //  Name = "WF Lower Face N2 Supply",
-          //  Unit = "",
-          //  Type = "option",
-          //  Min = 0,
-          //  Max = 1,
-          //  Default = "1",
-          //  Options = ["0:Disabled", "1:Enabled"],
-          //  CompatibleName = [],
-          //  Steps = []
-          //},
              new()
           {
-            Id = 13,
+            Id = 14,
+            Name = "WF Lower Face N2 Supply",
+            IsUsed = false,
+            Unit = "",
+            Type = "option",
+            Min = 0,
+            Max = 1,
+            Default = "1",
+            Options = ["0:Disabled", "1:Enabled"],
+            CompatibleName = [],
+            Steps = []
+          },
+             new()
+          {
+            Id = 15,
             Name = "WF Upper Face Chemical Supply",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "5"], "Process Type=1或5时允许"),
             Unit = "",
             Type = "option",
             Min = 0,
@@ -208,8 +234,10 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
              new()
           {
-            Id = 14,
+            Id = 16,
             Name = "WF Lower Face Chemical Supply",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1", "5"], "Process Type=1或5时允许"),
             Unit = "",
             Type = "option",
             Min = 0,
@@ -219,23 +247,29 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
             CompatibleName = ["WFUpperFaceChemicalSupply"],
             Steps = []
           },
-          //   new()
-          //{
-          //  Id = 17,
-          //  Name = "WF Upper Face DI-CO2 Supply",
-          //  Unit = "",
-          //  Type = "option",
-          //  Min = 0,
-          //  Max = 1,
-          //  Default = "1",
-          //  Options = ["0:Disabled", "1:Enabled"],
-          //  CompatibleName = [],
-          //  Steps = []
-          //},
+             new()
+          {
+            Id = 17,
+            Name = "WF Upper Face DI-CO2 Supply",
+            IsUsed = false,
+            Unit = "",
+            Type = "option",
+            Min = 0,
+            Max = 1,
+            Default = "1",
+            Options = ["0:Disabled", "1:Enabled"],
+            CompatibleName = [],
+            Steps = []
+          },
             new()
           {
-            Id = 15,
+            Id = 18,
             Name = "WF Chemical Mixed Total Flow",
+            IsUsed = true,
+            OperableRule = new OperableRule(
+                            "WF Upper Face Chemical Supply", ["1"],
+                            "WF Upper Face Chemical Supply=1或\nWF Lower Face Chemical Supply=1\n时允许",
+                            [new OperableRule("WF Lower Face Chemical Supply", ["1"])]),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -247,8 +281,13 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 16,
+            Id = 19,
             Name = "WF Chemical Ratio",
+            IsUsed = true,
+            OperableRule = new OperableRule(
+                            "WF Upper Face Chemical Supply", ["1"],
+                            "WF Upper Face Chemical Supply=1或\nWF Lower Face Chemical Supply=1\n时允许",
+                            [new OperableRule("WF Lower Face Chemical Supply", ["1"])]),
             Unit = "",
             Type = "float",
             Min = 0.00,
@@ -260,8 +299,10 @@ namespace CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate
           },
             new()
           {
-            Id = 17,
+            Id = 20,
             Name = "Pen Arm Type",
+            IsUsed = true,
+            OperableRule = new OperableRule("Process Type", ["1"], "Process Type=1时允许"),
             Unit = "",
             Type = "option",
             Min = 0,

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace CMP.Views.Tabs.RecipeTab;
+namespace CMP.ViewModels.Tabs.RecipeTab;
 
 /// <summary>
 /// Recipe 编辑器步骤列的单元格视觉与绑定。

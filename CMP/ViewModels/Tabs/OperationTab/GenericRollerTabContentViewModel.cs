@@ -389,7 +389,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
 
         try
         {
-            var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.RollRecipeFolder, SelectedRollRecipe);
             if (recipeContent != null)
             {
                 KSTRecipe.stRollerRecipeFormat plcRecipe = new KSTRecipe.stRollerRecipeFormat();
@@ -600,7 +600,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
         try
         {
-            var recipeContent = LoadRecipeContent("Roll Recipe", SelectedRollRecipe);
+            var recipeContent = LoadRecipeContent(RecipeTemplateRegistry.RollRecipeFolder, SelectedRollRecipe);
             if (recipeContent != null)
             {
                 KSTRecipe.stRollerRecipeFormat plcRecipe = new KSTRecipe.stRollerRecipeFormat();
@@ -935,7 +935,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 return;
             }
 
-            LoadRecipesFromFolder("Roll Recipe", RollRecipes);
+            LoadRecipesFromFolder(RecipeTemplateRegistry.RollRecipeFolder, RollRecipes);
 
             // 设置默认选择
             if (RollRecipes.Count > 0)
@@ -1026,6 +1026,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 return null;
             }
 
+            // 按文件夹名把模板上的规格元数据（IsUsed / OperableRule）贴回行上，
+            // 供 GetRealVal 判定"不使用"参数：IsUsed=false 的参数按 0（default）下发
+            RecipeTemplateRegistry.Decorate(content, folderName);
+
             return content;
         }
         catch (Exception ex)
@@ -1046,9 +1050,9 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             if (args == null || string.IsNullOrEmpty(args.RecipeType))
                 return;
 
-            if (args.RecipeType == "Roll Recipe")
+            if (args.RecipeType == RecipeTemplateRegistry.RollRecipeFolder)
             {
-                LoadRecipesFromFolder("Roll Recipe", RollRecipes);
+                LoadRecipesFromFolder(RecipeTemplateRegistry.RollRecipeFolder, RollRecipes);
                 if (!string.IsNullOrEmpty(args.RecipeName) && RollRecipes.Contains(args.RecipeName))
                 {
                     SelectedRollRecipe = args.RecipeName;
@@ -1114,7 +1118,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             }
                 );
 
-        if (model == null) return default;
+        if (model == null || !model.IsUsed) return default;
         if (stepIndex < 0 || stepIndex >= model.Steps.Count) return default;
 
         var value = model.Steps[stepIndex].Value;
@@ -1123,9 +1127,10 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
 
         if (type == "option" || type == "list")
         {
-            value.Replace("：", ":");
-            var arr = value.Split(':');
-            value = targetType == typeof(string) ? (arr.Length >= 2 ? arr[1] : arr[0]) : arr[0];
+            // 统一用 RecipeOptionValue 解析（兼容全角冒号）
+            value = targetType == typeof(string)
+                ? RecipeOptionValue.LabelPart(value)
+                : RecipeOptionValue.NumericPart(value);
         }
 
 

@@ -99,11 +99,11 @@
                                     <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                         <TextBlock VerticalAlignment="Center" Text="{lex:Loc Condition}" Width="60"
                                                    TextTrimming="CharacterEllipsis" />
-                                        <hc:ComboBox ItemsSource="{Binding ConditionRecipes}"
-                                                     SelectedItem="{Binding SelectedConditionRecipe}"
+                                        <hc:ComboBox ItemsSource="{Binding ExsituConditionRecipes}"
+                                                     SelectedItem="{Binding SelectedExsituConditionRecipe}"
                                                      Width="190" />
                                         <Button Content="{lex:Loc BreakIn}" Style="{StaticResource ButtonPrimary}"
-                                                Command="{Binding ConditionCommand}"
+                                                Command="{Binding ExsituConditionCommand}"
                                                 CommandParameter="Chamber" Width="65" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">

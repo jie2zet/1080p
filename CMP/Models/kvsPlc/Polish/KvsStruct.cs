@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace CMP.Models.kvsPlc.Polish { 
 	class KvStruct {
 		const int stChuckRecipeFormat_WSIZE = 1150;
-		const int stExsituRecipeFormat_WSIZE = 750;
+		const int stExsituConditionRecipeFormat_WSIZE = 726;
 		const int stInsituConditionRecipeFormat_WSIZE = 30;
 		const int stLoadRecipeFormat_WSIZE = 1000;
 		const int stPolishRecipeFormat_WSIZE = 1650;
@@ -188,37 +188,30 @@ namespace CMP.Models.kvsPlc.Polish {
             }
         }
 
-        public class stExsituRecipeFormat {
-			 public short[] ProcessType = new short[25];
-			 public short[] Reverse1 = new short[25];
-			 public float[] ProcessTime = new float[25];
-			 public short[] InSitu = new short[25];
-			 public short[] Reverse2 = new short[25];
-			 public float[] PlatenRotation = new float[25];
-			 public float[] ConditionHeadRotation = new float[25];
-			 public float[] ConditionPressure = new float[25];
-			 public short[] ConditionRecipe = new short[25];
-			 public short[] PlantWash = new short[25];
-			 public short[] SlurryLine1Type = new short[25];
-			 public short[] SlurryLine2Type = new short[25];
-			 public short[] SlurryLine3Type = new short[25];
-			 public short[] Reverse3 = new short[25];
-			 public float[] SlurryLine1Flow = new float[25];
-			 public float[] SlurryLine2Flow = new float[25];
-			 public float[] SlurryLine3Flow = new float[25];
-			 public float[] Reverse4 = new float[25];
-			 public short[] SweepStopTimeType = new short[25];
-			 public short[] Reverse5 = new short[25];
-			 public float[] Ratio = new float[25];
-
-			public stExsituRecipeFormat()
-			{
-				for (int i = 0; i < ProcessType.Length; i++)
-				{
-					ProcessType[i] = -1;
-                }
-			}
-		}
+        public class stExsituConditionRecipeFormat
+        {
+            public short[] ProcessType = new short[25];
+            public short[] Reverse1 = new short[25];
+            public float[] ProcessTime = new float[25];
+            public short[] InSitu = new short[25];
+            public short[] Reverse2 = new short[25];
+            public float[] PlatenRotation = new float[25];
+            public float[] ConditionerHeadRotation = new float[25];
+            public float[] ConditionPressure = new float[25];
+            public short[] ConditionSweepRecipe = new short[25];
+            public short[] PlatenWashSelection = new short[25];
+            public short[] SlurryLine1Type = new short[25];
+            public short[] SlurryLine2Type = new short[25];
+            public short[] SlurryLine3Type = new short[25];
+            public short[] Reverse3 = new short[25];
+            public float[] SlurryLine1Flow = new float[25];
+            public float[] SlurryLine2Flow = new float[25];
+            public float[] SlurryLine3Flow = new float[25];
+            public float[] Reverse4 = new float[25];
+            public short[] SweepStopTimeType = new short[25];
+            public short[] Reverse5 = new short[25];
+            public short[] Ratio = new short[25];
+        }
 
         public class stInsituConditionRecipeFormat
         {
@@ -228,10 +221,10 @@ namespace CMP.Models.kvsPlc.Polish {
             public short InSitu = default(short);
             public short Reverse2 = default(short);
             public float PlatenRotation = default(float);
-            public float ConditionHeadRotation = default(float);
+            public float ConditionerHeadRotation = default(float);
             public float ConditionPressure = default(float);
-            public short ConditionRecipe = default(short);
-            public short PlatenWash = default(short);
+            public short ConditionSweepRecipe = default(short);
+            public short PlatenWashSelection = default(short);
             public short SlurryLine1Type = default(short);
             public short SlurryLine2Type = default(short);
             public short SlurryLine3Type = default(short);
@@ -1243,64 +1236,75 @@ namespace CMP.Models.kvsPlc.Polish {
             ByteToBase_stChuckRecipeFormat(dst, src, len, wordOffset);
         }
 
-        public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
-			ByteToShort(ref dst.Reverse1, src, 25, 25 + wordOffset);
-			ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
-			ByteToShort(ref dst.InSitu, src, 25, 100 + wordOffset);
-			ByteToShort(ref dst.Reverse2, src, 25, 125 + wordOffset);
-			ByteToFloat(ref dst.PlatenRotation, src, 25, 150 + wordOffset);
-			ByteToFloat(ref dst.ConditionHeadRotation, src, 25, 200 + wordOffset);
-			ByteToFloat(ref dst.ConditionPressure, src, 25, 250 + wordOffset);
-			ByteToShort(ref dst.ConditionRecipe, src, 25, 300 + wordOffset);
-			ByteToShort(ref dst.PlantWash, src, 25, 325 + wordOffset);
-			ByteToShort(ref dst.SlurryLine1Type, src, 25, 350 + wordOffset);
-			ByteToShort(ref dst.SlurryLine2Type, src, 25, 375 + wordOffset);
-			ByteToShort(ref dst.SlurryLine3Type, src, 25, 400 + wordOffset);
-			ByteToShort(ref dst.Reverse3, src, 25, 425 + wordOffset);
-			ByteToFloat(ref dst.SlurryLine1Flow, src, 25, 450 + wordOffset);
-			ByteToFloat(ref dst.SlurryLine2Flow, src, 25, 500 + wordOffset);
-			ByteToFloat(ref dst.SlurryLine3Flow, src, 25, 550 + wordOffset);
-			ByteToFloat(ref dst.Reverse4, src, 25, 600 + wordOffset);
-			ByteToShort(ref dst.SweepStopTimeType, src, 25, 650 + wordOffset);
-			ByteToShort(ref dst.Reverse5, src, 25, 675 + wordOffset);
-			ByteToFloat(ref dst.Ratio, src, 25, 700 + wordOffset);
-		}
-		private static void ByteToBase_stExsituRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0) {
-			int[] indices = NewIndices(dst);
-			int offset = wordOffset;
-			for (int i = 0; i < len; i++) {
-				stExsituRecipeFormat elemTmp = new stExsituRecipeFormat();
-				NextIndices(dst, indices);
-				ByteTo_stExsituRecipeFormat(ref elemTmp, src, len, wordOffset);
-				dst.SetValue(elemTmp, indices);
-				wordOffset += stExsituRecipeFormat_WSIZE;
-			}
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
-		public static void ByteTo_stExsituRecipeFormat(ref stExsituRecipeFormat[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0) {
-			ByteToBase_stExsituRecipeFormat(dst, src, len, wordOffset);
-		}
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToShort(ref dst.ProcessType, src, 25, 0 + wordOffset);
+            ByteToShort(ref dst.Reverse1, src, 25, 25 + wordOffset);
+            ByteToFloat(ref dst.ProcessTime, src, 25, 50 + wordOffset);
+            ByteToShort(ref dst.InSitu, src, 25, 100 + wordOffset);
+            ByteToShort(ref dst.Reverse2, src, 25, 125 + wordOffset);
+            ByteToFloat(ref dst.PlatenRotation, src, 25, 150 + wordOffset);
+            ByteToFloat(ref dst.ConditionerHeadRotation, src, 25, 200 + wordOffset);
+            ByteToFloat(ref dst.ConditionPressure, src, 25, 250 + wordOffset);
+            ByteToShort(ref dst.ConditionSweepRecipe, src, 25, 300 + wordOffset);
+            ByteToShort(ref dst.PlatenWashSelection, src, 25, 325 + wordOffset);
+            ByteToShort(ref dst.SlurryLine1Type, src, 25, 350 + wordOffset);
+            ByteToShort(ref dst.SlurryLine2Type, src, 25, 375 + wordOffset);
+            ByteToShort(ref dst.SlurryLine3Type, src, 25, 400 + wordOffset);
+            ByteToShort(ref dst.Reverse3, src, 25, 425 + wordOffset);
+            ByteToFloat(ref dst.SlurryLine1Flow, src, 25, 450 + wordOffset);
+            ByteToFloat(ref dst.SlurryLine2Flow, src, 25, 500 + wordOffset);
+            ByteToFloat(ref dst.SlurryLine3Flow, src, 25, 550 + wordOffset);
+            ByteToFloat(ref dst.Reverse4, src, 25, 600 + wordOffset);
+            ByteToShort(ref dst.SweepStopTimeType, src, 25, 650 + wordOffset);
+            ByteToShort(ref dst.Reverse5, src, 25, 675 + wordOffset);
+            ByteToShort(ref dst.Ratio, src, 25, 700 + wordOffset);
+        }
+        private static void ByteToBase_stExsituConditionRecipeFormat(Array dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            int[] indices = NewIndices(dst);
+            int offset = wordOffset;
+            for (int i = 0; i < len; i++)
+            {
+                stExsituConditionRecipeFormat elemTmp = new stExsituConditionRecipeFormat();
+                NextIndices(dst, indices);
+                ByteTo_stExsituConditionRecipeFormat(ref elemTmp, src, len, wordOffset);
+                dst.SetValue(elemTmp, indices);
+                wordOffset += stExsituConditionRecipeFormat_WSIZE;
+            }
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
+        public static void ByteTo_stExsituConditionRecipeFormat(ref stExsituConditionRecipeFormat[,,,,,,,] dst, byte[] src, int len = 1, int wordOffset = 0)
+        {
+            ByteToBase_stExsituConditionRecipeFormat(dst, src, len, wordOffset);
+        }
 
         public static void ByteTo_stInsituConditionRecipeFormat(ref stInsituConditionRecipeFormat dst, byte[] src, int len = 1, int wordOffset = 0)
         {
@@ -1310,10 +1314,10 @@ namespace CMP.Models.kvsPlc.Polish {
             ByteToShort(ref dst.InSitu, src, 1, 4 + wordOffset);
             ByteToShort(ref dst.Reverse2, src, 1, 5 + wordOffset);
             ByteToFloat(ref dst.PlatenRotation, src, 1, 6 + wordOffset);
-            ByteToFloat(ref dst.ConditionHeadRotation, src, 1, 8 + wordOffset);
+            ByteToFloat(ref dst.ConditionerHeadRotation, src, 1, 8 + wordOffset);
             ByteToFloat(ref dst.ConditionPressure, src, 1, 10 + wordOffset);
-            ByteToShort(ref dst.ConditionRecipe, src, 1, 12 + wordOffset);
-            ByteToShort(ref dst.PlatenWash, src, 1, 13 + wordOffset);
+            ByteToShort(ref dst.ConditionSweepRecipe, src, 1, 12 + wordOffset);
+            ByteToShort(ref dst.PlatenWashSelection, src, 1, 13 + wordOffset);
             ByteToShort(ref dst.SlurryLine1Type, src, 1, 14 + wordOffset);
             ByteToShort(ref dst.SlurryLine2Type, src, 1, 15 + wordOffset);
             ByteToShort(ref dst.SlurryLine3Type, src, 1, 16 + wordOffset);
@@ -1686,62 +1690,73 @@ namespace CMP.Models.kvsPlc.Polish {
             stChuckRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
         }
 
-        public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat src, int len = 1, int wordOffset = 0) {
-			ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
-			ShortToByte(ref dst, src.Reverse1, 25, 25 + wordOffset);
-			FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
-			ShortToByte(ref dst, src.InSitu, 25, 100 + wordOffset);
-			ShortToByte(ref dst, src.Reverse2, 25, 125 + wordOffset);
-			FloatToByte(ref dst, src.PlatenRotation, 25, 150 + wordOffset);
-			FloatToByte(ref dst, src.ConditionHeadRotation, 25, 200 + wordOffset);
-			FloatToByte(ref dst, src.ConditionPressure, 25, 250 + wordOffset);
-			ShortToByte(ref dst, src.ConditionRecipe, 25, 300 + wordOffset);
-			ShortToByte(ref dst, src.PlantWash, 25, 325 + wordOffset);
-			ShortToByte(ref dst, src.SlurryLine1Type, 25, 350 + wordOffset);
-			ShortToByte(ref dst, src.SlurryLine2Type, 25, 375 + wordOffset);
-			ShortToByte(ref dst, src.SlurryLine3Type, 25, 400 + wordOffset);
-			ShortToByte(ref dst, src.Reverse3, 25, 425 + wordOffset);
-			FloatToByte(ref dst, src.SlurryLine1Flow, 25, 450 + wordOffset);
-			FloatToByte(ref dst, src.SlurryLine2Flow, 25, 500 + wordOffset);
-			FloatToByte(ref dst, src.SlurryLine3Flow, 25, 550 + wordOffset);
-			FloatToByte(ref dst, src.Reverse4, 25, 600 + wordOffset);
-			ShortToByte(ref dst, src.SweepStopTimeType, 25, 650 + wordOffset);
-			ShortToByte(ref dst, src.Reverse5, 25, 675 + wordOffset);
-			FloatToByte(ref dst, src.Ratio, 25, 700 + wordOffset);
-		}
-		private static void stExsituRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0) {
-			int[] indices = NewIndices(src);
-			int offset = wordOffset;
-			for (int i = 0; i < len; i++) {
-				NextIndices(src, indices);
-				stExsituRecipeFormat_ToByte(ref dst, (stExsituRecipeFormat)src.GetValue(indices), len, wordOffset);
-				wordOffset += stExsituRecipeFormat_WSIZE;
-			}
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,,,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,,,,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}
-		public static void stExsituRecipeFormat_ToByte(ref byte[] dst, stExsituRecipeFormat[,,,,,,,] src, int len = 1, int wordOffset = 0) {
-			stExsituRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
-		}   
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat src, int len = 1, int wordOffset = 0)
+        {
+            ShortToByte(ref dst, src.ProcessType, 25, 0 + wordOffset);
+            ShortToByte(ref dst, src.Reverse1, 25, 25 + wordOffset);
+            FloatToByte(ref dst, src.ProcessTime, 25, 50 + wordOffset);
+            ShortToByte(ref dst, src.InSitu, 25, 100 + wordOffset);
+            ShortToByte(ref dst, src.Reverse2, 25, 125 + wordOffset);
+            FloatToByte(ref dst, src.PlatenRotation, 25, 150 + wordOffset);
+            FloatToByte(ref dst, src.ConditionerHeadRotation, 25, 200 + wordOffset);
+            FloatToByte(ref dst, src.ConditionPressure, 25, 250 + wordOffset);
+            ShortToByte(ref dst, src.ConditionSweepRecipe, 25, 300 + wordOffset);
+            ShortToByte(ref dst, src.PlatenWashSelection, 25, 325 + wordOffset);
+            ShortToByte(ref dst, src.SlurryLine1Type, 25, 350 + wordOffset);
+            ShortToByte(ref dst, src.SlurryLine2Type, 25, 375 + wordOffset);
+            ShortToByte(ref dst, src.SlurryLine3Type, 25, 400 + wordOffset);
+            ShortToByte(ref dst, src.Reverse3, 25, 425 + wordOffset);
+            FloatToByte(ref dst, src.SlurryLine1Flow, 25, 450 + wordOffset);
+            FloatToByte(ref dst, src.SlurryLine2Flow, 25, 500 + wordOffset);
+            FloatToByte(ref dst, src.SlurryLine3Flow, 25, 550 + wordOffset);
+            FloatToByte(ref dst, src.Reverse4, 25, 600 + wordOffset);
+            ShortToByte(ref dst, src.SweepStopTimeType, 25, 650 + wordOffset);
+            ShortToByte(ref dst, src.Reverse5, 25, 675 + wordOffset);
+            ShortToByte(ref dst, src.Ratio, 25, 700 + wordOffset);
+        }
+        private static void stExsituConditionRecipeFormat_ToByteBase(ref byte[] dst, Array src, int len = 1, int wordOffset = 0)
+        {
+            int[] indices = NewIndices(src);
+            int offset = wordOffset;
+            for (int i = 0; i < len; i++)
+            {
+                NextIndices(src, indices);
+                stExsituConditionRecipeFormat_ToByte(ref dst, (stExsituConditionRecipeFormat)src.GetValue(indices), len, wordOffset);
+                wordOffset += stExsituConditionRecipeFormat_WSIZE;
+            }
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
+        public static void stExsituConditionRecipeFormat_ToByte(ref byte[] dst, stExsituConditionRecipeFormat[,,,,,,,] src, int len = 1, int wordOffset = 0)
+        {
+            stExsituConditionRecipeFormat_ToByteBase(ref dst, src, len, wordOffset);
+        }
 
         public static void stInsituConditionRecipeFormat_ToByte(ref byte[] dst, stInsituConditionRecipeFormat src, int len = 1, int wordOffset = 0)
         {
@@ -1751,10 +1766,10 @@ namespace CMP.Models.kvsPlc.Polish {
             ShortToByte(ref dst, src.InSitu, 1, 4 + wordOffset);
             ShortToByte(ref dst, src.Reverse2, 1, 5 + wordOffset);
             FloatToByte(ref dst, src.PlatenRotation, 1, 6 + wordOffset);
-            FloatToByte(ref dst, src.ConditionHeadRotation, 1, 8 + wordOffset);
+            FloatToByte(ref dst, src.ConditionerHeadRotation, 1, 8 + wordOffset);
             FloatToByte(ref dst, src.ConditionPressure, 1, 10 + wordOffset);
-            ShortToByte(ref dst, src.ConditionRecipe, 1, 12 + wordOffset);
-            ShortToByte(ref dst, src.PlatenWash, 1, 13 + wordOffset);
+            ShortToByte(ref dst, src.ConditionSweepRecipe, 1, 12 + wordOffset);
+            ShortToByte(ref dst, src.PlatenWashSelection, 1, 13 + wordOffset);
             ShortToByte(ref dst, src.SlurryLine1Type, 1, 14 + wordOffset);
             ShortToByte(ref dst, src.SlurryLine2Type, 1, 15 + wordOffset);
             ShortToByte(ref dst, src.SlurryLine3Type, 1, 16 + wordOffset);

@@ -86,7 +86,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
     private ObservableCollection<RecipeItem> _rollerRecipeItems = new();
     private ObservableCollection<RecipeItem> _penRecipeItems = new();
     private ObservableCollection<RecipeItem> _dryRecipeItems = new();
-    private ObservableCollection<RecipeItem> _conditionRecipeItems = new();
+    private ObservableCollection<RecipeItem> _exsituConditionRecipeItems = new();
 
     public ICollectionView FilteredSequences { get; }
     public bool IsLoading
@@ -184,12 +184,12 @@ public class SequenceRecipeEditorViewModel : BindableBase
         }
     }
     
-    public ObservableCollection<RecipeItem> ConditionRecipeItems
+    public ObservableCollection<RecipeItem> ExsituConditionRecipeItems
     {
-        get { return _conditionRecipeItems; }
+        get { return _exsituConditionRecipeItems; }
         set
         {
-            SetProperty(ref _conditionRecipeItems, value);
+            SetProperty(ref _exsituConditionRecipeItems, value);
         }
     }
 
@@ -623,7 +623,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
         RollerRecipeItems = new ObservableCollection<RecipeItem>();
         PenRecipeItems = new ObservableCollection<RecipeItem>();
         DryRecipeItems = new ObservableCollection<RecipeItem>();
-        ConditionRecipeItems = new ObservableCollection<RecipeItem>();
+        ExsituConditionRecipeItems = new ObservableCollection<RecipeItem>();
 
         // 订阅Recipe保存事件，当Recipe编辑器保存时自动重新加载Unit Recipes
         _eventAggregator.GetEvent<RecipeSavedEvent>().Subscribe(OnRecipeSaved, ThreadOption.UIThread);
@@ -653,7 +653,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
         {
             var sequenceItems = await Task.Run(LoadSequenceData).ConfigureAwait(false);
             var polishItems = await Task.Run(() => LoadUnitRecipeItems(_polishRecipeDirectory)).ConfigureAwait(false);
-            var conditionItems = await Task.Run(() => LoadUnitRecipeItems(_conditionRecipeDirectory)).ConfigureAwait(false);
+            var exsituConditionItems = await Task.Run(() => LoadUnitRecipeItems(_exsituConditionRecipeDirectory)).ConfigureAwait(false);
             var rollerItems = await Task.Run(() => LoadUnitRecipeItems(_rollerRecipeDirectory)).ConfigureAwait(false);
             var penItems = await Task.Run(() => LoadUnitRecipeItems(_penRecipeDirectory)).ConfigureAwait(false);
             var dryItems = await Task.Run(() => LoadUnitRecipeItems(_dryRecipeDirectory)).ConfigureAwait(false);
@@ -667,7 +667,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
                 }
 
                 ReplaceItems(PolishRecipeItems, polishItems);
-                ReplaceItems(ConditionRecipeItems, conditionItems);
+                ReplaceItems(ExsituConditionRecipeItems, exsituConditionItems);
                 ReplaceItems(RollerRecipeItems, rollerItems);
                 ReplaceItems(PenRecipeItems, penItems);
                 ReplaceItems(DryRecipeItems, dryItems);
@@ -701,7 +701,7 @@ public class SequenceRecipeEditorViewModel : BindableBase
         Path.Combine("D:\\CMP\\Configuration", "Recipes", "Sequence");
 
     private string _polishRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\Polish Recipe";
-    private string _conditionRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\Condition Recipe";
+    private string _exsituConditionRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\ExsituCondition Recipe";
     private string _rollerRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\Roll Recipe";
     private string _penRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\Pen Recipe";
     private string _dryRecipeDirectory = "D:\\CMP\\Configuration\\Recipes\\UnitRecipe\\Dry Recipe";
@@ -838,14 +838,14 @@ public class SequenceRecipeEditorViewModel : BindableBase
     
     private void LoadConditionRecipeItems()
     {
-        ConditionRecipeItems.Clear();
-        if (!Directory.Exists(_conditionRecipeDirectory))
+        ExsituConditionRecipeItems.Clear();
+        if (!Directory.Exists(_exsituConditionRecipeDirectory))
             return;
 
-        var dir = new DirectoryInfo(_conditionRecipeDirectory);
+        var dir = new DirectoryInfo(_exsituConditionRecipeDirectory);
         foreach (var file in dir.GetFiles("*.json"))
         {
-            ConditionRecipeItems.Add(new RecipeItem
+            ExsituConditionRecipeItems.Add(new RecipeItem
             {
                 Name = Path.GetFileNameWithoutExtension(file.Name),
                 Value = file.FullName

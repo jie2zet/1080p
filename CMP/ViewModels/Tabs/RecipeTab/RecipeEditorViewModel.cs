@@ -3,6 +3,7 @@ using CMP.Extensions;
 using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Recipe.RecipeEdit.RecipeParameterTemplate;
 using CMP.Services.Auth;
+using CMP.Services.Log;
 using CMP.Utils;
 using CMP.Views.Tabs.RecipeTab;
 using Core.Controls.Behaviors;
@@ -226,10 +227,37 @@ public class RecipeEditorViewModel : BindableBase
     }
             
     /// <summary>
+    /// 确保各 Recipe 类型对应的文件夹都已存在（不存在则创建）。
+    /// 新设备首次运行时 <see cref="recipeBasePath"/> 下一个子目录都没有，
+    /// 若不先补齐，对应类型的配方既无法新建也无法读取。
+    /// 文件夹清单来自 <see cref="RecipeTemplateRegistry.RegisteredFolders"/>，
+    /// 因此以后新增模板会自动带上对应目录。
+    /// </summary>
+    private void EnsureRecipeFolders()
+    {
+        try
+        {
+            var created = RecipeTemplateRegistry.EnsureFoldersExist(recipeBasePath);
+            if (created.Count > 0)
+            {
+                Logger.Info($"Created {created.Count} missing recipe folder(s): {string.Join(", ", created)}");
+            }
+        }
+        catch (Exception ex)
+        {
+            // 建目录失败不应阻断编辑器启动；日志留痕，界面表现为列表为空
+            Logger.Error($"Failed to ensure recipe folders under {recipeBasePath}", ex);
+        }
+    }
+
+    /// <summary>
     /// Initializes the recipes data from the JSON configuration file.
     /// </summary>
     private void InitRecipesData()
     {
+        // 先补齐各 Recipe 类型的文件夹，再读取配方数据
+        EnsureRecipeFolders();
+
         _recipeConf = new Recipe();
         var dic = ReadAllRepiceJson();
         foreach (var item in dic)
@@ -658,21 +686,14 @@ public class RecipeEditorViewModel : BindableBase
         RenameItemVisible = node.Level == 2;
         this.DialogResult = SelectedUnitRecipe.Header;
         var uuid = SelectedUnitRecipe?.Tag?.ToString();
-        if (SelectedUnitRecipe?.Level != 2)
-        {
-            return;
-        }
-        if (string.IsNullOrEmpty(uuid) || _recipeConf == null)
-        {
-            return;
-        }
+        if (SelectedUnitRecipe?.Level != 2) return;
+
+        if (string.IsNullOrEmpty(uuid) || _recipeConf == null) return;
 
         foreach (var unit in _recipeConf.Units)
         {
-            if (unit.Contents == null)
-            {
-                continue;
-            }
+            if (unit.Contents == null) continue;
+
             foreach (var content in unit.Contents)
             {
                 if (content?.Uuid != uuid) continue;
@@ -688,29 +709,22 @@ public class RecipeEditorViewModel : BindableBase
 
                 foreach (var data in RecipeData.Data)
                 {
-                    if (data.Name == "Algorithm")
+                    if (data.Name == "Algorithm" || data.Name == "Model")
                     {
-                        data.Options = GetEPDAlgorithm();
-                    }
-                    else if (data.Name == "Model")
-                    {
-                        data.Options = GetEPDModel();
+                        data.Options = GetEPDFileNames($"D:\\EPD\\File\\{data.Name}");
                     }
 
-                    var folderName = data.Name;
-                    if (folderName == "Head Sweep Recipe"
-                        || folderName == "Condition Recipe"
-                        || folderName == "Condition Sweep Recipe")
+                    // 参数名沿用 Excel 表格字面，少数已不再与配方文件夹同名 —— 这里做一次显式映射，
+                    // 既不改参数名，也不用「参数名 == 文件夹名」的隐含约定。
+                    var folderName = ResolveRecipeFolderForParameter(data.Name, unit!.Name);
+                    if (folderName != null)
                     {
                         string folderDirectory = Path.Combine(recipeBasePath, folderName);
                         data.Options = GetRecipeFileNames(folderDirectory);
                         foreach (var item in data.Steps)
                         {
-                            var arr = item.Value.Split(":");
-                            if (arr.Length > 1)
-                            {
-                                item.Value = arr[1];
-                            }
+                            // 去掉 "1:xxx" / "1：xxx" 的数字前缀（兼容全角冒号）
+                            item.Value = RecipeOptionValue.PartAfterSeparator(item.Value);
                         }
                     }
                 }
@@ -724,38 +738,43 @@ public class RecipeEditorViewModel : BindableBase
         }
     }
 
-    private List<string?> GetEPDAlgorithm()
+    /// <summary>
+    /// EPD 下拉框候选：<paramref name="folderPath"/> 下的 .json 文件名（不含扩展名），首位固定为 "None"。
+    /// Algorithm / Model 两个参数共用（仅目录不同）。目录不存在时只返回 "None"。
+    /// </summary>
+    private static List<string> GetEPDFileNames(string folderPath)
     {
-        string folderPath = "D:\\EPD\\File\\Algorithm";
-        List<string?> jsonFileNames = ["None"];
-        if (!Directory.Exists(folderPath))
-        {
-            return jsonFileNames;
-        }
-        jsonFileNames = [.. Directory.EnumerateFiles(folderPath, "*.json").Select(Path.GetFileNameWithoutExtension)];
-        jsonFileNames.Insert(0, "None");
-        return jsonFileNames;
-    }
+        List<string> jsonFileNames = ["None"];
+        if (!Directory.Exists(folderPath)) return jsonFileNames;
 
-    private List<string?> GetEPDModel()
-    {
-        string folderPath = "D:\\EPD\\File\\Model";
-        List<string?> jsonFileNames = ["None"];
-        if (!Directory.Exists(folderPath))
-        {
-            return jsonFileNames;
-        }
-        jsonFileNames = Directory.EnumerateFiles(folderPath, "*.json")
-        .Select(Path.GetFileNameWithoutExtension)
-        .ToList();
-        jsonFileNames.Insert(0, "None");
+        jsonFileNames.AddRange(Directory.EnumerateFiles(folderPath, "*.json")
+            .Select(Path.GetFileNameWithoutExtension)
+            .OfType<string>());
         return jsonFileNames;
     }
 
     /// <summary>
-    /// 获取指定的Recipe文件夹下的所有.json文件名称（不带扩展名），用于在下拉框中显示可选项
+    /// 参数名（沿用 Excel 表格字面，如 <c>Condition Recipe</c>）→ 其下拉列表实际读取的 Recipe 文件夹名。
+    /// 少数参数名与文件夹名已不再一一对应：
+    /// <c>Condition Recipe</c> 的配方存放在 InsituCondition Recipe 目录；
+    /// <c>Condition Sweep Recipe</c> 在 Insitu / Exsitu 两个模板里同名，按所属配方文件夹分流。
     /// </summary>
-    /// <returns></returns>
+    /// <returns>需要动态取选项的文件夹名；返回 null 表示该行用模板里的静态选项。</returns>
+    private static string? ResolveRecipeFolderForParameter(string? parameterName, string? ownerFolder) =>
+        parameterName switch
+        {
+            "Head Sweep Recipe" => RecipeTemplateRegistry.HeadSweepRecipeFolder,
+            "Condition Recipe" => RecipeTemplateRegistry.InsituConditionRecipeFolder,
+            "Condition Sweep Recipe" => ownerFolder == RecipeTemplateRegistry.ExsituConditionRecipeFolder
+                ? RecipeTemplateRegistry.ExsituConditionSweepRecipeFolder
+                : RecipeTemplateRegistry.InsituConditionSweepRecipeFolder,
+            _ => null,
+        };
+
+    /// <summary>
+    /// 获取指定的 Recipe 文件夹下的所有 .json 文件名称（不带扩展名），用于在下拉框中显示可选项。
+    /// 与 <see cref="GetEPDFileNames"/> 的区别：目录不存在时返回**空集合**（而非 "None"）。
+    /// </summary>
     private static List<string> GetRecipeFileNames(string FullFolderName)
     {
         if (string.IsNullOrEmpty(FullFolderName)) return [];
@@ -835,8 +854,11 @@ public class RecipeEditorViewModel : BindableBase
 
             switch (result.Item1)
             {
-                case RecipeModelTemplate.ConditionRecipeTemplate:
-                    newContent.Data = ConditionRecipeTemplate.Template;
+                case RecipeModelTemplate.InsituConditionRecipeTemplate:
+                    newContent.Data = InsituConditionRecipeTemplate.Template;
+                    break;
+                case RecipeModelTemplate.ExsituConditionRecipeTemplate:
+                    newContent.Data = ExsituConditionRecipeTemplate.Template;
                     break;
                 case RecipeModelTemplate.DechuckRecipeTemplate:
                     newContent.Data = DechuckRecipeTemplate.Template;
@@ -1294,6 +1316,17 @@ public class RecipeEditorViewModel : BindableBase
     }
 
     /// <summary>
+    /// 按 <see cref="Recipe.Data.IsUsed"/> 过滤 DataGrid 显示的行（Excel「不使用」=1 的参数行不显示）。
+    /// 只设置默认 CollectionView 的过滤谓词，不改动 <c>RecipeData.Data</c> 本身，
+    /// 因此隐藏行的数据仍会照常落盘与下发。
+    /// </summary>
+    private void ApplyRowVisibility()
+    {
+        if (RecipeData?.Data == null) return;
+        CollectionViewSource.GetDefaultView(RecipeData.Data).Filter = RecipeRowVisibility.Filter;
+    }
+
+    /// <summary>
     /// 订阅规则来源参数（如 Process Type）每个 Step 的 Value 变更，实现"改 Process Type 立即灰显"。
     /// 每次调用先退订，避免重复订阅与旧对象滞留（本方法是唯一订阅入口）。
     /// </summary>
@@ -1342,6 +1375,9 @@ public class RecipeEditorViewModel : BindableBase
 
         // 列结构即将重建，先按当前数据重算可操作性并重建订阅
         RefreshOperability();
+
+        // 按「不使用」标记过滤要显示的行
+        ApplyRowVisibility();
 
         var steps = RecipeData!.Data![0].Steps;
 

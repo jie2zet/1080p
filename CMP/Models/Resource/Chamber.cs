@@ -1,4 +1,5 @@
 using CMP.Models.kvsPlc;
+using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.DataCenter;
 using CMP.Models.Recipe.Sequence;
 using CMP.Services.Log;
@@ -283,10 +284,10 @@ public class Chamber : BindableBase
 
         var folder = _name switch
         {
-            "PolishA" or "PolishB" or "PolishC" or "PolishD" => "Polish Recipe",
-            "RollerA1" or "RollerA2" or "RollerA3" or "RollerB1" or "RollerB2" or "RollerB3" => "Roll Recipe",
-            "PenA1" or "PenA2" or "PenB1" or "PenB2" => "Pen Recipe",
-            "DryA" or "DryB" => "Dry Recipe",
+            "PolishA" or "PolishB" or "PolishC" or "PolishD" => RecipeTemplateRegistry.PolishRecipeFolder,
+            "RollerA1" or "RollerA2" or "RollerA3" or "RollerB1" or "RollerB2" or "RollerB3" => RecipeTemplateRegistry.RollRecipeFolder,
+            "PenA1" or "PenA2" or "PenB1" or "PenB2" => RecipeTemplateRegistry.PenRecipeFolder,
+            "DryA" or "DryB" => RecipeTemplateRegistry.DryRecipeFolder,
             _ => null
         };
 

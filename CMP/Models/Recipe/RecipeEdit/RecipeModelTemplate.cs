@@ -8,7 +8,8 @@ namespace CMP.Models.Recipe.RecipeEdit
 {
     public enum RecipeModelTemplate
     {
-        ConditionRecipeTemplate = 0,
+        InsituConditionRecipeTemplate = 0,
+        ExsituConditionRecipeTemplate,
         DechuckRecipeTemplate,
         DryRecipeTemplate,
         ExsituContidionSweepRecipeTemplate,
