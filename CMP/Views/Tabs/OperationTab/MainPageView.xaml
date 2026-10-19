@@ -59,9 +59,22 @@
                                     <Button Content="Unload" Width="70" Margin="0,0,3,0"
                                             Command="{Binding MOVCommand}" 
                                             CommandParameter="CULOD"/>
-                                    <Button Content="{lex:Loc StopLoad}" Width="85"
-                                            Style="{StaticResource ButtonDanger}"
-                                            Command="{Binding StopLoadCommand}"/>
+                                    <Button Width="100" Command="{Binding ToggleStopLoadCommand}">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource ButtonDanger}">
+                                                <Setter Property="Content" Value="{lex:Loc StopLoad}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsStopLoad}" Value="True">
+                                                        <Setter Property="Content" Value="{lex:Loc ResumeLoad}"/>
+                                                        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+                                                        <Setter Property="hc:VisualElement.HighlightBackground" Value="{DynamicResource DarkPrimaryBrush}"/>
+                                                        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource DarkPrimaryBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
                                 </StackPanel>
                                 <Border BorderBrush="DarkGray" BorderThickness="1" Width="150" Background="White" 
                                         Margin="1" CornerRadius="3">

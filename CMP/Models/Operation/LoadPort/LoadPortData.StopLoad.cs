@@ -23,10 +23,25 @@ namespace CMP.Models.Operation.LoadPort
 
         public ICommand StopLoadCommand { get; private set; }
 
+        public ICommand ToggleStopLoadCommand { get; private set; }
+
         private void InitStopLoadCommand()
         {
             StopLoadCommand = new DelegateCommand(ExecuteStopLoad, () => !IsStopLoad)
                 .ObservesProperty(() => IsStopLoad);
+            ToggleStopLoadCommand = new DelegateCommand(ExecuteToggleStopLoad);
+        }
+
+        private void ExecuteToggleStopLoad()
+        {
+            if (IsStopLoad)
+            {
+                ClearStopLoad();
+                Growl.InfoGlobal($"{TabName} 已恢复入料");
+                return;
+            }
+
+            ExecuteStopLoad(notify: true);
         }
 
         /// <summary>
