@@ -1586,13 +1586,9 @@ namespace CMP.Models.Operation.LoadPort
                     //Fixed 收集loadport报警
                     if (NAKOrABSErrorDic.ContainsKey(response)) {
                         // 获取错误代码在字典中的索引
-                        int errorIndex = NAKOrABSErrorDic.Keys.ToList().IndexOf(response);
-                        int alarmId = 500 + errorIndex; // AlarmId以500+dic第一个元素CKSUM，以此类推到最后一个EMOTR
-
-                        // 创建Alarm对象
+                        // 创建Alarm对象。AlarmId 留给数据库自增，业务编号用 AlarmCode。
                         var alarm = new Alarm
                         {
-                            AlarmId = alarmId,
                             AlarmCode = response,
                             AlarmName = response,
                             Description = NAKOrABSErrorDic.ContainsKey(response) ? NAKOrABSErrorDic[response] : "Unknown error",

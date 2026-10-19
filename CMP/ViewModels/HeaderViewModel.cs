@@ -315,7 +315,7 @@ public class HeaderViewModel : BindableBase
                 alarmTypeAlarms = ListAlarm.Where(alarm => alarm.Type == "Alarm").ToList();
                 foreach (var alarm in alarmTypeAlarms)
                 {
-                    currentAlarmIds.Add(alarm.AlarmId + "");
+                    currentAlarmIds.Add(string.IsNullOrEmpty(alarm.AlarmCode) ? alarm.AlarmName : alarm.AlarmCode);
                 }
             }
 
