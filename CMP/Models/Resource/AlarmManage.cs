@@ -57,7 +57,7 @@ namespace CMP.Models.Resource
                 while (csv.Read())
                 {
                     Alarm alarm = new Alarm();
-                    alarm.AlarmId = Convert.ToInt32(csv.GetField<string>(0));
+                    alarm.AlarmCode = csv.GetField<string>(0) ?? "";
                     if (csv.TryGetField(1, out string? nameValue))
                     {
                         if (nameValue != null)
@@ -102,7 +102,7 @@ namespace CMP.Models.Resource
                 while (csv.Read())
                 {
                     alarm = new Alarm();
-                    alarm.AlarmId = Convert.ToInt32(csv.GetField<string>(0));
+                    alarm.AlarmCode = csv.GetField<string>(0) ?? "";
 
                     if (csv.TryGetField(6, out bool EnabledValue))
                     {
@@ -128,7 +128,6 @@ namespace CMP.Models.Resource
                     {
                         if (value != null)
                         {
-                            alarm.AlarmCode = value;
                             alarm.PropertyName = value.Replace(" ", "");
                         }
                     }

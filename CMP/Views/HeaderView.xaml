@@ -457,7 +457,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Field4" Binding="{Binding AlarmId}" Width="Auto">
+                    <DataGridTextColumn Header="Field4" Binding="{Binding AlarmCode}" Width="Auto">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource RedTextBlockStyle}">
                                 <Style.Triggers>
