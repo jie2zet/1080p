@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CMP.Views.Tabs.ConfigTab.CalibrationView"
+<UserControl x:Class="CMP.Views.Tabs.ConfigTab.CalibrationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -19,6 +19,7 @@
              d:DataContext="{d:DesignInstance viewModels:CalibrationViewModel}"
              d:DesignWidth="1250">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisibility"/>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxBaseStyle}">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -74,9 +75,20 @@
         <DataTemplate x:Key="CalibDataGridTemplate">
             <DataGrid Style="{StaticResource ThisDataGridStyle}"
                           ItemsSource="{Binding}"
+                          IsEnabled="{Binding DataContext.CanEditCalibration, RelativeSource={RelativeSource AncestorType=UserControl}}"
                           MaxHeight="620"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsAutoCalibrationActive}" Value="True">
+                                <Setter Property="Background" Value="Yellow"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Set"              
                                         Width="*"
@@ -95,7 +107,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid gridHelp:GridHelpers.RowDefinitions="auto,auto,50">
+    <Grid gridHelp:GridHelpers.RowDefinitions="auto,auto,50,auto">
         <StackPanel Grid.Row="0" VerticalAlignment="Center" Height="auto">
             <TextBlock Text="{lex:Loc Calibration}" 
                        Background="#2C66A7" 
@@ -131,6 +143,22 @@
                             Content="Assign" 
                             Command="{Binding DataContext.AssignCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                             CommandParameter="{Binding Name}"/>
+                            <Button Width="112" Height="24"
+                                    Content="Auto Calibration"
+                                    Command="{Binding DataContext.AutoCalibrationCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding Name}">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+                                        <Setter Property="Visibility"
+                                                Value="{Binding DataContext.SupportsAutoCalibration, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BoolVisibility}}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Name}" Value="Disk">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -141,6 +169,14 @@
             <Button Content="Add Data" Margin="0,0,100,0" Style="{StaticResource ButtonStyle}" Width="65" Command="{Binding AddDataCommand}"/>
             <Button Content="Save" Style="{StaticResource ButtonStyle}" Command="{Binding SaveZoneCommand}"/>
             <Button Content="Copy to" Style="{StaticResource ButtonStyle}" Background="#3D8687" Margin="100,0,0,0" Command="{Binding CopyToZoneCommand}" CommandParameter="CopyColumnDialogView"/>
+            <Button Content="Stop" Width="65" Height="25" Margin="30,0,0,0"
+                    Style="{StaticResource ButtonStyle}" Command="{Binding StopAutoCalibrationCommand}"
+                    Visibility="{Binding SupportsAutoCalibration, Converter={StaticResource BoolVisibility}}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Margin="5"
+                    Visibility="{Binding SupportsAutoCalibration, Converter={StaticResource BoolVisibility}}">
+            <TextBlock Text="{Binding AutoCalibrationStatus}" TextWrapping="Wrap"
+                       HorizontalAlignment="Center" Margin="5"/>
         </StackPanel>
     </Grid>
 

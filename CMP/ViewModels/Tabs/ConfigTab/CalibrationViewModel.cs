@@ -1,4 +1,4 @@
-﻿using CMP.Extensions;
+using CMP.Extensions;
 using CMP.Models.Config;
 using CMP.Models.kvsPlc;
 using CMP.Models.Operation.Bot;
@@ -31,7 +31,7 @@ using KST = CMP.Models.kvsPlc.Polish.KvStruct;
 
 namespace CMP.ViewModels.Tabs.ConfigTab
 {
-    public class CalibrationViewModel : BindableBase, INavigationAware
+    public partial class CalibrationViewModel : BindableBase, INavigationAware
     {
         private readonly string _calibrationBaseDir = "D:\\CMP\\Configuration\\Configs\\Calibration\\";
         private string _calibrationFileName = "Calibration.json";
@@ -89,20 +89,23 @@ namespace CMP.ViewModels.Tabs.ConfigTab
         public CalibrationViewModel(IDialogService dialogService, IEventAggregator eventAggregator)
         {
             _isInitialized = false;
-            SaveZoneCommand = new DelegateCommand(OnSaveZone);
-            CopyToZoneCommand = new DelegateCommand<string>(OnCopyToZone);
-            AddDataCommand = new DelegateCommand(OnAddData);
-            AssignCommand = new DelegateCommand<string>(AssignCommandExecute);
+            SaveZoneCommand = new DelegateCommand(OnSaveZone, () => !IsAutoCalibrating);
+            CopyToZoneCommand = new DelegateCommand<string>(OnCopyToZone, _ => !IsAutoCalibrating);
+            AddDataCommand = new DelegateCommand(OnAddData, () => !IsAutoCalibrating);
+            AssignCommand = new DelegateCommand<string>(AssignCommandExecute, _ => !IsAutoCalibrating);
             _calibModelDictionary = new Dictionary<string, ObservableCollection<CalibrationModel>>();
             _calibrationDisplayInfos = [];
             _dialogService = dialogService;
             _eventAggregator = eventAggregator;
+            InitializeAutoCalibration();
             task = Task.Run(() => RunTimeTask());
         }
 
 
         private void OnCopyToZone(string viewName)
         {
+            if (IsAutoCalibrating) return;
+
             ObservableCollection<string> zoneNames = [];
             foreach (var item in _calibModelDictionary.Keys)
             {
@@ -137,6 +140,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
         private void OnAddData()
         {
+            if (IsAutoCalibrating) return;
             if (_calibModelDictionary == null) return;
             foreach (var key in _calibModelDictionary.Keys)
             {
@@ -172,6 +176,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
         private void OnSaveZone()
         {
+            if (IsAutoCalibrating) return;
+
             foreach (var kvp in CalibModelDictionary)
             {
                 var models = kvp.Value;
@@ -211,6 +217,8 @@ namespace CMP.ViewModels.Tabs.ConfigTab
 
         private void AssignCommandExecute(string name)
         {
+            if (IsAutoCalibrating) return;
+
             float[] arraySet = new float[50];
             float[] arrayAct = new float[50];
             float[] arrayRead = new float[50];
@@ -457,6 +465,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                     Models = kvp.Value
                 })
             );
+            AutoCalibrationCommand?.RaiseCanExecuteChanged();
             if (!_polishIdentifier.StartsWith("Polish")) return;
         }
 
@@ -518,7 +527,10 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             if (navigationContext.Parameters.TryGetValue("PolishIdentifier", out string? polishIdentifier))
             {
                 if (string.IsNullOrEmpty(polishIdentifier)) return;
+                // 切工位时取消上一轮自动校准，避免旧数据继续写入。
+                _autoCalibrationCancellation?.Cancel();
                 _polishIdentifier = polishIdentifier;
+                AutoCalibrationStatus = string.Empty;
                 _calibrationFileName = Path.Combine(_calibrationBaseDir, $"{_polishIdentifier}_Calibration.json");
                 InitZoneData();
                 switch (_polishIdentifier)
@@ -548,12 +560,20 @@ namespace CMP.ViewModels.Tabs.ConfigTab
                         kvLink = GlobalService.kvHostLinkInit.kvLinkPenB;
                         break;
                 }
+
+                RaisePropertyChanged(nameof(SupportsAutoCalibration));
+                AutoCalibrationCommand.RaiseCanExecuteChanged();
+                StopAutoCalibrationCommand.RaiseCanExecuteChanged();
             }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
-        public void OnNavigatedFrom(NavigationContext navigationContext) { }
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            // 离开页面时停止自动校准，finally 中仍会排气并恢复公式开关。
+            _autoCalibrationCancellation?.Cancel();
+        }
 
         private async void RunTimeTask()
         {
@@ -561,6 +581,7 @@ namespace CMP.ViewModels.Tabs.ConfigTab
             while (true)
             {
                 await Task.Delay(1000);
+                if (_suspendLiveRead) continue;
                 _stPolishCollectData = new();
                 byte[] _readBuf = new byte[2048];
                 var err = KHL.KHLReadVariable(kvLink.sock, "dataCollection", _readBuf, true);
