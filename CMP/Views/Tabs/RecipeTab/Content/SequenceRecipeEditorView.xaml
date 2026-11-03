@@ -13,7 +13,7 @@
              mvvm:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance content:SequenceRecipeEditorViewModel}"
-             d:DesignHeight="1060" Width="1976"
+             d:DesignHeight="900" d:DesignWidth="1800"
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources">
     <UserControl.Resources>
@@ -22,21 +22,25 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="280" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <!-- Left panel: sequence list -->
-        <StackPanel Grid.Column="0" Margin="5">
-            <TextBlock Text="Sequence Plans" FontWeight="Bold" Margin="0,0,0,5" />
-            <TextBlock Text="{Binding Sequences.Count, StringFormat='Count: {0}'}" Foreground="Red" />
-            <!-- search -->
-            <TextBox Margin="0,5,0,5" Width="290" Height="28"                 
+        <Grid Grid.Column="0" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Sequence Plans" FontWeight="Bold" Margin="0,0,0,5" />
+            <TextBlock Grid.Row="1" Text="{Binding Sequences.Count, StringFormat='Count: {0}'}" Foreground="Red" />
+            <TextBox Grid.Row="2" Margin="0,5,0,5" Height="28"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-            <!-- ListBox -->
-            <ListBox x:Name="SequenceListBox" ItemsSource="{Binding FilteredSequences}"
+            <ListBox x:Name="SequenceListBox" Grid.Row="3" ItemsSource="{Binding FilteredSequences}"
                  SelectedItem="{Binding SelectedSequence}"
                  DisplayMemberPath="Name"
-                 Height="730"
                  BorderBrush="Gray"
                  BorderThickness="1">
                 <i:Interaction.Triggers>
@@ -45,11 +49,11 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ListBox>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
                 <Button Content="New" Command="{Binding NewCommand}" Margin="2" Name="NewButton" />
                 <Button Content="Delete" Command="{Binding DeleteCommand}" Margin="2" Name="DeleteButton" />
             </StackPanel>
-        </StackPanel>
+        </Grid>
         <!-- Right panel: original editor content -->
         <Grid Grid.Column="1"
               extensions:GridHelpers.RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto ,Auto, Auto, *, *"
@@ -393,6 +397,7 @@
                             <TextBlock Padding="5" Foreground="White" Text="{lex:Loc Recipe}" />
                         </StackPanel>
                     </GroupBox.Header>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <Border Padding="10" HorizontalAlignment="Center">
                         <StackPanel extensions:StackPanelHelpers.Spacing="10" Orientation="Vertical">
                             <!-- Polish A -->
@@ -631,6 +636,7 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
+                    </ScrollViewer>
                 </GroupBox>
             </Grid>
 

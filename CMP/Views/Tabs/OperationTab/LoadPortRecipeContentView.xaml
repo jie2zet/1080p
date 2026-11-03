@@ -57,7 +57,6 @@
                               SelectionUnit="FullRow"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
-                              Height="720"
                               RowHeight="25"
                               Width="410">
 

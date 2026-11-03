@@ -23,6 +23,7 @@
     </UserControl.Resources>
     <Border BorderThickness="1"
             Margin="5" Padding="0" CornerRadius="4">
+        <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
         <StackPanel extensions:StackPanelHelpers.Spacing="10">
             <!-- 第一行：RoboticArm 1, 2, 3, 4, 5, 6-->
             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
@@ -1934,5 +1935,6 @@
                 </GroupBox>
             </StackPanel>
         </StackPanel>
+        </Viewbox>
     </Border>
 </UserControl>

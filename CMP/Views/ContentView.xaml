@@ -12,7 +12,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Margin="5">
-        <TabControl TabStripPlacement="Left" Height="900"
+        <TabControl TabStripPlacement="Left" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                     Style="{StaticResource CustomTabControlStyle}"
                     mvvm:RegionManager.RegionName="MainTabRegion" />
     </Grid>

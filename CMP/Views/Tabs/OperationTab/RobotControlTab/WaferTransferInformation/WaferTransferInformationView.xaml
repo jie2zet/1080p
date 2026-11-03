@@ -38,7 +38,7 @@
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Canvas Height="900" Width="1400" Margin="0,0,0,50">
+        <Canvas Height="860" Width="1400">
             <TextBlock Text="{lex:Loc WaferTransferInformationMap}" Canvas.Left="600" Canvas.Top="10" FontSize="22" FontWeight="Bold" Foreground="#404040"/>
 
             <!-- ================= ROW 1 ================= -->

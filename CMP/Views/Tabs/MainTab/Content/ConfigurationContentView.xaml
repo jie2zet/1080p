@@ -16,7 +16,7 @@
              >
     <Grid>
         <Grid>
-            <TabControl>
+            <TabControl Style="{StaticResource SecondaryTabControlStyle}">
                 <TabItem Header="{lex:Loc EquipmentConstants}" Style="{StaticResource SecondaryTabItemStyle}">
                     <ContentControl prism:RegionManager.RegionName="{x:Static regionNames:Global.ConfigRegion}"/>
                 </TabItem>

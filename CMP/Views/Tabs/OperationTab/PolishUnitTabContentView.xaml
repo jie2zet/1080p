@@ -14,6 +14,7 @@
              lex:ResxLocalizationProvider.DefaultDictionary="Resources">
     <Border BorderThickness="1"
             Margin="5" Padding="0" CornerRadius="4">
+        <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
         <StackPanel extensions:StackPanelHelpers.Spacing="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -868,5 +869,6 @@
                 </GroupBox>
             </Grid>
         </StackPanel>
+        </Viewbox>
     </Border>
 </UserControl>

@@ -28,7 +28,11 @@
             <Border BorderBrush="LightGray" BorderThickness="1">
                 <Grid extensions:GridHelpers.RowDefinitions="128,250">
                     <Border BorderBrush="DarkGray" BorderThickness="1" Background="White" Grid.Row="0" Margin="2" CornerRadius="3">
-                        <Grid extensions:GridHelpers.RowDefinitions="15,*" extensions:GridHelpers.ColumnDefinitions="100,Auto">
+                        <Grid extensions:GridHelpers.RowDefinitions="15,*">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="88" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
                                 <TextBlock Text="Load Port Control Status" HorizontalAlignment="Left" Foreground="Black"/>
                             </StackPanel>
@@ -50,19 +54,28 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left">
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="Load" Margin="0,0,3,0" 
+                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch">
+                                <Grid Margin="0,0,2,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Grid.Column="0" Content="Load" Margin="0,0,3,0" Padding="6,2"
                                             IsEnabled="{Binding LoadPortStatus.FoupDockStatus, Converter={StaticResource FoupDockStatusToIsEnabledConverter}}"
                                             Command="{Binding MOVCommand}" 
                                             CommandParameter="CLDMP"/>
-                                    <Button Content="Unload" Width="70" Margin="0,0,3,0"
+                                    <Button Grid.Column="1" Content="Unload" Margin="0,0,3,0" Padding="6,2"
                                             Command="{Binding MOVCommand}" 
                                             CommandParameter="CULOD"/>
-                                    <Button Width="100" Command="{Binding ToggleStopLoadCommand}">
+                                    <Button Grid.Column="2" Padding="4,2" MinWidth="0"
+                                            HorizontalAlignment="Stretch"
+                                            Command="{Binding ToggleStopLoadCommand}">
                                         <Button.Style>
                                             <Style TargetType="Button" BasedOn="{StaticResource ButtonDanger}">
                                                 <Setter Property="Content" Value="{lex:Loc StopLoad}"/>
+                                                <Setter Property="Padding" Value="4,2"/>
+                                                <Setter Property="MinWidth" Value="0"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsStopLoad}" Value="True">
                                                         <Setter Property="Content" Value="{lex:Loc ResumeLoad}"/>
@@ -75,7 +88,7 @@
                                             </Style>
                                         </Button.Style>
                                     </Button>
-                                </StackPanel>
+                                </Grid>
                                 <Border BorderBrush="DarkGray" BorderThickness="1" Width="150" Background="White" 
                                         Margin="1" CornerRadius="3">
                                     <StackPanel>

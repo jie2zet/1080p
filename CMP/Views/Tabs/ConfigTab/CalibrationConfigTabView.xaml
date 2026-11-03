@@ -13,7 +13,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid>
-            <TabControl x:Name="tabControl">
+            <TabControl x:Name="tabControl" Style="{StaticResource SecondaryTabControlStyle}">
                 <TabItem Header="PolishA" Style="{StaticResource SecondaryTabItemStyle}">
                     <ContentControl prism:RegionManager.RegionName="{x:Static regionNames:Global.CalibrationRegionPolishA}"/>
                 </TabItem>

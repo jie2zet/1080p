@@ -12,7 +12,7 @@
         Title="{Binding Title}"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
-        d:DesignHeight="900" d:DesignWidth="1000"
+        d:DesignHeight="1080" d:DesignWidth="1920"
         d:DataContext="{d:DesignInstance viewModels:MainViewModel}"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
         lex:LocalizeDictionary.DesignCulture="en"
@@ -22,12 +22,13 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-    <Grid Margin="10">
-        <Grid x:Name="MainShell"
-              extensions:GridHelpers.RowDefinitions="Auto, Auto, Auto"
+    <Viewbox Stretch="Uniform">
+        <Grid Width="1920" Height="1080">
+        <Grid x:Name="MainShell" Margin="8"
+              extensions:GridHelpers.RowDefinitions="Auto, *"
               extensions:GridHelpers.ColumnDefinitions="*">
             <ContentControl prism:RegionManager.RegionName="HeaderRegion" />
-            <ContentControl Grid.Row="1" Margin="0 5 0 0" prism:RegionManager.RegionName="ContentRegion" />
+            <ContentControl Grid.Row="1" Margin="0 4 0 0" prism:RegionManager.RegionName="ContentRegion" />
         </Grid>
 
         <Border Background="#B3000000"
@@ -44,5 +45,6 @@
                 <login:LoginPanel DataContext="{Binding Login}"/>
             </Border>
         </Border>
-    </Grid>
+        </Grid>
+    </Viewbox>
 </Window>

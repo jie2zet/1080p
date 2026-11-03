@@ -78,7 +78,7 @@
         </DataTemplate>
 
     </UserControl.Resources>
-    <Grid extensions:GridHelpers.ColumnDefinitions="380,1400">
+    <Grid extensions:GridHelpers.ColumnDefinitions="360,*">
         <operationTab:MainPageView Grid.Column="0"
                                    DataContext="{Binding MainPage}" />
         <!-- Center Content -->

@@ -16,7 +16,7 @@
              d:DataContext="{d:DesignInstance viewModels:LoadPortContentViewModel}"
              lex:ResxLocalizationProvider.DefaultAssembly="CMP"
              lex:ResxLocalizationProvider.DefaultDictionary="Resources"
-             d:DesignHeight="450" Width="1582">
+             d:DesignHeight="450" d:DesignWidth="1582">
     <UserControl.Resources>
         <converters:OnOffStateConverter x:Key="OnOffStateConverter" />
         <converters:StringFormatConverter x:Key="StringFormatConverter" />

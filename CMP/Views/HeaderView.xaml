@@ -20,7 +20,7 @@
     </UserControl.Resources>
     <Grid extensions:GridHelpers.RowDefinitions="*"
           extensions:GridHelpers.ColumnDefinitions="Auto, Auto, Auto, Auto">
-        <Image Grid.Column="0" Source="/Assets/Images/logo.png" Width="150" Height="150" />
+        <Image Grid.Column="0" Source="/Assets/Images/logo.png" Width="110" Height="110" />
         <!-- Left Content -->
         <GroupBox Margin="5" Grid.Row="0" Grid.Column="1"
                   Padding="7" Background="Transparent" hc:TitleElement.Background="Transparent"
@@ -133,7 +133,7 @@
             <!-- Logs -->
             <DataGrid
                 Width="1250"
-                Height="100"
+                Height="78"
                 Background="Transparent"
                 BorderBrush="#DDDDDD"
                 BorderThickness="1"
@@ -610,7 +610,7 @@
                             <Image.Style>
                                 <Style TargetType="Image">
                                     <Setter Property="Source" Value="/CMP;component/Assets/Images/lights/red.png" />
-                                    <Setter Property="Opacity" Value="0" />
+                                    <Setter Property="Opacity" Value="0.1" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding RedLightMode}" Value="Blink">
                                             <DataTrigger.EnterActions>
