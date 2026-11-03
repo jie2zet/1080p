@@ -1,0 +1,110 @@
+<UserControl x:Class="CMP.Views.Tabs.OperationTab.PolishUnitTab.PolishSwingPositionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:ResxLocalizationProvider.DefaultAssembly="CMP"
+             lex:ResxLocalizationProvider.DefaultDictionary="Resources"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:controls="clr-namespace:CMP.Controls"
+             Loaded="OnVisibilityChanged" Unloaded="OnVisibilityChanged"
+             IsVisibleChanged="OnIsVisibleChanged" DataContextChanged="OnDataContextChanged">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <DataTemplate x:Key="ParameterEditor">
+            <controls:EditableNumericWithActions Width="82" Height="32" HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" DecimalPlaces="3" Increment="0.001"
+                IsDirty="{Binding IsDirty, Mode=OneWay}"
+                SetCommand="{Binding SetCommand}" CancelCommand="{Binding CancelCommand}" />
+        </DataTemplate>
+        <DataTemplate x:Key="PositionRow">
+            <Grid Height="42">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="24" /><ColumnDefinition Width="58" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Title}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <ContentControl Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource ParameterEditor}" />
+                <controls:SignalLight Grid.Column="2" Width="16" Height="16" HorizontalAlignment="Left"
+                                      VerticalAlignment="Center" IsOn="{Binding IsReached}">
+                    <controls:SignalLight.Style>
+                        <Style TargetType="controls:SignalLight" BasedOn="{StaticResource {x:Type controls:SignalLight}}">
+                            <Setter Property="ToolTip" Value="{lex:Loc PolishMotorArrivalState}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsArrivalKnown}" Value="False">
+                                    <Setter Property="ToolTip" Value="{lex:Loc PolishMotorArrivalUnknown}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:SignalLight.Style>
+                </controls:SignalLight>
+                <Button Grid.Column="3" Content="{lex:Loc PolishMotorStart}" Width="58" Height="32" Padding="0"
+                        VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}" Command="{Binding StartCommand}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="VelocityRow">
+            <Grid Height="42">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="90" />
+                    <ColumnDefinition Width="24" /><ColumnDefinition Width="58" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Title}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+                <ContentControl Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource ParameterEditor}" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ScrollViewer x:Name="MotorScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                  hc:ScrollViewerAttach.AutoHide="False" CanContentScroll="False" PanningMode="Both">
+        <ItemsControl x:Name="MotorCards" ItemsSource="{Binding Motors}" MinWidth="1280" Margin="5">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate><UniformGrid Rows="1" /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <GroupBox Margin="0,0,10,0" VerticalAlignment="Top" Padding="10"
+                              Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
+                              Style="{StaticResource GroupBoxTab.Small}">
+                        <GroupBox.Header>
+                            <TextBlock Text="{Binding Title}" Padding="5" Foreground="White" />
+                        </GroupBox.Header>
+                        <StackPanel>
+                            <Grid Height="38">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" /><ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="24" /><ColumnDefinition Width="58" />
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="3" Content="{lex:Loc Stop}" Width="58" Height="32" Padding="0"
+                                        VerticalAlignment="Center" Style="{StaticResource ButtonDanger}" Command="{Binding StopCommand}" />
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding Positions}" MinHeight="210" VerticalAlignment="Top"
+                                          ItemTemplate="{StaticResource PositionRow}" />
+                            <Separator Margin="0,6" />
+                            <ItemsControl ItemsSource="{Binding Velocities}" ItemTemplate="{StaticResource VelocityRow}" />
+                            <Separator Margin="0,6" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" /><ColumnDefinition Width="172" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="34" /><RowDefinition Height="34" />
+                                    <RowDefinition Height="34" /><RowDefinition Height="34" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{lex:Loc PolishMotorActualPosition}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                <TextBlock Grid.Column="1" Text="{Binding Motor.ActPosition, StringFormat=F3}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="1" Text="{lex:Loc PolishMotorActualSpeed}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Motor.ActVelocity, StringFormat=F3}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="2" Text="{lex:Loc PolishMotorActualTorque}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Motor.ActTorque, StringFormat=F3}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="3" Text="{lex:Loc PolishMotorHeadRotationTorque}" Margin="0,0,8,0" VerticalAlignment="Center" TextWrapping="Wrap"
+                                           Visibility="{Binding HasExtraTorque, Converter={StaticResource BooleanToVisibility}}" />
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ExtraTorqueMotor.ActTorque, StringFormat=F3}" VerticalAlignment="Center"
+                                           Visibility="{Binding HasExtraTorque, Converter={StaticResource BooleanToVisibility}}" />
+                            </Grid>
+                        </StackPanel>
+                    </GroupBox>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

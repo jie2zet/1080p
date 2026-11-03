@@ -2496,4 +2496,127 @@
   <data name="ExsituCondition" xml:space="preserve">
     <value>离线条件</value>
   </data>
+  <data name="PolishMotorRotaryTab" xml:space="preserve">
+    <value>旋转电机</value>
+  </data>
+  <data name="PolishMotorSwing1Tab" xml:space="preserve">
+    <value>摆动电机1</value>
+  </data>
+  <data name="PolishMotorSwing2Tab" xml:space="preserve">
+    <value>摆动电机2</value>
+  </data>
+  <data name="PolishMotorPlatenRotation" xml:space="preserve">
+    <value>大盘旋转电机</value>
+  </data>
+  <data name="PolishMotorHeadRotation" xml:space="preserve">
+    <value>研磨头旋转电机</value>
+  </data>
+  <data name="PolishMotorConditionerRotation" xml:space="preserve">
+    <value>修整器旋转电机</value>
+  </data>
+  <data name="PolishMotorHeadSwing" xml:space="preserve">
+    <value>研磨头摆动电机</value>
+  </data>
+  <data name="PolishMotorHeadLift" xml:space="preserve">
+    <value>研磨头升降电机</value>
+  </data>
+  <data name="PolishMotorConditionerSwing" xml:space="preserve">
+    <value>修整器摆动电机</value>
+  </data>
+  <data name="PolishMotorSlurryArmSwing" xml:space="preserve">
+    <value>研磨液臂摆动电机</value>
+  </data>
+  <data name="PolishMotorSetSpeed" xml:space="preserve">
+    <value>设定速度</value>
+  </data>
+  <data name="PolishMotorConfirmedSpeed" xml:space="preserve">
+    <value>速度确认</value>
+  </data>
+  <data name="PolishMotorActualSpeed" xml:space="preserve">
+    <value>实际速度</value>
+  </data>
+  <data name="PolishMotorActualPosition" xml:space="preserve">
+    <value>实际位置</value>
+  </data>
+  <data name="PolishMotorJogSpeed" xml:space="preserve">
+    <value>点动速度</value>
+  </data>
+  <data name="PolishMotorSetPosition" xml:space="preserve">
+    <value>设定位置</value>
+  </data>
+  <data name="PolishMotorStart" xml:space="preserve">
+    <value>启动</value>
+  </data>
+  <data name="PolishMotorManualSpeed" xml:space="preserve">
+    <value>手动速度</value>
+  </data>
+  <data name="PolishMotorAutoSpeed" xml:space="preserve">
+    <value>自动速度</value>
+  </data>
+  <data name="PolishMotorAnyPosition" xml:space="preserve">
+    <value>任意位置</value>
+  </data>
+  <data name="PolishMotorHomePosition" xml:space="preserve">
+    <value>Home位置</value>
+  </data>
+  <data name="PolishMotorNearPosition" xml:space="preserve">
+    <value>最近位置</value>
+  </data>
+  <data name="PolishMotorFarPosition" xml:space="preserve">
+    <value>最远位置</value>
+  </data>
+  <data name="PolishMotorDechuckPosition" xml:space="preserve">
+    <value>Dechuck位置</value>
+  </data>
+  <data name="PolishMotorHighPosition" xml:space="preserve">
+    <value>High位置</value>
+  </data>
+  <data name="PolishMotorLoadPosition" xml:space="preserve">
+    <value>Load位置</value>
+  </data>
+  <data name="PolishMotorPolishPosition" xml:space="preserve">
+    <value>Polish位置</value>
+  </data>
+  <data name="PolishMotorCleanPosition" xml:space="preserve">
+    <value>Clean位置</value>
+  </data>
+  <data name="PolishMotorStartPosition" xml:space="preserve">
+    <value>开始位置</value>
+  </data>
+  <data name="PolishMotorEndPosition" xml:space="preserve">
+    <value>结束位置</value>
+  </data>
+  <data name="PolishMotorSlurryPosition" xml:space="preserve">
+    <value>Slurry位置</value>
+  </data>
+  <data name="PolishMotorActualTorque" xml:space="preserve">
+    <value>实际扭矩</value>
+  </data>
+  <data name="PolishMotorHeadRotationTorque" xml:space="preserve">
+    <value>头旋转扭矩</value>
+  </data>
+  <data name="PolishMotorArrivalState" xml:space="preserve">
+    <value>到位状态</value>
+  </data>
+  <data name="PolishMotorArrivalUnknown" xml:space="preserve">
+    <value>到位状态未读取</value>
+  </data>
+  <data name="PolishMotorValueOutOfRange" xml:space="preserve">
+    <value>数值须在 {0}～{1} 之间</value>
+  </data>
+  <data name="PolishMotorPlcDisconnected" xml:space="preserve">
+    <value>PLC 未连接</value>
+  </data>
+  <data name="PolishMotorPlcWriteFailed" xml:space="preserve">
+    <value>PLC 写入失败：{0}</value>
+  </data>
+  <data name="PolishMotorUnknown" xml:space="preserve">
+    <value>未知电机：{0}</value>
+  </data>
+  <data name="PolishMotorCommandFailed" xml:space="preserve">
+    <value>{0}{1}失败：{2}</value>
+  </data>
+  <data name="PolishMotorParameterWriteFailed" xml:space="preserve">
+    <value>写入{0}的{1}失败：{2}</value>
+  </data>
 </root>

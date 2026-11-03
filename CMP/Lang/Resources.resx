@@ -2496,4 +2496,127 @@
   <data name="ExsituCondition" xml:space="preserve">
     <value>ExsituCondition</value>
   </data>
+  <data name="PolishMotorRotaryTab" xml:space="preserve">
+    <value>Rotary Motors</value>
+  </data>
+  <data name="PolishMotorSwing1Tab" xml:space="preserve">
+    <value>Swing Motors 1</value>
+  </data>
+  <data name="PolishMotorSwing2Tab" xml:space="preserve">
+    <value>Swing Motors 2</value>
+  </data>
+  <data name="PolishMotorPlatenRotation" xml:space="preserve">
+    <value>Platen Rotation Motor</value>
+  </data>
+  <data name="PolishMotorHeadRotation" xml:space="preserve">
+    <value>Head Rotation Motor</value>
+  </data>
+  <data name="PolishMotorConditionerRotation" xml:space="preserve">
+    <value>Conditioner Rotation Motor</value>
+  </data>
+  <data name="PolishMotorHeadSwing" xml:space="preserve">
+    <value>Head Swing Motor</value>
+  </data>
+  <data name="PolishMotorHeadLift" xml:space="preserve">
+    <value>Head Lift Motor</value>
+  </data>
+  <data name="PolishMotorConditionerSwing" xml:space="preserve">
+    <value>Conditioner Swing Motor</value>
+  </data>
+  <data name="PolishMotorSlurryArmSwing" xml:space="preserve">
+    <value>Slurry Arm Swing Motor</value>
+  </data>
+  <data name="PolishMotorSetSpeed" xml:space="preserve">
+    <value>Set Speed</value>
+  </data>
+  <data name="PolishMotorConfirmedSpeed" xml:space="preserve">
+    <value>Confirmed</value>
+  </data>
+  <data name="PolishMotorActualSpeed" xml:space="preserve">
+    <value>Actual Speed</value>
+  </data>
+  <data name="PolishMotorActualPosition" xml:space="preserve">
+    <value>Actual Pos.</value>
+  </data>
+  <data name="PolishMotorJogSpeed" xml:space="preserve">
+    <value>Jog Speed</value>
+  </data>
+  <data name="PolishMotorSetPosition" xml:space="preserve">
+    <value>Set Pos.</value>
+  </data>
+  <data name="PolishMotorStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="PolishMotorManualSpeed" xml:space="preserve">
+    <value>Manual Speed</value>
+  </data>
+  <data name="PolishMotorAutoSpeed" xml:space="preserve">
+    <value>Auto Speed</value>
+  </data>
+  <data name="PolishMotorAnyPosition" xml:space="preserve">
+    <value>Any Position</value>
+  </data>
+  <data name="PolishMotorHomePosition" xml:space="preserve">
+    <value>Home Position</value>
+  </data>
+  <data name="PolishMotorNearPosition" xml:space="preserve">
+    <value>Near Position</value>
+  </data>
+  <data name="PolishMotorFarPosition" xml:space="preserve">
+    <value>Far Position</value>
+  </data>
+  <data name="PolishMotorDechuckPosition" xml:space="preserve">
+    <value>Dechuck Position</value>
+  </data>
+  <data name="PolishMotorHighPosition" xml:space="preserve">
+    <value>High Position</value>
+  </data>
+  <data name="PolishMotorLoadPosition" xml:space="preserve">
+    <value>Load Position</value>
+  </data>
+  <data name="PolishMotorPolishPosition" xml:space="preserve">
+    <value>Polish Position</value>
+  </data>
+  <data name="PolishMotorCleanPosition" xml:space="preserve">
+    <value>Clean Position</value>
+  </data>
+  <data name="PolishMotorStartPosition" xml:space="preserve">
+    <value>Start Position</value>
+  </data>
+  <data name="PolishMotorEndPosition" xml:space="preserve">
+    <value>End Position</value>
+  </data>
+  <data name="PolishMotorSlurryPosition" xml:space="preserve">
+    <value>Slurry Position</value>
+  </data>
+  <data name="PolishMotorActualTorque" xml:space="preserve">
+    <value>Actual Torque</value>
+  </data>
+  <data name="PolishMotorHeadRotationTorque" xml:space="preserve">
+    <value>Head Rotation Torque</value>
+  </data>
+  <data name="PolishMotorArrivalState" xml:space="preserve">
+    <value>In-position status</value>
+  </data>
+  <data name="PolishMotorArrivalUnknown" xml:space="preserve">
+    <value>In-position status not read</value>
+  </data>
+  <data name="PolishMotorValueOutOfRange" xml:space="preserve">
+    <value>Value must be between {0} and {1}.</value>
+  </data>
+  <data name="PolishMotorPlcDisconnected" xml:space="preserve">
+    <value>PLC is not connected.</value>
+  </data>
+  <data name="PolishMotorPlcWriteFailed" xml:space="preserve">
+    <value>PLC write failed: {0}</value>
+  </data>
+  <data name="PolishMotorUnknown" xml:space="preserve">
+    <value>Unknown motor: {0}</value>
+  </data>
+  <data name="PolishMotorCommandFailed" xml:space="preserve">
+    <value>{0}: {1} failed ({2}).</value>
+  </data>
+  <data name="PolishMotorParameterWriteFailed" xml:space="preserve">
+    <value>Failed to write {0} / {1}: {2}</value>
+  </data>
 </root>
