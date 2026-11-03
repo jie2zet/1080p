@@ -138,7 +138,7 @@
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="32"/>
-                                <RowDefinition Height="32"/>
+                                <RowDefinition Height="0"/>
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="32"/>
                                 <RowDefinition Height="32"/>
@@ -240,8 +240,9 @@
                             </StackPanel>
                             
                             <!-- LoadPort5# -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="LoadPort5#" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="LoadPort5#" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="Collapsed"/>
                                 <controls:EditableNumericWithActions Grid.Row="4" Grid.Column="1"
+                                                 Visibility="Collapsed"
                                                  Value="{Binding LoadPort5Position}"
                                                  Minimum="{Binding PositionMinimum}"
                                                  Maximum="{Binding PositionMaximum}"
@@ -251,7 +252,7 @@
                                                  SetCommand="{Binding LoadPort5SetCommand}"
                                                  CancelCommand="{Binding LoadPort5CancelCommand}"/>
                             <ToggleButton Grid.Row="4" Grid.Column="2" Content="{lex:Loc Move}" Style="{StaticResource MoveToggleButtonStyle}" 
-                                    Width="55" Height="28" Margin="5,0" IsChecked="{Binding LoadPort5MoveToggle, Mode=OneWay}" Command="{Binding LoadPort5MoveCommand}"/>
+                                    Width="55" Height="28" Margin="5,0" IsChecked="{Binding LoadPort5MoveToggle, Mode=OneWay}" Command="{Binding LoadPort5MoveCommand}" Visibility="Collapsed"/>
                             
                             <!-- Middle Module -->
                             <TextBlock Grid.Row="5" Grid.Column="0" Text="{lex:Loc MiddleModule}" VerticalAlignment="Center" Margin="0,0,5,0"/>
