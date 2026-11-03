@@ -67,6 +67,20 @@ public static partial class PlcHandle
                     [Param(18000, 300, 0, 1000, "大盘旋转电机速度", "速度", "r/min")]
                     public static int Velocity = 300;
                 }
+
+                /// <summary>
+                /// 旋转电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ConfirmedVelocityW = 0x3174;
+                    public const uint ActualVelocityW = 0x31F4;
+                    public const uint ActualPositionW = 0x3264;
+                    public const uint JogVelocityZf = 402030;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 0;
+                    public const ushort JogMinusBitOffset = 1;
+                }
             }
 
             /// <summary>
@@ -89,6 +103,21 @@ public static partial class PlcHandle
                 {
                     [Param(18010, 300, 0, 1000, "头旋转电机速度", "速度", "r/min")]
                     public static int Velocity = 300;
+                }
+
+                /// <summary>
+                /// 旋转电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ConfirmedVelocityW = 0x3176;
+                    public const uint ActualVelocityW = 0x31F6;
+                    // 触摸屏扭矩地址，仅供核对；界面复用采集数据中的只读扭矩反馈。
+                    public const uint TorqueDm = 15276;
+                    public const uint JogVelocityZf = 402032;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 2;
+                    public const ushort JogMinusBitOffset = 3;
                 }
             }
 
@@ -123,11 +152,37 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18020, 300, 0, 1000, "头摆动电机速度", "速度", "mm/s")]
+                    [Param(Address.ManualVelocityZf, 300, 0, 1000, "头摆动电机速度", "速度", "mm/s")]
                     public static int Velocity = 300;
 
-                    [Param(18030, 100, 0, 1000, "头摆动电机位置", "位置", "mm")]
+                    [Param(Address.AnyPositionZf, 100, 0, 1000, "头摆动电机位置", "位置", "mm")]
                     public static int Position = 100;
+                }
+
+                /// <summary>
+                /// 摆动电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ManualVelocityZf = 18020;
+                    public const uint AutoVelocityZf = 16024;
+                    public const uint AnyPositionZf = 18030;
+                    public const uint HomePositionZf = 16034;
+                    public const uint NearPositionZf = 16036;
+                    public const uint FarPositionZf = 16038;
+                    public const uint DechuckPositionZf = 16040;
+                    public const uint AnyPositionMr = 19000;
+                    public const uint HomePositionMr = 19003;
+                    public const uint NearPositionMr = 19004;
+                    public const uint FarPositionMr = 19005;
+                    public const uint DechuckPositionMr = 19006;
+                    public const uint TorqueDm = 15376; // 只读，复用现有采集反馈。
+                    public const uint ActualVelocityW = 0x31F8;
+                    public const uint ActualPositionW = 0x31FA;
+                    public const uint JogVelocityZf = 402034;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 4;
+                    public const ushort JogMinusBitOffset = 5;
                 }
             }
 
@@ -162,11 +217,37 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18040, 300, 0, 1000, "头升降电机速度", "速度", "mm/s")]
+                    [Param(Address.ManualVelocityZf, 300, 0, 1000, "头升降电机速度", "速度", "mm/s")]
                     public static int Velocity = 300;
 
-                    [Param(18050, 30, -180, 180, "头升降电机位置", "位置", "mm")]
+                    [Param(Address.AnyPositionZf, 30, -180, 180, "头升降电机位置", "位置", "mm")]
                     public static int Position = 30;
+                }
+
+                /// <summary>
+                /// 摆动电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ManualVelocityZf = 18040;
+                    public const uint AutoVelocityZf = 16044;
+                    public const uint AnyPositionZf = 18050;
+                    public const uint HighPositionZf = 16054;
+                    public const uint LoadPositionZf = 16056;
+                    public const uint PolishPositionZf = 16058;
+                    public const uint CleanPositionZf = 16060;
+                    public const uint AnyPositionMr = 19010;
+                    public const uint HighPositionMr = 19013;
+                    public const uint LoadPositionMr = 19014;
+                    public const uint PolishPositionMr = 19015;
+                    public const uint CleanPositionMr = 19100; // 按截图保留，勿按相邻地址推算。
+                    public const uint TorqueDm = 15476; // 只读，复用现有采集反馈。
+                    public const uint ActualVelocityW = 0x31FE;
+                    public const uint ActualPositionW = 0x3200;
+                    public const uint JogVelocityZf = 402036;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 6;
+                    public const ushort JogMinusBitOffset = 7;
                 }
             }
 
@@ -195,11 +276,35 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18080, 300, 0, 1000, "修整器摆动电机速度", "速度", "deg/s")]
+                    [Param(Address.ManualVelocityZf, 300, 0, 1000, "修整器摆动电机速度", "速度", "deg/s")]
                     public static int Velocity = 300;
 
-                    [Param(18090, 30, -180, 180, "修整器摆动电机位置", "位置", "deg")]
+                    [Param(Address.AnyPositionZf, 30, -180, 180, "修整器摆动电机位置", "位置", "deg")]
                     public static int Position = 30;
+                }
+
+                /// <summary>
+                /// 摆动电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ManualVelocityZf = 18080;
+                    public const uint AutoVelocityZf = 16088;
+                    public const uint AnyPositionZf = 18090;
+                    public const uint HomePositionZf = 16098;
+                    public const uint StartPositionZf = 16100;
+                    public const uint EndPositionZf = 16102;
+                    public const uint AnyPositionMr = 19208;
+                    public const uint HomePositionMr = 19211;
+                    public const uint StartPositionMr = 19212;
+                    public const uint EndPositionMr = 19213;
+                    public const uint TorqueDm = 15676; // 只读，复用现有采集反馈。
+                    public const uint ActualVelocityW = 0x3206;
+                    public const uint ActualPositionW = 0x3208;
+                    public const uint JogVelocityZf = 402040;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 10;
+                    public const ushort JogMinusBitOffset = 11;
                 }
             }
 
@@ -226,6 +331,19 @@ public static partial class PlcHandle
                     [Param(18070, 300, 0, 1000, "修整器头旋转电机速度", "速度", "r/min")]
                     public static int Velocity = 300;
                 }
+
+                /// <summary>
+                /// 旋转电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ConfirmedVelocityW = 0x3184;
+                    public const uint ActualVelocityW = 0x3204;
+                    public const uint JogVelocityZf = 402038;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 8;
+                    public const ushort JogMinusBitOffset = 9;
+                }
             }
 
             /// <summary>
@@ -250,14 +368,80 @@ public static partial class PlcHandle
 
                 public static class Param
                 {
-                    [Param(18110, 300, 0, 1000, "研磨液手臂电机速度", "速度", "deg/s")]
+                    [Param(Address.ManualVelocityZf, 300, 0, 1000, "研磨液手臂电机速度", "速度", "deg/s")]
                     public static int Velocity = 300;
 
-                    [Param(18120, 30, -180, 180, "研磨液手臂电机位置", "位置", "deg")]
+                    [Param(Address.AnyPositionZf, 30, -180, 180, "研磨液手臂电机位置", "位置", "deg")]
                     public static int Position = 30;
+                }
+
+                /// <summary>
+                /// 摆动电机操作页使用的反馈和点动地址。
+                /// </summary>
+                public static class Address
+                {
+                    public const uint ManualVelocityZf = 18110;
+                    public const uint AutoVelocityZf = 16124;
+                    public const uint AnyPositionZf = 18120;
+                    public const uint HomePositionZf = 16134;
+                    public const uint SlurryPositionZf = 16136;
+                    public const uint AnyPositionMr = 19312;
+                    public const uint HomePositionMr = 19315;
+                    public const uint SlurryPositionMr = 19400;
+                    public const uint TorqueDm = 15776; // 只读，复用现有采集反馈。
+                    public const uint ActualVelocityW = 0x3260;
+                    public const uint ActualPositionW = 0x3262;
+                    public const uint JogVelocityZf = 402042;
+                    public const uint JogBitWordZf = 402016;
+                    public const ushort JogPlusBitOffset = 12;
+                    public const ushort JogMinusBitOffset = 13;
                 }
             }
         }
+
+        /// <summary>摆动电机2的位置操作定义，ZF 参数、DM 命令和 MR 指示分别访问。</summary>
+        public sealed record SwingPositionDefinition(string TitleKey, uint PositionZf, uint StartDm, uint ArrivedMr);
+
+        public sealed record SwingPositionMotorDefinition(
+            string Key, string TitleKey, uint StopDm, uint ManualVelocityZf, uint AutoVelocityZf,
+            IReadOnlyList<SwingPositionDefinition> Positions);
+
+        public static IReadOnlyList<SwingPositionMotorDefinition> GetSwingPositionMotors() =>
+        [
+            new("HeadSweep", "PolishMotorHeadSwing", Motor.HeadSweep.Stop,
+                Motor.HeadSweep.Address.ManualVelocityZf, Motor.HeadSweep.Address.AutoVelocityZf,
+                [
+                    new("PolishMotorAnyPosition", Motor.HeadSweep.Address.AnyPositionZf, Motor.HeadSweep.AnyPosition, Motor.HeadSweep.Address.AnyPositionMr),
+                    new("PolishMotorHomePosition", Motor.HeadSweep.Address.HomePositionZf, Motor.HeadSweep.HomePosition, Motor.HeadSweep.Address.HomePositionMr),
+                    new("PolishMotorNearPosition", Motor.HeadSweep.Address.NearPositionZf, Motor.HeadSweep.PolishNearPosition, Motor.HeadSweep.Address.NearPositionMr),
+                    new("PolishMotorFarPosition", Motor.HeadSweep.Address.FarPositionZf, Motor.HeadSweep.PolishFarPosition, Motor.HeadSweep.Address.FarPositionMr),
+                    new("PolishMotorDechuckPosition", Motor.HeadSweep.Address.DechuckPositionZf, Motor.HeadSweep.DechuckPosition, Motor.HeadSweep.Address.DechuckPositionMr)
+                ]),
+            new("HeadUpDown", "PolishMotorHeadLift", Motor.HeadUpDown.Stop,
+                Motor.HeadUpDown.Address.ManualVelocityZf, Motor.HeadUpDown.Address.AutoVelocityZf,
+                [
+                    new("PolishMotorAnyPosition", Motor.HeadUpDown.Address.AnyPositionZf, Motor.HeadUpDown.AnyPosition, Motor.HeadUpDown.Address.AnyPositionMr),
+                    new("PolishMotorHighPosition", Motor.HeadUpDown.Address.HighPositionZf, Motor.HeadUpDown.HighPosition, Motor.HeadUpDown.Address.HighPositionMr),
+                    new("PolishMotorLoadPosition", Motor.HeadUpDown.Address.LoadPositionZf, Motor.HeadUpDown.LoadCupPosition, Motor.HeadUpDown.Address.LoadPositionMr),
+                    new("PolishMotorPolishPosition", Motor.HeadUpDown.Address.PolishPositionZf, Motor.HeadUpDown.PolishPosition, Motor.HeadUpDown.Address.PolishPositionMr),
+                    new("PolishMotorCleanPosition", Motor.HeadUpDown.Address.CleanPositionZf, Motor.HeadUpDown.CleanPosition, Motor.HeadUpDown.Address.CleanPositionMr)
+                ]),
+            new("ConditionerSweep", "PolishMotorConditionerSwing", Motor.ConditionerSweep.Stop,
+                Motor.ConditionerSweep.Address.ManualVelocityZf, Motor.ConditionerSweep.Address.AutoVelocityZf,
+                [
+                    new("PolishMotorAnyPosition", Motor.ConditionerSweep.Address.AnyPositionZf, Motor.ConditionerSweep.AnyPosition, Motor.ConditionerSweep.Address.AnyPositionMr),
+                    new("PolishMotorHomePosition", Motor.ConditionerSweep.Address.HomePositionZf, Motor.ConditionerSweep.HomePosition, Motor.ConditionerSweep.Address.HomePositionMr),
+                    new("PolishMotorStartPosition", Motor.ConditionerSweep.Address.StartPositionZf, Motor.ConditionerSweep.StartPosition, Motor.ConditionerSweep.Address.StartPositionMr),
+                    new("PolishMotorEndPosition", Motor.ConditionerSweep.Address.EndPositionZf, Motor.ConditionerSweep.EndPosition, Motor.ConditionerSweep.Address.EndPositionMr)
+                ]),
+            new("SlurryArmSweep", "PolishMotorSlurryArmSwing", Motor.SlurryArmSweep.Stop,
+                Motor.SlurryArmSweep.Address.ManualVelocityZf, Motor.SlurryArmSweep.Address.AutoVelocityZf,
+                [
+                    new("PolishMotorAnyPosition", Motor.SlurryArmSweep.Address.AnyPositionZf, Motor.SlurryArmSweep.AnyPosition, Motor.SlurryArmSweep.Address.AnyPositionMr),
+                    new("PolishMotorHomePosition", Motor.SlurryArmSweep.Address.HomePositionZf, Motor.SlurryArmSweep.HomePosition, Motor.SlurryArmSweep.Address.HomePositionMr),
+                    new("PolishMotorSlurryPosition", Motor.SlurryArmSweep.Address.SlurryPositionZf, Motor.SlurryArmSweep.SlurryPosition, Motor.SlurryArmSweep.Address.SlurryPositionMr)
+                ])
+        ];
 
         public static class Process
         {
