@@ -5,6 +5,9 @@ public class Motor : BindableBase
 
     private float _setVelocity;
     private float _actVelocity;
+    private float _confirmedVelocity;
+    private float _jogVelocity;
+    private float _actPosition;
     private float _setTorque;
     private float _actTorque;
     private bool _isServoOn = false;
@@ -17,6 +20,21 @@ public class Motor : BindableBase
     {
         get => _setVelocity;
         set => SetProperty(ref _setVelocity, value);
+    }
+    public float ConfirmedVelocity
+    {
+        get => _confirmedVelocity;
+        set => SetProperty(ref _confirmedVelocity, value);
+    }
+    public float JogVelocity
+    {
+        get => _jogVelocity;
+        set => SetProperty(ref _jogVelocity, value);
+    }
+    public float ActPosition
+    {
+        get => _actPosition;
+        set => SetProperty(ref _actPosition, value);
     }
     public float SetTorque
     {
@@ -38,12 +56,6 @@ public class Motor : BindableBase
 public class SweepMotor : Motor
 {
     private float _setPosition;
-    private float _actPosition;
-    public float ActPosition
-    {
-        get => _actPosition;
-        set => SetProperty(ref _actPosition, value);
-    }
     public float SetPosition
     {
         get => _setPosition;

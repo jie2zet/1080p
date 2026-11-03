@@ -5,6 +5,7 @@ using CMP.Lang;
 using CMP.Models.kvsPlc;
 using CMP.Models.kvsPlc.Roll;
 using CMP.Models.Operation.Polish;
+using CMP.Models.Operation;
 using CMP.Models.Recipe.RecipeEdit;
 using CMP.Models.Recipe.Sequence;
 using CMP.Models.Resource;
@@ -28,6 +29,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Threading;
 using System.Xaml;
+using WPFLocalizeExtension.Engine;
 using static CMP.Models.kvsPlc.SV.KvStruct;
 using KHL = CMP.Models.kvsPlc.KvHostLink;
 using KST = CMP.Models.kvsPlc.Polish.KvStruct;
@@ -38,9 +40,175 @@ namespace CMP.ViewModels.Tabs.OperationTab;
 
 public class PolishUnitTabContentViewModel : TabContentViewModelBase
 {
+    private readonly record struct RotaryMotorPlcAddresses(
+        uint StartCommand,
+        uint StopCommand,
+        uint SetVelocity,
+        uint ConfirmedVelocity,
+        uint ActualVelocity,
+        uint? ActualPosition,
+        uint JogVelocity,
+        uint JogBitWord,
+        ushort JogPlusOffset,
+        ushort JogMinusOffset);
+
+    private sealed record RotaryMotorFeedback(
+        float? PlatenSetVelocity,
+        float? PlatenConfirmedVelocity,
+        float? PlatenActualVelocity,
+        float? PlatenActualPosition,
+        float? PlatenJogVelocity,
+        float? HeadSetVelocity,
+        float? HeadConfirmedVelocity,
+        float? HeadActualVelocity,
+        float? HeadJogVelocity,
+        float? ConditionerSetVelocity,
+        float? ConditionerConfirmedVelocity,
+        float? ConditionerActualVelocity,
+        float? ConditionerJogVelocity);
+
+    private static readonly IReadOnlyDictionary<string, RotaryMotorPlcAddresses> RotaryMotorPlcAddressMap =
+        new Dictionary<string, RotaryMotorPlcAddresses>(StringComparer.Ordinal)
+        {
+            ["PlatenMotor"] = new(
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Run,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Stop,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.ConfirmedVelocityW,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.ActualVelocityW,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.ActualPositionW,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.PlatenRotation.Address.JogMinusBitOffset),
+            ["HeadRotateMotor"] = new(
+                PlcHandle.CmdPolish.Motor.HeadRotation.Run,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Stop,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.ConfirmedVelocityW,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.ActualVelocityW,
+                null,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.HeadRotation.Address.JogMinusBitOffset),
+            ["DiskRotateMotor"] = new(
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Run,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Stop,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.ConfirmedVelocityW,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.ActualVelocityW,
+                null,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.JogMinusBitOffset)
+        };
+
+    private readonly record struct SwingMotorPlcAddresses(
+        uint StartCommand,
+        uint StopCommand,
+        uint SetVelocity,
+        uint SetPosition,
+        uint ActualVelocity,
+        uint ActualPosition,
+        uint JogVelocity,
+        uint JogBitWord,
+        ushort JogPlusOffset,
+        ushort JogMinusOffset);
+
+    private sealed record SwingMotorFeedback(
+        float? HeadSweepSetVelocity,
+        float? HeadSweepSetPosition,
+        float? HeadSweepActualVelocity,
+        float? HeadSweepActualPosition,
+        float? HeadSweepJogVelocity,
+        float? HeadLiftSetVelocity,
+        float? HeadLiftSetPosition,
+        float? HeadLiftActualVelocity,
+        float? HeadLiftActualPosition,
+        float? HeadLiftJogVelocity,
+        float? ConditionerSweepSetVelocity,
+        float? ConditionerSweepSetPosition,
+        float? ConditionerSweepActualVelocity,
+        float? ConditionerSweepActualPosition,
+        float? ConditionerSweepJogVelocity,
+        float? SlurrySweepSetVelocity,
+        float? SlurrySweepSetPosition,
+        float? SlurrySweepActualVelocity,
+        float? SlurrySweepActualPosition,
+        float? SlurrySweepJogVelocity);
+
+    private static readonly IReadOnlyDictionary<string, SwingMotorPlcAddresses> SwingMotorPlcAddressMap =
+        new Dictionary<string, SwingMotorPlcAddresses>(StringComparer.Ordinal)
+        {
+            ["HeadSweepMotor"] = new(
+                PlcHandle.CmdPolish.Motor.HeadSweep.AnyPosition,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Stop,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.HeadSweep.Param.Position.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.ActualVelocityW,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.ActualPositionW,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.HeadSweep.Address.JogMinusBitOffset),
+            ["HeadLiftMotor"] = new(
+                PlcHandle.CmdPolish.Motor.HeadUpDown.AnyPosition,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Stop,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Param.Position.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.ActualVelocityW,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.ActualPositionW,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.HeadUpDown.Address.JogMinusBitOffset),
+            ["ConditionSweepMotor"] = new(
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.AnyPosition,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Stop,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Param.Position.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.ActualVelocityW,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.ActualPositionW,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.JogMinusBitOffset),
+            ["SlurrySweepMotor"] = new(
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.AnyPosition,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Stop,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Param.Velocity.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Param.Position.ParamHandle(),
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.ActualVelocityW,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.ActualPositionW,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.JogVelocityZf,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.JogBitWordZf,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.JogPlusBitOffset,
+                PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.JogMinusBitOffset)
+        };
+
     private readonly IEventAggregator _eventAggregator;
     private string? _tabTitle;
     private string? _baseChamberAddress;
+    private readonly EditableFloatItem _platenSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.PlatenRotation.Param.Velocity.ParamHandle()}", nameof(PlatenSetVelocity), nameof(IsPlatenSetVelocityDirty));
+    private readonly EditableFloatItem _platenJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.PlatenRotation.Address.JogVelocityZf}", nameof(PlatenJogVelocity), nameof(IsPlatenJogVelocityDirty));
+    private readonly EditableFloatItem _headSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadRotation.Param.Velocity.ParamHandle()}", nameof(HeadSetVelocity), nameof(IsHeadSetVelocityDirty));
+    private readonly EditableFloatItem _headJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadRotation.Address.JogVelocityZf}", nameof(HeadJogVelocity), nameof(IsHeadJogVelocityDirty));
+    private readonly EditableFloatItem _conditionerSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Param.Velocity.ParamHandle()}", nameof(ConditionerSetVelocity), nameof(IsConditionerSetVelocityDirty));
+    private readonly EditableFloatItem _conditionerJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.Address.JogVelocityZf}", nameof(ConditionerJogVelocity), nameof(IsConditionerJogVelocityDirty));
+    private readonly EditableFloatItem _headSweepSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadSweep.Param.Velocity.ParamHandle()}", nameof(HeadSweepSetVelocity), nameof(IsHeadSweepSetVelocityDirty));
+    private readonly EditableFloatItem _headSweepSetPositionItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadSweep.Param.Position.ParamHandle()}", nameof(HeadSweepSetPosition), nameof(IsHeadSweepSetPositionDirty));
+    private readonly EditableFloatItem _headSweepJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadSweep.Address.JogVelocityZf}", nameof(HeadSweepJogVelocity), nameof(IsHeadSweepJogVelocityDirty));
+    private readonly EditableFloatItem _headLiftSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadUpDown.Param.Velocity.ParamHandle()}", nameof(HeadLiftSetVelocity), nameof(IsHeadLiftSetVelocityDirty));
+    private readonly EditableFloatItem _headLiftSetPositionItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadUpDown.Param.Position.ParamHandle()}", nameof(HeadLiftSetPosition), nameof(IsHeadLiftSetPositionDirty));
+    private readonly EditableFloatItem _headLiftJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.HeadUpDown.Address.JogVelocityZf}", nameof(HeadLiftJogVelocity), nameof(IsHeadLiftJogVelocityDirty));
+    private readonly EditableFloatItem _conditionerSweepSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.ConditionerSweep.Param.Velocity.ParamHandle()}", nameof(ConditionerSweepSetVelocity), nameof(IsConditionerSweepSetVelocityDirty));
+    private readonly EditableFloatItem _conditionerSweepSetPositionItem = new($"ZF{PlcHandle.CmdPolish.Motor.ConditionerSweep.Param.Position.ParamHandle()}", nameof(ConditionerSweepSetPosition), nameof(IsConditionerSweepSetPositionDirty));
+    private readonly EditableFloatItem _conditionerSweepJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.ConditionerSweep.Address.JogVelocityZf}", nameof(ConditionerSweepJogVelocity), nameof(IsConditionerSweepJogVelocityDirty));
+    private readonly EditableFloatItem _slurrySweepSetVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.SlurryArmSweep.Param.Velocity.ParamHandle()}", nameof(SlurrySweepSetVelocity), nameof(IsSlurrySweepSetVelocityDirty));
+    private readonly EditableFloatItem _slurrySweepSetPositionItem = new($"ZF{PlcHandle.CmdPolish.Motor.SlurryArmSweep.Param.Position.ParamHandle()}", nameof(SlurrySweepSetPosition), nameof(IsSlurrySweepSetPositionDirty));
+    private readonly EditableFloatItem _slurrySweepJogVelocityItem = new($"ZF{PlcHandle.CmdPolish.Motor.SlurryArmSweep.Address.JogVelocityZf}", nameof(SlurrySweepJogVelocity), nameof(IsSlurrySweepJogVelocityDirty));
     public new string? TabTitle
     {
         get => _tabTitle;
@@ -67,6 +235,150 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         get => _polishUnit;
         set => SetProperty(ref _polishUnit, value);
     }
+
+    public double PlatenSetVelocity
+    {
+        get => _platenSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_platenSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsPlatenSetVelocityDirty => _platenSetVelocityItem.IsDirty;
+
+    public double PlatenJogVelocity
+    {
+        get => _platenJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_platenJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsPlatenJogVelocityDirty => _platenJogVelocityItem.IsDirty;
+
+    public double HeadSetVelocity
+    {
+        get => _headSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadSetVelocityDirty => _headSetVelocityItem.IsDirty;
+
+    public double HeadJogVelocity
+    {
+        get => _headJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadJogVelocityDirty => _headJogVelocityItem.IsDirty;
+
+    public double ConditionerSetVelocity
+    {
+        get => _conditionerSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_conditionerSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsConditionerSetVelocityDirty => _conditionerSetVelocityItem.IsDirty;
+
+    public double ConditionerJogVelocity
+    {
+        get => _conditionerJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_conditionerJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsConditionerJogVelocityDirty => _conditionerJogVelocityItem.IsDirty;
+
+    public double HeadSweepSetVelocity
+    {
+        get => _headSweepSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headSweepSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadSweepSetVelocityDirty => _headSweepSetVelocityItem.IsDirty;
+
+    public double HeadSweepSetPosition
+    {
+        get => _headSweepSetPositionItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headSweepSetPositionItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadSweepSetPositionDirty => _headSweepSetPositionItem.IsDirty;
+
+    public double HeadSweepJogVelocity
+    {
+        get => _headSweepJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headSweepJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadSweepJogVelocityDirty => _headSweepJogVelocityItem.IsDirty;
+
+    public double HeadLiftSetVelocity
+    {
+        get => _headLiftSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headLiftSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadLiftSetVelocityDirty => _headLiftSetVelocityItem.IsDirty;
+
+    public double HeadLiftSetPosition
+    {
+        get => _headLiftSetPositionItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headLiftSetPositionItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadLiftSetPositionDirty => _headLiftSetPositionItem.IsDirty;
+
+    public double HeadLiftJogVelocity
+    {
+        get => _headLiftJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_headLiftJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsHeadLiftJogVelocityDirty => _headLiftJogVelocityItem.IsDirty;
+
+    public double ConditionerSweepSetVelocity
+    {
+        get => _conditionerSweepSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_conditionerSweepSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsConditionerSweepSetVelocityDirty => _conditionerSweepSetVelocityItem.IsDirty;
+
+    public double ConditionerSweepSetPosition
+    {
+        get => _conditionerSweepSetPositionItem.Value;
+        set => EditableFloatItemHelper.SetValue(_conditionerSweepSetPositionItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsConditionerSweepSetPositionDirty => _conditionerSweepSetPositionItem.IsDirty;
+
+    public double ConditionerSweepJogVelocity
+    {
+        get => _conditionerSweepJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_conditionerSweepJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsConditionerSweepJogVelocityDirty => _conditionerSweepJogVelocityItem.IsDirty;
+
+    public double SlurrySweepSetVelocity
+    {
+        get => _slurrySweepSetVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_slurrySweepSetVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsSlurrySweepSetVelocityDirty => _slurrySweepSetVelocityItem.IsDirty;
+
+    public double SlurrySweepSetPosition
+    {
+        get => _slurrySweepSetPositionItem.Value;
+        set => EditableFloatItemHelper.SetValue(_slurrySweepSetPositionItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsSlurrySweepSetPositionDirty => _slurrySweepSetPositionItem.IsDirty;
+
+    public double SlurrySweepJogVelocity
+    {
+        get => _slurrySweepJogVelocityItem.Value;
+        set => EditableFloatItemHelper.SetValue(_slurrySweepJogVelocityItem, value, RaisePropertyChanged);
+    }
+
+    public bool IsSlurrySweepJogVelocityDirty => _slurrySweepJogVelocityItem.IsDirty;
 
     // Recipe lists for ComboBoxes 
     private ObservableCollection<string> _loadRecipes = new();
@@ -278,12 +590,55 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
     private string _configUnloadRetryRecipe = "";
 
     public PolishSlurryContentViewModel SlurryControl { get; }
+    public PolishSwingPositionsViewModel SwingPositions { get; }
 
     public DelegateCommand<string> AutoCommand { get; set; }
     public DelegateCommand<string> AbortUnitCommand { get; set; }
     public DelegateCommand<string> AbortCommand { get; set; }
     public DelegateCommand<string> StartCommand { get; set; }
     public DelegateCommand<string> RunCommand { get; set; }
+    public DelegateCommand<string> RotaryMotorStartCommand { get; set; }
+    public DelegateCommand<string> RotaryMotorStopCommand { get; set; }
+    public DelegateCommand<string> SwingMotorStartCommand { get; set; }
+    public DelegateCommand<string> SwingMotorStopCommand { get; set; }
+    public DelegateCommand<string> JogPressCommand { get; set; }
+    public DelegateCommand<string> JogReleaseCommand { get; set; }
+    public DelegateCommand PlatenSetVelocitySetCommand => _platenSetVelocityItem.SetCommand;
+    public DelegateCommand PlatenSetVelocityCancelCommand => _platenSetVelocityItem.CancelCommand;
+    public DelegateCommand PlatenJogVelocitySetCommand => _platenJogVelocityItem.SetCommand;
+    public DelegateCommand PlatenJogVelocityCancelCommand => _platenJogVelocityItem.CancelCommand;
+    public DelegateCommand HeadSetVelocitySetCommand => _headSetVelocityItem.SetCommand;
+    public DelegateCommand HeadSetVelocityCancelCommand => _headSetVelocityItem.CancelCommand;
+    public DelegateCommand HeadJogVelocitySetCommand => _headJogVelocityItem.SetCommand;
+    public DelegateCommand HeadJogVelocityCancelCommand => _headJogVelocityItem.CancelCommand;
+    public DelegateCommand ConditionerSetVelocitySetCommand => _conditionerSetVelocityItem.SetCommand;
+    public DelegateCommand ConditionerSetVelocityCancelCommand => _conditionerSetVelocityItem.CancelCommand;
+    public DelegateCommand ConditionerJogVelocitySetCommand => _conditionerJogVelocityItem.SetCommand;
+    public DelegateCommand ConditionerJogVelocityCancelCommand => _conditionerJogVelocityItem.CancelCommand;
+    public DelegateCommand HeadSweepSetVelocitySetCommand => _headSweepSetVelocityItem.SetCommand;
+    public DelegateCommand HeadSweepSetVelocityCancelCommand => _headSweepSetVelocityItem.CancelCommand;
+    public DelegateCommand HeadSweepSetPositionSetCommand => _headSweepSetPositionItem.SetCommand;
+    public DelegateCommand HeadSweepSetPositionCancelCommand => _headSweepSetPositionItem.CancelCommand;
+    public DelegateCommand HeadSweepJogVelocitySetCommand => _headSweepJogVelocityItem.SetCommand;
+    public DelegateCommand HeadSweepJogVelocityCancelCommand => _headSweepJogVelocityItem.CancelCommand;
+    public DelegateCommand HeadLiftSetVelocitySetCommand => _headLiftSetVelocityItem.SetCommand;
+    public DelegateCommand HeadLiftSetVelocityCancelCommand => _headLiftSetVelocityItem.CancelCommand;
+    public DelegateCommand HeadLiftSetPositionSetCommand => _headLiftSetPositionItem.SetCommand;
+    public DelegateCommand HeadLiftSetPositionCancelCommand => _headLiftSetPositionItem.CancelCommand;
+    public DelegateCommand HeadLiftJogVelocitySetCommand => _headLiftJogVelocityItem.SetCommand;
+    public DelegateCommand HeadLiftJogVelocityCancelCommand => _headLiftJogVelocityItem.CancelCommand;
+    public DelegateCommand ConditionerSweepSetVelocitySetCommand => _conditionerSweepSetVelocityItem.SetCommand;
+    public DelegateCommand ConditionerSweepSetVelocityCancelCommand => _conditionerSweepSetVelocityItem.CancelCommand;
+    public DelegateCommand ConditionerSweepSetPositionSetCommand => _conditionerSweepSetPositionItem.SetCommand;
+    public DelegateCommand ConditionerSweepSetPositionCancelCommand => _conditionerSweepSetPositionItem.CancelCommand;
+    public DelegateCommand ConditionerSweepJogVelocitySetCommand => _conditionerSweepJogVelocityItem.SetCommand;
+    public DelegateCommand ConditionerSweepJogVelocityCancelCommand => _conditionerSweepJogVelocityItem.CancelCommand;
+    public DelegateCommand SlurrySweepSetVelocitySetCommand => _slurrySweepSetVelocityItem.SetCommand;
+    public DelegateCommand SlurrySweepSetVelocityCancelCommand => _slurrySweepSetVelocityItem.CancelCommand;
+    public DelegateCommand SlurrySweepSetPositionSetCommand => _slurrySweepSetPositionItem.SetCommand;
+    public DelegateCommand SlurrySweepSetPositionCancelCommand => _slurrySweepSetPositionItem.CancelCommand;
+    public DelegateCommand SlurrySweepJogVelocitySetCommand => _slurrySweepJogVelocityItem.SetCommand;
+    public DelegateCommand SlurrySweepJogVelocityCancelCommand => _slurrySweepJogVelocityItem.CancelCommand;
     public DelegateCommand<string> PressCommand { get; set; }
     public DelegateCommand<string> VentCommand { get; set; }
     public DelegateCommand<string> VacuumCommand { get; set; }
@@ -418,6 +773,30 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         AbortCommand = OperationAudit.Create<string>("Abort", AbortCommandExecute, () => TabTitle ?? string.Empty);
         StartCommand = OperationAudit.Create<string>("Start", StartCommandExecute, () => TabTitle ?? string.Empty);
         RunCommand = OperationAudit.Create<string>("Run", RunCommandExecute, () => TabTitle ?? string.Empty);
+        RotaryMotorStartCommand = OperationAudit.Create<string>("Run", RotaryMotorStartCommandExecute, () => TabTitle ?? string.Empty);
+        RotaryMotorStopCommand = OperationAudit.Create<string>("Abort", RotaryMotorStopCommandExecute, () => TabTitle ?? string.Empty);
+        SwingMotorStartCommand = OperationAudit.Create<string>("Run", SwingMotorStartCommandExecute, () => TabTitle ?? string.Empty);
+        SwingMotorStopCommand = OperationAudit.Create<string>("Abort", SwingMotorStopCommandExecute, () => TabTitle ?? string.Empty);
+        InitializeRotaryMotorEditableItem(_platenSetVelocityItem, "PlatenMotor", "SetVelocity");
+        InitializeRotaryMotorEditableItem(_platenJogVelocityItem, "PlatenMotor", "JogVelocity");
+        InitializeRotaryMotorEditableItem(_headSetVelocityItem, "HeadRotateMotor", "SetVelocity");
+        InitializeRotaryMotorEditableItem(_headJogVelocityItem, "HeadRotateMotor", "JogVelocity");
+        InitializeRotaryMotorEditableItem(_conditionerSetVelocityItem, "DiskRotateMotor", "SetVelocity");
+        InitializeRotaryMotorEditableItem(_conditionerJogVelocityItem, "DiskRotateMotor", "JogVelocity");
+        InitializeSwingMotorEditableItem(_headSweepSetVelocityItem, "HeadSweepMotor", "SetVelocity");
+        InitializeSwingMotorEditableItem(_headSweepSetPositionItem, "HeadSweepMotor", "SetPosition");
+        InitializeSwingMotorEditableItem(_headSweepJogVelocityItem, "HeadSweepMotor", "JogVelocity");
+        InitializeSwingMotorEditableItem(_headLiftSetVelocityItem, "HeadLiftMotor", "SetVelocity");
+        InitializeSwingMotorEditableItem(_headLiftSetPositionItem, "HeadLiftMotor", "SetPosition");
+        InitializeSwingMotorEditableItem(_headLiftJogVelocityItem, "HeadLiftMotor", "JogVelocity");
+        InitializeSwingMotorEditableItem(_conditionerSweepSetVelocityItem, "ConditionSweepMotor", "SetVelocity");
+        InitializeSwingMotorEditableItem(_conditionerSweepSetPositionItem, "ConditionSweepMotor", "SetPosition");
+        InitializeSwingMotorEditableItem(_conditionerSweepJogVelocityItem, "ConditionSweepMotor", "JogVelocity");
+        InitializeSwingMotorEditableItem(_slurrySweepSetVelocityItem, "SlurrySweepMotor", "SetVelocity");
+        InitializeSwingMotorEditableItem(_slurrySweepSetPositionItem, "SlurrySweepMotor", "SetPosition");
+        InitializeSwingMotorEditableItem(_slurrySweepJogVelocityItem, "SlurrySweepMotor", "JogVelocity");
+        JogPressCommand = new DelegateCommand<string>(JogPressCommandExecute);
+        JogReleaseCommand = new DelegateCommand<string>(JogReleaseCommandExecute);
         PressCommand = OperationAudit.Create<string>("Press", PressCommandExecute, () => TabTitle ?? string.Empty);
         VentCommand = OperationAudit.Create<string>("Vent", VentCommandExecute, () => TabTitle ?? string.Empty);
         VacuumCommand = OperationAudit.Create<string>("Vacuum", VacuumCommandExecute, () => TabTitle ?? string.Empty);
@@ -440,6 +819,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
         kvLink = link;
         SlurryControl = new PolishSlurryContentViewModel(() => kvLink.sock, () => TabTitle ?? string.Empty);
+        SwingPositions = new PolishSwingPositionsViewModel(() => kvLink.sock, () => TabTitle ?? string.Empty, PolishUnit);
         err = KHL.KHLWriteVariable(kvLink.sock, "PLCStartPermition", writeTrue, true);
         err = KHL.KHLWriteVariable(kvLink.sock, "PLCReady", writeTrue, true);
         //err = KHL.KHLWriteVariable(sock, "PLCAutoStart", writeTrue, true);
@@ -599,11 +979,25 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                     }
                 }
                 IntereactionWithPLCForAssignRecipe();
+                var rotaryMotorFeedback = ReadRotaryMotorFeedback();
+                var swingMotorFeedback = ReadSwingMotorFeedback();
+                var swingPositionFeedback = SwingPositions.ReadFeedback();
 
                 if (disp != null)
-                    await disp.InvokeAsync(new System.Action(RefreshHMI));
+                    await disp.InvokeAsync(() =>
+                    {
+                        RefreshHMI();
+                        ApplyRotaryMotorFeedback(rotaryMotorFeedback);
+                        ApplySwingMotorFeedback(swingMotorFeedback);
+                        SwingPositions.ApplyFeedback(swingPositionFeedback);
+                    });
                 else
+                {
                     RefreshHMI();
+                    ApplyRotaryMotorFeedback(rotaryMotorFeedback);
+                    ApplySwingMotorFeedback(swingMotorFeedback);
+                    SwingPositions.ApplyFeedback(swingPositionFeedback);
+                }
             }
             catch (Exception ex)
             {
@@ -611,6 +1005,527 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             }
 
         }
+    }
+
+    private RotaryMotorFeedback? ReadRotaryMotorFeedback()
+    {
+        if (kvLink.sock <= 0)
+            return null;
+
+        float? ReadFloat(KHLDevType device, uint address)
+        {
+            var data = new byte[4];
+            var readError = KHL.KHLReadDevicesAsWords(kvLink.sock, device, address, 2, data);
+            return readError == (int)KHLUserError.KHL_ERR_NONE ? BitConverter.ToSingle(data, 0) : null;
+        }
+
+        try
+        {
+            var platen = RotaryMotorPlcAddressMap["PlatenMotor"];
+            var head = RotaryMotorPlcAddressMap["HeadRotateMotor"];
+            var conditioner = RotaryMotorPlcAddressMap["DiskRotateMotor"];
+
+            return new RotaryMotorFeedback(
+                ReadFloat(KHLDevType.DEV_ZF, platen.SetVelocity),
+                ReadFloat(KHLDevType.DEV_W, platen.ConfirmedVelocity),
+                ReadFloat(KHLDevType.DEV_W, platen.ActualVelocity),
+                platen.ActualPosition.HasValue ? ReadFloat(KHLDevType.DEV_W, platen.ActualPosition.Value) : null,
+                ReadFloat(KHLDevType.DEV_ZF, platen.JogVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, head.SetVelocity),
+                ReadFloat(KHLDevType.DEV_W, head.ConfirmedVelocity),
+                ReadFloat(KHLDevType.DEV_W, head.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, head.JogVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, conditioner.SetVelocity),
+                ReadFloat(KHLDevType.DEV_W, conditioner.ConfirmedVelocity),
+                ReadFloat(KHLDevType.DEV_W, conditioner.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, conditioner.JogVelocity));
+        }
+        catch (Exception ex)
+        {
+            Logger.For("RotaryMotor").Debug($"Read rotary motor feedback failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    private void ApplyRotaryMotorFeedback(RotaryMotorFeedback? feedback)
+    {
+        if (feedback == null)
+            return;
+
+        SyncRotaryMotorParameter(_platenSetVelocityItem, feedback.PlatenSetVelocity, PolishUnit.PlatenMotor, "SetVelocity");
+        SyncRotaryMotorParameter(_platenJogVelocityItem, feedback.PlatenJogVelocity, PolishUnit.PlatenMotor, "JogVelocity");
+        SyncRotaryMotorParameter(_headSetVelocityItem, feedback.HeadSetVelocity, PolishUnit.HeadRotateMotor, "SetVelocity");
+        SyncRotaryMotorParameter(_headJogVelocityItem, feedback.HeadJogVelocity, PolishUnit.HeadRotateMotor, "JogVelocity");
+        SyncRotaryMotorParameter(_conditionerSetVelocityItem, feedback.ConditionerSetVelocity, PolishUnit.DiskRotateMotor, "SetVelocity");
+        SyncRotaryMotorParameter(_conditionerJogVelocityItem, feedback.ConditionerJogVelocity, PolishUnit.DiskRotateMotor, "JogVelocity");
+
+        ApplyValue(feedback.PlatenConfirmedVelocity, value => PolishUnit.PlatenMotor.ConfirmedVelocity = value);
+        ApplyValue(feedback.PlatenActualVelocity, value => PolishUnit.PlatenMotor.ActVelocity = value);
+        ApplyValue(feedback.PlatenActualPosition, value => PolishUnit.PlatenMotor.ActPosition = value);
+        ApplyValue(feedback.HeadConfirmedVelocity, value => PolishUnit.HeadRotateMotor.ConfirmedVelocity = value);
+        ApplyValue(feedback.HeadActualVelocity, value => PolishUnit.HeadRotateMotor.ActVelocity = value);
+        ApplyValue(feedback.ConditionerConfirmedVelocity, value => PolishUnit.DiskRotateMotor.ConfirmedVelocity = value);
+        ApplyValue(feedback.ConditionerActualVelocity, value => PolishUnit.DiskRotateMotor.ActVelocity = value);
+    }
+
+    private SwingMotorFeedback? ReadSwingMotorFeedback()
+    {
+        if (kvLink.sock <= 0)
+            return null;
+
+        float? ReadFloat(KHLDevType device, uint address)
+        {
+            var data = new byte[4];
+            var readError = KHL.KHLReadDevicesAsWords(kvLink.sock, device, address, 2, data);
+            return readError == (int)KHLUserError.KHL_ERR_NONE ? BitConverter.ToSingle(data, 0) : null;
+        }
+
+        try
+        {
+            var headSweep = SwingMotorPlcAddressMap["HeadSweepMotor"];
+            var headLift = SwingMotorPlcAddressMap["HeadLiftMotor"];
+            var conditionerSweep = SwingMotorPlcAddressMap["ConditionSweepMotor"];
+            var slurrySweep = SwingMotorPlcAddressMap["SlurrySweepMotor"];
+
+            return new SwingMotorFeedback(
+                ReadFloat(KHLDevType.DEV_ZF, headSweep.SetVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, headSweep.SetPosition),
+                ReadFloat(KHLDevType.DEV_W, headSweep.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_W, headSweep.ActualPosition),
+                ReadFloat(KHLDevType.DEV_ZF, headSweep.JogVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, headLift.SetVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, headLift.SetPosition),
+                ReadFloat(KHLDevType.DEV_W, headLift.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_W, headLift.ActualPosition),
+                ReadFloat(KHLDevType.DEV_ZF, headLift.JogVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, conditionerSweep.SetVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, conditionerSweep.SetPosition),
+                ReadFloat(KHLDevType.DEV_W, conditionerSweep.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_W, conditionerSweep.ActualPosition),
+                ReadFloat(KHLDevType.DEV_ZF, conditionerSweep.JogVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, slurrySweep.SetVelocity),
+                ReadFloat(KHLDevType.DEV_ZF, slurrySweep.SetPosition),
+                ReadFloat(KHLDevType.DEV_W, slurrySweep.ActualVelocity),
+                ReadFloat(KHLDevType.DEV_W, slurrySweep.ActualPosition),
+                ReadFloat(KHLDevType.DEV_ZF, slurrySweep.JogVelocity));
+        }
+        catch (Exception ex)
+        {
+            Logger.For("SwingMotor").Debug($"Read swing motor feedback failed: {ex.Message}");
+            return null;
+        }
+    }
+
+    private void ApplySwingMotorFeedback(SwingMotorFeedback? feedback)
+    {
+        if (feedback == null)
+            return;
+
+        SyncSwingMotorParameter(_headSweepSetVelocityItem, feedback.HeadSweepSetVelocity, PolishUnit.HeadSweepMotor, "SetVelocity");
+        SyncSwingMotorParameter(_headSweepSetPositionItem, feedback.HeadSweepSetPosition, PolishUnit.HeadSweepMotor, "SetPosition");
+        SyncSwingMotorParameter(_headSweepJogVelocityItem, feedback.HeadSweepJogVelocity, PolishUnit.HeadSweepMotor, "JogVelocity");
+        ApplyValue(feedback.HeadSweepActualVelocity, value => PolishUnit.HeadSweepMotor.ActVelocity = value);
+        ApplyValue(feedback.HeadSweepActualPosition, value => PolishUnit.HeadSweepMotor.ActPosition = value);
+
+        SyncSwingMotorParameter(_headLiftSetVelocityItem, feedback.HeadLiftSetVelocity, PolishUnit.HeadLiftMotor, "SetVelocity");
+        SyncSwingMotorParameter(_headLiftSetPositionItem, feedback.HeadLiftSetPosition, PolishUnit.HeadLiftMotor, "SetPosition");
+        SyncSwingMotorParameter(_headLiftJogVelocityItem, feedback.HeadLiftJogVelocity, PolishUnit.HeadLiftMotor, "JogVelocity");
+        ApplyValue(feedback.HeadLiftActualVelocity, value => PolishUnit.HeadLiftMotor.ActVelocity = value);
+        ApplyValue(feedback.HeadLiftActualPosition, value => PolishUnit.HeadLiftMotor.ActPosition = value);
+
+        SyncSwingMotorParameter(_conditionerSweepSetVelocityItem, feedback.ConditionerSweepSetVelocity, PolishUnit.ConditionSweepMotor, "SetVelocity");
+        SyncSwingMotorParameter(_conditionerSweepSetPositionItem, feedback.ConditionerSweepSetPosition, PolishUnit.ConditionSweepMotor, "SetPosition");
+        SyncSwingMotorParameter(_conditionerSweepJogVelocityItem, feedback.ConditionerSweepJogVelocity, PolishUnit.ConditionSweepMotor, "JogVelocity");
+        ApplyValue(feedback.ConditionerSweepActualVelocity, value => PolishUnit.ConditionSweepMotor.ActVelocity = value);
+        ApplyValue(feedback.ConditionerSweepActualPosition, value => PolishUnit.ConditionSweepMotor.ActPosition = value);
+
+        SyncSwingMotorParameter(_slurrySweepSetVelocityItem, feedback.SlurrySweepSetVelocity, PolishUnit.SlurrySweepMotor, "SetVelocity");
+        SyncSwingMotorParameter(_slurrySweepSetPositionItem, feedback.SlurrySweepSetPosition, PolishUnit.SlurrySweepMotor, "SetPosition");
+        SyncSwingMotorParameter(_slurrySweepJogVelocityItem, feedback.SlurrySweepJogVelocity, PolishUnit.SlurrySweepMotor, "JogVelocity");
+        ApplyValue(feedback.SlurrySweepActualVelocity, value => PolishUnit.SlurrySweepMotor.ActVelocity = value);
+        ApplyValue(feedback.SlurrySweepActualPosition, value => PolishUnit.SlurrySweepMotor.ActPosition = value);
+    }
+
+    private void SyncSwingMotorParameter(EditableFloatItem item, float? plcValue, SweepMotor motor, string parameter)
+    {
+        if (!plcValue.HasValue || float.IsNaN(plcValue.Value) || float.IsInfinity(plcValue.Value))
+            return;
+
+        var value = (double)plcValue.Value;
+        item.PlcValue = value;
+        item.HasPlcValue = true;
+        if (item.IsDirty)
+            return;
+
+        if (!item.Value.Equals(value))
+        {
+            item.Value = value;
+            RaisePropertyChanged(item.ValuePropertyName);
+        }
+
+        SetSwingMotorParameterValue(motor, parameter, plcValue.Value);
+    }
+
+    private void SyncRotaryMotorParameter(EditableFloatItem item, float? plcValue, Motor motor, string parameter)
+    {
+        if (!plcValue.HasValue || float.IsNaN(plcValue.Value) || float.IsInfinity(plcValue.Value))
+            return;
+
+        var value = (double)plcValue.Value;
+        item.PlcValue = value;
+        item.HasPlcValue = true;
+        if (item.IsDirty)
+            return;
+
+        if (!item.Value.Equals(value))
+        {
+            item.Value = value;
+            RaisePropertyChanged(item.ValuePropertyName);
+        }
+
+        SetMotorParameterValue(motor, parameter, plcValue.Value);
+    }
+
+    private static void ApplyValue(float? value, Action<float> setter)
+    {
+        if (value.HasValue && !float.IsNaN(value.Value) && !float.IsInfinity(value.Value))
+            setter(value.Value);
+    }
+
+    private void RotaryMotorStartCommandExecute(string motorName)
+    {
+        WriteRotaryMotorCommand(motorName, start: true);
+    }
+
+    private void RotaryMotorStopCommandExecute(string motorName)
+    {
+        WriteRotaryMotorCommand(motorName, start: false);
+    }
+
+    private static string GetMotorText(string key) =>
+        Resources.ResourceManager.GetString(key, LocalizeDictionary.Instance.Culture) ?? key;
+
+    private static string FormatMotorText(string key, params object[] args) =>
+        string.Format(LocalizeDictionary.Instance.Culture, GetMotorText(key), args);
+
+    private static string GetMotorTitle(string motorName) => GetMotorText(motorName switch
+    {
+        "PlatenMotor" => "PolishMotorPlatenRotation",
+        "HeadRotateMotor" => "PolishMotorHeadRotation",
+        "DiskRotateMotor" => "PolishMotorConditionerRotation",
+        "HeadSweepMotor" => "PolishMotorHeadSwing",
+        "HeadLiftMotor" => "PolishMotorHeadLift",
+        "ConditionSweepMotor" => "PolishMotorConditionerSwing",
+        "SlurrySweepMotor" => "PolishMotorSlurryArmSwing",
+        _ => motorName
+    });
+
+    private static string GetMotorParameterTitle(string parameter) => GetMotorText(parameter switch
+    {
+        "SetVelocity" => "PolishMotorSetSpeed",
+        "SetPosition" => "PolishMotorSetPosition",
+        "JogVelocity" => "PolishMotorJogSpeed",
+        _ => parameter
+    });
+
+    private void WriteRotaryMotorCommand(string motorName, bool start)
+    {
+        if (!RotaryMotorPlcAddressMap.TryGetValue(motorName, out var address))
+        {
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorUnknown", motorName));
+            return;
+        }
+
+        var commandAddress = start ? address.StartCommand : address.StopCommand;
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1, new byte[] { 1, 0 });
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorCommandFailed",
+                GetMotorTitle(motorName),
+                GetMotorText(start ? "PolishMotorStart" : "Stop"), result));
+    }
+
+    private void SwingMotorStartCommandExecute(string motorName)
+    {
+        WriteSwingMotorCommand(motorName, start: true);
+    }
+
+    private void SwingMotorStopCommandExecute(string motorName)
+    {
+        WriteSwingMotorCommand(motorName, start: false);
+    }
+
+    private void WriteSwingMotorCommand(string motorName, bool start)
+    {
+        if (!SwingMotorPlcAddressMap.TryGetValue(motorName, out var address))
+        {
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorUnknown", motorName));
+            return;
+        }
+
+        var commandAddress = start ? address.StartCommand : address.StopCommand;
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1, new byte[] { 1, 0 });
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorCommandFailed",
+                GetMotorTitle(motorName),
+                GetMotorText(start ? "PolishMotorStart" : "Stop"), result));
+    }
+
+    private void InitializeSwingMotorEditableItem(EditableFloatItem item, string motorName, string parameter)
+    {
+        item.SetCommand = new DelegateCommand(() => SetSwingMotorParameter(item, motorName, parameter));
+        item.CancelCommand = new DelegateCommand(() => CancelSwingMotorParameter(item, motorName, parameter));
+    }
+
+    private void SetSwingMotorParameter(EditableFloatItem item, string motorName, string parameter)
+    {
+        var motor = GetSwingMotor(motorName);
+        if (motor == null || !SwingMotorPlcAddressMap.TryGetValue(motorName, out var address))
+            return;
+
+        var value = (float)item.Value;
+        var target = $"{TabTitle}/{motorName}:{parameter}";
+        if (!WriteSwingMotorParameter(motorName, parameter, value, address))
+        {
+            AuditLogService.WriteCurrentUser("SetValue", "Failed", "PLC write failed", AuditModules.Operation, target);
+            return;
+        }
+
+        item.Value = value;
+        item.PlcValue = value;
+        item.HasPlcValue = true;
+        SetSwingMotorParameterValue(motor, parameter, value);
+        RaisePropertyChanged(item.ValuePropertyName);
+        if (PlcEditableValueHelper.SetDirty(ref item.IsDirty, false))
+            RaisePropertyChanged(item.DirtyPropertyName);
+        AuditLogService.WriteCurrentUser("SetValue", "Success", string.Empty, AuditModules.Operation, target);
+    }
+
+    private void CancelSwingMotorParameter(EditableFloatItem item, string motorName, string parameter)
+    {
+        var motor = GetSwingMotor(motorName);
+        if (motor == null)
+            return;
+
+        var value = item.HasPlcValue ? item.PlcValue : GetSwingMotorParameterValue(motor, parameter);
+        if (!item.Value.Equals(value))
+        {
+            item.Value = value;
+            RaisePropertyChanged(item.ValuePropertyName);
+        }
+
+        SetSwingMotorParameterValue(motor, parameter, (float)value);
+        if (PlcEditableValueHelper.SetDirty(ref item.IsDirty, false))
+            RaisePropertyChanged(item.DirtyPropertyName);
+    }
+
+    private SweepMotor? GetSwingMotor(string motorName) => motorName switch
+    {
+        "HeadSweepMotor" => PolishUnit.HeadSweepMotor,
+        "HeadLiftMotor" => PolishUnit.HeadLiftMotor,
+        "ConditionSweepMotor" => PolishUnit.ConditionSweepMotor,
+        "SlurrySweepMotor" => PolishUnit.SlurrySweepMotor,
+        _ => null
+    };
+
+    private static double GetSwingMotorParameterValue(SweepMotor motor, string parameter) => parameter switch
+    {
+        "SetVelocity" => motor.SetVelocity,
+        "SetPosition" => motor.SetPosition,
+        "JogVelocity" => motor.JogVelocity,
+        _ => 0d
+    };
+
+    private static void SetSwingMotorParameterValue(SweepMotor motor, string parameter, float value)
+    {
+        if (parameter == "SetVelocity")
+            motor.SetVelocity = value;
+        else if (parameter == "SetPosition")
+            motor.SetPosition = value;
+        else if (parameter == "JogVelocity")
+            motor.JogVelocity = value;
+    }
+
+    private bool WriteSwingMotorParameter(string motorName, string parameter, float value,
+        SwingMotorPlcAddresses address)
+    {
+        if (float.IsNaN(value) || float.IsInfinity(value))
+            return false;
+
+        var data = BitConverter.GetBytes(value);
+        var wordAddress = parameter switch
+        {
+            "SetPosition" => address.SetPosition,
+            "JogVelocity" => address.JogVelocity,
+            _ => address.SetVelocity
+        };
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, wordAddress, 2, data);
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+        {
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorParameterWriteFailed",
+                GetMotorTitle(motorName),
+                GetMotorParameterTitle(parameter), result));
+            return false;
+        }
+
+        return true;
+    }
+
+    private void InitializeRotaryMotorEditableItem(EditableFloatItem item, string motorName, string parameter)
+    {
+        item.SetCommand = new DelegateCommand(() => SetRotaryMotorParameter(item, motorName, parameter));
+        item.CancelCommand = new DelegateCommand(() => CancelRotaryMotorParameter(item, motorName, parameter));
+    }
+
+    private void SetRotaryMotorParameter(EditableFloatItem item, string motorName, string parameter)
+    {
+        var motor = GetRotaryMotor(motorName);
+        if (motor == null || !RotaryMotorPlcAddressMap.TryGetValue(motorName, out var address))
+            return;
+
+        var value = (float)item.Value;
+        var target = $"{TabTitle}/{motorName}:{parameter}";
+        if (!WriteRotaryMotorParameter(motorName, parameter, value, address))
+        {
+            AuditLogService.WriteCurrentUser("SetValue", "Failed", "PLC write failed", AuditModules.Operation, target);
+            return;
+        }
+
+        item.Value = value;
+        item.PlcValue = value;
+        item.HasPlcValue = true;
+        SetMotorParameterValue(motor, parameter, value);
+        RaisePropertyChanged(item.ValuePropertyName);
+        if (PlcEditableValueHelper.SetDirty(ref item.IsDirty, false))
+            RaisePropertyChanged(item.DirtyPropertyName);
+        AuditLogService.WriteCurrentUser("SetValue", "Success", string.Empty, AuditModules.Operation, target);
+    }
+
+    private void CancelRotaryMotorParameter(EditableFloatItem item, string motorName, string parameter)
+    {
+        var motor = GetRotaryMotor(motorName);
+        if (motor == null)
+            return;
+
+        var value = item.HasPlcValue ? item.PlcValue : GetMotorParameterValue(motor, parameter);
+        if (!item.Value.Equals(value))
+        {
+            item.Value = value;
+            RaisePropertyChanged(item.ValuePropertyName);
+        }
+
+        SetMotorParameterValue(motor, parameter, (float)value);
+        if (PlcEditableValueHelper.SetDirty(ref item.IsDirty, false))
+            RaisePropertyChanged(item.DirtyPropertyName);
+    }
+
+    private Motor? GetRotaryMotor(string motorName) => motorName switch
+    {
+        "PlatenMotor" => PolishUnit.PlatenMotor,
+        "HeadRotateMotor" => PolishUnit.HeadRotateMotor,
+        "DiskRotateMotor" => PolishUnit.DiskRotateMotor,
+        _ => null
+    };
+
+    private static double GetMotorParameterValue(Motor motor, string parameter) => parameter switch
+    {
+        "SetVelocity" => motor.SetVelocity,
+        "JogVelocity" => motor.JogVelocity,
+        _ => 0d
+    };
+
+    private static void SetMotorParameterValue(Motor motor, string parameter, float value)
+    {
+        if (parameter == "SetVelocity")
+            motor.SetVelocity = value;
+        else if (parameter == "JogVelocity")
+            motor.JogVelocity = value;
+    }
+
+    private bool WriteRotaryMotorParameter(string motorName, string parameter, float value,
+        RotaryMotorPlcAddresses address)
+    {
+        if (float.IsNaN(value) || float.IsInfinity(value))
+            return false;
+
+        var data = BitConverter.GetBytes(value);
+        var wordAddress = parameter == "JogVelocity" ? address.JogVelocity : address.SetVelocity;
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, wordAddress, 2, data);
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+        {
+            Growl.ErrorGlobal(FormatMotorText("PolishMotorParameterWriteFailed",
+                GetMotorTitle(motorName),
+                GetMotorParameterTitle(parameter), result));
+            return false;
+        }
+
+        return true;
+    }
+
+    private void JogPressCommandExecute(string motorName)
+    {
+        var parts = motorName?.Split(':', 2, StringSplitOptions.TrimEntries);
+        if (parts is not { Length: 2 })
+            return;
+
+        var rotaryMotor = GetRotaryMotor(parts[0]);
+        if (rotaryMotor != null && RotaryMotorPlcAddressMap.TryGetValue(parts[0], out var rotaryAddress))
+        {
+            if (!WriteRotaryMotorParameter(parts[0], "JogVelocity", rotaryMotor.JogVelocity, rotaryAddress))
+                return;
+        }
+        else
+        {
+            var swingMotor = GetSwingMotor(parts[0]);
+            if (swingMotor == null || !SwingMotorPlcAddressMap.TryGetValue(parts[0], out var swingAddress))
+                return;
+
+            if (!WriteSwingMotorParameter(parts[0], "JogVelocity", swingMotor.JogVelocity, swingAddress))
+                return;
+        }
+
+        WriteJogBit(parts[0], string.Equals(parts[1], "+", StringComparison.Ordinal));
+    }
+
+    private void JogReleaseCommandExecute(string motorName)
+    {
+        WriteJogBit(motorName, plus: null);
+    }
+
+    private void WriteJogBit(string motorName, bool? plus)
+    {
+        var hasRotaryAddress = RotaryMotorPlcAddressMap.TryGetValue(motorName, out var rotaryAddress);
+        var hasSwingAddress = SwingMotorPlcAddressMap.TryGetValue(motorName, out var swingAddress);
+        if (!hasRotaryAddress && !hasSwingAddress)
+            return;
+
+        var wordAddress = hasRotaryAddress ? rotaryAddress.JogBitWord : swingAddress.JogBitWord;
+        var plusOffset = hasRotaryAddress ? rotaryAddress.JogPlusOffset : swingAddress.JogPlusOffset;
+        var minusOffset = hasRotaryAddress ? rotaryAddress.JogMinusOffset : swingAddress.JogMinusOffset;
+
+        if (plus == null)
+        {
+            WriteJogBitValue(wordAddress, plusOffset, false);
+            WriteJogBitValue(wordAddress, minusOffset, false);
+            return;
+        }
+
+        var activeOffset = plus.Value ? plusOffset : minusOffset;
+        var inactiveOffset = plus.Value ? minusOffset : plusOffset;
+        if (WriteJogBitValue(wordAddress, inactiveOffset, false))
+            WriteJogBitValue(wordAddress, activeOffset, true);
+    }
+
+    private bool WriteJogBitValue(uint wordAddress, ushort bitOffset, bool value)
+    {
+        var result = KHL.KHLWriteDevicesAsBits(kvLink.sock, KHLDevType.DEV_ZF, wordAddress, bitOffset, 1,
+            new byte[] { value ? (byte)1 : (byte)0 });
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+        {
+            Logger.For("Motor").Debug($"Write JOG bit ZF{wordAddress} bit {bitOffset} failed: {result}");
+            return false;
+        }
+
+        return true;
     }
 
     private void RefreshHMI()
