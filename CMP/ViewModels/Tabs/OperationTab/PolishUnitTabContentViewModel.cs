@@ -40,6 +40,8 @@ namespace CMP.ViewModels.Tabs.OperationTab;
 
 public class PolishUnitTabContentViewModel : TabContentViewModelBase
 {
+    private const ushort PolishMotorCommandValue = 10;
+
     private readonly record struct RotaryMotorPlcAddresses(
         uint StartCommand,
         uint StopCommand,
@@ -1237,7 +1239,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
 
         var commandAddress = start ? address.StartCommand : address.StopCommand;
-        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1, new byte[] { 1, 0 });
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1,
+            BitConverter.GetBytes(PolishMotorCommandValue));
         if (result != (int)KHLUserError.KHL_ERR_NONE)
             Growl.ErrorGlobal(FormatMotorText("PolishMotorCommandFailed",
                 GetMotorTitle(motorName),
@@ -1263,7 +1266,8 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         }
 
         var commandAddress = start ? address.StartCommand : address.StopCommand;
-        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1, new byte[] { 1, 0 });
+        var result = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_DM, commandAddress, 1,
+            BitConverter.GetBytes(PolishMotorCommandValue));
         if (result != (int)KHLUserError.KHL_ERR_NONE)
             Growl.ErrorGlobal(FormatMotorText("PolishMotorCommandFailed",
                 GetMotorTitle(motorName),
