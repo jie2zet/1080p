@@ -260,8 +260,15 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
     /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
+    private const uint ChuckPositionAddressSideA = 5400;
+    private const uint ChuckPositionAddressSideB = 6600;
+    private const uint PenRotationPositionAddressSideA = 5402;
+    private const uint PenRotationPositionAddressSideB = 6602;
+
     private void RefreshHmi()
     {
+        RefreshDirectPositions();
+
         if (penData == null || !penData.TryGetProcessDataSnapshot(out var snapshot))
         {
             return;
@@ -322,6 +329,43 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
         RaisePropertyChanged(nameof(PenArmSweepMotorServoText));
         RaisePropertyChanged(nameof(PenRotationMotorServoText));
         
+    }
+
+    /// <summary>
+    /// 直接读设备字的当前位置，浮点占两个字。
+    /// 晶圆旋转：A 侧 W5400，B 侧 W6600。笔头旋转：A 侧 W5402，B 侧 W6602。
+    /// </summary>
+    private void RefreshDirectPositions()
+    {
+        if (kvLink.sock <= 0)
+        {
+            return;
+        }
+
+        var sideA = TabId is 0 or 1;
+        if (TryReadPosition(sideA ? ChuckPositionAddressSideA : ChuckPositionAddressSideB, out var chuckPosition))
+        {
+            PenClean.ChuckRotationMotor.ActPosition = chuckPosition;
+        }
+
+        if (TryReadPosition(sideA ? PenRotationPositionAddressSideA : PenRotationPositionAddressSideB, out var penRotationPosition))
+        {
+            PenClean.PenRotationMotor.ActPosition = penRotationPosition;
+        }
+    }
+
+    private bool TryReadPosition(uint address, out float value)
+    {
+        var data = new byte[4];
+        var readError = KHL.KHLReadDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, address, 2, data);
+        if (readError == (int)KHLUserError.KHL_ERR_NONE)
+        {
+            value = BitConverter.ToSingle(data, 0);
+            return true;
+        }
+
+        value = 0;
+        return false;
     }
     
     private void SetWaferIndex(int waferIndex)
@@ -836,9 +880,9 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             }
             else
             {
-                string stateText = newServoState ? "ON" : "OFF";
-                Growl.SuccessGlobal($"{_penCleanConfig.PenType} Servo Command: {obj} - Servo {stateText}");
-            }
+            string stateText = newServoState ? "ON" : "OFF";
+            Growl.SuccessGlobal($"{_penCleanConfig.PenType} Servo Command: {obj} - Servo {stateText}");
+        }
         }
         catch (ArgumentException ex)
         {

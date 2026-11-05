@@ -92,6 +92,10 @@
                                 <TextBlock Width="65" Text="{Binding DryClean.ChuckRotationMotor.ActVelocity, StringFormat='{}{0:F2}'}" VerticalAlignment="Center" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="{lex:Loc ActPos}" Width="65" VerticalAlignment="Center" />
+                                <TextBlock Width="65" Text="{Binding DryClean.ChuckRotationMotor.ActPosition, StringFormat='{}{0:F2}'}" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc Torque}" Width="65" VerticalAlignment="Center" />
                                 <TextBlock Width="65" Text="{Binding DryClean.ChuckRotationMotor.ActTorque, StringFormat='{}{0:F2}'}" VerticalAlignment="Center" />
                             </StackPanel>

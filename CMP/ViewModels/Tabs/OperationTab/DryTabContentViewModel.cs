@@ -1017,11 +1017,17 @@ public class DryTabContentViewModel : TabContentViewModelBase
         }
     }
 
+    /// <summary>旋转电机当前位置：DryA 为 W5A10，DryB 为 W6C10。</summary>
+    private const uint ChuckPositionAddressDryA = 0x5A10;
+    private const uint ChuckPositionAddressDryB = 0x6C10;
+
     /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
     private void RefreshHmi()
     {
+        RefreshChuckPosition();
+
         if (dryData == null || !dryData.TryGetProcessDataSnapshot(out var snapshot))
         {
             return;
@@ -1038,6 +1044,23 @@ public class DryTabContentViewModel : TabContentViewModelBase
         
         RaisePropertyChanged(nameof(ChuckRotationMotorServoText));
         RaisePropertyChanged(nameof(ArmSwingMotorServoText));
+    }
+
+    /// <summary>旋转电机当前位置按连续两个字解析成浮点数。</summary>
+    private void RefreshChuckPosition()
+    {
+        if (kvLink.sock <= 0)
+        {
+            return;
+        }
+
+        var address = TabId == 0 ? ChuckPositionAddressDryA : ChuckPositionAddressDryB;
+        var data = new byte[4];
+        var readError = KHL.KHLReadDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, address, 2, data);
+        if (readError == (int)KHLUserError.KHL_ERR_NONE)
+        {
+            DryClean.ChuckRotationMotor.ActPosition = BitConverter.ToSingle(data, 0);
+        }
     }
 }
 
