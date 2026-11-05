@@ -623,14 +623,16 @@ public class RoboticArm : BindableBase
                         200 => "EFEMRobot=>TransferBuffer",
                         300 => "DryA=>EFEMRobot",
                         400 => "DryB=>EFEMRobot",
-                        500 => "EFEMRobot=>Loadport"
+                        500 => "EFEMRobot=>Loadport",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D952": // TransBuffer
                     return dValue switch
                     {
                         100 => "Loadport=>TransferBuffer",
-                        200 => "TransferBuffer=>TransRobot"
+                        200 => "TransferBuffer=>TransRobot",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D953": // TransRobot
@@ -644,7 +646,8 @@ public class RoboticArm : BindableBase
                         600 => "FixBBuffer=>TransRobot",
                         700 => "TransRobot=>RollA2",
                         800 => "TransRobot=>RollB1",
-                        900 => "TransRobot=>RollB2"
+                        900 => "TransRobot=>RollB2",
+                        _ => $"未知工位({dValue})"
                     };
                 case "D954": // FixABuffer
                     return "TransRobot=>FixABuffer";
@@ -654,7 +657,8 @@ public class RoboticArm : BindableBase
                     {
                         100 => "FixABuffer=>FixALTP1",
                         200 => "FixALTP1=>PolishA",
-                        300 => "FixALTP1=>PolishB"
+                        300 => "FixALTP1=>PolishB",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D956": // FixALTP1
@@ -663,7 +667,8 @@ public class RoboticArm : BindableBase
                         100 => "FixABuffer=>FixALTP2",
                         200 => "PolishA=>FixALTP2",
                         300 => "FixALTP2=>PolishB",
-                        400 => "FixALTP2=>FixABuffer"
+                        400 => "FixALTP2=>FixABuffer",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D957": // FixALTP2/FixALTP3
@@ -671,7 +676,8 @@ public class RoboticArm : BindableBase
                     {
                         100 => "PolishA=>FixALTP3",
                         200 => "PolishB=>FixALTP3",
-                        300 => "FixALTP3=>FixABuffer"
+                        300 => "FixALTP3=>FixABuffer",
+                        _ => $"未知工位({dValue})"
                     };
                 case "D958": // FixBBuffer
                     return "TransRobot=>FixBBuffer";
@@ -683,7 +689,8 @@ public class RoboticArm : BindableBase
                     {
                         100 => "FixBBuffer=>FixBLTP1",
                         200 => "FixBLTP1=>PolishC",
-                        300 => "FixBLTP1=>PolishD"
+                        300 => "FixBLTP1=>PolishD",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D960": // FixBLTP2
@@ -692,7 +699,8 @@ public class RoboticArm : BindableBase
                         100 => "FixBBuffer=>FixBLTP2",
                         200 => "PolishC=>FixBLTP2",
                         300 => "FixBLTP2=>PolishD",
-                        400 => "FixBLTP2=>FixBBuffer"
+                        400 => "FixBLTP2=>FixBBuffer",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D961": //FixBLTP3
@@ -700,7 +708,8 @@ public class RoboticArm : BindableBase
                     {
                         100 => "PolishC=>FixBLTP3",
                         200 => "PolishD=>FixBLTP3",
-                        300 => "FixBLTP3=>FixBBuffer"
+                        300 => "FixBLTP3=>FixBBuffer",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D962": // CleanARobot1
@@ -711,7 +720,8 @@ public class RoboticArm : BindableBase
                         300 => "CleanARobot1=>RollA3",
                         400 => "RollA3=>CleanARobot1",
                         500 => "CleanARobot1=>PenA1",
-                        600 => "CleanARobot1=>RollA2"
+                        600 => "CleanARobot1=>RollA2",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D963": //CleanARobot2
@@ -722,7 +732,8 @@ public class RoboticArm : BindableBase
                         300 => "PenA1=>CleanARobot2",
                         400 => "PenA2=>CleanARobot2",
                         500 => "CleanARobot2=>DryA",
-                        600 => "CleanARobot2=>PenA1"
+                        600 => "CleanARobot2=>PenA1",
+                        _ => $"未知工位({dValue})"
                     };
                 case "D964": // CleanBRobot1
                     return dValue switch
@@ -732,7 +743,8 @@ public class RoboticArm : BindableBase
                         300 => "CleanBRobot1=>RollB3",
                         400 => "RollB3=>CleanBRobot1",
                         500 => "CleanBRobot1=>PenB1",
-                        600 => "CleanBRobot1=>RollB2"
+                        600 => "CleanBRobot1=>RollB2",
+                        _ => $"未知工位({dValue})"
                     };
 
                 case "D965": //CleanBRobot2
@@ -743,7 +755,8 @@ public class RoboticArm : BindableBase
                         300 => "PenB1=>CleanBRobot2",
                         400 => "PenB2=>CleanBRobot2",
                         500 => "CleanBRobot2=>DryB",
-                        600 => "CleanBRobot2=>PenB1"
+                        600 => "CleanBRobot2=>PenB1",
+                        _ => $"未知工位({dValue})"
                     };
                 default:
                     return $"Unknow_{dAddress}";
