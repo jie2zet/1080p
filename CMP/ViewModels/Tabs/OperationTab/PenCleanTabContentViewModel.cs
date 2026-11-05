@@ -810,7 +810,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (handle, value, offset) = _penCleanConfig.GetServoCommand(obj);
+            var (handle, value, offset) = _penCleanConfig.GetServoCommand(obj, newServoState);
 
             // Update the motor state
             switch (obj)

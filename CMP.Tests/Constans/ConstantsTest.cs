@@ -71,43 +71,51 @@ public class ConstansTest
     }
 
     [TestMethod]
-    public void PolishGetBitOffset()
+    public void PolishServoCommands()
     {
-        var handle = PlcHandle.CmdPolish.Motor.ConditionerSweep.Servo;
-        var bitOffset = PlcHandle.CmdPolish.Motor.ConditionerSweep.Servo.BitOffset();
-        var value = true.Value();
+        var servoOn = PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn;
+        var servoOff = PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOff;
+
+        Assert.AreEqual(1132, servoOn);
+        Assert.AreEqual(1133, servoOff);
         
-        Console.WriteLine($@"Handle: {handle}");
-        Console.WriteLine($@"Bit Offset: {bitOffset}");
-        Console.WriteLine($@"Value: {value}");
-        Console.WriteLine(0xA);
+        Console.WriteLine($@"Servo On: {servoOn}");
+        Console.WriteLine($@"Servo Off: {servoOff}");
     }
 
     [TestMethod]
-    public void DryInterfaceGetBitOffsetTest()
+    public void DryInterfaceGetServoCommandTest()
     {
         var dry = new GenericDryCleanConfig("Dry B", Handle.CmdDryB);
-        var (handle, value, offset) = dry.GetServoCommand("ChuckRotationMotor");
+        var (handle, value, offset) = dry.GetServoCommand("ChuckRotationMotor", true);
+
+        Assert.AreEqual(1070, value);
+        Assert.AreEqual(0, offset);
+
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
         Console.WriteLine($@"Offset: {offset}");
     }
     
     [TestMethod]
-    public void PenInterfaceGetBitOffsetTest()
+    public void PenInterfaceGetServoCommandTest()
     {
         var pen = new GenericPenCleanConfig("Pen A", Handle.CmdPenA1);
-        var (handle, value, offset) = pen.GetServoCommand("PenArmSweepMotor");
+        var (handle, value, offset) = pen.GetServoCommand("PenArmSweepMotor", true);
+        Assert.AreEqual(1082, value);
+        Assert.AreEqual(0, offset);
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
         Console.WriteLine($@"Offset: {offset}");
     }
     
     [TestMethod]
-    public void RollerInterfaceGetBitOffsetTest()
+    public void RollerInterfaceGetServoCommandTest()
     {
         var roller = new GenericRollConfig("Roller C", Handle.CmdRollB1);
-        var (handle, value, offset) = roller.GetServoCommand("WfRightPillarRotateMotor");
+        var (handle, value, offset) = roller.GetServoCommand("WfRightPillarRotateMotor", true);
+        Assert.AreEqual(1082, value);
+        Assert.AreEqual(0, offset);
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
         Console.WriteLine($@"Offset: {offset}");

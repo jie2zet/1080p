@@ -20,6 +20,8 @@ namespace CMP.ViewModels.Tabs.OperationTab.PolishUnitTab;
 /// <summary>摆动电机2；由所属 Polish 页的监控循环读取，不创建额外定时器。</summary>
 public sealed class PolishSwingPositionsViewModel
 {
+    private const ushort PolishMotorCommandValue = 10;
+
     private readonly Func<int> _getSocket;
     private readonly Func<string> _getUnit;
     private readonly Func<int, KHLDevType, uint, uint, byte[], int> _readWords;
@@ -67,7 +69,7 @@ public sealed class PolishSwingPositionsViewModel
                 ?? throw new InvalidOperationException($"Missing velocity metadata: {definition.Key}");
             return new PolishSwingPositionMotorViewModel(definition, motor,
                 definition.Key == "SlurryArmSweep" ? unit.HeadRotateMotor : null,
-                positionMetadata, velocityMetadata, SetParameter, ExecuteCommand);
+                positionMetadata, velocityMetadata, SetParameter, ExecuteCommand, ExecuteServoCommand);
         }).ToArray();
         _positions = Motors.SelectMany(motor => motor.Positions).ToArray();
         _parameters = Motors.SelectMany(motor => motor.Positions.Cast<PolishSwingParameterViewModel>()
@@ -154,7 +156,18 @@ public sealed class PolishSwingPositionsViewModel
 
     private void ExecuteCommand(string title, uint addressDm) =>
         ExecuteOperation("MotorCommand", $"{title}/DM{addressDm}",
-            () => Write(KHLDevType.DEV_DM, addressDm, 1, BitConverter.GetBytes((ushort)1)));
+            () => Write(KHLDevType.DEV_DM, addressDm, 1, BitConverter.GetBytes(PolishMotorCommandValue)));
+
+    private void ExecuteServoCommand(PolishSwingPositionMotorViewModel motor)
+    {
+        var newState = !motor.Motor.IsServoOn;
+        var commandValue = newState ? motor.ServoOn : motor.ServoOff;
+        ExecuteOperation("Servo", $"{motor.Title}/{GetText("Servo")}", () =>
+        {
+            Write(KHLDevType.DEV_W, Handle.CmdPolish, 1, commandValue.Value());
+            motor.Motor.IsServoOn = newState;
+        });
+    }
 
     private void Write(KHLDevType device, uint address, uint words, byte[] data)
     {
@@ -279,25 +292,41 @@ public sealed class PolishSwingPositionMotorViewModel : BindableBase
     private readonly string _titleKey;
     internal PolishSwingPositionMotorViewModel(Cmd.SwingPositionMotorDefinition definition, SweepMotor motor,
         Motor? extraTorqueMotor, PlcHandle.ParamAttribute positionMetadata, PlcHandle.ParamAttribute velocityMetadata,
-        Action<PolishSwingParameterViewModel> setParameter, Action<string, uint> executeCommand)
+        Action<PolishSwingParameterViewModel> setParameter, Action<string, uint> executeCommand,
+        Action<PolishSwingPositionMotorViewModel> executeServoCommand)
     {
         _titleKey = definition.TitleKey;
         Motor = motor;
         ExtraTorqueMotor = extraTorqueMotor;
+        ServoOn = definition.ServoOn;
+        ServoOff = definition.ServoOff;
         Positions = definition.Positions.Select(position => new PolishSwingPositionViewModel(_titleKey, position,
             positionMetadata.NumericMinValue, positionMetadata.NumericMaxValue, setParameter, executeCommand)).ToArray();
         Velocities = new[] { ("PolishMotorManualSpeed", definition.ManualVelocityZf), ("PolishMotorAutoSpeed", definition.AutoVelocityZf) }
             .Select(item => new PolishSwingParameterViewModel(_titleKey, item.Item1, item.Item2,
                 velocityMetadata.NumericMinValue, velocityMetadata.NumericMaxValue, setParameter)).ToArray();
         StopCommand = new DelegateCommand(() => executeCommand($"{Title}/{GetText("Stop")}", definition.StopDm));
+        ServoCommand = new DelegateCommand(() => executeServoCommand(this));
+        Motor.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(Motor.IsServoOn)) RaisePropertyChanged(nameof(ServoText));
+        };
     }
 
     public string Title => GetText(_titleKey);
-    internal void RefreshLocalization() => RaisePropertyChanged(nameof(Title));
+    internal void RefreshLocalization()
+    {
+        RaisePropertyChanged(nameof(Title));
+        RaisePropertyChanged(nameof(ServoText));
+    }
     public SweepMotor Motor { get; }
     public Motor? ExtraTorqueMotor { get; }
+    public int ServoOn { get; }
+    public int ServoOff { get; }
+    public string ServoText => Motor.IsServoOn ? GetText("Off") : GetText("On");
     public bool HasExtraTorque => ExtraTorqueMotor != null;
     public IReadOnlyList<PolishSwingPositionViewModel> Positions { get; }
     public IReadOnlyList<PolishSwingParameterViewModel> Velocities { get; }
     public DelegateCommand StopCommand { get; }
+    public DelegateCommand ServoCommand { get; }
 }

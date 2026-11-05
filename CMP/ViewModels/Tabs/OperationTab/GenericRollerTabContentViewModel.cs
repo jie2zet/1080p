@@ -768,7 +768,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (handle, value, offset) = _rollerConfig.GetServoCommand(obj);
+            var (handle, value, offset) = _rollerConfig.GetServoCommand(obj, newServoState);
 
             // Update the motor state
             switch (obj)
