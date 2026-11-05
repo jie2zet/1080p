@@ -768,7 +768,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (handle, value, offset) = _rollerConfig.GetServoCommand(obj, newServoState);
+            var (handle, value, _) = _rollerConfig.GetServoCommand(obj, newServoState);
 
             // Update the motor state
             switch (obj)
@@ -791,7 +791,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                     break;
             }
 
-            _err = KHL.KHLWriteDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, value, offset, 1, newServoState.Value());
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value.Value());
             if (_err != 0)
             {
                 Growl.ErrorGlobal($"ServoCommand {obj} Error: {_err}");
