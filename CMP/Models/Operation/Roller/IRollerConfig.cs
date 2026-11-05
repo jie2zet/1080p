@@ -68,7 +68,7 @@ public interface IRollerConfig
     /// </summary>
     /// <param name="motor">电机名称</param>
     /// <param name="isOn">是否打开伺服</param>
-    (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor);
+    (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor, bool servoOn);
     
     /// <summary>
     /// 获取气缸控制命令的 PLC 句柄和值

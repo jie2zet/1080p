@@ -56,7 +56,7 @@
     </UserControl.Resources>
     <ScrollViewer x:Name="MotorScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
                   hc:ScrollViewerAttach.AutoHide="False" CanContentScroll="False" PanningMode="Both">
-        <ItemsControl x:Name="MotorCards" ItemsSource="{Binding Motors}" MinWidth="1280" Margin="5">
+        <ItemsControl x:Name="MotorCards" ItemsSource="{Binding Motors}" MinWidth="1280" Margin="5,5,5,48" VerticalAlignment="Top">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate><UniformGrid Rows="1" /></ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
@@ -76,6 +76,15 @@
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="3" Content="{lex:Loc Stop}" Width="58" Height="32" Padding="0"
                                         VerticalAlignment="Center" Style="{StaticResource ButtonDanger}" Command="{Binding StopCommand}" />
+                            </Grid>
+                            <Grid Height="38">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" /><ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="24" /><ColumnDefinition Width="58" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{lex:Loc Servo}" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <Button Grid.Column="3" Content="{Binding ServoText}" Width="58" Height="32" Padding="0"
+                                        VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" />
                             </Grid>
                             <ItemsControl ItemsSource="{Binding Positions}" MinHeight="210" VerticalAlignment="Top"
                                           ItemTemplate="{StaticResource PositionRow}" />

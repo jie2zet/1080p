@@ -357,8 +357,10 @@
                 </StackPanel>
                 <TabControl Grid.Row="1" Grid.Column="0" Margin="0 0 0 10">
                     <TabItem Header="{lex:Loc PolishMotorRotaryTab}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10" Margin="0 5 0 0">
+                        <ScrollViewer x:Name="RotaryMotorScrollViewer"
+                                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                      hc:ScrollViewerAttach.AutoHide="False" CanContentScroll="False" PanningMode="Both">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10" Margin="0,5,0,48" VerticalAlignment="Top">
                                 <GroupBox Header="{lex:Loc PolishMotorPlatenRotation}" Width="330" Style="{StaticResource GroupBoxTab.Small}">
                                     <Grid Margin="10">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="82"/><ColumnDefinition Width="120"/></Grid.ColumnDefinitions>
@@ -382,6 +384,8 @@
                                             SetCommand="{Binding PlatenJogVelocitySetCommand}"
                                             CancelCommand="{Binding PlatenJogVelocityCancelCommand}"/>
                                         <StackPanel Grid.Row="4" Grid.Column="2" Width="120" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"><Button Content="JOG+" Tag="PlatenMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/><Button Content="JOG-" Tag="PlatenMotor" Width="58" Height="32" Margin="4 0 0 0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/></StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding PlatenMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="PlatenMotor"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="{lex:Loc PolishMotorHeadRotation}" Width="330" Style="{StaticResource GroupBoxTab.Small}">
@@ -406,6 +410,8 @@
                                             SetCommand="{Binding HeadJogVelocitySetCommand}"
                                             CancelCommand="{Binding HeadJogVelocityCancelCommand}"/>
                                         <StackPanel Grid.Row="4" Grid.Column="2" Width="120" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"><Button Content="JOG+" Tag="HeadRotateMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/><Button Content="JOG-" Tag="HeadRotateMotor" Width="58" Height="32" Margin="4 0 0 0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/></StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding HeadRotateMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="HeadRotateMotor"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="{lex:Loc PolishMotorConditionerRotation}" Width="330" Style="{StaticResource GroupBoxTab.Small}">
@@ -430,14 +436,18 @@
                                             SetCommand="{Binding ConditionerJogVelocitySetCommand}"
                                             CancelCommand="{Binding ConditionerJogVelocityCancelCommand}"/>
                                         <StackPanel Grid.Row="4" Grid.Column="2" Width="120" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"><Button Content="JOG+" Tag="DiskRotateMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/><Button Content="JOG-" Tag="DiskRotateMotor" Width="58" Height="32" Margin="4 0 0 0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/></StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding DiskRotateMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="DiskRotateMotor"/>
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
                         </ScrollViewer>
                     </TabItem>
                     <TabItem Header="{lex:Loc PolishMotorSwing1Tab}">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <UniformGrid Rows="1" Columns="4" MinWidth="1320" Margin="0,5,0,10">
+                        <ScrollViewer x:Name="Swing1MotorScrollViewer"
+                                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                      hc:ScrollViewerAttach.AutoHide="False" CanContentScroll="False" PanningMode="Both">
+                            <UniformGrid Rows="1" Columns="4" MinWidth="1320" Margin="0,5,0,48" VerticalAlignment="Top">
                                 <GroupBox Header="{lex:Loc PolishMotorHeadSwing}" Margin="0,0,10,0" Style="{StaticResource GroupBoxTab.Small}">
                                     <Grid Margin="10">
                                         <Grid.ColumnDefinitions><ColumnDefinition Width="70"/><ColumnDefinition Width="82"/><ColumnDefinition Width="120"/></Grid.ColumnDefinitions>
@@ -469,6 +479,8 @@
                                             <Button Content="JOG+" Tag="HeadSweepMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                             <Button Content="JOG-" Tag="HeadSweepMotor" Width="58" Height="32" Margin="4,0,0,0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                         </StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding HeadSweepMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="HeadSweepMotor"/>
                                     </Grid>
                                 </GroupBox>
 
@@ -503,6 +515,8 @@
                                             <Button Content="JOG+" Tag="HeadLiftMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                             <Button Content="JOG-" Tag="HeadLiftMotor" Width="58" Height="32" Margin="4,0,0,0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                         </StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding HeadLiftMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="HeadLiftMotor"/>
                                     </Grid>
                                 </GroupBox>
 
@@ -537,6 +551,8 @@
                                             <Button Content="JOG+" Tag="ConditionSweepMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                             <Button Content="JOG-" Tag="ConditionSweepMotor" Width="58" Height="32" Margin="4,0,0,0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                         </StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding ConditionSweepMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="ConditionSweepMotor"/>
                                     </Grid>
                                 </GroupBox>
 
@@ -571,6 +587,8 @@
                                             <Button Content="JOG+" Tag="SlurrySweepMotor" Width="58" Height="32" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                             <Button Content="JOG-" Tag="SlurrySweepMotor" Width="58" Height="32" Margin="4,0,0,0" Style="{StaticResource ButtonPrimary}" PreviewMouseLeftButtonDown="JogButton_OnPressed" PreviewMouseLeftButtonUp="JogButton_OnReleased" LostMouseCapture="JogButton_OnCaptureLost"/>
                                         </StackPanel>
+                                         <TextBlock Grid.Row="5" Text="{lex:Loc Servo}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                         <Button Grid.Row="5" Grid.Column="2" Content="{Binding SlurrySweepMotorServoText}" Width="120" Height="32" Style="{StaticResource ButtonPrimary}" Command="{Binding ServoCommand}" CommandParameter="SlurrySweepMotor"/>
                                     </Grid>
                                 </GroupBox>
                             </UniformGrid>

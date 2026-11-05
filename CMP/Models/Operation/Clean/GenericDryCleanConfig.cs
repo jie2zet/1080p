@@ -104,10 +104,10 @@ public class GenericDryCleanConfig : IDryCleanConfig
         };
     }
 
-    public (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor)
+    public (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor, bool servoOn)
     {
         var motorType = _plcHandleType.GetNestedType("Motor")!;
-        var commandName = "Servo";
+        var commandName = servoOn ? "ServoOn" : "ServoOff";
 
         return motor switch
         {

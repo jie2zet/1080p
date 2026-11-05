@@ -68,8 +68,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPenA1, "回原点")]
                 public const int Home = 1023;
                 
-                [PlcHandle(Handle.CmdPenA1, "伺服", 0)]
-                public const int Servo = 537;
+                [PlcHandle(Handle.CmdPenA1, "Servo On")]
+                public const int ServoOn = 1080;
+
+                [PlcHandle(Handle.CmdPenA1, "Servo Off")]
+                public const int ServoOff = 1081;
                 
                 public static class Param
                 {
@@ -104,8 +107,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPenA1, "中心位置")]
                 public const int CenterPosition = 1037;
                 
-                [PlcHandle(Handle.CmdPenA1, "伺服", 1)]
-                public const int Servo = 537;
+                [PlcHandle(Handle.CmdPenA1, "Servo On")]
+                public const int ServoOn = 1082;
+
+                [PlcHandle(Handle.CmdPenA1, "Servo Off")]
+                public const int ServoOff = 1083;
                 
                 public static class Param
                 {
@@ -128,8 +134,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPenA1, "停止")]
                 public const int Stop = 1041;
                 
-                [PlcHandle(Handle.CmdPenA1, "伺服", 2)]
-                public const int Servo = 537;
+                [PlcHandle(Handle.CmdPenA1, "Servo On")]
+                public const int ServoOn = 1084;
+
+                [PlcHandle(Handle.CmdPenA1, "Servo Off")]
+                public const int ServoOff = 1085;
                 
                 public static class Param
                 {

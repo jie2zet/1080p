@@ -23,7 +23,7 @@ public interface IPenCleanConfig
 
     // 电机控制命令
     (uint handle, byte[] value) GetMotorCommand(string motorCommand);
-    (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor);
+    (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor, bool servoOn);
 
     // 气缸控制命令
     (uint handle, byte[] value) GetCylinderCommand(string cylinderCommand);

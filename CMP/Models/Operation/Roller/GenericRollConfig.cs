@@ -125,10 +125,10 @@ public class GenericRollConfig : IRollerConfig
         return (PlcHandleName, (ushort)value, PlcHandleHelper.GetHandleInfoByPath(path)!.BitOffset);
     }
     
-    public (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor)
+    public (uint handle, ushort value, ushort bitOffset) GetServoCommand(string motor, bool servoOn)
     {
         var motorType = _plcHandleType.GetNestedType("Motor")!;
-        var commandName = "Servo";
+        var commandName = servoOn ? "ServoOn" : "ServoOff";
         
         return motor switch
         {
