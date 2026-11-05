@@ -854,7 +854,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (handle, value, offset) = _penCleanConfig.GetServoCommand(obj, newServoState);
+            var (handle, value, _) = _penCleanConfig.GetServoCommand(obj, newServoState);
 
             // Update the motor state
             switch (obj)
@@ -873,7 +873,7 @@ public class PenCleanTabContentViewModel : TabContentViewModelBase
                     break;
             }
 
-            _err = KHL.KHLWriteDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, value, offset, 1, newServoState.Value());
+            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value.Value());
             if (_err != 0)
             {
                 Growl.ErrorGlobal($"Servo Command {obj} Error: {_err}");
