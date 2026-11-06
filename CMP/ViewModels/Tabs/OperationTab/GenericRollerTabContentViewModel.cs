@@ -768,9 +768,20 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (handle, value, _) = _rollerConfig.GetServoCommand(obj, newServoState);
+            var (_, servoAddress, bitOffset) = _rollerConfig.GetServoCommand(obj, newServoState);
+            _err = KHL.KHLWriteDevicesAsBits(
+                kvLink.sock,
+                KHLDevType.DEV_W,
+                servoAddress.HexWAddress(),
+                bitOffset,
+                1,
+                newServoState.Value());
+            if (_err != 0)
+            {
+                Growl.ErrorGlobal($"ServoCommand {obj} Error: {_err}");
+                return;
+            }
 
-            // Update the motor state
             switch (obj)
             {
                 case "WfLeftPillarRotateMotor":
@@ -791,16 +802,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                     break;
             }
 
-            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value.Value());
-            if (_err != 0)
-            {
-                Growl.ErrorGlobal($"ServoCommand {obj} Error: {_err}");
-            }
-            else
-            {
-                string stateText = newServoState ? "ON" : "OFF";
-                Growl.SuccessGlobal($"{_rollerConfig.RollType} ServoCommand: {obj} - Servo {stateText}");
-            }
+            string stateText = newServoState ? "ON" : "OFF";
+            Growl.SuccessGlobal($"{_rollerConfig.RollType} ServoCommand: {obj} - Servo {stateText}");
         }
         catch (ArgumentException ex)
         {

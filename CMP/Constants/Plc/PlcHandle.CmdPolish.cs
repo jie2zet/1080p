@@ -59,11 +59,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "寸动")]
                 public const int Inching = 1022;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1120;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 0)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1121;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 0)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -100,11 +100,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "寸动")]
                 public const int Inching = 1032;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1122;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 1)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1123;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 1)]
+                public const int ServoOff = 530;
                 public static class Param
                 {
                     [Param(18010, 300, 0, 1000, "头旋转电机速度", "速度", "r/min")]
@@ -153,11 +153,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "卸片位置")]
                 public const int DechuckPosition = 1046;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1124;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 2)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1125;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 2)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -221,11 +221,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "清洁位置")]
                 public const int CleanPosition = 1056;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1126;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 3)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1127;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 3)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -283,11 +283,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "结束位置")]
                 public const int EndPosition = 1085;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1132;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 5)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1133;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 5)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -338,11 +338,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "寸动")]
                 public const int Inching = 1072;
 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1130;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 4)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1131;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 4)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -381,11 +381,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdPolish, "液体位置")]
                 public const int SlurryPosition = 1104;
                 
-                [PlcHandle(Handle.CmdPolish, "Servo On")]
-                public const int ServoOn = 1136;
+                [PlcHandle(Handle.CmdPolish, "Servo On", 6)]
+                public const int ServoOn = 530;
 
-                [PlcHandle(Handle.CmdPolish, "Servo Off")]
-                public const int ServoOff = 1137;
+                [PlcHandle(Handle.CmdPolish, "Servo Off", 6)]
+                public const int ServoOff = 530;
 
                 public static class Param
                 {
@@ -425,12 +425,14 @@ public static partial class PlcHandle
 
         public sealed record SwingPositionMotorDefinition(
             string Key, string TitleKey, uint StopDm, int ServoOn, int ServoOff,
+            ushort ServoBitOffset,
             uint ManualVelocityZf, uint AutoVelocityZf,
             IReadOnlyList<SwingPositionDefinition> Positions);
 
         public static IReadOnlyList<SwingPositionMotorDefinition> GetSwingPositionMotors() =>
         [
             new("HeadSweep", "PolishMotorHeadSwing", Motor.HeadSweep.Stop, Motor.HeadSweep.ServoOn, Motor.HeadSweep.ServoOff,
+                Motor.HeadSweep.ServoOn.BitOffset(),
                 Motor.HeadSweep.Address.ManualVelocityZf, Motor.HeadSweep.Address.AutoVelocityZf,
                 [
                     new("PolishMotorAnyPosition", Motor.HeadSweep.Address.AnyPositionZf, Motor.HeadSweep.AnyPosition, Motor.HeadSweep.Address.AnyPositionMr),
@@ -440,6 +442,7 @@ public static partial class PlcHandle
                     new("PolishMotorDechuckPosition", Motor.HeadSweep.Address.DechuckPositionZf, Motor.HeadSweep.DechuckPosition, Motor.HeadSweep.Address.DechuckPositionMr)
                 ]),
             new("HeadUpDown", "PolishMotorHeadLift", Motor.HeadUpDown.Stop, Motor.HeadUpDown.ServoOn, Motor.HeadUpDown.ServoOff,
+                Motor.HeadUpDown.ServoOn.BitOffset(),
                 Motor.HeadUpDown.Address.ManualVelocityZf, Motor.HeadUpDown.Address.AutoVelocityZf,
                 [
                     new("PolishMotorAnyPosition", Motor.HeadUpDown.Address.AnyPositionZf, Motor.HeadUpDown.AnyPosition, Motor.HeadUpDown.Address.AnyPositionMr),
@@ -449,6 +452,7 @@ public static partial class PlcHandle
                     new("PolishMotorCleanPosition", Motor.HeadUpDown.Address.CleanPositionZf, Motor.HeadUpDown.CleanPosition, Motor.HeadUpDown.Address.CleanPositionMr)
                 ]),
             new("ConditionerSweep", "PolishMotorConditionerSwing", Motor.ConditionerSweep.Stop, Motor.ConditionerSweep.ServoOn, Motor.ConditionerSweep.ServoOff,
+                Motor.ConditionerSweep.ServoOn.BitOffset(),
                 Motor.ConditionerSweep.Address.ManualVelocityZf, Motor.ConditionerSweep.Address.AutoVelocityZf,
                 [
                     new("PolishMotorAnyPosition", Motor.ConditionerSweep.Address.AnyPositionZf, Motor.ConditionerSweep.AnyPosition, Motor.ConditionerSweep.Address.AnyPositionMr),
@@ -457,6 +461,7 @@ public static partial class PlcHandle
                     new("PolishMotorEndPosition", Motor.ConditionerSweep.Address.EndPositionZf, Motor.ConditionerSweep.EndPosition, Motor.ConditionerSweep.Address.EndPositionMr)
                 ]),
             new("SlurryArmSweep", "PolishMotorSlurryArmSwing", Motor.SlurryArmSweep.Stop, Motor.SlurryArmSweep.ServoOn, Motor.SlurryArmSweep.ServoOff,
+                Motor.SlurryArmSweep.ServoOn.BitOffset(),
                 Motor.SlurryArmSweep.Address.ManualVelocityZf, Motor.SlurryArmSweep.Address.AutoVelocityZf,
                 [
                     new("PolishMotorAnyPosition", Motor.SlurryArmSweep.Address.AnyPositionZf, Motor.SlurryArmSweep.AnyPosition, Motor.SlurryArmSweep.Address.AnyPositionMr),

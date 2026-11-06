@@ -7,7 +7,7 @@ using CMP.Services.Plc;
 /// </summary>
 public static class PolishASideTransferAddress
 {
-    #region 轴位置调整 - 位置设定 (D)
+    #region 轴位置调整 - 位置设定 (ZR)
 
     /// <summary>
     /// 待机位
@@ -70,7 +70,7 @@ public static class PolishASideTransferAddress
 
     #endregion
 
-    #region 轴位置调整 - 速度设定 (D)
+    #region 轴位置调整 - 速度设定 (D/ZR)
 
     /// <summary>
     /// JOG 速度

@@ -9,7 +9,7 @@ namespace CMP.Constants.Plc.RobotControl
 {
     public static class CleanRobotA1Address
     {
-        #region 位置设定 (D)
+        #region 位置设定 (ZR)
         /// <summary>
         /// 清洗A侧机器人1 rollerA1/A2
         /// </summary>
@@ -39,7 +39,7 @@ namespace CMP.Constants.Plc.RobotControl
         public const string PenA1Move = "M1562";
         #endregion
 
-        #region 速度设定 (D)
+        #region 速度设定 (D/ZR)
         /// <summary>
         /// 清洗A侧机器人1 Jog速度
         /// </summary>

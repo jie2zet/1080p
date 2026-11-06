@@ -27,6 +27,7 @@ public sealed class PolishSwingPositionsViewModel
     private readonly Func<int, KHLDevType, uint, uint, byte[], int> _readWords;
     private readonly Func<int, KHLDevType, uint, ushort, uint, byte[], int> _readBits;
     private readonly Func<int, KHLDevType, uint, uint, byte[], int> _writeWords;
+    private readonly Func<int, KHLDevType, uint, ushort, uint, byte[], int> _writeBits;
     private readonly Action<string> _showError;
     private readonly Action<string, string, string, string> _audit;
     private readonly IReadOnlyList<PolishSwingParameterViewModel> _parameters;
@@ -35,14 +36,16 @@ public sealed class PolishSwingPositionsViewModel
 
     public PolishSwingPositionsViewModel(Func<int> getSocket, Func<string> getUnit, PolishUnit unit)
         : this(getSocket, getUnit, unit, KHL.KHLReadDevicesAsWords, KHL.KHLReadDevicesAsBits,
-            KHL.KHLWriteDevicesAsWords, message => Growl.ErrorGlobal(message))
+            KHL.KHLWriteDevicesAsWords, KHL.KHLWriteDevicesAsBits, message => Growl.ErrorGlobal(message))
     {
     }
 
     internal PolishSwingPositionsViewModel(Func<int> getSocket, Func<string> getUnit, PolishUnit unit,
         Func<int, KHLDevType, uint, uint, byte[], int> readWords,
         Func<int, KHLDevType, uint, ushort, uint, byte[], int> readBits,
-        Func<int, KHLDevType, uint, uint, byte[], int> writeWords, Action<string> showError,
+        Func<int, KHLDevType, uint, uint, byte[], int> writeWords,
+        Func<int, KHLDevType, uint, ushort, uint, byte[], int> writeBits,
+        Action<string> showError,
         Action<string, string, string, string>? audit = null)
     {
         _getSocket = getSocket;
@@ -50,6 +53,7 @@ public sealed class PolishSwingPositionsViewModel
         _readWords = readWords;
         _readBits = readBits;
         _writeWords = writeWords;
+        _writeBits = writeBits;
         _showError = showError;
         _audit = audit ?? ((action, result, detail, target) =>
             AuditLogService.WriteCurrentUser(action, result, detail, AuditModules.Operation, target));
@@ -161,12 +165,23 @@ public sealed class PolishSwingPositionsViewModel
     private void ExecuteServoCommand(PolishSwingPositionMotorViewModel motor)
     {
         var newState = !motor.Motor.IsServoOn;
-        var commandValue = newState ? motor.ServoOn : motor.ServoOff;
         ExecuteOperation("Servo", $"{motor.Title}/{GetText("Servo")}", () =>
         {
-            Write(KHLDevType.DEV_W, Handle.CmdPolish, 1, commandValue.Value());
+            WriteBit(
+                motor.ServoOn.HexWAddress(),
+                motor.ServoBitOffset,
+                newState);
             motor.Motor.IsServoOn = newState;
         });
+    }
+
+    private void WriteBit(uint address, ushort bitOffset, bool value)
+    {
+        var socket = _getSocket();
+        if (socket <= 0) throw new InvalidOperationException(GetText("PolishMotorPlcDisconnected"));
+        var result = _writeBits(socket, KHLDevType.DEV_W, address, bitOffset, 1, value.Value());
+        if (result != (int)KHLUserError.KHL_ERR_NONE)
+            throw new InvalidOperationException(Format("PolishMotorPlcWriteFailed", result));
     }
 
     private void Write(KHLDevType device, uint address, uint words, byte[] data)
@@ -300,6 +315,7 @@ public sealed class PolishSwingPositionMotorViewModel : BindableBase
         ExtraTorqueMotor = extraTorqueMotor;
         ServoOn = definition.ServoOn;
         ServoOff = definition.ServoOff;
+        ServoBitOffset = definition.ServoBitOffset;
         Positions = definition.Positions.Select(position => new PolishSwingPositionViewModel(_titleKey, position,
             positionMetadata.NumericMinValue, positionMetadata.NumericMaxValue, setParameter, executeCommand)).ToArray();
         Velocities = new[] { ("PolishMotorManualSpeed", definition.ManualVelocityZf), ("PolishMotorAutoSpeed", definition.AutoVelocityZf) }
@@ -323,6 +339,7 @@ public sealed class PolishSwingPositionMotorViewModel : BindableBase
     public Motor? ExtraTorqueMotor { get; }
     public int ServoOn { get; }
     public int ServoOff { get; }
+    public ushort ServoBitOffset { get; }
     public string ServoText => Motor.IsServoOn ? GetText("Off") : GetText("On");
     public bool HasExtraTorque => ExtraTorqueMotor != null;
     public IReadOnlyList<PolishSwingPositionViewModel> Positions { get; }

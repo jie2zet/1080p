@@ -9,7 +9,7 @@ namespace CMP.Constants.Plc.RobotControl
     public static class PolishBSideArm3Address
     {
         #region B侧手臂3x轴位置设定
-        #region 位置设定 (D)
+        #region 位置设定 (ZR)
         /// <summary>
         /// 3x轴待机位
         /// </summary>
@@ -60,7 +60,7 @@ namespace CMP.Constants.Plc.RobotControl
         public const string TransferArmMove_3x = "M1499";
         #endregion
 
-        #region 速度设定 (D)
+        #region 速度设定 (D/ZR)
         /// <summary>
         /// 3x轴Jog速度
         /// </summary>
@@ -142,7 +142,7 @@ namespace CMP.Constants.Plc.RobotControl
         #endregion
 
         #region B侧手臂3z轴位置设定
-        #region 位置设定 (D)
+        #region 位置设定 (ZR)
         /// <summary>
         /// 3z轴待机位
         /// </summary>
@@ -209,7 +209,7 @@ namespace CMP.Constants.Plc.RobotControl
         public const string TransferArmMove_3zStatus = "M5803";
         #endregion
 
-        #region 速度设定 (D)
+        #region 速度设定 (D/ZR)
         /// <summary>
         /// 3z轴Jog速度
         /// </summary>

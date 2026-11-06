@@ -480,6 +480,20 @@ public static partial class PlcHandleHelper
 public static class PlcHandleExtensions
 {
     /// <summary>
+    /// 将 Keyence W 软元件的十六进制文本地址转换为 HostLink 使用的数值地址。
+    /// 例如常量 1080 表示 W1080，转换结果为 0x1080，而不是十进制 1080。
+    /// </summary>
+    public static uint HexWAddress(this int address)
+    {
+        if (address < 0)
+            throw new ArgumentOutOfRangeException(nameof(address), address, "W 地址不能为负数");
+
+        return Convert.ToUInt32(address.ToString(), 16);
+    }
+
+    public static uint HexWAddress(this ushort address) => ((int)address).HexWAddress();
+
+    /// <summary>
     /// 获取 Handle 类型（通过路径查找，避免值重复问题）
     /// </summary>
     /// <param name="value">字段值</param>

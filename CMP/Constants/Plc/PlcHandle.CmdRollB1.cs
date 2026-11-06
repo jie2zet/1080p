@@ -65,11 +65,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB1, "停止")]
                 public const int Stop = 1021;
                 
-                [PlcHandle(Handle.CmdRollB1, "Servo On")]
-                public const int ServoOn = 1080;
+                [PlcHandle(Handle.CmdRollB1, "Servo On", 8)]
+                public const int ServoOn = 535;
 
-                [PlcHandle(Handle.CmdRollB1, "Servo Off")]
-                public const int ServoOff = 1081;
+                [PlcHandle(Handle.CmdRollB1, "Servo Off", 8)]
+                public const int ServoOff = 535;
 
                 public static class Param
                 {
@@ -89,11 +89,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB1, "停止")]
                 public const int Stop = 1031;
                 
-                [PlcHandle(Handle.CmdRollB1, "Servo On")]
-                public const int ServoOn = 1082;
+                [PlcHandle(Handle.CmdRollB1, "Servo On", 9)]
+                public const int ServoOn = 535;
 
-                [PlcHandle(Handle.CmdRollB1, "Servo Off")]
-                public const int ServoOff = 1083;
+                [PlcHandle(Handle.CmdRollB1, "Servo Off", 9)]
+                public const int ServoOff = 535;
 
                 public static class Param
                 {
@@ -113,11 +113,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB1, "停止")]
                 public const int Stop = 1041;
                 
-                [PlcHandle(Handle.CmdRollB1, "Servo On")]
-                public const int ServoOn = 1084;
+                [PlcHandle(Handle.CmdRollB1, "Servo On", 0xA)]
+                public const int ServoOn = 535;
 
-                [PlcHandle(Handle.CmdRollB1, "Servo Off")]
-                public const int ServoOff = 1085;
+                [PlcHandle(Handle.CmdRollB1, "Servo Off", 0xA)]
+                public const int ServoOff = 535;
 
                 public static class Param
                 {
@@ -137,11 +137,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdRollB1, "停止")]
                 public const int Stop = 1051;
                 
-                [PlcHandle(Handle.CmdRollB1, "Servo On")]
-                public const int ServoOn = 1086;
+                [PlcHandle(Handle.CmdRollB1, "Servo On", 0xB)]
+                public const int ServoOn = 535;
 
-                [PlcHandle(Handle.CmdRollB1, "Servo Off")]
-                public const int ServoOff = 1087;
+                [PlcHandle(Handle.CmdRollB1, "Servo Off", 0xB)]
+                public const int ServoOff = 535;
 
                 public static class Param
                 {

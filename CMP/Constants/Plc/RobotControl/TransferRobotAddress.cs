@@ -7,7 +7,7 @@ namespace CMP.Constants.Plc.RobotControl;
 /// </summary>
 public static class TransferRobotAddress
 {
-    #region 轴位置调整 - 位置设定 (D)
+    #region 轴位置调整 - 位置设定 (ZR)
 
     /// <summary>
     /// 模组取料位
@@ -70,7 +70,7 @@ public static class TransferRobotAddress
 
     #endregion
 
-    #region 轴位置调整 - 速度和坐标 (D)
+    #region 轴位置调整 - 速度和坐标 (D/ZR)
 
     /// <summary>
     /// JOG 速度

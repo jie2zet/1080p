@@ -5,7 +5,7 @@ namespace CMP.Constants.Plc.RobotControl;
 /// </summary>
 public static class PolishBSideTransferAddress
 {
-    #region 轴位置调整 - 位置设定 (D)
+    #region 轴位置调整 - 位置设定 (ZR)
 
     /// <summary>
     /// 待机位
@@ -63,7 +63,7 @@ public static class PolishBSideTransferAddress
 
     #endregion
 
-    #region 轴位置调整 - 速度设定 (D)
+    #region 轴位置调整 - 速度设定 (D/ZR)
 
     /// <summary>
     /// JOG 速度

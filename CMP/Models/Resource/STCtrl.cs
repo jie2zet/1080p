@@ -1,4 +1,4 @@
-﻿using CMP.Models.DataCenter;
+using CMP.Models.DataCenter;
 using CMP.Services.Plc;
 using System;
 using System.Collections.ObjectModel;
@@ -200,8 +200,8 @@ namespace CMP.Models.Resource
         {
             return item.Type switch
             {
-                "INT_32" => PlcBatchReadItem<int>.Bind(item.PLCLink, value => item.Value = value, addressType: PlcBatchAddressType.D),
-                "UINT_16" => PlcBatchReadItem<short>.Bind(item.PLCLink, value => item.Value = value, addressType: PlcBatchAddressType.D),
+                "INT_32" => PlcBatchReadItem<int>.Bind(item.PLCLink, value => item.Value = value),
+                "UINT_16" => PlcBatchReadItem<short>.Bind(item.PLCLink, value => item.Value = value),
                 _ => null
             };
         }

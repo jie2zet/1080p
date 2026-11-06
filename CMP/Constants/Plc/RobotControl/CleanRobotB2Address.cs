@@ -9,7 +9,7 @@ namespace CMP.Constants.Plc.RobotControl
 {
     public static class CleanRobotB2Address
     {
-        #region 位置设定 (D)
+        #region 位置设定 (ZR)
         /// <summary>
         /// 清洗B侧机器人2 rollerA1/A2
         /// </summary>
@@ -47,7 +47,7 @@ namespace CMP.Constants.Plc.RobotControl
         public const string DryMove = "M1627";
         #endregion
 
-        #region 速度设定 (D)
+        #region 速度设定 (D/ZR)
         /// <summary>
         /// 清洗B侧机器人2 Jog速度
         /// </summary>

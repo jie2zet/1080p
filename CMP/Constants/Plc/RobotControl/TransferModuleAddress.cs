@@ -7,7 +7,7 @@ using CMP.Services.Plc;
 /// </summary>
 public static class TransferModuleAddress
 {
-    #region 轴位置调整 - 位置设定 (D)
+    #region 轴位置调整 - 位置设定 (ZR)
 
     /// <summary>
     /// Load 位置
@@ -45,7 +45,7 @@ public static class TransferModuleAddress
 
     #endregion
 
-    #region 轴位置调整 - 速度设定 (D)
+    #region 轴位置调整 - 速度设定 (D/ZR)
 
     /// <summary>
     /// JOG 速度

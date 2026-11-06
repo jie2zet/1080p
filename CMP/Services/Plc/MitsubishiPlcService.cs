@@ -35,6 +35,24 @@ internal static class PlcBatchAddressHelper
 
     public static string ToDAddress(int addressNumber) => $"D{addressNumber}";
 
+    public static bool TryParseZRAddress(string address, out int addressNumber)
+    {
+        addressNumber = 0;
+        if (string.IsNullOrWhiteSpace(address)) return false;
+
+        var raw = address.Trim();
+        if (!raw.StartsWith("ZR", StringComparison.OrdinalIgnoreCase)) return false;
+        if (raw.Contains('.')) return false;
+
+        return int.TryParse(raw[2..], out addressNumber) && addressNumber >= 0;
+    }
+
+    public static string ToZRAddress(int addressNumber) => $"ZR{addressNumber}";
+
+    public static bool TryParseWordAddress(string address, out int addressNumber) =>
+        TryParseDAddress(address, out addressNumber) ||
+        TryParseZRAddress(address, out addressNumber);
+
     public static bool TryParseMAddress(string address, out int addressNumber)
     {
         addressNumber = 0;
@@ -54,6 +72,7 @@ public enum PlcBatchAddressType
 {
     Auto,
     D,
+    ZR,
     M
 }
 
@@ -183,7 +202,7 @@ public sealed class PlcBatchReadItem<T> : PlcBatchReadItemBase
             return;
         }
 
-        if (!PlcBatchAddressHelper.TryParseDAddress(Address, out var addressNumber))
+        if (!PlcBatchAddressHelper.TryParseWordAddress(Address, out var addressNumber))
         {
             IsSuccess = false;
             OriginResult = new OperateResult<short[]>
@@ -640,7 +659,7 @@ public class MitsubishiPlcService : IDisposable
     }
 
     /// <summary>
-    /// 批量读取地址，自动按最小地址到最大地址连续读取后再分发到各项
+    /// 批量读取地址，D / ZR / M 按软元件类型分批后连续读取并分发到各项
     /// </summary>
     public OperateResult<IList<PlcBatchReadItemBase>> BatchRead(IList<PlcBatchReadItemBase> batchItems)
     {
@@ -650,22 +669,21 @@ public class MitsubishiPlcService : IDisposable
         if (batchItems.Count == 0)
             return OperateResult.CreateSuccessResult(batchItems);
 
-        if (!SplitBatchItemsByAddressType(batchItems, out var dItems, out var mBoolItems, out var splitError))
+        if (!SplitBatchItemsByAddressType(batchItems, out var dItems, out var zrItems, out var mBoolItems, out var splitError))
             return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = splitError };
 
         if (dItems.Count > 0)
         {
-            if (!TryBuildBatchRange(dItems, out var dStartAddress, out var dTotalLength, out var dError))
-                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dError };
+            var dResult = ReadWordBatch(dItems, PlcBatchAddressType.D);
+            if (!dResult.IsSuccess)
+                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dResult.Message, Content = batchItems };
+        }
 
-            var dBlockResult = DebugMode
-                ? MockRead<short[]>(dTotalLength)
-                : Read<short[]>(PlcBatchAddressHelper.ToDAddress(dStartAddress), dTotalLength);
-
-            ApplyBatchBlockResult(dItems, dBlockResult, dStartAddress);
-
-            if (!dBlockResult.IsSuccess)
-                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dBlockResult.Message, Content = batchItems };
+        if (zrItems.Count > 0)
+        {
+            var zrResult = ReadWordBatch(zrItems, PlcBatchAddressType.ZR);
+            if (!zrResult.IsSuccess)
+                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = zrResult.Message, Content = batchItems };
         }
 
         if (mBoolItems.Count > 0)
@@ -679,7 +697,7 @@ public class MitsubishiPlcService : IDisposable
     }
 
     /// <summary>
-    /// 批量异步读取地址，自动按最小地址到最大地址连续读取后再分发到各项
+    /// 批量异步读取地址，D / ZR / M 按软元件类型分批后连续读取并分发到各项
     /// </summary>
     public async Task<OperateResult<IList<PlcBatchReadItemBase>>> BatchReadAsync(IList<PlcBatchReadItemBase> batchItems)
     {
@@ -689,22 +707,21 @@ public class MitsubishiPlcService : IDisposable
         if (batchItems.Count == 0)
             return OperateResult.CreateSuccessResult(batchItems);
 
-        if (!SplitBatchItemsByAddressType(batchItems, out var dItems, out var mBoolItems, out var splitError))
+        if (!SplitBatchItemsByAddressType(batchItems, out var dItems, out var zrItems, out var mBoolItems, out var splitError))
             return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = splitError };
 
         if (dItems.Count > 0)
         {
-            if (!TryBuildBatchRange(dItems, out var dStartAddress, out var dTotalLength, out var dError))
-                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dError };
+            var dResult = await ReadWordBatchAsync(dItems, PlcBatchAddressType.D);
+            if (!dResult.IsSuccess)
+                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dResult.Message, Content = batchItems };
+        }
 
-            var dBlockResult = DebugMode
-                ? MockRead<short[]>(dTotalLength)
-                : await ReadAsync<short[]>(PlcBatchAddressHelper.ToDAddress(dStartAddress), dTotalLength);
-
-            ApplyBatchBlockResult(dItems, dBlockResult, dStartAddress);
-
-            if (!dBlockResult.IsSuccess)
-                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = dBlockResult.Message, Content = batchItems };
+        if (zrItems.Count > 0)
+        {
+            var zrResult = await ReadWordBatchAsync(zrItems, PlcBatchAddressType.ZR);
+            if (!zrResult.IsSuccess)
+                return new OperateResult<IList<PlcBatchReadItemBase>> { IsSuccess = false, Message = zrResult.Message, Content = batchItems };
         }
 
         if (mBoolItems.Count > 0)
@@ -716,6 +733,50 @@ public class MitsubishiPlcService : IDisposable
 
         return OperateResult.CreateSuccessResult(batchItems);
     }
+
+    private OperateResult ReadWordBatch(
+        IList<PlcBatchReadItemBase> batchItems,
+        PlcBatchAddressType addressType)
+    {
+        if (!TryBuildWordBatchRange(batchItems, addressType, out var startAddress, out var totalLength, out var error))
+            return new OperateResult { IsSuccess = false, Message = error };
+
+        var start = ToWordAddress(addressType, startAddress);
+        var blockResult = DebugMode
+            ? MockRead<short[]>(totalLength)
+            : Read<short[]>(start, totalLength);
+
+        ApplyBatchBlockResult(batchItems, blockResult, startAddress);
+        return blockResult.IsSuccess
+            ? OperateResult.CreateSuccessResult()
+            : new OperateResult { IsSuccess = false, Message = blockResult.Message };
+    }
+
+    private async Task<OperateResult> ReadWordBatchAsync(
+        IList<PlcBatchReadItemBase> batchItems,
+        PlcBatchAddressType addressType)
+    {
+        if (!TryBuildWordBatchRange(batchItems, addressType, out var startAddress, out var totalLength, out var error))
+            return new OperateResult { IsSuccess = false, Message = error };
+
+        var start = ToWordAddress(addressType, startAddress);
+        var blockResult = DebugMode
+            ? MockRead<short[]>(totalLength)
+            : await ReadAsync<short[]>(start, totalLength);
+
+        ApplyBatchBlockResult(batchItems, blockResult, startAddress);
+        return blockResult.IsSuccess
+            ? OperateResult.CreateSuccessResult()
+            : new OperateResult { IsSuccess = false, Message = blockResult.Message };
+    }
+
+    private static string ToWordAddress(PlcBatchAddressType addressType, int addressNumber) =>
+        addressType switch
+        {
+            PlcBatchAddressType.D => PlcBatchAddressHelper.ToDAddress(addressNumber),
+            PlcBatchAddressType.ZR => PlcBatchAddressHelper.ToZRAddress(addressNumber),
+            _ => throw new ArgumentOutOfRangeException(nameof(addressType), addressType, "仅支持 D 或 ZR 字地址")
+        };
 
     /// <summary>
     /// 批量读取 M 地址，自动按最小地址到最大地址连续读取后再分发到各项
@@ -783,8 +844,9 @@ public class MitsubishiPlcService : IDisposable
         }
     }
 
-    private static bool TryBuildBatchRange(
+    private static bool TryBuildWordBatchRange(
         IList<PlcBatchReadItemBase> batchItems,
+        PlcBatchAddressType addressType,
         out int startAddress,
         out ushort totalLength,
         out string error)
@@ -792,6 +854,12 @@ public class MitsubishiPlcService : IDisposable
         startAddress = 0;
         totalLength = 0;
         error = string.Empty;
+
+        if (addressType is not (PlcBatchAddressType.D or PlcBatchAddressType.ZR))
+        {
+            error = $"不支持的字地址类型: {addressType}";
+            return false;
+        }
 
         var hasAny = false;
         var minAddress = int.MaxValue;
@@ -805,9 +873,13 @@ public class MitsubishiPlcService : IDisposable
                 return false;
             }
 
-            if (!PlcBatchAddressHelper.TryParseDAddress(item.Address, out var addressNumber))
+            var isValid = addressType == PlcBatchAddressType.D
+                ? PlcBatchAddressHelper.TryParseDAddress(item.Address, out var addressNumber)
+                : PlcBatchAddressHelper.TryParseZRAddress(item.Address, out addressNumber);
+
+            if (!isValid)
             {
-                error = $"仅支持 D 地址批量读取，当前地址无效: {item.Address}";
+                error = $"仅支持 {addressType} 地址批量读取，当前地址无效: {item.Address}";
                 return false;
             }
 
@@ -902,10 +974,12 @@ public class MitsubishiPlcService : IDisposable
     private static bool SplitBatchItemsByAddressType(
         IList<PlcBatchReadItemBase> batchItems,
         out List<PlcBatchReadItemBase> dItems,
+        out List<PlcBatchReadItemBase> zrItems,
         out List<PlcBatchReadItem<bool>> mBoolItems,
         out string error)
     {
         dItems = [];
+        zrItems = [];
         mBoolItems = [];
         error = string.Empty;
 
@@ -916,6 +990,12 @@ public class MitsubishiPlcService : IDisposable
             if (addressType == PlcBatchAddressType.D)
             {
                 dItems.Add(item);
+                continue;
+            }
+
+            if (addressType == PlcBatchAddressType.ZR)
+            {
+                zrItems.Add(item);
                 continue;
             }
 
@@ -942,7 +1022,19 @@ public class MitsubishiPlcService : IDisposable
     {
         if (item.AddressType != PlcBatchAddressType.Auto)
         {
+            // 兼容旧调用：部分 ZR 配置项曾被显式标记为 D，以实际地址前缀为准。
+            if (item.AddressType == PlcBatchAddressType.D &&
+                PlcBatchAddressHelper.TryParseZRAddress(item.Address, out _))
+            {
+                return PlcBatchAddressType.ZR;
+            }
+
             return item.AddressType;
+        }
+
+        if (PlcBatchAddressHelper.TryParseZRAddress(item.Address, out _))
+        {
+            return PlcBatchAddressType.ZR;
         }
 
         if (PlcBatchAddressHelper.TryParseDAddress(item.Address, out _))

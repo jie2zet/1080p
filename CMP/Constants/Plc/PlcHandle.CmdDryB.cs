@@ -68,11 +68,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdDryB, "回原点")]
                 public const int Home = 1023;
 
-                [PlcHandle(Handle.CmdDryB, "Servo On")]
-                public const int ServoOn = 1070;
+                [PlcHandle(Handle.CmdDryB, "Servo On", 8)]
+                public const int ServoOn = 539;
 
-                [PlcHandle(Handle.CmdDryB, "Servo Off")]
-                public const int ServoOff = 1071;
+                [PlcHandle(Handle.CmdDryB, "Servo Off", 8)]
+                public const int ServoOff = 539;
 
                 public static class Param
                 {
@@ -104,11 +104,11 @@ public static partial class PlcHandle
                 [PlcHandle(Handle.CmdDryB, "边缘位置2")]
                 public const int EdgePosition2 = 1036;
 
-                [PlcHandle(Handle.CmdDryB, "Servo On")]
-                public const int ServoOn = 1072;
+                [PlcHandle(Handle.CmdDryB, "Servo On", 9)]
+                public const int ServoOn = 539;
 
-                [PlcHandle(Handle.CmdDryB, "Servo Off")]
-                public const int ServoOff = 1073;
+                [PlcHandle(Handle.CmdDryB, "Servo Off", 9)]
+                public const int ServoOff = 539;
 
                 public static class Param
                 {

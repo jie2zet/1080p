@@ -76,8 +76,10 @@ public class ConstansTest
         var servoOn = PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn;
         var servoOff = PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOff;
 
-        Assert.AreEqual(1132, servoOn);
-        Assert.AreEqual(1133, servoOff);
+        Assert.AreEqual(530, servoOn);
+        Assert.AreEqual(530, servoOff);
+        Assert.AreEqual(0x530u, servoOn.HexWAddress());
+        Assert.AreEqual((ushort)5, PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn.BitOffset());
         
         Console.WriteLine($@"Servo On: {servoOn}");
         Console.WriteLine($@"Servo Off: {servoOff}");
@@ -89,8 +91,9 @@ public class ConstansTest
         var dry = new GenericDryCleanConfig("Dry B", Handle.CmdDryB);
         var (handle, value, offset) = dry.GetServoCommand("ChuckRotationMotor", true);
 
-        Assert.AreEqual(1070, value);
-        Assert.AreEqual(0, offset);
+        Assert.AreEqual(539, value);
+        Assert.AreEqual(0x539u, value.HexWAddress());
+        Assert.AreEqual(8, offset);
 
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
@@ -102,8 +105,9 @@ public class ConstansTest
     {
         var pen = new GenericPenCleanConfig("Pen A", Handle.CmdPenA1);
         var (handle, value, offset) = pen.GetServoCommand("PenArmSweepMotor", true);
-        Assert.AreEqual(1082, value);
-        Assert.AreEqual(0, offset);
+        Assert.AreEqual(537, value);
+        Assert.AreEqual(0x537u, value.HexWAddress());
+        Assert.AreEqual(1, offset);
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
         Console.WriteLine($@"Offset: {offset}");
@@ -114,8 +118,9 @@ public class ConstansTest
     {
         var roller = new GenericRollConfig("Roller C", Handle.CmdRollB1);
         var (handle, value, offset) = roller.GetServoCommand("WfRightPillarRotateMotor", true);
-        Assert.AreEqual(1082, value);
-        Assert.AreEqual(0, offset);
+        Assert.AreEqual(535, value);
+        Assert.AreEqual(0x535u, value.HexWAddress());
+        Assert.AreEqual(9, offset);
         Console.WriteLine($@"Handle: {handle}");
         Console.WriteLine($@"Value: {value}");
         Console.WriteLine($@"Offset: {offset}");

@@ -2315,24 +2315,24 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
     private void ServoCommandExecute(string obj)
     {
-        var plcHandle = 0u;
-        byte[] plcValue = [];
+        var servoAddress = 0u;
+        ushort servoBitOffset = 0;
         var newServoState = false;
+        Action<bool>? updateState = null;
+        string? servoTextProperty = null;
 
         void PrepareServoCommand(
             bool currentState,
-            uint servoOnHandle,
-            byte[] servoOnValue,
-            uint servoOffHandle,
-            byte[] servoOffValue,
+            int address,
+            ushort bitOffset,
             Action<bool> setState,
             string propertyName)
         {
             newServoState = !currentState;
-            plcHandle = newServoState ? servoOnHandle : servoOffHandle;
-            plcValue = newServoState ? servoOnValue : servoOffValue;
-            setState(newServoState);
-            RaisePropertyChanged(propertyName);
+            servoAddress = address.HexWAddress();
+            servoBitOffset = bitOffset;
+            updateState = setState;
+            servoTextProperty = propertyName;
         }
 
         switch (obj)
@@ -2340,70 +2340,56 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
             case "PlatenMotor":
                 PrepareServoCommand(
                     PolishUnit.PlatenMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOn,
+                    PlcHandle.CmdPolish.Motor.PlatenRotation.ServoOn.BitOffset(),
                     state => PolishUnit.PlatenMotor.IsServoOn = state,
                     nameof(PlatenMotorServoText));
                 break;
             case "HeadRotateMotor":
                 PrepareServoCommand(
                     PolishUnit.HeadRotateMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOn,
+                    PlcHandle.CmdPolish.Motor.HeadRotation.ServoOn.BitOffset(),
                     state => PolishUnit.HeadRotateMotor.IsServoOn = state,
                     nameof(HeadRotateMotorServoText));
                 break;
             case "DiskRotateMotor":
                 PrepareServoCommand(
                     PolishUnit.DiskRotateMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOn,
+                    PlcHandle.CmdPolish.Motor.ConditionerHeadRotation.ServoOn.BitOffset(),
                     state => PolishUnit.DiskRotateMotor.IsServoOn = state,
                     nameof(DiskRotateMotorServoText));
                 break;
             case "HeadSweepMotor":
                 PrepareServoCommand(
                     PolishUnit.HeadSweepMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOn,
+                    PlcHandle.CmdPolish.Motor.HeadSweep.ServoOn.BitOffset(),
                     state => PolishUnit.HeadSweepMotor.IsServoOn = state,
                     nameof(HeadSweepMotorServoText));
                 break;
             case "ConditionSweepMotor":
                 PrepareServoCommand(
                     PolishUnit.ConditionSweepMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn,
+                    PlcHandle.CmdPolish.Motor.ConditionerSweep.ServoOn.BitOffset(),
                     state => PolishUnit.ConditionSweepMotor.IsServoOn = state,
                     nameof(ConditionSweepMotorServoText));
                 break;
             case "HeadLiftMotor":
                 PrepareServoCommand(
                     PolishUnit.HeadLiftMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOn,
+                    PlcHandle.CmdPolish.Motor.HeadUpDown.ServoOn.BitOffset(),
                     state => PolishUnit.HeadLiftMotor.IsServoOn = state,
                     nameof(HeadLiftMotorServoText));
                 break;
             case "SlurrySweepMotor":
                 PrepareServoCommand(
                     PolishUnit.SlurrySweepMotor.IsServoOn,
-                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOn.Handle(),
-                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOn.Value(),
-                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOff.Handle(),
-                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOff.Value(),
+                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOn,
+                    PlcHandle.CmdPolish.Motor.SlurryArmSweep.ServoOn.BitOffset(),
                     state => PolishUnit.SlurrySweepMotor.IsServoOn = state,
                     nameof(SlurrySweepMotorServoText));
                 break;
@@ -2412,13 +2398,23 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
                 return;
         }
 
-        err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, plcHandle, 1, plcValue);
+        err = KHL.KHLWriteDevicesAsBits(
+            kvLink.sock,
+            KHLDevType.DEV_W,
+            servoAddress,
+            servoBitOffset,
+            1,
+            newServoState.Value());
         if (err != 0)
         {
             Growl.ErrorGlobal($"ServoCommandExecute Error: {err}");
         }
         else
         {
+            updateState?.Invoke(newServoState);
+            if (servoTextProperty != null)
+                RaisePropertyChanged(servoTextProperty);
+
             string stateText = newServoState ? "ON" : "OFF";
             Growl.SuccessGlobal($"ServoCommandExecute: {obj} - Servo {stateText}");
         }
