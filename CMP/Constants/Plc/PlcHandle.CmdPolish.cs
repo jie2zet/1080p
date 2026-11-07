@@ -1052,7 +1052,7 @@ public static partial class PlcHandle
             public static class Zone1
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1800;
+                public const int Vent = 1830;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1801;
@@ -1070,7 +1070,7 @@ public static partial class PlcHandle
             public static class Zone2
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1803;
+                public const int Vent = 1831;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1804;
@@ -1088,7 +1088,7 @@ public static partial class PlcHandle
             public static class Zone3
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1806;
+                public const int Vent = 1832;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1807;
@@ -1106,7 +1106,7 @@ public static partial class PlcHandle
             public static class Zone4
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1809;
+                public const int Vent = 1833;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1810;
@@ -1124,7 +1124,7 @@ public static partial class PlcHandle
             public static class Zone5
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1812;
+                public const int Vent = 1834;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1813;
@@ -1142,7 +1142,7 @@ public static partial class PlcHandle
             public static class Zone6
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1815;
+                public const int Vent = 1835;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1816;
@@ -1160,7 +1160,7 @@ public static partial class PlcHandle
             public static class Zone7
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1818;
+                public const int Vent = 1836;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1819;
@@ -1178,7 +1178,7 @@ public static partial class PlcHandle
             public static class Zone8
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1821;
+                public const int Vent = 1837;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1822;
@@ -1196,7 +1196,7 @@ public static partial class PlcHandle
             public static class Retain
             {
                 [PlcHandle(Handle.CmdPolish, "排气")]
-                public const int Vent = 1824;
+                public const int Vent = 1838;
 
                 [PlcHandle(Handle.CmdPolish, "真空")]
                 public const int Vacuum = 1825;

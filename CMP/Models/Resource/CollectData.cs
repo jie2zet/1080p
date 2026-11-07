@@ -24,6 +24,7 @@ using System.Runtime.Serialization;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Reflection;
 using CMP.Services.Reflection;
+using CMP.Constants.Plc;
 using static CMP.Models.kvsPlc.IO.KvStruct;
 using static CMP.Models.kvsPlc.SV.KvStruct;
 
@@ -260,7 +261,7 @@ namespace CMP.Models.Resource
 
     public class Polish : CollectDataChamber
     {
-        const uint MotorStatusAddress = 530;
+        const int MotorStatusAddress = 530;
         const uint MotorCount = 7;
         const int SnapshotBufferSize = 2048;
         public string polishName = string.Empty;
@@ -447,7 +448,7 @@ namespace CMP.Models.Resource
         private void CollectMotorServoStatus()
         {
             bool[] motorServoStatus = new bool[MotorCount];
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, MotorStatusAddress, 0, MotorCount, readBuf);
+            err = KHT.KHLReadDevicesAsBits(kvLink.sock,KHLDevType.DEV_W,MotorStatusAddress.HexWAddress(),0,MotorCount,readBuf);
             if(err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
@@ -724,23 +725,17 @@ namespace CMP.Models.Resource
         private void CollectMotorServoStatus()
         {
             bool[] motorServoStatus = new bool[4];
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 534, 0, 4, readBuf);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
+            (int Address, ushort BitOffset)[] stations = rollerName == "RollerB" ? [(535, 8), (536, 0), (536, 8)] : [(534, 0), (534, 8), (535, 0)];
+
+            for (var station = 0; station < stations.Length; station++)
             {
-                KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
-                ApplyMotorServoStatus(motorServoStatus, "_1");
-            }
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 534, 8, 4, readBuf);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
-            {
-                KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
-                ApplyMotorServoStatus(motorServoStatus, "_2");
-            }
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 535, 0, 4, readBuf);
-            if (err == (int)KHLUserError.KHL_ERR_NONE)
-            {
-                KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
-                ApplyMotorServoStatus(motorServoStatus, "_3");
+                var (address, bitOffset) = stations[station];
+                err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, address.HexWAddress(), bitOffset, 4, readBuf);
+                if (err == (int)KHLUserError.KHL_ERR_NONE)
+                {
+                    KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
+                    ApplyMotorServoStatus(motorServoStatus, $"_{station + 1}");
+                }
             }
         }
 
@@ -830,7 +825,7 @@ namespace CMP.Models.Resource
 
         /// <summary>
         /// 获取最近一次成功读取的完整 Pen 过程数据副本。各工位的三个 ServoOn 字段
-        /// 在对应设备位成功读取后，以 W537 的最新值为准。
+        /// 在对应设备位成功读取后，以 PenA 的 W537 或 PenB 的 W538 最新值为准。
         /// </summary>
         internal bool TryGetProcessDataSnapshot(out KHSTPenCollectData.stPenCollectData snapshot)
         {
@@ -1006,13 +1001,14 @@ namespace CMP.Models.Resource
         private void CollectMotorServoStatus()
         {
             bool[] motorServoStatus = new bool[3];
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 537, 0, 3, readBuf);
+            var address = penName == "PenB" ? 538 : 537;
+            err = KHT.KHLReadDevicesAsBits(kvLink.sock,KHLDevType.DEV_W, address.HexWAddress(), 0,3,readBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
                 ApplyMotorServoStatus(motorServoStatus, "_1");
             }
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 537, 8, 3, readBuf);
+            err = KHT.KHLReadDevicesAsBits(kvLink.sock,KHLDevType.DEV_W,address.HexWAddress(), 8, 3,  readBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KHST.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);
@@ -1241,7 +1237,8 @@ namespace CMP.Models.Resource
         private void CollectMotorServoStatus()
         {
             bool[] motorServoStatus = new bool[2];
-            err = KHT.KHLReadDevicesAsBits(kvLink.sock, KHLDevType.DEV_W, 539, 0, 2, readBuf);
+            var bitOffset = dryName == "DryB" ? (ushort)8 : (ushort)0;
+            err = KHT.KHLReadDevicesAsBits( kvLink.sock,KHLDevType.DEV_W,539.HexWAddress(),bitOffset,2, readBuf);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
                 KHSTDryCollectData.ByteToBool(ref motorServoStatus, readBuf, motorServoStatus.Length);

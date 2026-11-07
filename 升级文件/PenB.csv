@@ -1,0 +1,240 @@
+AlarmId,AlarmName,AlarmValue,Enabled,Type,Unit
+7000,PenB_1 Recipe Request Timeout,FALSE,TRUE,Alarm,PenB1
+7001,PenB_1 Recipe Data Error,FALSE,TRUE,Alarm,PenB1
+7002,PenB_1 Recipe Data Transmission From HMIAbnormal End,FALSE,TRUE,Alarm,PenB1
+7003,PenB_1 Step Action Timeout,FALSE,TRUE,Alarm,PenB1
+7004,PenB_1 ECRunning Parameter Invailid,FALSE,TRUE,Alarm,PenB1
+7005,PenB_1 Wafer Sensor And Information Not Match,FALSE,TRUE,Alarm,PenB1
+7006,PenB_1 PLCSystem Error,FALSE,TRUE,Alarm,PenB1
+7007,PenB_1 Transfer PLCCommunication Error,FALSE,TRUE,Alarm,PenB1
+7008,PenB_1 XHA6 ECMotion Unit Motion Enable Fault,FALSE,TRUE,Alarm,PenB1
+7009,PenB_1 XHA6 ECMotion Unit Fault,FALSE,TRUE,Alarm,PenB1
+7010,PenB_1 XHA6 ECMotion Unit Axis Fault,FALSE,TRUE,Alarm,PenB1
+7011,PenB_1 XHA6 ECMotion Unit Axis Warning,FALSE,TRUE,Warning,PenB1
+7012,PenB_1 XHA6 ECEther CATLink Off,FALSE,TRUE,Alarm,PenB1
+7013,PenB_1 Chuck Rotation Motor Axis Warning,FALSE,TRUE,Warning,PenB1
+7014,PenB_1 Chuck Rotation Motor Driver Warning,FALSE,TRUE,Warning,PenB1
+7015,PenB_1 Chuck Rotation Motor Axis Fault,FALSE,TRUE,Alarm,PenB1
+7016,PenB_1 Chuck Rotation Motor Driver Alarm,FALSE,TRUE,Alarm,PenB1
+7017,PenB_1 Pen Arm Swing Motor Axis Warning,FALSE,TRUE,Warning,PenB1
+7018,PenB_1 Pen Arm Swing Motor Driver Warning,FALSE,TRUE,Warning,PenB1
+7019,PenB_1 Pen Arm Swing Motor Axis Fault,FALSE,TRUE,Alarm,PenB1
+7020,PenB_1 Pen Arm Swing Motor Driver Alarm,FALSE,TRUE,Alarm,PenB1
+7021,PenB_1 PENRotates Motor Axis Warning,FALSE,TRUE,Warning,PenB1
+7022,PenB_1 PENRotates Motor Driver Warning,FALSE,TRUE,Warning,PenB1
+7023,PenB_1 PENRotates Motor Axis Fault,FALSE,TRUE,Alarm,PenB1
+7024,PenB_1 PENRotates Motor Driver Alarm,FALSE,TRUE,Alarm,PenB1
+7025,PenB_1 Chuck Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,PenB1
+7026,PenB_1 Chuck Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB1
+7027,PenB_1 Chuck Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,PenB1
+7028,PenB_1 Chuck Rotation Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7029,PenB_1 Chuck Rotation Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,PenB1
+7030,PenB_1 Chuck Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB1
+7031,PenB_1 Arm Swing Motor Move To Any Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7032,PenB_1 Arm Swing Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB1
+7033,PenB_1 Arm Swing Inching Action Timeout,FALSE,TRUE,Alarm,PenB1
+7034,PenB_1 Arm Swing Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7035,PenB_1 Arm Swing Motor Move To Start Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7036,PenB_1 Arm Swing Motor Move To End Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7037,PenB_1 Arm Swing Motor Move To Trim Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7038,PenB_1 Arm Swing Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,PenB1
+7039,PenB_1 Arm Swing Motor Move To Center Position Action Timeout,FALSE,TRUE,Alarm,PenB1
+7040,PenB_1 Arm Swing Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB1
+7041,PenB_1 Pen Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,PenB1
+7042,PenB_1 Pen Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB1
+7043,PenB_1 Pen Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,PenB1
+7044,PenB_1 Pen Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB1
+7045,PenB_1 Chuck Rotation Motor Velocity Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7046,PenB_1 Chuck Rotation Motor Velocity Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7047,PenB_1 Chuck Rotation Motor Velocity Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7048,PenB_1 Chuck Rotation Motor Velocity Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7049,PenB_1 Pen Rotation Motor Velocity Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7050,PenB_1 Pen Rotation Motor Velocity Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7051,PenB_1 Pen Rotation Motor Velocity Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7052,PenB_1 Pen Rotation Motor Velocity Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7053,PenB_1 DIWFull Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7054,PenB_1 Chamber Door Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7055,PenB_1 DIWCO2 Pressure Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7056,PenB_1 WFLower Face Purge N2 Pressure Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7057,PenB_1 Liquid Leakage Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7058,PenB_1 N2 Pressure Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7059,PenB_1 DIWPressure Detection Alarm,FALSE,TRUE,Alarm,PenB1
+7060,PenB_1 Drain Pan Leak Alarm,FALSE,TRUE,Alarm,PenB1
+7061,PenB_1 Safty Door Alarm,FALSE,TRUE,Alarm,PenB1
+7062,PenB_1 Pen Up Dowm Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB1
+7063,PenB_1 Pen Arm Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB1
+7064,PenB_1 WFClamp Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB1
+7065,PenB_1 WFInlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB1
+7066,PenB_1 WFOutlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB1
+7067,PenB_1 Trim Position Notfound Pen Alarm,FALSE,TRUE,Alarm,PenB1
+7068,PenB_1 Pen Up Dowm Cylinder Up Action Time Out,FALSE,TRUE,Alarm,PenB1
+7069,PenB_1 Pen Up Dowm Cylinder Down Action Time Out,FALSE,TRUE,Alarm,PenB1
+7070,PenB_1 Pen Arm Cylinder Up Action Timeout,FALSE,TRUE,Alarm,PenB1
+7071,PenB_1 Pen Arm Cylinder Dowm Action Timeout,FALSE,TRUE,Alarm,PenB1
+7072,PenB_1 WFClamp Cylinder Clamp Action Timeout,FALSE,TRUE,Warning,PenB1
+7073,PenB_1 WFClamp Cylinder Release Action Timeout,FALSE,TRUE,Warning,PenB1
+7074,PenB_1 WFInlet Door Cylinder Open Action Time Out,FALSE,TRUE,Warning,PenB1
+7075,PenB_1 WFInlet Door Cylinder Close Action Time Out,FALSE,TRUE,Warning,PenB1
+7076,PenB_1 DIWInlet Flowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7077,PenB_1 DIWInlet Flowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7078,PenB_1 DIWInlet Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7079,PenB_1 DIWInlet Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7080,PenB_1 WFUpper Face DIWFlowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7081,PenB_1 WFUpper Face DIWFlowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7082,PenB_1 WFUpper Face DIWFlowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7083,PenB_1 WFUpper Face DIWFlowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7084,PenB_1 WFLower Face DIWFlowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7085,PenB_1 WFLoweer Face DIWFlowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7086,PenB_1 WFLower Face DIWFlowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7087,PenB_1 WFLower Face DIWFlowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7088,PenB_1 Chemical Flowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7089,PenB_1 Chemical Flowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7090,PenB_1 Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7091,PenB_1 Chemical Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7092,PenB_1 DIWChamber Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7093,PenB_1 Pen DIWWash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7094,PenB_1 Pen DIWWash Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7095,PenB_1 Plate DIWWash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7096,PenB_1 Plate DIWWash Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7097,PenB_1 Plate Chemical Wash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7098,PenB_1 WFUpper Face Wash Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7099,PenB_1 WFUpper Face Wash Chemical Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7100,PenB_1 WFLower Face Wash Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7101,PenB_1 WFLower Face Wash Chemical Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7102,PenB_1 Chemical Supply Pressure Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7103,PenB_1 Chemical Supply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7104,PenB_1 Chemical Supply Pressure Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7105,PenB_1 Chemical Supply Pressure Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7106,PenB_1 Pen Pressure Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7107,PenB_1 Pen Pressure Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7108,PenB_1 Pen Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7109,PenB_1 Pen Pressure Lower Limit Plus,FALSE,TRUE,Warning,PenB1
+7110,PenB_1 WFLower Face N2 Outlet Flow Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7111,PenB_1 WFLower Face N2 Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB1
+7112,PenB_1 Brush Cumlative Life Time Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7113,PenB_1 Brush Cumlative Life Time Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7114,PenB_1 Brush Cumlative Wafer Count Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7115,PenB_1 Brush Cumlative Wafer Count Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7116,PenB_1 Unit Wafer Count Upper Limit Minus,FALSE,TRUE,Warning,PenB1
+7117,PenB_1 Unit Wafer Count Upper Limit Plus,FALSE,TRUE,Warning,PenB1
+7500,PenB_2 Recipe Request Timeout,FALSE,TRUE,Alarm,PenB2
+7501,PenB_2 Recipe Data Error,FALSE,TRUE,Alarm,PenB2
+7502,PenB_2 Recipe Data Transmission From HMIAbnormal End,FALSE,TRUE,Alarm,PenB2
+7503,PenB_2 Step Action Timeout,FALSE,TRUE,Alarm,PenB2
+7504,PenB_2 ECRunning Parameter Invailid,FALSE,TRUE,Alarm,PenB2
+7505,PenB_2 Wafer Sensor And Information Not Match,FALSE,TRUE,Alarm,PenB2
+7506,PenB_2 PLCSystem Error,FALSE,TRUE,Alarm,PenB2
+7507,PenB_2 Transfer PLCCommunication Error,FALSE,TRUE,Alarm,PenB2
+7508,PenB_2 XHA6 ECMotion Unit Motion Enable Fault,FALSE,TRUE,Alarm,PenB2
+7509,PenB_2 XHA6 ECMotion Unit Fault,FALSE,TRUE,Alarm,PenB2
+7510,PenB_2 XHA6 ECMotion Unit Axis Fault,FALSE,TRUE,Alarm,PenB2
+7511,PenB_2 XHA6 ECMotion Unit Axis Warning,FALSE,TRUE,Warning,PenB2
+7512,PenB_2 XHA6 ECEther CATLink Off,FALSE,TRUE,Alarm,PenB2
+7513,PenB_2 Chuck Rotation Motor Axis Warning,FALSE,TRUE,Warning,PenB2
+7514,PenB_2 Chuck Rotation Motor Driver Warning,FALSE,TRUE,Warning,PenB2
+7515,PenB_2 Chuck Rotation Motor Axis Fault,FALSE,TRUE,Alarm,PenB2
+7516,PenB_2 Chuck Rotation Motor Driver Alarm,FALSE,TRUE,Alarm,PenB2
+7517,PenB_2 Pen Arm Swing Motor Axis Warning,FALSE,TRUE,Warning,PenB2
+7518,PenB_2 Pen Arm Swing Motor Driver Warning,FALSE,TRUE,Warning,PenB2
+7519,PenB_2 Pen Arm Swing Motor Axis Fault,FALSE,TRUE,Alarm,PenB2
+7520,PenB_2 Pen Arm Swing Motor Driver Alarm,FALSE,TRUE,Alarm,PenB2
+7521,PenB_2 PENRotates Motor Axis Warning,FALSE,TRUE,Warning,PenB2
+7522,PenB_2 PENRotates Motor Driver Warning,FALSE,TRUE,Warning,PenB2
+7523,PenB_2 PENRotates Motor Axis Fault,FALSE,TRUE,Alarm,PenB2
+7524,PenB_2 PENRotates Motor Driver Alarm,FALSE,TRUE,Alarm,PenB2
+7525,PenB_2 Chuck Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,PenB2
+7526,PenB_2 Chuck Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB2
+7527,PenB_2 Chuck Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,PenB2
+7528,PenB_2 Chuck Rotation Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7529,PenB_2 Chuck Rotation Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,PenB2
+7530,PenB_2 Chuck Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB2
+7531,PenB_2 Arm Swing Motor Move To Any Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7532,PenB_2 Arm Swing Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB2
+7533,PenB_2 Arm Swing Inching Action Timeout,FALSE,TRUE,Alarm,PenB2
+7534,PenB_2 Arm Swing Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7535,PenB_2 Arm Swing Motor Move To Start Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7536,PenB_2 Arm Swing Motor Move To End Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7537,PenB_2 Arm Swing Motor Move To Trim Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7538,PenB_2 Arm Swing Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,PenB2
+7539,PenB_2 Arm Swing Motor Move To Center Position Action Timeout,FALSE,TRUE,Alarm,PenB2
+7540,PenB_2 Arm Swing Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB2
+7541,PenB_2 Pen Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,PenB2
+7542,PenB_2 Pen Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,PenB2
+7543,PenB_2 Pen Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,PenB2
+7544,PenB_2 Pen Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,PenB2
+7545,PenB_2 Chuck Rotation Motor Velocity Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7546,PenB_2 Chuck Rotation Motor Velocity Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7547,PenB_2 Chuck Rotation Motor Velocity Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7548,PenB_2 Chuck Rotation Motor Velocity Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7549,PenB_2 Pen Rotation Motor Velocity Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7550,PenB_2 Pen Rotation Motor Velocity Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7551,PenB_2 Pen Rotation Motor Velocity Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7552,PenB_2 Pen Rotation Motor Velocity Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7553,PenB_2 Pen Up Dowm Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7554,PenB_2 Pen Arm Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7555,PenB_2 WFClamp Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7556,PenB_2 Nozzle Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7557,PenB_2 WFInlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7558,PenB_2 WFOutlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,PenB2
+7559,PenB_2 Trim Position Notfound Pen Alarm,FALSE,TRUE,Alarm,PenB2
+7560,PenB_2 Pen Up Dowm Cylinder Up Action Time Out,FALSE,TRUE,Alarm,PenB2
+7561,PenB_2 Pen Up Dowm Cylinder Down Action Time Out,FALSE,TRUE,Alarm,PenB2
+7562,PenB_2 Pen Arm Cylinder Up Action Timeout,FALSE,TRUE,Alarm,PenB2
+7563,PenB_2 Pen Arm Cylinder Dowm Action Timeout,FALSE,TRUE,Alarm,PenB2
+7564,PenB_2 WFClamp Cylinder Clamp Action Timeout,FALSE,TRUE,Alarm,PenB2
+7565,PenB_2 WFClamp Cylinder Release Action Timeout,FALSE,TRUE,Alarm,PenB2
+7566,PenB_2 Nozzle Cylinder Up Action Time Out,FALSE,TRUE,Alarm,PenB2
+7567,PenB_2 Nozzle Cylinder Dowm Action Time Out,FALSE,TRUE,Alarm,PenB2
+7568,PenB_2 WFInlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,PenB2
+7569,PenB_2 WFInlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,PenB2
+7570,PenB_2 WFOutlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,PenB2
+7571,PenB_2 WFOutlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,PenB2
+7572,PenB_2 DIWInlet Flowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7573,PenB_2 DIWInlet Flowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7574,PenB_2 DIWInlet Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7575,PenB_2 DIWInlet Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7576,PenB_2 WFUpper Face DIWFlowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7577,PenB_2 WFUpper Face DIWFlowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7578,PenB_2 WFUpper Face DIWFlowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7579,PenB_2 WFUpper Face DIWFlowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7580,PenB_2 WFLower Face DIWFlowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7581,PenB_2 WFLoweer Face DIWFlowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7582,PenB_2 WFLower Face DIWFlowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7583,PenB_2 WFLower Face DIWFlowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7584,PenB_2 Chemical Flowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7585,PenB_2 Chemical Flowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7586,PenB_2 Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7587,PenB_2 Chemical Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7588,PenB_2 Carbonated DIWFlowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7589,PenB_2 DIWChamber Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7590,PenB_2 Pen DIWWash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7591,PenB_2 Quartz DIWWash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7592,PenB_2 Quartz Chemical Wash Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7593,PenB_2 WFUpper Face Wash Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7594,PenB_2 WFLower Face Wash Chemical Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7595,PenB_2 Valve Before DIWSupply Pressure Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7596,PenB_2 Valve Before DIWSupply Pressure Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7597,PenB_2 Valve Before DIWSupply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7598,PenB_2 Valve Before DIWSupply Pressure Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7599,PenB_2 Valve After DIWSupply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7600,PenB_2 Chemical Supply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7601,PenB_2 Carbonated DIWConcentration Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7602,PenB_2 Pen Pressure Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7603,PenB_2 Pen Pressure Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7604,PenB_2 Pen Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7605,PenB_2 Pen Pressure Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7606,PenB_2 WFUpper Face N2 Outlet Flowrate Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7607,PenB_2 WFUpper Face N2 Outlet Flowrate Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7608,PenB_2 WFUpper Face N2 Outlet Flowrate Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7609,PenB_2 WFUpper Face N2 Outlet Flowrate Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7610,PenB_2 WFLower Face N2 Outlet Flow Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7611,PenB_2 CUPPurge Flow Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7612,PenB_2 Valve Before CO2 Supply Pressure Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7613,PenB_2 Valve Before CO2 Supply Pressure Upper Limit Plus,FALSE,TRUE,Warning,PenB2
+7614,PenB_2 Valve Before CO2 Supply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7615,PenB_2 Valve Before CO2 Supply Pressure Lower Limit Plus,FALSE,TRUE,Warning,PenB2
+7616,PenB_2 WFUpper Face N2 Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7617,PenB_2 WFLower Face N2 Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7618,PenB_2 Valve After CO2 Supply Pressure Lower Limit Minus,FALSE,TRUE,Warning,PenB2
+7619,PenB_2 Spare Parts Life Time Upper Limit Minus,FALSE,TRUE,Warning,PenB2
+7620,PenB_2 Spare Parts Life Time Upper Limit Plus,FALSE,TRUE,Warning,PenB2

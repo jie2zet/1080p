@@ -713,8 +713,8 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             PolishDDownPieceMoveZ2Command = OperationAudit.Create("PolishDDownPieceMoveZ2", () => _plc.Write(PolishBSideArm2Address.PolishDDownPieceMove, !PolishDDownPieceMove_2z), () => "PolishBSideArm2");
             PolishDUpPieceMoveZ2Command = OperationAudit.Create("PolishDUpPieceMoveZ2", () => _plc.Write(PolishBSideArm2Address.PolishDUpPieceMove, !PolishDUpPieceMove_2z), () => "PolishBSideArm2");
 
-            EnableCommandX2Command = OperationAudit.Create("EnableCommandX2", () => _plc.Write(PolishBSideArm2Address.Enable_2x, !IsEnabled_2x), () => "PolishBSideArm2");
-            EnableCommandZ2Command = OperationAudit.Create("EnableCommandZ2", () => _plc.Write(PolishBSideArm2Address.Enable_2z, !IsEnabled_2z), () => "PolishBSideArm2");
+            EnableCommandX2Command = OperationAudit.Create("EnableCommandX2", () => _plc.ToggleBool(PolishBSideArm2Address.Enable_2x), () => "PolishBSideArm2");
+            EnableCommandZ2Command = OperationAudit.Create("EnableCommandZ2", () => _plc.ToggleBool(PolishBSideArm2Address.Enable_2z), () => "PolishBSideArm2");
 
             PressJogUpX2Command = OperationAudit.Create("PressJogUpX2", () => _plc.Write(PolishBSideArm2Address.JogUp_2x, true), () => "PolishBSideArm2");
             ReleaseJogUpX2Command = OperationAudit.Create("ReleaseJogUpX2", () => _plc.Write(PolishBSideArm2Address.JogUp_2x, false), () => "PolishBSideArm2");

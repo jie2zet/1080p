@@ -630,7 +630,7 @@ public class PolishBSideTransferControlViewModel : TabContentViewModelBase
         RobotLowerArmMoveCommand = OperationAudit.Create("RobotLowerArmMove", () => _plc.Write(PolishBSideTransferAddress.RobotLowerArmPositionMove, !RobotLowerArmMoveToggle), () => "PolishBSideTransfer");
         LtpPlacePositionMoveCommand = OperationAudit.Create("LtpPlacePositionMove", () => _plc.Write(PolishBSideTransferAddress.LtpPlacePositionMove, !LtpPlacePositionMoveToggle), () => "PolishBSideTransfer");
 
-        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(PolishBSideTransferAddress.Enable, !IsEnabled), () => "PolishBSideTransfer");
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.ToggleBool(PolishBSideTransferAddress.Enable), () => "PolishBSideTransfer");
         OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,

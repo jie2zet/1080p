@@ -1063,6 +1063,27 @@ public class MitsubishiPlcService : IDisposable
     }
 
     /// <summary>
+    /// 读取并翻转指定的位软元件。适用于命令位与状态反馈位分离的开关命令，
+    /// 避免使用尚未更新的状态反馈来决定下一次写入值。
+    /// </summary>
+    public OperateResult ToggleBool(string address)
+    {
+        if (DebugMode) return MockWrite();
+
+        var readResult = Read<bool>(address);
+        if (!readResult.IsSuccess)
+        {
+            return new OperateResult
+            {
+                IsSuccess = false,
+                Message = $"读取 {address} 失败，无法翻转: {readResult.Message}"
+            };
+        }
+
+        return Write(address, !readResult.Content);
+    }
+
+    /// <summary>
     /// 泛型异步写入
     /// </summary>
     public async Task<OperateResult> WriteAsync<T>(string address, T value)

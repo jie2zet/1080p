@@ -3,6 +3,8 @@ using CMP.Models.kvsPlc;
 using KHT = CMP.Models.kvsPlc.KvHostLink;
 using KHST = CMP.Models.kvsPlc.Alarm.KvStruct;
 using KHSTPolishAlarm = CMP.Models.kvsPlc.Polish.KvStructPolishAlarm;
+using KHSTDryAlarm = CMP.Models.kvsPlc.Dry.KvsStructDryAlarm;
+using KHSTPenAlarm = CMP.Models.kvsPlc.Pen.KvsStructPenAlarm;
 using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System.Net.NetworkInformation;
 using CMP.Models.Warn;
@@ -493,10 +495,10 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadVariable(kvlink.sock, "alarm", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                stPenAlarm penAlarm = new stPenAlarm();
-                KHST.ByteTo_stPenAlarm(ref penAlarm, _readBuf);
-                object[] allValues = CompiledFieldAccessor<stPenAlarm>.GetAllFieldValues(penAlarm);
-                var fields = typeof(stPenAlarm).GetFields(
+                KHSTPenAlarm.stPenAlarm penAlarm = new KHSTPenAlarm.stPenAlarm();
+                KHSTPenAlarm.ByteTo_stPenAlarm(ref penAlarm, _readBuf);
+                object[] allValues = CompiledFieldAccessor<KHSTPenAlarm.stPenAlarm>.GetAllFieldValues(penAlarm);
+                var fields = typeof(KHSTPenAlarm.stPenAlarm).GetFields(
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 for (int i = 0; i < allValues.Length; i++)
                 {
@@ -533,10 +535,10 @@ namespace CMP.Models.Resource
             err = KHT.KHLReadVariable(kvlink.sock, "alarm", _readBuf, true);
             if (err == (int)KHLUserError.KHL_ERR_NONE)
             {
-                stDryAlarm dryAlarm = new stDryAlarm();
-                KHST.ByteTo_stDryAlarm(ref dryAlarm, _readBuf);
-                object[] allValues = CompiledFieldAccessor<stDryAlarm>.GetAllFieldValues(dryAlarm);
-                var fields = typeof(stDryAlarm).GetFields(
+                KHSTDryAlarm.stDryAlarm dryAlarm = new KHSTDryAlarm.stDryAlarm();
+                KHSTDryAlarm.ByteTo_stDryAlarm(ref dryAlarm, _readBuf);
+                object[] allValues = CompiledFieldAccessor<KHSTDryAlarm.stDryAlarm>.GetAllFieldValues(dryAlarm);
+                var fields = typeof(KHSTDryAlarm.stDryAlarm).GetFields(
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 for (int i = 0; i < allValues.Length; i++)
                 {

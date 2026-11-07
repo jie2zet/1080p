@@ -740,7 +740,7 @@ public class PolishASideArm3ControlViewModel : TabContentViewModelBase
         XTransferArmPositionMoveCommand = OperationAudit.Create("XTransferArmPositionMove", () => _plc.Write(PolishASideArm3Address.XTransferArmPositionMove, !XTransferArmPositionMoveToggle), () => "PolishASideArm3");
         XPolishAPositionMoveCommand = OperationAudit.Create("XPolishAPositionMove", () => _plc.Write(PolishASideArm3Address.XPolishAPositionMove, !XPolishAPositionMoveToggle), () => "PolishASideArm3");
         XPolishBPositionMoveCommand = OperationAudit.Create("XPolishBPositionMove", () => _plc.Write(PolishASideArm3Address.XPolishBPositionMove, !XPolishBPositionMoveToggle), () => "PolishASideArm3");
-        XEnableCommand = OperationAudit.Create("XEnable", () => _plc.Write(PolishASideArm3Address.XEnable, !XIsEnabled), () => "PolishASideArm3");
+        XEnableCommand = OperationAudit.Create("XEnable", () => _plc.ToggleBool(PolishASideArm3Address.XEnable), () => "PolishASideArm3");
         XOriginCommand = OperationAudit.Create("XOrigin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,
@@ -756,7 +756,7 @@ public class PolishASideArm3ControlViewModel : TabContentViewModelBase
         ZTransferArmPositionMoveCommand = OperationAudit.Create("ZTransferArmPositionMove", () => _plc.Write(PolishASideArm3Address.ZTransferArmPositionMove, !ZTransferArmPositionMoveToggle), () => "PolishASideArm3");
         ZPolishAPositionMoveCommand = OperationAudit.Create("ZPolishAPositionMove", () => _plc.Write(PolishASideArm3Address.ZPolishAPositionMove, !ZPolishAPositionMoveToggle), () => "PolishASideArm3");
         ZPolishBPositionMoveCommand = OperationAudit.Create("ZPolishBPositionMove", () => _plc.Write(PolishASideArm3Address.ZPolishBPositionMove, !ZPolishBPositionMoveToggle), () => "PolishASideArm3");
-        ZEnableCommand = OperationAudit.Create("ZEnable", () => _plc.Write(PolishASideArm3Address.ZEnable, !ZIsEnabled), () => "PolishASideArm3");
+        ZEnableCommand = OperationAudit.Create("ZEnable", () => _plc.ToggleBool(PolishASideArm3Address.ZEnable), () => "PolishASideArm3");
         ZOriginCommand = OperationAudit.Create("ZOrigin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,

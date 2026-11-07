@@ -1382,7 +1382,7 @@ public class FeedingRobotControlViewModel : TabContentViewModelBase
             OperationAudit.Create("MiddleModuleMove", () => _plc.Write(FeedingRobotAddress.MiddleModuleMove, !MiddleModuleMoveToggle), () => "FeedingRobot");
         DryAMoveCommand = OperationAudit.Create("DryAMove", () => _plc.Write(FeedingRobotAddress.DryAMove, !DryAMoveToggle), () => "FeedingRobot");
         DryBMoveCommand = OperationAudit.Create("DryBMove", () => _plc.Write(FeedingRobotAddress.DryBMove, !DryBMoveToggle), () => "FeedingRobot");
-        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(FeedingRobotAddress.Enable, !IsEnabled), () => "FeedingRobot");
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.ToggleBool(FeedingRobotAddress.Enable), () => "FeedingRobot");
         OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,

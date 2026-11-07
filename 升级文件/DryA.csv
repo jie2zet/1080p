@@ -1,0 +1,93 @@
+AlarmId,AlarmName,AlarmValue,Enabled,Type,Unit
+8000,DryA Recipe Request Timeout,FALSE,TRUE,Alarm,DryA
+8001,DryA Recipe Data Error,FALSE,TRUE,Alarm,DryA
+8002,DryA Recipe Data Transmission From HMIAbnormal End,FALSE,TRUE,Alarm,DryA
+8003,DryA Step Action Timeout,FALSE,TRUE,Alarm,DryA
+8004,DryA ECRunning Parameter Invailid,FALSE,TRUE,Alarm,DryA
+8005,DryA Head Wafer Sensor And Information Not Match,FALSE,TRUE,Alarm,DryA
+8006,DryA PLCSystem Error,FALSE,TRUE,Alarm,DryA
+8007,DryA Transfer PLCCommunication Error,FALSE,TRUE,Alarm,DryA
+8008,DryA XH16 ECMotion Unit Motion Enable Fault,FALSE,TRUE,Alarm,DryA
+8009,DryA XH16 ECMotion Unit Fault,FALSE,TRUE,Alarm,DryA
+8010,DryA XH16 ECMotion Unit Axis Fault,FALSE,TRUE,Alarm,DryA
+8011,DryA XH16 ECMotion Unit Axis Warning,FALSE,TRUE,Warning,DryA
+8012,DryA XH16 ECEther CATLink Off,FALSE,TRUE,Alarm,DryA
+8013,DryA Chuck Rotation Motor Axis Warning,FALSE,TRUE,Warning,DryA
+8014,DryA Chuck Rotation Motor Driver Warning,FALSE,TRUE,Warning,DryA
+8015,DryA Chuck Rotation Motor Axis Alarm,FALSE,TRUE,Alarm,DryA
+8016,DryA Chuck Rotation Motor Driver Alarm,FALSE,TRUE,Alarm,DryA
+8017,DryA Arm Swing Motor Axis Warning,FALSE,TRUE,Warning,DryA
+8018,DryA Arm Swing Motor Driver Warning,FALSE,TRUE,Warning,DryA
+8019,DryA Arm Swing Motor Axis Alarm,FALSE,TRUE,Alarm,DryA
+8020,DryA Arm Swing Motor Driver Alarm,FALSE,TRUE,Alarm,DryA
+8021,DryA Chuck Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,DryA
+8022,DryA Chuck Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,DryA
+8023,DryA Chuck Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,DryA
+8024,DryA Chuck Rotation Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,DryA
+8025,DryA Chuck Rotation Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,DryA
+8026,DryA Chuck Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,DryA
+8027,DryA Arm Swing Motor Move To Any Position Action Timeout,FALSE,TRUE,Alarm,DryA
+8028,DryA Arm Swing Motor Stop Action Timeout,FALSE,TRUE,Alarm,DryA
+8029,DryA Arm Swing Inching Action Timeout,FALSE,TRUE,Alarm,DryA
+8030,DryA Arm Swing Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,DryA
+8031,DryA Arm Swing Motor Move To Centre Position Action Timeout,FALSE,TRUE,Alarm,DryA
+8032,DryA Arm Swing Motor Move Toedge Position1 Action Timeout,FALSE,TRUE,Alarm,DryA
+8033,DryA Arm Swing Motor Move Toedge Position2 Action Timeout,FALSE,TRUE,Alarm,DryA
+8034,DryA Arm Swing Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,DryA
+8035,DryA Arm Swing Motor Driver Servo Unready,FALSE,TRUE,Alarm,DryA
+8036,DryA Chuck Rotation Motor Speed Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8037,DryA Chuck Rotation Motor Speed Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8038,DryA Chuck Rotation Motor Speed Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8039,DryA Chuck Rotation Motor Speed Lower Limit Plus,FALSE,TRUE,Warning,DryA
+8040,DryA WFClamp Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryA
+8041,DryA WFInlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryA
+8042,DryA WFOutlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryA
+8043,DryA WFClamp Cylinder Clamp Action Timeout,FALSE,TRUE,Alarm,DryA
+8044,DryA WFClamp Cylinder Release Action Timeout,FALSE,TRUE,Alarm,DryA
+8045,DryA WFInlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,DryA
+8046,DryA WFInlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,DryA
+8047,DryA WFOutlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,DryA
+8048,DryA WFOutlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,DryA
+8049,DryA WFUpper Face DIWWash Flowrate2 Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8050,DryA WFUpper Face DIWWash Flowrate2 Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8051,DryA WFUpper Face DIWWash Flowrate2 Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8052,DryA WFUpper Face DIWWash Flowrate2 Lower Limit Plus,FALSE,TRUE,Warning,DryA
+8053,DryA WFUpper Face DIWWash Flow1 Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8054,DryA WFLower Face DIWWash Flow Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8055,DryA IPAPressure Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8056,DryA IPALiquid Level Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8057,DryA IPALiquid Level Lower Limit Plus,FALSE,TRUE,Warning,DryA
+8058,DryA IPALiquid Level Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8059,DryA IPAWeigh Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8060,DryA IPAWeigh Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8061,DryA Bubbling N2 Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8062,DryA Bubbling N2 Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8063,DryA Bubbling N2 Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8064,DryA Bubbling N2 Flowrate Lower Limit Plus,FALSE,TRUE,Warning,DryA
+8065,DryA Dilution N2 Gas Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8066,DryA Dilution N2 Gas Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8067,DryA Dilution N2 Gas Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8068,DryA Dilution N2 Gas Flowrate Lower Limit Plus,FALSE,TRUE,Warning,DryA
+8069,DryA WFBackside N2 Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8070,DryA WFBackside N2 Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryA
+8071,DryA WFBackside N2 Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryA
+8072,DryA WFBackside N2 Flowrate Lower Limit Plus,FALSE,TRUE,Alarm,DryA
+8073,DryA Stage N2 Purge Flow Lower Limit Minus,FALSE,TRUE,Alarm,DryA
+8074,DryA Bubbling N2 Inlet Pressure Lower Limit Minus,FALSE,TRUE,Alarm,DryA
+8075,DryA Leak Detection Alarm,FALSE,TRUE,Alarm,DryA
+8076,DryA WFSearch Alarm,FALSE,TRUE,Alarm,DryA
+8077,DryA IPAConcentration Alarm,FALSE,TRUE,Alarm,DryA
+8078,DryA Flame Detection Alarm,FALSE,TRUE,Alarm,DryA
+8079,DryA DIWPressure Alarm,FALSE,TRUE,Alarm,DryA
+8080,DryA N2 Pressure Alarm,FALSE,TRUE,Alarm,DryA
+8081,DryA Safety Door Open Error,FALSE,TRUE,Alarm,DryA
+8082,DryA Micro Differential Pressure Meter1 High Alarm,FALSE,TRUE,Alarm,DryA
+8083,DryA Micro Differential Pressure Meter2 High Alarm,FALSE,TRUE,Alarm,DryA
+8084,DryA Micro Differential Pressure Meter3 High Alarm,FALSE,TRUE,Warning,DryA
+8085,DryA Micro Differential Pressure Meter4 High Alarm,FALSE,TRUE,Warning,DryA
+8086,DryA Micro Differential Pressure Meter1 Low Alarm,FALSE,TRUE,Alarm,DryA
+8087,DryA Micro Differential Pressure Meter2 Low Alarm,FALSE,TRUE,Alarm,DryA
+8088,DryA Micro Differential Pressure Meter3 Low Alarm,FALSE,TRUE,Alarm,DryA
+8089,DryA Micro Differential Pressure Meter4 Low Alarm,FALSE,TRUE,Alarm,DryA
+8090,DryA Spare Parts Life Time Upper Limit Minus,FALSE,TRUE,Warning,DryA
+8091,DryA Spare Parts Life Time Upper Limit Plus,FALSE,TRUE,Warning,DryA

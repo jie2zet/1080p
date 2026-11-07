@@ -592,7 +592,7 @@ public class TransferRobotControlViewModel : TabContentViewModelBase
         RollerB2MoveCommand = OperationAudit.Create("RollerB2Move", () => _plc.Write(TransferRobotAddress.RollerB2Move, !RollerB2MoveToggle), () => "TransferRobot");
 
         // Axis Control
-        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(TransferRobotAddress.Enable, !IsEnabled), () => "TransferRobot");
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.ToggleBool(TransferRobotAddress.Enable), () => "TransferRobot");
         OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,

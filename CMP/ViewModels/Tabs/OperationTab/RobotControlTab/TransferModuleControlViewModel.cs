@@ -553,7 +553,7 @@ public class TransferModuleControlViewModel : TabContentViewModelBase
         LoadPositionMoveCommand = OperationAudit.Create("LoadPositionMove", () => _plc.Write(TransferModuleAddress.LoadPositionMove, !LoadPositionMoveToggle), () => "TransferModule");
         UnloadPositionMoveCommand = OperationAudit.Create("UnloadPositionMove", () => _plc.Write(TransferModuleAddress.UnloadPositionMove, !UnloadPositionMoveToggle), () => "TransferModule");
         SparePositionMoveCommand = OperationAudit.Create("SparePositionMove", () => _plc.Write(TransferModuleAddress.SparePositionMove, !SparePositionMoveToggle), () => "TransferModule");
-        EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(TransferModuleAddress.Enable, !IsEnabled), () => "TransferModule");
+        EnableCommand = OperationAudit.Create("Enable", () => _plc.ToggleBool(TransferModuleAddress.Enable), () => "TransferModule");
         OriginCommand = OperationAudit.Create("Origin", () =>
         {
             if (MessageBox.Show(Lang.Resources.ConfirmActionContent, Lang.Resources.ConfirmActionTips,

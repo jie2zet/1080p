@@ -631,8 +631,8 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.PolishBArm
             PolishDMoveZ3Command = OperationAudit.Create("PolishDMoveZ3", () => _plc.Write(PolishBSideArm3Address.PolishDMove_3z, !PolishDPosMoveToggle_3z), () => "PolishBSideArm3");
             TransferMoveZ3Command = OperationAudit.Create("TransferMoveZ3", () => _plc.Write(PolishBSideArm3Address.TransferArmMove_3z, !TransferArmMoveToggle_3z), () => "PolishBSideArm3");
 
-            EnableCommandX3Command = OperationAudit.Create("EnableCommandX3", () => _plc.Write(PolishBSideArm3Address.Enable_3x, !IsEnabled_3x), () => "PolishBSideArm3");
-            EnableCommandZ3Command = OperationAudit.Create("EnableCommandZ3", () => _plc.Write(PolishBSideArm3Address.Enable_3z, !IsEnabled_3z), () => "PolishBSideArm3");
+            EnableCommandX3Command = OperationAudit.Create("EnableCommandX3", () => _plc.ToggleBool(PolishBSideArm3Address.Enable_3x), () => "PolishBSideArm3");
+            EnableCommandZ3Command = OperationAudit.Create("EnableCommandZ3", () => _plc.ToggleBool(PolishBSideArm3Address.Enable_3z), () => "PolishBSideArm3");
 
             PressJogUpX3Command = OperationAudit.Create("PressJogUpX3", () => _plc.Write(PolishBSideArm3Address.JogUp_3x, true), () => "PolishBSideArm3");
             ReleaseJogUpX3Command = OperationAudit.Create("ReleaseJogUpX3", () => _plc.Write(PolishBSideArm3Address.JogUp_3x, false), () => "PolishBSideArm3");

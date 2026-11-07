@@ -706,7 +706,7 @@ namespace CMP.ViewModels.Tabs.OperationTab.RobotControlTab.CleanRobot
 
 
             //Enable
-            EnableCommand = OperationAudit.Create("Enable", () => _plc.Write(CleanRobotB2Address.Enable, !IsEnabled), () => "CleanBSideRobot2");
+            EnableCommand = OperationAudit.Create("Enable", () => _plc.ToggleBool(CleanRobotB2Address.Enable), () => "CleanBSideRobot2");
 
             //Jog Control
             PressJogUpCommand = new DelegateCommand(() => _plc.Write(CleanRobotB2Address.JogUp, true));

@@ -1,0 +1,93 @@
+AlarmId,AlarmName,AlarmValue,Enabled,Type,Unit
+8500,DryB Recipe Request Timeout,FALSE,TRUE,Alarm,DryB
+8501,DryB Recipe Data Error,FALSE,TRUE,Alarm,DryB
+8502,DryB Recipe Data Transmission From HMIAbnormal End,FALSE,TRUE,Alarm,DryB
+8503,DryB Step Action Timeout,FALSE,TRUE,Alarm,DryB
+8504,DryB ECRunning Parameter Invailid,FALSE,TRUE,Alarm,DryB
+8505,DryB Head Wafer Sensor And Information Not Match,FALSE,TRUE,Alarm,DryB
+8506,DryB PLCSystem Error,FALSE,TRUE,Alarm,DryB
+8507,DryB Transfer PLCCommunication Error,FALSE,TRUE,Alarm,DryB
+8508,DryB XH16 ECMotion Unit Motion Enable Fault,FALSE,TRUE,Alarm,DryB
+8509,DryB XH16 ECMotion Unit Fault,FALSE,TRUE,Alarm,DryB
+8510,DryB XH16 ECMotion Unit Axis Fault,FALSE,TRUE,Alarm,DryB
+8511,DryB XH16 ECMotion Unit Axis Warning,FALSE,TRUE,Warning,DryB
+8512,DryB XH16 ECEther CATLink Off,FALSE,TRUE,Alarm,DryB
+8513,DryB Chuck Rotation Motor Axis Warning,FALSE,TRUE,Warning,DryB
+8514,DryB Chuck Rotation Motor Driver Warning,FALSE,TRUE,Warning,DryB
+8515,DryB Chuck Rotation Motor Axis Alarm,FALSE,TRUE,Alarm,DryB
+8516,DryB Chuck Rotation Motor Driver Alarm,FALSE,TRUE,Alarm,DryB
+8517,DryB Arm Swing Motor Axis Warning,FALSE,TRUE,Warning,DryB
+8518,DryB Arm Swing Motor Driver Warning,FALSE,TRUE,Warning,DryB
+8519,DryB Arm Swing Motor Axis Alarm,FALSE,TRUE,Alarm,DryB
+8520,DryB Arm Swing Motor Driver Alarm,FALSE,TRUE,Alarm,DryB
+8521,DryB Chuck Rotation Motor Run Action Timeout,FALSE,TRUE,Alarm,DryB
+8522,DryB Chuck Rotation Motor Stop Action Timeout,FALSE,TRUE,Alarm,DryB
+8523,DryB Chuck Rotation Motor Inching Action Timeout,FALSE,TRUE,Alarm,DryB
+8524,DryB Chuck Rotation Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,DryB
+8525,DryB Chuck Rotation Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,DryB
+8526,DryB Chuck Rotation Motor Driver Servo Unready,FALSE,TRUE,Alarm,DryB
+8527,DryB Arm Swing Motor Move To Any Position Action Timeout,FALSE,TRUE,Alarm,DryB
+8528,DryB Arm Swing Motor Stop Action Timeout,FALSE,TRUE,Alarm,DryB
+8529,DryB Arm Swing Inching Action Timeout,FALSE,TRUE,Alarm,DryB
+8530,DryB Arm Swing Motor Move To Home Position Action Timeout,FALSE,TRUE,Alarm,DryB
+8531,DryB Arm Swing Motor Move To Centre Position Action Timeout,FALSE,TRUE,Alarm,DryB
+8532,DryB Arm Swing Motor Move Toedge Position1 Action Timeout,FALSE,TRUE,Alarm,DryB
+8533,DryB Arm Swing Motor Move Toedge Position2 Action Timeout,FALSE,TRUE,Alarm,DryB
+8534,DryB Arm Swing Motor Coordinate Change Action Timeout,FALSE,TRUE,Alarm,DryB
+8535,DryB Arm Swing Motor Driver Servo Unready,FALSE,TRUE,Alarm,DryB
+8536,DryB Chuck Rotation Motor Speed Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8537,DryB Chuck Rotation Motor Speed Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8538,DryB Chuck Rotation Motor Speed Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8539,DryB Chuck Rotation Motor Speed Lower Limit Plus,FALSE,TRUE,Warning,DryB
+8540,DryB WFClamp Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryB
+8541,DryB WFInlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryB
+8542,DryB WFOutlet Door Cylinder Limit Sensor,FALSE,TRUE,Alarm,DryB
+8543,DryB WFClamp Cylinder Clamp Action Timeout,FALSE,TRUE,Alarm,DryB
+8544,DryB WFClamp Cylinder Release Action Timeout,FALSE,TRUE,Alarm,DryB
+8545,DryB WFInlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,DryB
+8546,DryB WFInlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,DryB
+8547,DryB WFOutlet Door Cylinder Open Action Time Out,FALSE,TRUE,Alarm,DryB
+8548,DryB WFOutlet Door Cylinder Close Action Time Out,FALSE,TRUE,Alarm,DryB
+8549,DryB WFUpper Face DIWWash Flowrate2 Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8550,DryB WFUpper Face DIWWash Flowrate2 Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8551,DryB WFUpper Face DIWWash Flowrate2 Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8552,DryB WFUpper Face DIWWash Flowrate2 Lower Limit Plus,FALSE,TRUE,Warning,DryB
+8553,DryB WFUpper Face DIWWash Flow1 Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8554,DryB WFLower Face DIWWash Flow Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8555,DryB IPAPressure Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8556,DryB IPALiquid Level Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8557,DryB IPALiquid Level Lower Limit Plus,FALSE,TRUE,Warning,DryB
+8558,DryB IPALiquid Level Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8559,DryB IPAWeigh Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8560,DryB IPAWeigh Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8561,DryB Bubbling N2 Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8562,DryB Bubbling N2 Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8563,DryB Bubbling N2 Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8564,DryB Bubbling N2 Flowrate Lower Limit Plus,FALSE,TRUE,Warning,DryB
+8565,DryB Dilution N2 Gas Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8566,DryB Dilution N2 Gas Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8567,DryB Dilution N2 Gas Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8568,DryB Dilution N2 Gas Flowrate Lower Limit Plus,FALSE,TRUE,Warning,DryB
+8569,DryB WFBackside N2 Flowrate Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8570,DryB WFBackside N2 Flowrate Upper Limit Plus,FALSE,TRUE,Warning,DryB
+8571,DryB WFBackside N2 Flowrate Lower Limit Minus,FALSE,TRUE,Warning,DryB
+8572,DryB WFBackside N2 Flowrate Lower Limit Plus,FALSE,TRUE,Alarm,DryB
+8573,DryB Stage N2 Purge Flow Lower Limit Minus,FALSE,TRUE,Alarm,DryB
+8574,DryB Bubbling N2 Inlet Pressure Lower Limit Minus,FALSE,TRUE,Alarm,DryB
+8575,DryB Leak Detection Alarm,FALSE,TRUE,Alarm,DryB
+8576,DryB WFSearch Alarm,FALSE,TRUE,Alarm,DryB
+8577,DryB IPAConcentration Alarm,FALSE,TRUE,Alarm,DryB
+8578,DryB Flame Detection Alarm,FALSE,TRUE,Alarm,DryB
+8579,DryB DIWPressure Alarm,FALSE,TRUE,Alarm,DryB
+8580,DryB N2 Pressure Alarm,FALSE,TRUE,Alarm,DryB
+8581,DryB Safety Door Open Error,FALSE,TRUE,Alarm,DryB
+8582,DryB Micro Differential Pressure Meter1 High Alarm,FALSE,TRUE,Alarm,DryB
+8583,DryB Micro Differential Pressure Meter2 High Alarm,FALSE,TRUE,Alarm,DryB
+8584,DryB Micro Differential Pressure Meter3 High Alarm,FALSE,TRUE,Warning,DryB
+8585,DryB Micro Differential Pressure Meter4 High Alarm,FALSE,TRUE,Warning,DryB
+8586,DryB Micro Differential Pressure Meter1 Low Alarm,FALSE,TRUE,Alarm,DryB
+8587,DryB Micro Differential Pressure Meter2 Low Alarm,FALSE,TRUE,Alarm,DryB
+8588,DryB Micro Differential Pressure Meter3 Low Alarm,FALSE,TRUE,Alarm,DryB
+8589,DryB Micro Differential Pressure Meter4 Low Alarm,FALSE,TRUE,Alarm,DryB
+8590,DryB Spare Parts Life Time Upper Limit Minus,FALSE,TRUE,Warning,DryB
+8591,DryB Spare Parts Life Time Upper Limit Plus,FALSE,TRUE,Warning,DryB
