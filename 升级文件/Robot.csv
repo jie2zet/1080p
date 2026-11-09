@@ -1,0 +1,1409 @@
+AlarmId,Address,AlarmName,Description_EN,Description_CN,AlarmValue,Enabled,Type
+9000,D5600.0,L0,PLC停止运行,PLC stopped running,FALSE,TRUE,Alarm
+9001,D5600.1,L1,,,FALSE,TRUE,Alarm
+9002,D5600.2,L2,,,FALSE,TRUE,Alarm
+9003,D5600.3,L3,,,FALSE,TRUE,Alarm
+9004,D5600.4,L4,,,FALSE,TRUE,Alarm
+9005,D5600.5,L5,,,FALSE,TRUE,Alarm
+9006,D5600.6,L6,,,FALSE,TRUE,Alarm
+9007,D5600.7,L7,,,FALSE,TRUE,Alarm
+9008,D5600.8,L8,,,FALSE,TRUE,Alarm
+9009,D5600.9,L9,,,FALSE,TRUE,Alarm
+9010,D5600.10,L10,GN11模块错误,GN11 module error,FALSE,TRUE,Alarm
+9011,D5600.11,L11,GN11模块链接错误,GN11 module link error,FALSE,TRUE,Alarm
+9012,D5600.12,L12,GN11链接站有异常,GN11 link station has an abnormality,FALSE,TRUE,Alarm
+9013,D5600.13,L13,GN11模块没有准备好,GN11 module not ready,FALSE,TRUE,Alarm
+9014,D5600.14,L14,,,FALSE,TRUE,Alarm
+9015,D5600.15,L15,,,FALSE,TRUE,Alarm
+9016,D5601.0,L16,,,FALSE,TRUE,Alarm
+9017,D5601.1,L17,,,FALSE,TRUE,Alarm
+9018,D5601.2,L18,,,FALSE,TRUE,Alarm
+9019,D5601.3,L19,,,FALSE,TRUE,Alarm
+9020,D5601.4,L20,急停1按下,Emergency stop 1 pressed,FALSE,TRUE,Alarm
+9021,D5601.5,L21,急停4按下,Emergency stop 4 pressed,FALSE,TRUE,Alarm
+9022,D5601.6,L22,急停3按下,Emergency stop 3 pressed,FALSE,TRUE,Alarm
+9023,D5601.7,L23,急停4按下,Emergency stop 4 pressed,FALSE,TRUE,Alarm
+9024,D5601.8,L24,急停5按下,Emergency stop 5 pressed,FALSE,TRUE,Alarm
+9025,D5601.9,L25,急停6按下,Emergency stop 6 pressed,FALSE,TRUE,Alarm
+9026,D5601.10,L26,,,FALSE,TRUE,Alarm
+9027,D5601.11,L27,,,FALSE,TRUE,Alarm
+9028,D5601.12,L28,,,FALSE,TRUE,Alarm
+9029,D5601.13,L29,,,FALSE,TRUE,Alarm
+9030,D5601.14,L30,CleanA安全门1打开,CleanA safety door 1 is open,FALSE,TRUE,Alarm
+9031,D5601.15,L31,CleanA安全门2打开,CleanA safety door 2 is open,FALSE,TRUE,Alarm
+9032,D5602.0,L32,CleanA安全门3打开,CleanA safety door 3 is open,FALSE,TRUE,Alarm
+9033,D5602.1,L33,CleanA安全门4打开,CleanA safety door 4 is open,FALSE,TRUE,Alarm
+9034,D5602.2,L34,CleanA安全门5打开,CleanA safety door 5 is open,FALSE,TRUE,Alarm
+9035,D5602.3,L35,CleanA安全门6打开,CleanA safety door 6 is open,FALSE,TRUE,Alarm
+9036,D5602.4,L36,CleanA安全门7打开,CleanA safety door 7 is open,FALSE,TRUE,Alarm
+9037,D5602.5,L37,,,FALSE,TRUE,Alarm
+9038,D5602.6,L38,,,FALSE,TRUE,Alarm
+9039,D5602.7,L39,,,FALSE,TRUE,Alarm
+9040,D5602.8,L40,CleanB安全门1打开,CleanB safety door 1 is open,FALSE,TRUE,Alarm
+9041,D5602.9,L41,CleanB安全门2打开,CleanB safety door 2 is open,FALSE,TRUE,Alarm
+9042,D5602.10,L42,CleanB安全门3打开,CleanB safety door 3 is open,FALSE,TRUE,Alarm
+9043,D5602.11,L43,CleanB安全门4打开,CleanB safety door 4 is open,FALSE,TRUE,Alarm
+9044,D5602.12,L44,CleanB安全门5打开,CleanB safety door 5 is open,FALSE,TRUE,Alarm
+9045,D5602.13,L45,CleanB安全门6打开,CleanB safety door 6 is open,FALSE,TRUE,Alarm
+9046,D5602.14,L46,CleanB安全门7打开,CleanB safety door 7 is open,FALSE,TRUE,Alarm
+9047,D5602.15,L47,,,FALSE,TRUE,Alarm
+9048,D5603.0,L48,,,FALSE,TRUE,Alarm
+9049,D5603.1,L49,,,FALSE,TRUE,Alarm
+9050,D5603.2,L50,PolishA安全门1打开,PolishA security door 1 is open,FALSE,TRUE,Alarm
+9051,D5603.3,L51,PolishA安全门2打开,PolishA security door 2 is open,FALSE,TRUE,Alarm
+9052,D5603.4,L52,PolishB安全门1打开,PolishB security door 1 is open,FALSE,TRUE,Alarm
+9053,D5603.5,L53,PolishB安全门2打开,PolishB security door 2 is open,FALSE,TRUE,Alarm
+9054,D5603.6,L54,PolishC安全门1打开,PolishC security door 1 is open,FALSE,TRUE,Alarm
+9055,D5603.7,L55,PolishC安全门2打开,PolishC security door 2 is open,FALSE,TRUE,Alarm
+9056,D5603.8,L56,PolishD安全门1打开,PolishD security door 1 is open,FALSE,TRUE,Alarm
+9057,D5603.9,L57,PolishD安全门2打开,PolishD security door 2 is open,FALSE,TRUE,Alarm
+9058,D5603.10,L58,,,FALSE,TRUE,Alarm
+9059,D5603.11,L59,,,FALSE,TRUE,Alarm
+9060,D5603.12,L60,Loadport安全门1打开,Loadport security door 1 is open,FALSE,TRUE,Alarm
+9061,D5603.13,L61,Loadport安全门2打开,Loadport security door 2 is open,FALSE,TRUE,Alarm
+9062,D5603.14,L62,Loadport安全光栅1触碰,Loadport security grating 1 touch,FALSE,TRUE,Alarm
+9063,D5603.15,L63,Loadport安全光栅2触碰,Loadport security grating 2 touch,FALSE,TRUE,Alarm
+9064,D5604.0,L64,,,FALSE,TRUE,Alarm
+9065,D5604.1,L65,,,FALSE,TRUE,Alarm
+9066,D5604.2,L66,,,FALSE,TRUE,Alarm
+9067,D5604.3,L67,,,FALSE,TRUE,Alarm
+9068,D5604.4,L68,,,FALSE,TRUE,Alarm
+9069,D5604.5,L69,,,FALSE,TRUE,Alarm
+9070,D5604.6,L70,清洗主气压低,The main air pressure for cleaning is low,FALSE,TRUE,Alarm
+9071,D5604.7,L71,清洗纯水压力低,The pressure of the main DIwater for cleaning is low,FALSE,TRUE,Alarm
+9072,D5604.8,L72,清洗纯水压力低,The pressure of the cleaning main DIwater is low,FALSE,TRUE,Alarm
+9073,D5604.9,L73,,,FALSE,TRUE,Alarm
+9074,D5604.10,L74,,,FALSE,TRUE,Alarm
+9075,D5604.11,L75,,,FALSE,TRUE,Alarm
+9076,D5604.12,L76,,,FALSE,TRUE,Alarm
+9077,D5604.13,L77,,,FALSE,TRUE,Alarm
+9078,D5604.14,L78,,,FALSE,TRUE,Alarm
+9079,D5604.15,L79,,,FALSE,TRUE,Alarm
+9080,D5605.0,L80,,,FALSE,TRUE,Alarm
+9081,D5605.1,L81,,,FALSE,TRUE,Alarm
+9082,D5605.2,L82,,,FALSE,TRUE,Alarm
+9083,D5605.3,L83,,,FALSE,TRUE,Alarm
+9084,D5605.4,L84,,,FALSE,TRUE,Alarm
+9085,D5605.5,L85,,,FALSE,TRUE,Alarm
+9086,D5605.6,L86,,,FALSE,TRUE,Alarm
+9087,D5605.7,L87,,,FALSE,TRUE,Alarm
+9088,D5605.8,L88,,,FALSE,TRUE,Alarm
+9089,D5605.9,L89,,,FALSE,TRUE,Alarm
+9090,D5605.10,L90,,,FALSE,TRUE,Alarm
+9091,D5605.11,L91,,,FALSE,TRUE,Alarm
+9092,D5605.12,L92,,,FALSE,TRUE,Alarm
+9093,D5605.13,L93,,,FALSE,TRUE,Alarm
+9094,D5605.14,L94,,,FALSE,TRUE,Alarm
+9095,D5605.15,L95,,,FALSE,TRUE,Alarm
+9096,D5606.0,L96,,,FALSE,TRUE,Alarm
+9097,D5606.1,L97,,,FALSE,TRUE,Alarm
+9098,D5606.2,L98,,,FALSE,TRUE,Alarm
+9099,D5606.3,L99,,,FALSE,TRUE,Alarm
+9100,D5606.4,L100,Robot1发生故障,Robot1 has malfunctioned,FALSE,TRUE,Alarm
+9101,D5606.5,L101,Robot1动作超时,Robot1 action timeout,FALSE,TRUE,Alarm
+9102,D5606.6,L102,Robot1移动轴驱动器错误,Robot1 mobile axis driver error,FALSE,TRUE,Alarm
+9103,D5606.7,L103,Robot1移动轴限位错误,Robot1 movement axis limit error,FALSE,TRUE,Alarm
+9104,D5606.8,L104,Robot1移动轴动作超时,Robot1 movement axis action timeout,FALSE,TRUE,Alarm
+9105,D5606.9,L105,Robot1离线,Robot1 offline,FALSE,TRUE,Alarm
+9106,D5606.10,L106,,,FALSE,TRUE,Alarm
+9107,D5606.11,L107,,,FALSE,TRUE,Alarm
+9108,D5606.12,L108,,,FALSE,TRUE,Alarm
+9109,D5606.13,L109,,,FALSE,TRUE,Alarm
+9110,D5606.14,L110,Robot1上手臂晶圆信息错误,Robot1's upper arm wafer information error,FALSE,TRUE,Alarm
+9111,D5606.15,L111,Robot1下手臂晶圆信息错误,Robot1's lower arm wafer information is incorrect,FALSE,TRUE,Alarm
+9112,D5607.0,L112,上位机下发数据非法,The data sent by the upper computer is error,FALSE,TRUE,Alarm
+9113,D5607.1,L113,,,FALSE,TRUE,Alarm
+9114,D5607.2,L114,,,FALSE,TRUE,Warning
+9115,D5607.3,L115,Robot1移动轴动作条件不到,Robot1's movement axis action conditions are not met,FALSE,TRUE,Warning
+9116,D5607.4,L116,ROBOT1停止运行,Robot1 stopped running,FALSE,TRUE,Warning
+9117,D5607.5,L117,,,FALSE,TRUE,Warning
+9118,D5607.6,L118,,,FALSE,TRUE,Warning
+9119,D5607.7,L119,,,FALSE,TRUE,Alarm
+9120,D5607.8,L120,中转模组轴驱动器错误,Transfer module axis driver error,FALSE,TRUE,Alarm
+9121,D5607.9,L121,中转模组轴限位错误,Transfer module axis limit error,FALSE,TRUE,Alarm
+9122,D5607.10,L122,中转模组轴动作超时,Transfer module axis action timeout,FALSE,TRUE,Alarm
+9123,D5607.11,L123,中转模组晶圆进入门打开超时,Transfer module wafer entry door timeout,FALSE,TRUE,Alarm
+9124,D5607.12,L124,中转模组晶圆进入门关闭超时,Transfer module wafer entry door closing timeout,FALSE,TRUE,Alarm
+9125,D5607.13,L125,中转模组晶圆出料门打开超时,Transfer module wafer discharge door opening timeout,FALSE,TRUE,Alarm
+9126,D5607.14,L126,中转模组晶圆出料门关闭超时,The transfer module wafer discharge door has timed out of closing,FALSE,TRUE,Alarm
+9127,D5607.15,L127,中转模组晶圆侧出门打开超时,Transfer module wafer side exit opening timeout,FALSE,TRUE,Alarm
+9128,D5608.0,L128,中转模组晶圆测出门关闭超时,Transfer module wafer testing door closing timeout,FALSE,TRUE,Alarm
+9129,D5608.1,L129,Step超时,Step timeout,FALSE,TRUE,Alarm
+9130,D5608.2,L130,中转模组WF信息错误,Transfer module WF information error,FALSE,TRUE,Alarm
+9131,D5608.3,L131,,,FALSE,TRUE,Alarm
+9132,D5608.4,L132,,,FALSE,TRUE,Alarm
+9133,D5608.5,L133,,,FALSE,TRUE,Alarm
+9134,D5608.6,L134,,,FALSE,TRUE,Alarm
+9135,D5608.7,L135,中转模组轴动作条件不到,The operating conditions for the transfer module axis are not met,FALSE,TRUE,Alarm
+9136,D5608.8,L136,,,FALSE,TRUE,Alarm
+9137,D5608.9,L137,,,FALSE,TRUE,Alarm
+9138,D5608.10,L138,,,FALSE,TRUE,Alarm
+9139,D5608.11,L139,,,FALSE,TRUE,Alarm
+9140,D5608.12,L140,中转Robot2故障,Transfer robot2 error,FALSE,TRUE,Alarm
+9141,D5608.13,L141,中转Robot2动作超时,Transfer robot2 action timeout,FALSE,TRUE,Alarm
+9142,D5608.14,L142,中转Robot2移动轴驱动器错误,Transfer robot2 mobile axis driver error,FALSE,TRUE,Alarm
+9143,D5608.15,L143,中转Robot2移动轴限位错误,Transfer robot2 mobile axis limit error,FALSE,TRUE,Alarm
+9144,D5609.0,L144,中转Robot2移动轴动作超时,Transfer robot2 movement axis action timeout,FALSE,TRUE,Alarm
+9145,D5609.1,L145,Robot2离线,Robot2 off line,FALSE,TRUE,Alarm
+9146,D5609.2,L146,ROBOT2停止运行,Robot2 stopped running,FALSE,TRUE,Alarm
+9147,D5609.3,L147,,,FALSE,TRUE,Alarm
+9148,D5609.4,L148,,,FALSE,TRUE,Alarm
+9149,D5609.5,L149,,,FALSE,TRUE,Alarm
+9150,D5609.6,L150,中转Robot2上层手臂WF信息错误,Transfer robot2 upper arm WF information error,FALSE,TRUE,Alarm
+9151,D5609.7,L151,中转Robot2下层手臂WF信息错误,Transfer robot2 lower arm WF information error,FALSE,TRUE,Alarm
+9152,D5609.8,L152,,,FALSE,TRUE,Alarm
+9153,D5609.9,L153,,,FALSE,TRUE,Alarm
+9154,D5609.10,L154,,,FALSE,TRUE,Alarm
+9155,D5609.11,L155,中转Robot2移动轴动作条件不到,Transfer robot2 movement axis action conditions are not met,FALSE,TRUE,Alarm
+9156,D5609.12,L156,,,FALSE,TRUE,Alarm
+9157,D5609.13,L157,,,FALSE,TRUE,Alarm
+9158,D5609.14,L158,,,FALSE,TRUE,Alarm
+9159,D5609.15,L159,,,FALSE,TRUE,Alarm
+9160,D5610.0,L160,A侧中转手臂轴驱动器错误,BufferA transfer arm axis driver error,FALSE,TRUE,Alarm
+9161,D5610.1,L161,A侧中转手臂轴限位错误,BufferA transfer arm axis limit error,FALSE,TRUE,Alarm
+9162,D5610.2,L162,A侧中转手臂轴动作超时,BufferA transfer arm axis action timeout,FALSE,TRUE,Alarm
+9163,D5610.3,L163,A侧中转手臂气缸松开超时,BufferA transfer arm cylinder release timeout,FALSE,TRUE,Alarm
+9164,D5610.4,L164,A侧中转手臂气缸夹紧超时,BufferA transfer arm cylinder clamping timeout,FALSE,TRUE,Alarm
+9165,D5610.5,L165,A侧中转手臂气缸松开夹紧感应错误,"The air cylinder of the side transfer arm has released the clamping device, but the sensing system has detected an error",FALSE,TRUE,Alarm
+9166,D5610.6,L166,A侧中转手臂门打开超时,The door of the A-side transfer arm has been open for an excessive time,FALSE,TRUE,Alarm
+9167,D5610.7,L167,A侧中转手臂门关闭超时,The side transfer arm door has been closed for an excessive duration,FALSE,TRUE,Alarm
+9168,D5610.8,L168,A侧中转手臂门打开关闭紧感应错误,The door sensor for the side transfer arm is experiencing an error in sensing the opening and closing of the door,FALSE,TRUE,Alarm
+9169,D5610.9,L169,,,FALSE,TRUE,Alarm
+9170,D5610.10,L170,A侧中转手臂气缸WF信息错误,BufferA transfer arm cylinder WF information error,FALSE,TRUE,Alarm
+9171,D5610.11,L171,,,FALSE,TRUE,Alarm
+9172,D5610.12,L172,,,FALSE,TRUE,Alarm
+9173,D5610.13,L173,,,FALSE,TRUE,Alarm
+9174,D5610.14,L174,,,FALSE,TRUE,Alarm
+9175,D5610.15,L175,A侧中转手臂动作条件不到,The conditions for the transfer arm movement on side A are not met,FALSE,TRUE,Alarm
+9176,D5611.0,L176,,,FALSE,TRUE,Alarm
+9177,D5611.1,L177,,,FALSE,TRUE,Alarm
+9178,D5611.2,L178,,,FALSE,TRUE,Alarm
+9179,D5611.3,L179,,,FALSE,TRUE,Alarm
+9180,D5611.4,L180,A侧研磨上层手臂X轴驱动器错误,A-side LTP1 X-axis driver error,FALSE,TRUE,Alarm
+9181,D5611.5,L181,A侧研磨上层手臂X轴限位错误,A-side LTP1 X-axis limit error,FALSE,TRUE,Alarm
+9182,D5611.6,L182,A侧研磨上层手臂X轴动作超时,A-side LTP1 X-axis action timeout,FALSE,TRUE,Alarm
+9183,D5611.7,L183,A侧研磨上层手臂Z轴驱动器错误,A-side LTP1 Z-axis driver error,FALSE,TRUE,Alarm
+9184,D5611.8,L184,A侧研磨上层手臂Z轴限位错误,A-side LTP1 Z-axis limit error,FALSE,TRUE,Alarm
+9185,D5611.9,L185,A侧研磨上层手臂Z轴动作超时,A-side LTP1 Z-axis action timeout,FALSE,TRUE,Alarm
+9186,D5611.10,L186,,,FALSE,TRUE,Alarm
+9187,D5611.11,L187,,,FALSE,TRUE,Alarm
+9188,D5611.12,L188,,,FALSE,TRUE,Alarm
+9189,D5611.13,L189,A侧研磨上层手臂Sensor感应错误,A-side LTP1 sensor error,FALSE,TRUE,Alarm
+9190,D5611.14,L190,A侧研磨上层手臂WF信息错误,The WF information of the LTP1 on the A-side grinding is incorrect,FALSE,TRUE,Alarm
+9191,D5611.15,L191,A侧研磨上层手臂Sensor1感应错误,A-side LTP1 sensor_1 error,FALSE,TRUE,Alarm
+9192,D5612.0,L192,A侧研磨上层手臂Sensor2感应错误,A-side LTP1 sensor_2 error,FALSE,TRUE,Alarm
+9193,D5612.1,L193,A侧研磨上层手臂Sensor3感应错误,A-side LTP1 sensor_3 error,FALSE,TRUE,Alarm
+9194,D5612.2,L194,,,FALSE,TRUE,Alarm
+9195,D5612.3,L195,A侧研磨上层手臂X轴动作条件不到,The X-axis movement condition of the LTP1 on the A-side grinding is not met,FALSE,TRUE,Alarm
+9196,D5612.4,L196,A侧研磨上层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP1 on the A-side grinding is not met,FALSE,TRUE,Alarm
+9197,D5612.5,L197,,,FALSE,TRUE,Alarm
+9198,D5612.6,L198,,,FALSE,TRUE,Alarm
+9199,D5612.7,L199,,,FALSE,TRUE,Alarm
+9200,D5612.8,L200,A侧研磨中层手臂X轴驱动器错误,A-side LTP2 X-axis driver error,FALSE,TRUE,Alarm
+9201,D5612.9,L201,A侧研磨中层手臂X轴限位错误,A-side LTP2 X-axis limit error,FALSE,TRUE,Alarm
+9202,D5612.10,L202,A侧研磨中层手臂X轴动作超时,A-side LTP2 X-axis action timeout,FALSE,TRUE,Alarm
+9203,D5612.11,L203,A侧研磨中层手臂Z轴驱动器错误,A-side LTP2 Z-axis driver error,FALSE,TRUE,Alarm
+9204,D5612.12,L204,A侧研磨中层手臂Z轴限位错误,A-side LTP2 Z-axis limit error,FALSE,TRUE,Alarm
+9205,D5612.13,L205,A侧研磨中层手臂Z轴动作超时,A-side LTP2 Z-axis action timeout,FALSE,TRUE,Alarm
+9206,D5612.14,L206,,,FALSE,TRUE,Alarm
+9207,D5612.15,L207,,,FALSE,TRUE,Alarm
+9208,D5613.0,L208,,,FALSE,TRUE,Alarm
+9209,D5613.1,L209,A侧研磨中层手臂Sensor感应错误,A-side LTP2 sensor sensing error,FALSE,TRUE,Alarm
+9210,D5613.2,L210,A侧研磨中层手臂WF信息错误,The WF information of the LTP2 on the A-side grinding is incorrect,FALSE,TRUE,Alarm
+9211,D5613.3,L211,A侧研磨中层手臂Sensor1感应错误,A-side LTP2 sensor_1 error,FALSE,TRUE,Alarm
+9212,D5613.4,L212,A侧研磨中层手臂Sensor2感应错误,A-side LTP2 sensor_2 error,FALSE,TRUE,Alarm
+9213,D5613.5,L213,A侧研磨中层手臂Sensor3感应错误,A-side LTP2 sensor_3 error,FALSE,TRUE,Alarm
+9214,D5613.6,L214,,,FALSE,TRUE,Alarm
+9215,D5613.7,L215,A侧研磨中层手臂X轴动作条件不到,The X-axis movement condition of the LTP2 on the A-side grinding is not met,FALSE,TRUE,Alarm
+9216,D5613.8,L216,A侧研磨中层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP2 in A-side grinding is not met,FALSE,TRUE,Alarm
+9217,D5613.9,L217,,,FALSE,TRUE,Alarm
+9218,D5613.10,L218,,,FALSE,TRUE,Alarm
+9219,D5613.11,L219,,,FALSE,TRUE,Alarm
+9220,D5613.12,L220,A侧研磨下层手臂X轴驱动器错误,A-side LTP3 X-axis driver error,FALSE,TRUE,Alarm
+9221,D5613.13,L221,A侧研磨下层手臂X轴限位错误,A-side LTP3 X-axis limit error,FALSE,TRUE,Alarm
+9222,D5613.14,L222,A侧研磨下层手臂X轴动作超时,A-side LTP3 X-axis action timeout,FALSE,TRUE,Alarm
+9223,D5613.15,L223,A侧研磨下层手臂Z轴驱动器错误,A-side LTP3 Z-axis driver error,FALSE,TRUE,Alarm
+9224,D5614.0,L224,A侧研磨下层手臂Z轴限位错误,A-side LTP3 Z-axis limit error,FALSE,TRUE,Alarm
+9225,D5614.1,L225,A侧研磨下层手臂Z轴动作超时,A-side LTP3 Z-axis action timeout,FALSE,TRUE,Alarm
+9226,D5614.2,L226,,,FALSE,TRUE,Alarm
+9227,D5614.3,L227,,,FALSE,TRUE,Alarm
+9228,D5614.4,L228,,,FALSE,TRUE,Alarm
+9229,D5614.5,L229,A侧研磨下层手臂Sensor感应错误,A-side LTP3 sensor error,FALSE,TRUE,Alarm
+9230,D5614.6,L230,A侧研磨下层手臂WF信息错误,The WF information of the LTP3 on the A-side grinding is incorrect,FALSE,TRUE,Alarm
+9231,D5614.7,L231,A侧研磨下层手臂Sensor1感应错误,A-side LTP3 sensor_1 serror,FALSE,TRUE,Alarm
+9232,D5614.8,L232,A侧研磨下层手臂Sensor2感应错误,A-side LTP3 sensor_2 error,FALSE,TRUE,Alarm
+9233,D5614.9,L233,A侧研磨下层手臂Sensor3感应错误,A-side LTP3 sensor_3 error,FALSE,TRUE,Alarm
+9234,D5614.10,L234,,,FALSE,TRUE,Alarm
+9235,D5614.11,L235,A侧研磨下层手臂X轴动作条件不到,The X-axis movement condition of the LTP3 on the A-side grinding is not met,FALSE,TRUE,Alarm
+9236,D5614.12,L236,A侧研磨下层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP3 on the A-side grinding is not met,FALSE,TRUE,Alarm
+9237,D5614.13,L237,,,FALSE,TRUE,Alarm
+9238,D5614.14,L238,,,FALSE,TRUE,Alarm
+9239,D5614.15,L239,,,FALSE,TRUE,Alarm
+9240,D5615.0,L240,B侧中转手臂轴驱动器错误,B-side transfer arm axis driver error,FALSE,TRUE,Alarm
+9241,D5615.1,L241,B侧中转手臂轴限位错误,B-side transfer arm axis limit error,FALSE,TRUE,Alarm
+9242,D5615.2,L242,B侧中转手臂轴动作超时,B-side transfer arm axis action timeout,FALSE,TRUE,Alarm
+9243,D5615.3,L243,B侧中转手臂气缸松开超时,B-side transfer arm cylinder release timeout,FALSE,TRUE,Alarm
+9244,D5615.4,L244,B侧中转手臂气缸夹紧超时,B-side transfer arm cylinder clamping timeout,FALSE,TRUE,Alarm
+9245,D5615.5,L245,B侧中转手臂气缸松开夹紧感应错误,"The air cylinder of the side transfer arm has released the clamping device, but the sensing system has detected an error",FALSE,TRUE,Alarm
+9246,D5615.6,L246,B侧中转手臂门打开超时,The door of the A-side transfer arm has been open for an excessive time,FALSE,TRUE,Alarm
+9247,D5615.7,L247,B侧中转手臂门关闭超时,The side transfer arm door has been closed for an excessive duration,FALSE,TRUE,Alarm
+9248,D5615.8,L248,B侧中转手臂门打开关闭紧感应错误,The door sensor for the side transfer arm is experiencing an error in sensing the opening and closing of the door,FALSE,TRUE,Alarm
+9249,D5615.9,L249,,,FALSE,TRUE,Alarm
+9250,D5615.10,L250,B侧中转手臂WF信息错误,B-side transfer arm WF information error,FALSE,TRUE,Alarm
+9251,D5615.11,L251,,,FALSE,TRUE,Alarm
+9252,D5615.12,L252,,,FALSE,TRUE,Alarm
+9253,D5615.13,L253,,,FALSE,TRUE,Alarm
+9254,D5615.14,L254,,,FALSE,TRUE,Alarm
+9255,D5615.15,L255,B侧中转手臂动作条件不到,The conditions for the transfer arm movement on the B-side are not met,FALSE,TRUE,Alarm
+9256,D5616.0,L256,,,FALSE,TRUE,Alarm
+9257,D5616.1,L257,,,FALSE,TRUE,Alarm
+9258,D5616.2,L258,,,FALSE,TRUE,Alarm
+9259,D5616.3,L259,,,FALSE,TRUE,Alarm
+9260,D5616.4,L260,B侧研磨上层手臂X轴驱动器错误,B-side LTP1 X-axis driver error,FALSE,TRUE,Alarm
+9261,D5616.5,L261,B侧研磨上层手臂X轴限位错误,B-side LTP1 X-axis limit error,FALSE,TRUE,Alarm
+9262,D5616.6,L262,B侧研磨上层手臂X轴动作超时,B-side LTP1 X-axis action timeout,FALSE,TRUE,Alarm
+9263,D5616.7,L263,B侧研磨上层手臂Z轴驱动器错误,B-side LTP1 Z-axis driver error,FALSE,TRUE,Alarm
+9264,D5616.8,L264,B侧研磨上层手臂Z轴限位错误,B-side LTP1 Z-axis limit error,FALSE,TRUE,Alarm
+9265,D5616.9,L265,B侧研磨上层手臂Z轴动作超时,B-side LTP1 Z-axis action timeout,FALSE,TRUE,Alarm
+9266,D5616.10,L266,,,FALSE,TRUE,Alarm
+9267,D5616.11,L267,,,FALSE,TRUE,Alarm
+9268,D5616.12,L268,,,FALSE,TRUE,Alarm
+9269,D5616.13,L269,B侧研磨上层手臂Sensor感应错误,B-side LTP1 sensor sensing error,FALSE,TRUE,Alarm
+9270,D5616.14,L270,B侧研磨上层手臂WF信息错误,B-side LTP1 WF information error,FALSE,TRUE,Alarm
+9271,D5616.15,L271,B侧研磨上层手臂Sensor1感应错误,B-side LTP1 sensor_1 sensing error,FALSE,TRUE,Alarm
+9272,D5617.0,L272,B侧研磨上层手臂Sensor2感应错误,B-side LTP1 sensor_2 sensing error,FALSE,TRUE,Alarm
+9273,D5617.1,L273,B侧研磨上层手臂Sensor3感应错误,B-side LTP1 sensor_3 sensing error,FALSE,TRUE,Alarm
+9274,D5617.2,L274,,,FALSE,TRUE,Alarm
+9275,D5617.3,L275,B侧研磨上层手臂X轴动作条件不到,The X-axis movement condition of the LTP1 on the B-side grinding is not met,FALSE,TRUE,Alarm
+9276,D5617.4,L276,B侧研磨上层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP1 on the B-side grinding is not me,FALSE,TRUE,Alarm
+9277,D5617.5,L277,,,FALSE,TRUE,Alarm
+9278,D5617.6,L278,,,FALSE,TRUE,Alarm
+9279,D5617.7,L279,,,FALSE,TRUE,Alarm
+9280,D5617.8,L280,B侧研磨中层手臂X轴驱动器错误,B-side LTP2 X-axis driver error,FALSE,TRUE,Alarm
+9281,D5617.9,L281,B侧研磨中层手臂X轴限位错误,B-side LTP2 X-axis limit error,FALSE,TRUE,Alarm
+9282,D5617.10,L282,B侧研磨中层手臂X轴动作超时,B-side LTP2 X-axis action timeout,FALSE,TRUE,Alarm
+9283,D5617.11,L283,B侧研磨中层手臂Z轴驱动器错误,B-side LTP2 Z-axis driver error,FALSE,TRUE,Alarm
+9284,D5617.12,L284,B侧研磨中层手臂Z轴限位错误,B-side LTP2 Z-axis limit error,FALSE,TRUE,Alarm
+9285,D5617.13,L285,B侧研磨中层手臂Z轴动作超时,B-side LTP2 Z-axis action timeout,FALSE,TRUE,Alarm
+9286,D5617.14,L286,,,FALSE,TRUE,Alarm
+9287,D5617.15,L287,,,FALSE,TRUE,Alarm
+9288,D5618.0,L288,,,FALSE,TRUE,Alarm
+9289,D5618.1,L289,B侧研磨中层手臂Sensor感应错误,B-side LTP2 sensor sensing error,FALSE,TRUE,Alarm
+9290,D5618.2,L290,B侧研磨中层手臂WF信息错误,B-side LTP2 WF information error,FALSE,TRUE,Alarm
+9291,D5618.3,L291,B侧研磨中层手臂Sensor1感应错误,B-side LTP2 sensor_1 sensing error,FALSE,TRUE,Alarm
+9292,D5618.4,L292,B侧研磨中层手臂Sensor2感应错误,B-side LTP2 sensor_2 sensing error,FALSE,TRUE,Alarm
+9293,D5618.5,L293,B侧研磨中层手臂Sensor3感应错误,B-side LTP2 sensor_3 sensing error,FALSE,TRUE,Alarm
+9294,D5618.6,L294,,,FALSE,TRUE,Alarm
+9295,D5618.7,L295,B侧研磨中层手臂X轴动作条件不到,The X-axis movement condition of the LTP2 on the B-side grinding is not met,FALSE,TRUE,Alarm
+9296,D5618.8,L296,B侧研磨中层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP2 in B-side grinding is not met,FALSE,TRUE,Alarm
+9297,D5618.9,L297,,,FALSE,TRUE,Alarm
+9298,D5618.10,L298,,,FALSE,TRUE,Alarm
+9299,D5618.11,L299,,,FALSE,TRUE,Alarm
+9300,D5618.12,L300,B侧研磨下层手臂X轴驱动器错误,B-side LTP3 X-axis driver error,FALSE,TRUE,Alarm
+9301,D5618.13,L301,B侧研磨下层手臂X轴限位错误,B-side LTP3 X-axis limit error,FALSE,TRUE,Alarm
+9302,D5618.14,L302,B侧研磨下层手臂X轴动作超时,B-side LTP3 X-axis action timeout,FALSE,TRUE,Alarm
+9303,D5618.15,L303,B侧研磨下层手臂Z轴驱动器错误,B-side LTP3 Z-axis driver error,FALSE,TRUE,Alarm
+9304,D5619.0,L304,B侧研磨下层手臂Z轴限位错误,B-side LTP3 Z-axis limit error,FALSE,TRUE,Alarm
+9305,D5619.1,L305,B侧研磨下层手臂Z轴动作超时,B-side LTP3 Z-axis action timeout,FALSE,TRUE,Alarm
+9306,D5619.2,L306,,,FALSE,TRUE,Alarm
+9307,D5619.3,L307,,,FALSE,TRUE,Alarm
+9308,D5619.4,L308,,,FALSE,TRUE,Alarm
+9309,D5619.5,L309,B侧研磨下层手臂Sensor感应错误,B-side LTP3 sensor sensing error,FALSE,TRUE,Alarm
+9310,D5619.6,L310,B侧研磨下层手臂WF信息错误,B-side LTP3 WF information error,FALSE,TRUE,Alarm
+9311,D5619.7,L311,B侧研磨下层手臂Sensor1感应错误,B-side LTP3 sensor_1 error,FALSE,TRUE,Alarm
+9312,D5619.8,L312,B侧研磨下层手臂Sensor2感应错误,B-side LTP3 sensor_2 error,FALSE,TRUE,Alarm
+9313,D5619.9,L313,B侧研磨下层手臂Sensor3感应错误,B-side LTP3 sensor_3 error,FALSE,TRUE,Alarm
+9314,D5619.10,L314,,,FALSE,TRUE,Alarm
+9315,D5619.11,L315,B侧研磨下层手臂X轴动作条件不到,The X-axis movement condition of the LTP3 on the B-side grinding is not met,FALSE,TRUE,Alarm
+9316,D5619.12,L316,B侧研磨下层手臂Z轴动作条件不到,The Z-axis movement condition of the LTP3 on the B-side grinding is not met,FALSE,TRUE,Alarm
+9317,D5619.13,L317,,,FALSE,TRUE,Alarm
+9318,D5619.14,L318,,,FALSE,TRUE,Alarm
+9319,D5619.15,L319,,,FALSE,TRUE,Alarm
+9320,D5620.0,L320,A侧清洗Robot3故障,A-side cleaning robot3 error,FALSE,TRUE,Alarm
+9321,D5620.1,L321,A侧清洗Robot3动作超时,A-side cleaning robot3 action timeout,FALSE,TRUE,Alarm
+9322,D5620.2,L322,A侧清洗Robot3移动轴驱动器错误,A-side cleaning robot3 moving axis driver error,FALSE,TRUE,Alarm
+9323,D5620.3,L323,A侧清洗Robot3移动轴限位错误,A-side cleaning robot3 moving axis limit error,FALSE,TRUE,Alarm
+9324,D5620.4,L324,A侧清洗Robot3移动轴动作超时,A-side cleaning robot3 moving axis action timeout,FALSE,TRUE,Alarm
+9325,D5620.5,L325,Robot3离线,Robot3 off line,FALSE,TRUE,Alarm
+9326,D5620.6,L326,ROBOT3停止运行,Robot3 stopped operating,FALSE,TRUE,Alarm
+9327,D5620.7,L327,,,FALSE,TRUE,Alarm
+9328,D5620.8,L328,,,FALSE,TRUE,Alarm
+9329,D5620.9,L329,,,FALSE,TRUE,Alarm
+9330,D5620.10,L330,A侧清洗Robot3上层手臂WF信息错误,A-side cleaning robot3 upper arm WF information error,FALSE,TRUE,Alarm
+9331,D5620.11,L331,A侧清洗Robot3下层手臂WF信息错误,A-side cleaning robot3 lower arm WF information error,FALSE,TRUE,Alarm
+9332,D5620.12,L332,,,FALSE,TRUE,Alarm
+9333,D5620.13,L333,,,FALSE,TRUE,Alarm
+9334,D5620.14,L334,,,FALSE,TRUE,Alarm
+9335,D5620.15,L335,A侧清洗Robot3移动轴动作条件不到,The action conditions for the moving axis of the A-side cleaning Robot3 are not met,FALSE,TRUE,Alarm
+9336,D5621.0,L336,,,FALSE,TRUE,Alarm
+9337,D5621.1,L337,,,FALSE,TRUE,Alarm
+9338,D5621.2,L338,,,FALSE,TRUE,Alarm
+9339,D5621.3,L339,,,FALSE,TRUE,Alarm
+9340,D5621.4,L340,A侧清洗Robot4故障,A-side cleaning robot4 error,FALSE,TRUE,Alarm
+9341,D5621.5,L341,A侧清洗Robot4动作超时,A-side cleaning robot4 action timeout,FALSE,TRUE,Alarm
+9342,D5621.6,L342,A侧清洗Robot4移动轴驱动器错误,A-side cleaning robot4 moving axis driver error,FALSE,TRUE,Alarm
+9343,D5621.7,L343,A侧清洗Robot4移动轴限位错误,A-side cleaning robot4 movement axis limit error,FALSE,TRUE,Alarm
+9344,D5621.8,L344,A侧清洗Robot4移动轴动作超时,A-side cleaning robot4 movement axis action timeout,FALSE,TRUE,Alarm
+9345,D5621.9,L345,Robot4离线,Robot4 off line,FALSE,TRUE,Alarm
+9346,D5621.10,L346,ROBOT4停止运行,Robot4 stopped operating,FALSE,TRUE,Alarm
+9347,D5621.11,L347,,,FALSE,TRUE,Alarm
+9348,D5621.12,L348,,,FALSE,TRUE,Alarm
+9349,D5621.13,L349,,,FALSE,TRUE,Alarm
+9350,D5621.14,L350,A侧清洗Robot4上层手臂WF信息错误,The WF information of the upper arm of Robot4 on the A-side cleaning is incorrect,FALSE,TRUE,Alarm
+9351,D5621.15,L351,A侧清洗Robot4下层手臂WF信息错误,The WF information of the lower arm of Robot4 on the A-side cleaning is incorrect,FALSE,TRUE,Alarm
+9352,D5622.0,L352,,,FALSE,TRUE,Alarm
+9353,D5622.1,L353,,,FALSE,TRUE,Alarm
+9354,D5622.2,L354,,,FALSE,TRUE,Alarm
+9355,D5622.3,L355,A侧清洗Robot4移动轴动作条件不到,A-side cleaning robot4 movement axis action conditions are not met,FALSE,TRUE,Alarm
+9356,D5622.4,L356,,,FALSE,TRUE,Alarm
+9357,D5622.5,L357,,,FALSE,TRUE,Alarm
+9358,D5622.6,L358,,,FALSE,TRUE,Alarm
+9359,D5622.7,L359,,,FALSE,TRUE,Alarm
+9360,D5622.8,L360,B侧清洗Robot5故障,B-side cleaning robot5 malfunction,FALSE,TRUE,Alarm
+9361,D5622.9,L361,B侧清洗Robot5动作超时,B-side cleaning robot5 action timeout,FALSE,TRUE,Alarm
+9362,D5622.10,L362,B侧清洗Robot5移动轴驱动器错误,B-side cleaning robot5 moving axis driver error,FALSE,TRUE,Alarm
+9363,D5622.11,L363,B侧清洗Robot5移动轴限位错误,B-side cleaning robot5 movement axis limit error,FALSE,TRUE,Alarm
+9364,D5622.12,L364,B侧清洗Robot5移动轴动作超时,B-side cleaning robot5 movement axis action timeout,FALSE,TRUE,Alarm
+9365,D5622.13,L365,Robot5离线,Robot5 off line,FALSE,TRUE,Alarm
+9366,D5622.14,L366,ROBOT5停止运行,Robot5 stopped operating,FALSE,TRUE,Alarm
+9367,D5622.15,L367,,,FALSE,TRUE,Alarm
+9368,D5623.0,L368,,,FALSE,TRUE,Alarm
+9369,D5623.1,L369,,,FALSE,TRUE,Alarm
+9370,D5623.2,L370,B侧清洗Robot5上层手臂WF信息错误,B-side cleaning robot5 upper arm WF information error,FALSE,TRUE,Alarm
+9371,D5623.3,L371,B侧清洗Robot5下层手臂WF信息错误,B-side cleaning robot5 lower arm WF information error,FALSE,TRUE,Alarm
+9372,D5623.4,L372,,,FALSE,TRUE,Alarm
+9373,D5623.5,L373,,,FALSE,TRUE,Alarm
+9374,D5623.6,L374,,,FALSE,TRUE,Alarm
+9375,D5623.7,L375,B侧清洗Robot5移动轴动作条件不到,The action conditions for the B-side cleaning robot5's moving axis are not met,FALSE,TRUE,Alarm
+9376,D5623.8,L376,,,FALSE,TRUE,Alarm
+9377,D5623.9,L377,,,FALSE,TRUE,Alarm
+9378,D5623.10,L378,,,FALSE,TRUE,Alarm
+9379,D5623.11,L379,,,FALSE,TRUE,Alarm
+9380,D5623.12,L380,B侧清洗Robot6故障,B-side cleaning robot6 error,FALSE,TRUE,Alarm
+9381,D5623.13,L381,B侧清洗Robot6动作超时,B-side cleaning robot6 action timeout,FALSE,TRUE,Alarm
+9382,D5623.14,L382,B侧清洗Robot6移动轴驱动器错误,B-side cleaning robot6 moving axis driver error,FALSE,TRUE,Alarm
+9383,D5623.15,L383,B侧清洗Robot6移动轴限位错误,B-side cleaning robot6 movement axis limit error,FALSE,TRUE,Alarm
+9384,D5624.0,L384,B侧清洗Robot6移动轴动作超时,B-side cleaning robot6 movement axis action timeout,FALSE,TRUE,Alarm
+9385,D5624.1,L385,Robot6离线,Robot6 off line,FALSE,TRUE,Alarm
+9386,D5624.2,L386,ROBOT6停止运行,Robot6 stopped operating,FALSE,TRUE,Alarm
+9387,D5624.3,L387,,,FALSE,TRUE,Alarm
+9388,D5624.4,L388,,,FALSE,TRUE,Alarm
+9389,D5624.5,L389,,,FALSE,TRUE,Alarm
+9390,D5624.6,L390,B侧清洗Robot6上层手臂WF信息错误,B-side cleaning robot6 upper arm WF information error,FALSE,TRUE,Alarm
+9391,D5624.7,L391,B侧清洗Robot6下层手臂WF信息错误,B-side cleaning robot6 lower arm WF information error,FALSE,TRUE,Alarm
+9392,D5624.8,L392,,,FALSE,TRUE,Alarm
+9393,D5624.9,L393,,,FALSE,TRUE,Alarm
+9394,D5624.10,L394,,,FALSE,TRUE,Alarm
+9395,D5624.11,L395,B侧清洗Robot6移动轴动作条件不到,The action conditions for the B-side cleaning Robot6 moving axis are not met,FALSE,TRUE,Alarm
+9396,D5624.12,L396,,,FALSE,TRUE,Alarm
+9397,D5624.13,L397,,,FALSE,TRUE,Alarm
+9398,D5624.14,L398,,,FALSE,TRUE,Alarm
+9399,D5624.15,L399,,,FALSE,TRUE,Alarm
+9400,D5625.0,L400,Side A N2  Pressure Lower Limit (-),Side A N2  Pressure Lower Limit (-),FALSE,TRUE,Alarm
+9401,D5625.1,L401,Side A DIW  Pressure1 Lower Limit (-),Side A DIW  Pressure1 Lower Limit (-),FALSE,TRUE,Alarm
+9402,D5625.2,L402,Side A DIW  Pressure2 Lower Limit (-),Side A DIW  Pressure2 Lower Limit (-),FALSE,TRUE,Alarm
+9403,D5625.3,L403,Side A Cooling Water  Pressure Lower Limit (-),Side A Cooling Water  Pressure Lower Limit (-),FALSE,TRUE,Alarm
+9404,D5625.4,L404,Side B N2  Pressure Lower Limit (-),Side B N2  Pressure Lower Limit (-),FALSE,TRUE,Alarm
+9405,D5625.5,L405,Side B DIW  Pressure1 Lower Limit (-),Side B DIW  Pressure1 Lower Limit (-),FALSE,TRUE,Alarm
+9406,D5625.6,L406,Side B DIW  Pressure2 Lower Limit (-),Side B DIW  Pressure2 Lower Limit (-),FALSE,TRUE,Alarm
+9407,D5625.7,L407,Side B Cooling Water  Pressure Lower Limit (-),Side B Cooling Water  Pressure Lower Limit (-),FALSE,TRUE,Alarm
+9408,D5625.8,L408,,,FALSE,TRUE,Alarm
+9409,D5625.9,L409,,,FALSE,TRUE,Alarm
+9410,D5625.10,L410,Side A Buffer Flow Limit (-),Side A Buffer Flow Limit (-),FALSE,TRUE,Alarm
+9411,D5625.11,L411,Side A Waiting Position Flow Limit (-),Side A Waiting Position Flow Limit (-),FALSE,TRUE,Alarm
+9412,D5625.12,L412,Side B Buffer Flow Limit (-),Side B Buffer Flow Limit (-),FALSE,TRUE,Alarm
+9413,D5625.13,L413,Side B Waiting Position Flow Limit (-),Side B Waiting Position Flow Limit (-),FALSE,TRUE,Alarm
+9414,D5625.14,L414,,,FALSE,TRUE,Alarm
+9415,D5625.15,L415,,,FALSE,TRUE,Alarm
+9416,D5626.0,L416,,,FALSE,TRUE,Alarm
+9417,D5626.1,L417,,,FALSE,TRUE,Alarm
+9418,D5626.2,L418,,,FALSE,TRUE,Alarm
+9419,D5626.3,L419,,,FALSE,TRUE,Alarm
+9420,D5626.4,L420,,,FALSE,TRUE,Alarm
+9421,D5626.5,L421,,,FALSE,TRUE,Alarm
+9422,D5626.6,L422,,,FALSE,TRUE,Alarm
+9423,D5626.7,L423,,,FALSE,TRUE,Alarm
+9424,D5626.8,L424,,,FALSE,TRUE,Alarm
+9425,D5626.9,L425,,,FALSE,TRUE,Alarm
+9426,D5626.10,L426,,,FALSE,TRUE,Alarm
+9427,D5626.11,L427,,,FALSE,TRUE,Alarm
+9428,D5626.12,L428,,,FALSE,TRUE,Alarm
+9429,D5626.13,L429,,,FALSE,TRUE,Alarm
+9430,D5626.14,L430,,,FALSE,TRUE,Alarm
+9431,D5626.15,L431,,,FALSE,TRUE,Alarm
+9432,D5627.0,L432,,,FALSE,TRUE,Alarm
+9433,D5627.1,L433,,,FALSE,TRUE,Alarm
+9434,D5627.2,L434,,,FALSE,TRUE,Alarm
+9435,D5627.3,L435,,,FALSE,TRUE,Alarm
+9436,D5627.4,L436,,,FALSE,TRUE,Alarm
+9437,D5627.5,L437,,,FALSE,TRUE,Alarm
+9438,D5627.6,L438,,,FALSE,TRUE,Alarm
+9439,D5627.7,L439,,,FALSE,TRUE,Alarm
+9440,D5627.8,L440,,,FALSE,TRUE,Alarm
+9441,D5627.9,L441,,,FALSE,TRUE,Alarm
+9442,D5627.10,L442,,,FALSE,TRUE,Alarm
+9443,D5627.11,L443,,,FALSE,TRUE,Alarm
+9444,D5627.12,L444,,,FALSE,TRUE,Alarm
+9445,D5627.13,L445,,,FALSE,TRUE,Alarm
+9446,D5627.14,L446,,,FALSE,TRUE,Alarm
+9447,D5627.15,L447,,,FALSE,TRUE,Alarm
+9448,D5628.0,L448,,,FALSE,TRUE,Alarm
+9449,D5628.1,L449,Robot1-PLC控制机器人急停,Robot1-PLC control robot emergency stop,FALSE,TRUE,Alarm
+9450,D5628.2,L450,Robot1-PLC通知信号不止一个 请检查PLC控制信号,Robot1-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+9451,D5628.3,L451,Robot1-程式设置/等待寄存器位状态指令错误 请检查,Robot1-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+9452,D5628.4,L452,Robot1,,FALSE,TRUE,Alarm
+9453,D5628.5,L453,Robot1,,FALSE,TRUE,Alarm
+9454,D5628.6,L454,Robot1,,FALSE,TRUE,Alarm
+9455,D5628.7,L455,Robot1,,FALSE,TRUE,Alarm
+9456,D5628.8,L456,Robot1,,FALSE,TRUE,Alarm
+9457,D5628.9,L457,Robot1,,FALSE,TRUE,Alarm
+9458,D5628.10,L458,Robot1-ModbusTcp通讯心跳检查失败,Robot1-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+9459,D5628.11,L459,Robot1,,FALSE,TRUE,Alarm
+9460,D5628.12,L460,Robot1,,FALSE,TRUE,Alarm
+9461,D5628.13,L461,Robot1,,FALSE,TRUE,Alarm
+9462,D5628.14,L462,Robot1,,FALSE,TRUE,Alarm
+9463,D5628.15,L463,Robot1,,FALSE,TRUE,Alarm
+9464,D5629.0,L464,Robot1-A1轴原点被重新设置 按复位解除警报,Robot1-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9465,D5629.1,L465,Robot1-A2轴原点被重新设置 按复位解除警报,Robot1-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9466,D5629.2,L466,Robot1-A3轴原点被重新设置 按复位解除警报,Robot1-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9467,D5629.3,L467,Robot1-A4轴原点被重新设置 按复位解除警报,Robot1-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9468,D5629.4,L468,Robot1-A5轴原点被重新设置 按复位解除警报,Robot1-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9469,D5629.5,L469,Robot1-A6轴原点被重新设置 按复位解除警报,Robot1-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9470,D5629.6,L470,Robot1-A7轴原点被重新设置 按复位解除警报,Robot1-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9471,D5629.7,L471,Robot1-A8轴原点被重新设置 按复位解除警报,Robot1-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9472,D5629.8,L472,Robot1-A9轴原点被重新设置 按复位解除警报,Robot1-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9473,D5629.9,L473,Robot1,,FALSE,TRUE,Alarm
+9474,D5629.10,L474,Robot1,,FALSE,TRUE,Alarm
+9475,D5629.11,L475,Robot1,,FALSE,TRUE,Alarm
+9476,D5629.12,L476,Robot1,,FALSE,TRUE,Alarm
+9477,D5629.13,L477,Robot1,,FALSE,TRUE,Alarm
+9478,D5629.14,L478,Robot1,,FALSE,TRUE,Alarm
+9479,D5629.15,L479,Robot1,,FALSE,TRUE,Alarm
+9480,D5630.0,L480,Robot1-A1轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9481,D5630.1,L481,Robot1-A2轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9482,D5630.2,L482,Robot1-A3轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9483,D5630.3,L483,Robot1-A4轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9484,D5630.4,L484,Robot1-A5轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9485,D5630.5,L485,Robot1-A6轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9486,D5630.6,L486,Robot1-A7轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9487,D5630.7,L487,Robot1-A8轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9488,D5630.8,L488,Robot1-A9轴原点编码器校准数值变化 按复位解除警报,Robot1-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9489,D5630.9,L489,Robot1,,FALSE,TRUE,Alarm
+9490,D5630.10,L490,Robot1,,FALSE,TRUE,Alarm
+9491,D5630.11,L491,Robot1,,FALSE,TRUE,Alarm
+9492,D5630.12,L492,Robot1,,FALSE,TRUE,Alarm
+9493,D5630.13,L493,Robot1,,FALSE,TRUE,Alarm
+9494,D5630.14,L494,Robot1,,FALSE,TRUE,Alarm
+9495,D5630.15,L495,Robot1,,FALSE,TRUE,Alarm
+9496,D5631.0,L496,Robot1-A1轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9497,D5631.1,L497,Robot1-A2轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9498,D5631.2,L498,Robot1-A3轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9499,D5631.3,L499,Robot1-A4轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9500,D5631.4,L500,Robot1-A5轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9501,D5631.5,L501,Robot1-A6轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9502,D5631.6,L502,Robot1-A7轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9503,D5631.7,L503,Robot1-A8轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9504,D5631.8,L504,Robot1-A9轴编码器多圈数值被清除 断电解除警报,Robot1-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9505,D5631.9,L505,Robot1,,FALSE,TRUE,Alarm
+9506,D5631.10,L506,Robot1,,FALSE,TRUE,Alarm
+9507,D5631.11,L507,Robot1,,FALSE,TRUE,Alarm
+9508,D5631.12,L508,Robot1,,FALSE,TRUE,Alarm
+9509,D5631.13,L509,Robot1,,FALSE,TRUE,Alarm
+9510,D5631.14,L510,Robot1,,FALSE,TRUE,Alarm
+9511,D5631.15,L511,Robot1,,FALSE,TRUE,Alarm
+9512,D5632.0,L512,Robot1-A1轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9513,D5632.1,L513,Robot1-A2轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9514,D5632.2,L514,Robot1-A3轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9515,D5632.3,L515,Robot1-A4轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9516,D5632.4,L516,Robot1-A5轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9517,D5632.5,L517,Robot1-A6轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9518,D5632.6,L518,Robot1-A7轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9519,D5632.7,L519,Robot1-A8轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9520,D5632.8,L520,Robot1-A9轴重启前多圈被复位 请再次设定校正点,Robot1-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9521,D5632.9,L521,Robot1,,FALSE,TRUE,Alarm
+9522,D5632.10,L522,Robot1,,FALSE,TRUE,Alarm
+9523,D5632.11,L523,Robot1,,FALSE,TRUE,Alarm
+9524,D5632.12,L524,Robot1,,FALSE,TRUE,Alarm
+9525,D5632.13,L525,Robot1,,FALSE,TRUE,Alarm
+9526,D5632.14,L526,Robot1,,FALSE,TRUE,Alarm
+9527,D5632.15,L527,Robot1,,FALSE,TRUE,Alarm
+9528,D5633.0,L528,Robot1,,FALSE,TRUE,Alarm
+9529,D5633.1,L529,Robot1-料盒动作时组号编号错误 请检查组号设置,Robot1-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+9530,D5633.2,L530,Robot1-料盒动作完成标号设置错误 请检查标号设置,Robot1-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+9531,D5633.3,L531,Robot1-料盒动作的取/放种类设置错误 请检查取放设置,Robot1-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+9532,D5633.4,L532,Robot1-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot1-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+9533,D5633.5,L533,Robot1-料盒参数读取错误,Robot1-Magazine parameter read error,FALSE,TRUE,Alarm
+9534,D5633.6,L534,Robot1-料盒参数写入错误,Robot1-Magazine parameter write error,FALSE,TRUE,Alarm
+9535,D5633.7,L535,Robot1-料盒动作时未初始化,Robot1-Magazine action: not initialized,FALSE,TRUE,Alarm
+9536,D5633.8,L536,Robot1-料盒动作时层数设置错误,Robot1-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+9537,D5633.9,L537,Robot1,,FALSE,TRUE,Alarm
+9538,D5633.10,L538,Robot1,,FALSE,TRUE,Alarm
+9539,D5633.11,L539,Robot1,,FALSE,TRUE,Alarm
+9540,D5633.12,L540,Robot1,,FALSE,TRUE,Alarm
+9541,D5633.13,L541,Robot1,,FALSE,TRUE,Alarm
+9542,D5633.14,L542,Robot1,,FALSE,TRUE,Alarm
+9543,D5633.15,L543,Robot1,,FALSE,TRUE,Alarm
+9544,D5634.0,L544,Robot1,,FALSE,TRUE,Alarm
+9545,D5634.1,L545,Robot1-上手臂取片信号检查失败 请确认后是否继续,Robot1-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9546,D5634.2,L546,Robot1-上手臂放片信号检查失败 请确认后是否继续,Robot1-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9547,D5634.3,L547,Robot1-下手臂取片信号检查失败 请确认后是否继续,Robot1-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9548,D5634.4,L548,Robot1-下手臂放片信号检查失败 请确认后是否继续,Robot1-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9549,D5634.5,L549,Robot1,,FALSE,TRUE,Alarm
+9550,D5634.6,L550,Robot1,,FALSE,TRUE,Alarm
+9551,D5634.7,L551,Robot1,,FALSE,TRUE,Alarm
+9552,D5634.8,L552,Robot1,,FALSE,TRUE,Alarm
+9553,D5634.9,L553,Robot1,,FALSE,TRUE,Alarm
+9554,D5634.10,L554,Robot1,,FALSE,TRUE,Alarm
+9555,D5634.11,L555,Robot1,,FALSE,TRUE,Alarm
+9556,D5634.12,L556,Robot1,,FALSE,TRUE,Alarm
+9557,D5634.13,L557,Robot1,,FALSE,TRUE,Alarm
+9558,D5634.14,L558,Robot1,,FALSE,TRUE,Alarm
+9559,D5634.15,L559,Robot1,,FALSE,TRUE,Alarm
+9560,D5635.0,L560,Robot1,,FALSE,TRUE,Alarm
+9561,D5635.1,L561,Robot1-PLC控制机器人暂停,Robot1-PLC control robot pause,FALSE,TRUE,Alarm
+9562,D5635.2,L562,Robot1-PLC控制机器人停止,Robot1-PLC control robot stop,FALSE,TRUE,Alarm
+9563,D5635.3,L563,Robot1-PLC控制机器人复位,Robot1-PLC control robot reset,FALSE,TRUE,Alarm
+9564,D5635.4,L564,Robot1,,FALSE,TRUE,Alarm
+9565,D5635.5,L565,Robot1,,FALSE,TRUE,Alarm
+9566,D5635.6,L566,Robot1,,FALSE,TRUE,Alarm
+9567,D5635.7,L567,Robot1,,FALSE,TRUE,Alarm
+9568,D5635.8,L568,Robot1,,FALSE,TRUE,Alarm
+9569,D5635.9,L569,Robot1,,FALSE,TRUE,Alarm
+9570,D5635.10,L570,Robot1,,FALSE,TRUE,Alarm
+9571,D5635.11,L571,Robot1,,FALSE,TRUE,Alarm
+9572,D5635.12,L572,Robot1,,FALSE,TRUE,Alarm
+9573,D5635.13,L573,Robot1,,FALSE,TRUE,Alarm
+9574,D5635.14,L574,Robot1,,FALSE,TRUE,Alarm
+9575,D5635.15,L575,Robot1,,FALSE,TRUE,Alarm
+9576,D5636.0,L576,Robot1,,FALSE,TRUE,Alarm
+9577,D5636.1,L577,Robot1-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot1-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+9578,D5636.2,L578,Robot1,,FALSE,TRUE,Alarm
+9579,D5636.3,L579,Robot1,,FALSE,TRUE,Alarm
+9580,D5636.4,L580,Robot1,,FALSE,TRUE,Alarm
+9581,D5636.5,L581,Robot1,,FALSE,TRUE,Alarm
+9582,D5636.6,L582,Robot1,,FALSE,TRUE,Alarm
+9583,D5636.7,L583,Robot1,,FALSE,TRUE,Alarm
+9584,D5636.8,L584,Robot1,,FALSE,TRUE,Alarm
+9585,D5636.9,L585,Robot1,,FALSE,TRUE,Alarm
+9586,D5636.10,L586,Robot1,,FALSE,TRUE,Alarm
+9587,D5636.11,L587,Robot1,,FALSE,TRUE,Alarm
+9588,D5636.12,L588,Robot1,,FALSE,TRUE,Alarm
+9589,D5636.13,L589,Robot1,,FALSE,TRUE,Alarm
+9590,D5636.14,L590,Robot1,,FALSE,TRUE,Alarm
+9591,D5636.15,L591,Robot1,,FALSE,TRUE,Alarm
+9592,D5637.0,L592,Robot1-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot1-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+9593,D5637.1,L593,Robot1-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot1-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+9594,D5637.2,L594,Robot1-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot1-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+9595,D5637.3,L595,Robot1,,FALSE,TRUE,Alarm
+9596,D5637.4,L596,Robot1,,FALSE,TRUE,Alarm
+9597,D5637.5,L597,Robot1,,FALSE,TRUE,Alarm
+9598,D5637.6,L598,Robot1,,FALSE,TRUE,Alarm
+9599,D5637.7,L599,Robot1,,FALSE,TRUE,Alarm
+9600,D5637.8,L600,Robot1,,FALSE,TRUE,Alarm
+9601,D5637.9,L601,Robot1,,FALSE,TRUE,Alarm
+9602,D5637.10,L602,Robot1,,FALSE,TRUE,Alarm
+9603,D5637.11,L603,Robot1,,FALSE,TRUE,Alarm
+9604,D5637.12,L604,Robot1,,FALSE,TRUE,Alarm
+9605,D5637.13,L605,Robot1,,FALSE,TRUE,Alarm
+9606,D5637.14,L606,Robot1,,FALSE,TRUE,Alarm
+9607,D5637.15,L607,Robot1,,FALSE,TRUE,Alarm
+9608,D5638.0,L608,,,FALSE,TRUE,Alarm
+9609,D5638.1,L609,Robot2-PLC控制机器人急停,Robot2-PLC control robot emergency stop,FALSE,TRUE,Alarm
+9610,D5638.2,L610,Robot2-PLC通知信号不止一个 请检查PLC控制信号,Robot2-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+9611,D5638.3,L611,Robot2-程式设置/等待寄存器位状态指令错误 请检查,Robot2-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+9612,D5638.4,L612,,,FALSE,TRUE,Alarm
+9613,D5638.5,L613,,,FALSE,TRUE,Alarm
+9614,D5638.6,L614,,,FALSE,TRUE,Alarm
+9615,D5638.7,L615,,,FALSE,TRUE,Alarm
+9616,D5638.8,L616,,,FALSE,TRUE,Alarm
+9617,D5638.9,L617,,,FALSE,TRUE,Alarm
+9618,D5638.10,L618,Robot2-ModbusTcp通讯心跳检查失败,Robot2-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+9619,D5638.11,L619,,,FALSE,TRUE,Alarm
+9620,D5638.12,L620,,,FALSE,TRUE,Alarm
+9621,D5638.13,L621,,,FALSE,TRUE,Alarm
+9622,D5638.14,L622,,,FALSE,TRUE,Alarm
+9623,D5638.15,L623,,,FALSE,TRUE,Alarm
+9624,D5639.0,L624,Robot2-A1轴原点被重新设置 按复位解除警报,Robot2-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9625,D5639.1,L625,Robot2-A2轴原点被重新设置 按复位解除警报,Robot2-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9626,D5639.2,L626,Robot2-A3轴原点被重新设置 按复位解除警报,Robot2-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9627,D5639.3,L627,Robot2-A4轴原点被重新设置 按复位解除警报,Robot2-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9628,D5639.4,L628,Robot2-A5轴原点被重新设置 按复位解除警报,Robot2-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9629,D5639.5,L629,Robot2-A6轴原点被重新设置 按复位解除警报,Robot2-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9630,D5639.6,L630,Robot2-A7轴原点被重新设置 按复位解除警报,Robot2-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9631,D5639.7,L631,Robot2-A8轴原点被重新设置 按复位解除警报,Robot2-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9632,D5639.8,L632,Robot2-A9轴原点被重新设置 按复位解除警报,Robot2-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9633,D5639.9,L633,,,FALSE,TRUE,Alarm
+9634,D5639.10,L634,,,FALSE,TRUE,Alarm
+9635,D5639.11,L635,,,FALSE,TRUE,Alarm
+9636,D5639.12,L636,,,FALSE,TRUE,Alarm
+9637,D5639.13,L637,,,FALSE,TRUE,Alarm
+9638,D5639.14,L638,,,FALSE,TRUE,Alarm
+9639,D5639.15,L639,,,FALSE,TRUE,Alarm
+9640,D5640.0,L640,Robot2-A1轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9641,D5640.1,L641,Robot2-A2轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9642,D5640.2,L642,Robot2-A3轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9643,D5640.3,L643,Robot2-A4轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9644,D5640.4,L644,Robot2-A5轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9645,D5640.5,L645,Robot2-A6轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9646,D5640.6,L646,Robot2-A7轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9647,D5640.7,L647,Robot2-A8轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9648,D5640.8,L648,Robot2-A9轴原点编码器校准数值变化 按复位解除警报,Robot2-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9649,D5640.9,L649,,,FALSE,TRUE,Alarm
+9650,D5640.10,L650,,,FALSE,TRUE,Alarm
+9651,D5640.11,L651,,,FALSE,TRUE,Alarm
+9652,D5640.12,L652,,,FALSE,TRUE,Alarm
+9653,D5640.13,L653,,,FALSE,TRUE,Alarm
+9654,D5640.14,L654,,,FALSE,TRUE,Alarm
+9655,D5640.15,L655,,,FALSE,TRUE,Alarm
+9656,D5641.0,L656,Robot2-A1轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9657,D5641.1,L657,Robot2-A2轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9658,D5641.2,L658,Robot2-A3轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9659,D5641.3,L659,Robot2-A4轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9660,D5641.4,L660,Robot2-A5轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9661,D5641.5,L661,Robot2-A6轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9662,D5641.6,L662,Robot2-A7轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9663,D5641.7,L663,Robot2-A8轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9664,D5641.8,L664,Robot2-A9轴编码器多圈数值被清除 断电解除警报,Robot2-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9665,D5641.9,L665,,,FALSE,TRUE,Alarm
+9666,D5641.10,L666,,,FALSE,TRUE,Alarm
+9667,D5641.11,L667,,,FALSE,TRUE,Alarm
+9668,D5641.12,L668,,,FALSE,TRUE,Alarm
+9669,D5641.13,L669,,,FALSE,TRUE,Alarm
+9670,D5641.14,L670,,,FALSE,TRUE,Alarm
+9671,D5641.15,L671,,,FALSE,TRUE,Alarm
+9672,D5642.0,L672,Robot2-A1轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9673,D5642.1,L673,Robot2-A2轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9674,D5642.2,L674,Robot2-A3轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9675,D5642.3,L675,Robot2-A4轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9676,D5642.4,L676,Robot2-A5轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9677,D5642.5,L677,Robot2-A6轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9678,D5642.6,L678,Robot2-A7轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9679,D5642.7,L679,Robot2-A8轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9680,D5642.8,L680,Robot2-A9轴重启前多圈被复位 请再次设定校正点,Robot2-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9681,D5642.9,L681,,,FALSE,TRUE,Alarm
+9682,D5642.10,L682,,,FALSE,TRUE,Alarm
+9683,D5642.11,L683,,,FALSE,TRUE,Alarm
+9684,D5642.12,L684,,,FALSE,TRUE,Alarm
+9685,D5642.13,L685,,,FALSE,TRUE,Alarm
+9686,D5642.14,L686,,,FALSE,TRUE,Alarm
+9687,D5642.15,L687,,,FALSE,TRUE,Alarm
+9688,D5643.0,L688,,,FALSE,TRUE,Alarm
+9689,D5643.1,L689,Robot2-料盒动作时组编号错误 请检查组号设置,Robot2-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+9690,D5643.2,L690,Robot2-料盒动作完成标号设置错误 请检查标号设置,Robot2-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+9691,D5643.3,L691,Robot2-料盒动作的取/放种类设置错误 请检查取放设置,Robot2-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+9692,D5643.4,L692,Robot2-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot2-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+9693,D5643.5,L693,Robot2-料盒参数读取错误,Robot2-Magazine parameter read error,FALSE,TRUE,Alarm
+9694,D5643.6,L694,Robot2-料盒参数写入错误,Robot2-Magazine parameter write error,FALSE,TRUE,Alarm
+9695,D5643.7,L695,Robot2-料盒动作时未初始化,Robot2-Magazine action: not initialized,FALSE,TRUE,Alarm
+9696,D5643.8,L696,Robot2-料盒动作时层数设置错误,Robot2-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+9697,D5643.9,L697,,,FALSE,TRUE,Alarm
+9698,D5643.10,L698,,,FALSE,TRUE,Alarm
+9699,D5643.11,L699,,,FALSE,TRUE,Alarm
+9700,D5643.12,L700,,,FALSE,TRUE,Alarm
+9701,D5643.13,L701,,,FALSE,TRUE,Alarm
+9702,D5643.14,L702,,,FALSE,TRUE,Alarm
+9703,D5643.15,L703,,,FALSE,TRUE,Alarm
+9704,D5644.0,L704,,,FALSE,TRUE,Alarm
+9705,D5644.1,L705,Robot2-上手臂取片信号检查失败 请确认后是否继续,Robot2-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9706,D5644.2,L706,Robot2-上手臂放片信号检查失败 请确认后是否继续,Robot2-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9707,D5644.3,L707,Robot2-下手臂取片信号检查失败 请确认后是否继续,Robot2-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9708,D5644.4,L708,Robot2-下手臂放片信号检查失败 请确认后是否继续,Robot2-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9709,D5644.5,L709,,,FALSE,TRUE,Alarm
+9710,D5644.6,L710,,,FALSE,TRUE,Alarm
+9711,D5644.7,L711,,,FALSE,TRUE,Alarm
+9712,D5644.8,L712,,,FALSE,TRUE,Alarm
+9713,D5644.9,L713,,,FALSE,TRUE,Alarm
+9714,D5644.10,L714,,,FALSE,TRUE,Alarm
+9715,D5644.11,L715,,,FALSE,TRUE,Alarm
+9716,D5644.12,L716,,,FALSE,TRUE,Alarm
+9717,D5644.13,L717,,,FALSE,TRUE,Alarm
+9718,D5644.14,L718,,,FALSE,TRUE,Alarm
+9719,D5644.15,L719,,,FALSE,TRUE,Alarm
+9720,D5645.0,L720,,,FALSE,TRUE,Alarm
+9721,D5645.1,L721,Robot2-PLC控制机器人暂停,Robot2-PLC control robot pause,FALSE,TRUE,Alarm
+9722,D5645.2,L722,Robot2-PLC控制机器人停止,Robot2-PLC control robot stop,FALSE,TRUE,Alarm
+9723,D5645.3,L723,Robot2-PLC控制机器人复位,Robot2-PLC control robot reset,FALSE,TRUE,Alarm
+9724,D5645.4,L724,,,FALSE,TRUE,Alarm
+9725,D5645.5,L725,,,FALSE,TRUE,Alarm
+9726,D5645.6,L726,,,FALSE,TRUE,Alarm
+9727,D5645.7,L727,,,FALSE,TRUE,Alarm
+9728,D5645.8,L728,,,FALSE,TRUE,Alarm
+9729,D5645.9,L729,,,FALSE,TRUE,Alarm
+9730,D5645.10,L730,,,FALSE,TRUE,Alarm
+9731,D5645.11,L731,,,FALSE,TRUE,Alarm
+9732,D5645.12,L732,,,FALSE,TRUE,Alarm
+9733,D5645.13,L733,,,FALSE,TRUE,Alarm
+9734,D5645.14,L734,,,FALSE,TRUE,Alarm
+9735,D5645.15,L735,,,FALSE,TRUE,Alarm
+9736,D5646.0,L736,,,FALSE,TRUE,Alarm
+9737,D5646.1,L737,Robot2-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot2-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+9738,D5646.2,L738,,,FALSE,TRUE,Alarm
+9739,D5646.3,L739,,,FALSE,TRUE,Alarm
+9740,D5646.4,L740,,,FALSE,TRUE,Alarm
+9741,D5646.5,L741,,,FALSE,TRUE,Alarm
+9742,D5646.6,L742,,,FALSE,TRUE,Alarm
+9743,D5646.7,L743,,,FALSE,TRUE,Alarm
+9744,D5646.8,L744,,,FALSE,TRUE,Alarm
+9745,D5646.9,L745,,,FALSE,TRUE,Alarm
+9746,D5646.10,L746,,,FALSE,TRUE,Alarm
+9747,D5646.11,L747,,,FALSE,TRUE,Alarm
+9748,D5646.12,L748,,,FALSE,TRUE,Alarm
+9749,D5646.13,L749,,,FALSE,TRUE,Alarm
+9750,D5646.14,L750,,,FALSE,TRUE,Alarm
+9751,D5646.15,L751,,,FALSE,TRUE,Alarm
+9752,D5647.0,L752,Robot2-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot2-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+9753,D5647.1,L753,Robot2-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot2-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+9754,D5647.2,L754,Robot2-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot2-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+9755,D5647.3,L755,,,FALSE,TRUE,Alarm
+9756,D5647.4,L756,,,FALSE,TRUE,Alarm
+9757,D5647.5,L757,,,FALSE,TRUE,Alarm
+9758,D5647.6,L758,,,FALSE,TRUE,Alarm
+9759,D5647.7,L759,,,FALSE,TRUE,Alarm
+9760,D5647.8,L760,,,FALSE,TRUE,Alarm
+9761,D5647.9,L761,,,FALSE,TRUE,Alarm
+9762,D5647.10,L762,,,FALSE,TRUE,Alarm
+9763,D5647.11,L763,,,FALSE,TRUE,Alarm
+9764,D5647.12,L764,,,FALSE,TRUE,Alarm
+9765,D5647.13,L765,,,FALSE,TRUE,Alarm
+9766,D5647.14,L766,,,FALSE,TRUE,Alarm
+9767,D5647.15,L767,,,FALSE,TRUE,Alarm
+9768,D5648.0,L768,,,FALSE,TRUE,Alarm
+9769,D5648.1,L769,Robot3-PLC控制机器人急停,Robot3-PLC control robot emergency stop,FALSE,TRUE,Alarm
+9770,D5648.2,L770,Robot3-PLC通知信号不止一个 请检查PLC控制信号,Robot3-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+9771,D5648.3,L771,Robot3-程式设置/等待寄存器位状态指令错误 请检查,Robot3-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+9772,D5648.4,L772,,,FALSE,TRUE,Alarm
+9773,D5648.5,L773,,,FALSE,TRUE,Alarm
+9774,D5648.6,L774,,,FALSE,TRUE,Alarm
+9775,D5648.7,L775,,,FALSE,TRUE,Alarm
+9776,D5648.8,L776,,,FALSE,TRUE,Alarm
+9777,D5648.9,L777,,,FALSE,TRUE,Alarm
+9778,D5648.10,L778,Robot3-ModbusTcp通讯心跳检查失败,Robot3-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+9779,D5648.11,L779,,,FALSE,TRUE,Alarm
+9780,D5648.12,L780,,,FALSE,TRUE,Alarm
+9781,D5648.13,L781,,,FALSE,TRUE,Alarm
+9782,D5648.14,L782,,,FALSE,TRUE,Alarm
+9783,D5648.15,L783,,,FALSE,TRUE,Alarm
+9784,D5649.0,L784,Robot3-A1轴原点被重新设置 按复位解除警报,Robot3-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9785,D5649.1,L785,Robot3-A2轴原点被重新设置 按复位解除警报,Robot3-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9786,D5649.2,L786,Robot3-A3轴原点被重新设置 按复位解除警报,Robot3-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9787,D5649.3,L787,Robot3-A4轴原点被重新设置 按复位解除警报,Robot3-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9788,D5649.4,L788,Robot3-A5轴原点被重新设置 按复位解除警报,Robot3-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9789,D5649.5,L789,Robot3-A6轴原点被重新设置 按复位解除警报,Robot3-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9790,D5649.6,L790,Robot3-A7轴原点被重新设置 按复位解除警报,Robot3-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9791,D5649.7,L791,Robot3-A8轴原点被重新设置 按复位解除警报,Robot3-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9792,D5649.8,L792,Robot3-A9轴原点被重新设置 按复位解除警报,Robot3-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9793,D5649.9,L793,,,FALSE,TRUE,Alarm
+9794,D5649.10,L794,,,FALSE,TRUE,Alarm
+9795,D5649.11,L795,,,FALSE,TRUE,Alarm
+9796,D5649.12,L796,,,FALSE,TRUE,Alarm
+9797,D5649.13,L797,,,FALSE,TRUE,Alarm
+9798,D5649.14,L798,,,FALSE,TRUE,Alarm
+9799,D5649.15,L799,,,FALSE,TRUE,Alarm
+9800,D5650.0,L800,Robot3-A1轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9801,D5650.1,L801,Robot3-A2轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9802,D5650.2,L802,Robot3-A3轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9803,D5650.3,L803,Robot3-A4轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9804,D5650.4,L804,Robot3-A5轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9805,D5650.5,L805,Robot3-A6轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9806,D5650.6,L806,Robot3-A7轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9807,D5650.7,L807,Robot3-A8轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9808,D5650.8,L808,Robot3-A9轴原点编码器校准数值变化 按复位解除警报,Robot3-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9809,D5650.9,L809,,,FALSE,TRUE,Alarm
+9810,D5650.10,L810,,,FALSE,TRUE,Alarm
+9811,D5650.11,L811,,,FALSE,TRUE,Alarm
+9812,D5650.12,L812,,,FALSE,TRUE,Alarm
+9813,D5650.13,L813,,,FALSE,TRUE,Alarm
+9814,D5650.14,L814,,,FALSE,TRUE,Alarm
+9815,D5650.15,L815,,,FALSE,TRUE,Alarm
+9816,D5651.0,L816,Robot3-A1轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9817,D5651.1,L817,Robot3-A2轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9818,D5651.2,L818,Robot3-A3轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9819,D5651.3,L819,Robot3-A4轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9820,D5651.4,L820,Robot3-A5轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9821,D5651.5,L821,Robot3-A6轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9822,D5651.6,L822,Robot3-A7轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9823,D5651.7,L823,Robot3-A8轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9824,D5651.8,L824,Robot3-A9轴编码器多圈数值被清除 断电解除警报,Robot3-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9825,D5651.9,L825,,,FALSE,TRUE,Alarm
+9826,D5651.10,L826,,,FALSE,TRUE,Alarm
+9827,D5651.11,L827,,,FALSE,TRUE,Alarm
+9828,D5651.12,L828,,,FALSE,TRUE,Alarm
+9829,D5651.13,L829,,,FALSE,TRUE,Alarm
+9830,D5651.14,L830,,,FALSE,TRUE,Alarm
+9831,D5651.15,L831,,,FALSE,TRUE,Alarm
+9832,D5652.0,L832,Robot3-A1轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9833,D5652.1,L833,Robot3-A2轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9834,D5652.2,L834,Robot3-A3轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9835,D5652.3,L835,Robot3-A4轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9836,D5652.4,L836,Robot3-A5轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9837,D5652.5,L837,Robot3-A6轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9838,D5652.6,L838,Robot3-A7轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9839,D5652.7,L839,Robot3-A8轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9840,D5652.8,L840,Robot3-A9轴重启前多圈被复位 请再次设定校正点,Robot3-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9841,D5652.9,L841,,,FALSE,TRUE,Alarm
+9842,D5652.10,L842,,,FALSE,TRUE,Alarm
+9843,D5652.11,L843,,,FALSE,TRUE,Alarm
+9844,D5652.12,L844,,,FALSE,TRUE,Alarm
+9845,D5652.13,L845,,,FALSE,TRUE,Alarm
+9846,D5652.14,L846,,,FALSE,TRUE,Alarm
+9847,D5652.15,L847,,,FALSE,TRUE,Alarm
+9848,D5653.0,L848,,,FALSE,TRUE,Alarm
+9849,D5653.1,L849,Robot3-料盒动作时组编号错误 请检查组号设置,Robot3-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+9850,D5653.2,L850,Robot3-料盒动作完成标号设置错误 请检查标号设置,Robot3-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+9851,D5653.3,L851,Robot3-料盒动作的取/放种类设置错误 请检查取放设置,Robot3-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+9852,D5653.4,L852,Robot3-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot3-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+9853,D5653.5,L853,Robot3-料盒参数读取错误,Robot3-Magazine parameter read error,FALSE,TRUE,Alarm
+9854,D5653.6,L854,Robot3-料盒参数写入错误,Robot3-Magazine parameter write error,FALSE,TRUE,Alarm
+9855,D5653.7,L855,Robot3-料盒动作时未初始化,Robot3-Magazine action: not initialized,FALSE,TRUE,Alarm
+9856,D5653.8,L856,Robot3-料盒动作时层数设置错误,Robot3-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+9857,D5653.9,L857,,,FALSE,TRUE,Alarm
+9858,D5653.10,L858,,,FALSE,TRUE,Alarm
+9859,D5653.11,L859,,,FALSE,TRUE,Alarm
+9860,D5653.12,L860,,,FALSE,TRUE,Alarm
+9861,D5653.13,L861,,,FALSE,TRUE,Alarm
+9862,D5653.14,L862,,,FALSE,TRUE,Alarm
+9863,D5653.15,L863,,,FALSE,TRUE,Alarm
+9864,D5654.0,L864,,,FALSE,TRUE,Alarm
+9865,D5654.1,L865,Robot3-上手臂取片信号检查失败 请确认后是否继续,Robot3-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9866,D5654.2,L866,Robot3-上手臂放片信号检查失败 请确认后是否继续,Robot3-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9867,D5654.3,L867,Robot3-下手臂取片信号检查失败 请确认后是否继续,Robot3-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9868,D5654.4,L868,Robot3-下手臂放片信号检查失败 请确认后是否继续,Robot3-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+9869,D5654.5,L869,,,FALSE,TRUE,Alarm
+9870,D5654.6,L870,,,FALSE,TRUE,Alarm
+9871,D5654.7,L871,,,FALSE,TRUE,Alarm
+9872,D5654.8,L872,,,FALSE,TRUE,Alarm
+9873,D5654.9,L873,,,FALSE,TRUE,Alarm
+9874,D5654.10,L874,,,FALSE,TRUE,Alarm
+9875,D5654.11,L875,,,FALSE,TRUE,Alarm
+9876,D5654.12,L876,,,FALSE,TRUE,Alarm
+9877,D5654.13,L877,,,FALSE,TRUE,Alarm
+9878,D5654.14,L878,,,FALSE,TRUE,Alarm
+9879,D5654.15,L879,,,FALSE,TRUE,Alarm
+9880,D5655.0,L880,,,FALSE,TRUE,Alarm
+9881,D5655.1,L881,Robot3-PLC控制机器人暂停,Robot3-PLC control robot pause,FALSE,TRUE,Alarm
+9882,D5655.2,L882,Robot3-PLC控制机器人停止,Robot3-PLC control robot stop,FALSE,TRUE,Alarm
+9883,D5655.3,L883,Robot3-PLC控制机器人复位,Robot3-PLC control robot reset,FALSE,TRUE,Alarm
+9884,D5655.4,L884,,,FALSE,TRUE,Alarm
+9885,D5655.5,L885,,,FALSE,TRUE,Alarm
+9886,D5655.6,L886,,,FALSE,TRUE,Alarm
+9887,D5655.7,L887,,,FALSE,TRUE,Alarm
+9888,D5655.8,L888,,,FALSE,TRUE,Alarm
+9889,D5655.9,L889,,,FALSE,TRUE,Alarm
+9890,D5655.10,L890,,,FALSE,TRUE,Alarm
+9891,D5655.11,L891,,,FALSE,TRUE,Alarm
+9892,D5655.12,L892,,,FALSE,TRUE,Alarm
+9893,D5655.13,L893,,,FALSE,TRUE,Alarm
+9894,D5655.14,L894,,,FALSE,TRUE,Alarm
+9895,D5655.15,L895,,,FALSE,TRUE,Alarm
+9896,D5656.0,L896,,,FALSE,TRUE,Alarm
+9897,D5656.1,L897,Robot3-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot3-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+9898,D5656.2,L898,,,FALSE,TRUE,Alarm
+9899,D5656.3,L899,,,FALSE,TRUE,Alarm
+9900,D5656.4,L900,,,FALSE,TRUE,Alarm
+9901,D5656.5,L901,,,FALSE,TRUE,Alarm
+9902,D5656.6,L902,,,FALSE,TRUE,Alarm
+9903,D5656.7,L903,,,FALSE,TRUE,Alarm
+9904,D5656.8,L904,,,FALSE,TRUE,Alarm
+9905,D5656.9,L905,,,FALSE,TRUE,Alarm
+9906,D5656.10,L906,,,FALSE,TRUE,Alarm
+9907,D5656.11,L907,,,FALSE,TRUE,Alarm
+9908,D5656.12,L908,,,FALSE,TRUE,Alarm
+9909,D5656.13,L909,,,FALSE,TRUE,Alarm
+9910,D5656.14,L910,,,FALSE,TRUE,Alarm
+9911,D5656.15,L911,,,FALSE,TRUE,Alarm
+9912,D5657.0,L912,Robot3-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot3-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+9913,D5657.1,L913,Robot3-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot3-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+9914,D5657.2,L914,Robot3-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot3-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+9915,D5657.3,L915,,,FALSE,TRUE,Alarm
+9916,D5657.4,L916,,,FALSE,TRUE,Alarm
+9917,D5657.5,L917,,,FALSE,TRUE,Alarm
+9918,D5657.6,L918,,,FALSE,TRUE,Alarm
+9919,D5657.7,L919,,,FALSE,TRUE,Alarm
+9920,D5657.8,L920,,,FALSE,TRUE,Alarm
+9921,D5657.9,L921,,,FALSE,TRUE,Alarm
+9922,D5657.10,L922,,,FALSE,TRUE,Alarm
+9923,D5657.11,L923,,,FALSE,TRUE,Alarm
+9924,D5657.12,L924,,,FALSE,TRUE,Alarm
+9925,D5657.13,L925,,,FALSE,TRUE,Alarm
+9926,D5657.14,L926,,,FALSE,TRUE,Alarm
+9927,D5657.15,L927,,,FALSE,TRUE,Alarm
+9928,D5658.0,L928,,,FALSE,TRUE,Alarm
+9929,D5658.1,L929,Robot4-PLC控制机器人急停,Robot4-PLC control robot emergency stop,FALSE,TRUE,Alarm
+9930,D5658.2,L930,Robot4-PLC通知信号不止一个 请检查PLC控制信号,Robot4-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+9931,D5658.3,L931,Robot4-程式设置/等待寄存器位状态指令错误 请检查,Robot4-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+9932,D5658.4,L932,,,FALSE,TRUE,Alarm
+9933,D5658.5,L933,,,FALSE,TRUE,Alarm
+9934,D5658.6,L934,,,FALSE,TRUE,Alarm
+9935,D5658.7,L935,,,FALSE,TRUE,Alarm
+9936,D5658.8,L936,,,FALSE,TRUE,Alarm
+9937,D5658.9,L937,,,FALSE,TRUE,Alarm
+9938,D5658.10,L938,Robot4-ModbusTcp通讯心跳检查失败,Robot4-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+9939,D5658.11,L939,,,FALSE,TRUE,Alarm
+9940,D5658.12,L940,,,FALSE,TRUE,Alarm
+9941,D5658.13,L941,,,FALSE,TRUE,Alarm
+9942,D5658.14,L942,,,FALSE,TRUE,Alarm
+9943,D5658.15,L943,,,FALSE,TRUE,Alarm
+9944,D5659.0,L944,Robot4-A1轴原点被重新设置 按复位解除警报,Robot4-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9945,D5659.1,L945,Robot4-A2轴原点被重新设置 按复位解除警报,Robot4-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9946,D5659.2,L946,Robot4-A3轴原点被重新设置 按复位解除警报,Robot4-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9947,D5659.3,L947,Robot4-A4轴原点被重新设置 按复位解除警报,Robot4-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9948,D5659.4,L948,Robot4-A5轴原点被重新设置 按复位解除警报,Robot4-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9949,D5659.5,L949,Robot4-A6轴原点被重新设置 按复位解除警报,Robot4-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9950,D5659.6,L950,Robot4-A7轴原点被重新设置 按复位解除警报,Robot4-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9951,D5659.7,L951,Robot4-A8轴原点被重新设置 按复位解除警报,Robot4-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9952,D5659.8,L952,Robot4-A9轴原点被重新设置 按复位解除警报,Robot4-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+9953,D5659.9,L953,,,FALSE,TRUE,Alarm
+9954,D5659.10,L954,,,FALSE,TRUE,Alarm
+9955,D5659.11,L955,,,FALSE,TRUE,Alarm
+9956,D5659.12,L956,,,FALSE,TRUE,Alarm
+9957,D5659.13,L957,,,FALSE,TRUE,Alarm
+9958,D5659.14,L958,,,FALSE,TRUE,Alarm
+9959,D5659.15,L959,,,FALSE,TRUE,Alarm
+9960,D5660.0,L960,Robot4-A1轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9961,D5660.1,L961,Robot4-A2轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9962,D5660.2,L962,Robot4-A3轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9963,D5660.3,L963,Robot4-A4轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9964,D5660.4,L964,Robot4-A5轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9965,D5660.5,L965,Robot4-A6轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9966,D5660.6,L966,Robot4-A7轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9967,D5660.7,L967,Robot4-A8轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9968,D5660.8,L968,Robot4-A9轴原点编码器校准数值变化 按复位解除警报,Robot4-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+9969,D5660.9,L969,,,FALSE,TRUE,Alarm
+9970,D5660.10,L970,,,FALSE,TRUE,Alarm
+9971,D5660.11,L971,,,FALSE,TRUE,Alarm
+9972,D5660.12,L972,,,FALSE,TRUE,Alarm
+9973,D5660.13,L973,,,FALSE,TRUE,Alarm
+9974,D5660.14,L974,,,FALSE,TRUE,Alarm
+9975,D5660.15,L975,,,FALSE,TRUE,Alarm
+9976,D5661.0,L976,Robot4-A1轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9977,D5661.1,L977,Robot4-A2轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9978,D5661.2,L978,Robot4-A3轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9979,D5661.3,L979,Robot4-A4轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9980,D5661.4,L980,Robot4-A5轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9981,D5661.5,L981,Robot4-A6轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9982,D5661.6,L982,Robot4-A7轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9983,D5661.7,L983,Robot4-A8轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9984,D5661.8,L984,Robot4-A9轴编码器多圈数值被清除 断电解除警报,Robot4-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+9985,D5661.9,L985,,,FALSE,TRUE,Alarm
+9986,D5661.10,L986,,,FALSE,TRUE,Alarm
+9987,D5661.11,L987,,,FALSE,TRUE,Alarm
+9988,D5661.12,L988,,,FALSE,TRUE,Alarm
+9989,D5661.13,L989,,,FALSE,TRUE,Alarm
+9990,D5661.14,L990,,,FALSE,TRUE,Alarm
+9991,D5661.15,L991,,,FALSE,TRUE,Alarm
+9992,D5662.0,L992,Robot4-A1轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9993,D5662.1,L993,Robot4-A2轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9994,D5662.2,L994,Robot4-A3轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9995,D5662.3,L995,Robot4-A4轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9996,D5662.4,L996,Robot4-A5轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9997,D5662.5,L997,Robot4-A6轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9998,D5662.6,L998,Robot4-A7轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+9999,D5662.7,L999,Robot4-A8轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10000,D5662.8,L1000,Robot4-A9轴重启前多圈被复位 请再次设定校正点,Robot4-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10001,D5662.9,L1001,,,FALSE,TRUE,Alarm
+10002,D5662.10,L1002,,,FALSE,TRUE,Alarm
+10003,D5662.11,L1003,,,FALSE,TRUE,Alarm
+10004,D5662.12,L1004,,,FALSE,TRUE,Alarm
+10005,D5662.13,L1005,,,FALSE,TRUE,Alarm
+10006,D5662.14,L1006,,,FALSE,TRUE,Alarm
+10007,D5662.15,L1007,,,FALSE,TRUE,Alarm
+10008,D5663.0,L1008,,,FALSE,TRUE,Alarm
+10009,D5663.1,L1009,Robot4-料盒动作时组编号错误 请检查组号设置,Robot4-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+10010,D5663.2,L1010,Robot4-料盒动作完成标号设置错误 请检查标号设置,Robot4-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+10011,D5663.3,L1011,Robot4-料盒动作的取/放种类设置错误 请检查取放设置,Robot4-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+10012,D5663.4,L1012,Robot4-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot4-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+10013,D5663.5,L1013,Robot4-料盒参数读取错误,Robot4-Magazine parameter read error,FALSE,TRUE,Alarm
+10014,D5663.6,L1014,Robot4-料盒参数写入错误,Robot4-Magazine parameter write error,FALSE,TRUE,Alarm
+10015,D5663.7,L1015,Robot4-料盒动作时未初始化,Robot4-Magazine action: not initialized,FALSE,TRUE,Alarm
+10016,D5663.8,L1016,Robot4-料盒动作时层数设置错误,Robot4-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+10017,D5663.9,L1017,,,FALSE,TRUE,Alarm
+10018,D5663.10,L1018,,,FALSE,TRUE,Alarm
+10019,D5663.11,L1019,,,FALSE,TRUE,Alarm
+10020,D5663.12,L1020,,,FALSE,TRUE,Alarm
+10021,D5663.13,L1021,,,FALSE,TRUE,Alarm
+10022,D5663.14,L1022,,,FALSE,TRUE,Alarm
+10023,D5663.15,L1023,,,FALSE,TRUE,Alarm
+10024,D5664.0,L1024,,,FALSE,TRUE,Alarm
+10025,D5664.1,L1025,Robot4-上手臂取片信号检查失败 请确认后是否继续,Robot4-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10026,D5664.2,L1026,Robot4-上手臂放片信号检查失败 请确认后是否继续,Robot4-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10027,D5664.3,L1027,Robot4-下手臂取片信号检查失败 请确认后是否继续,Robot4-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10028,D5664.4,L1028,Robot4-下手臂放片信号检查失败 请确认后是否继续,Robot4-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10029,D5664.5,L1029,,,FALSE,TRUE,Alarm
+10030,D5664.6,L1030,,,FALSE,TRUE,Alarm
+10031,D5664.7,L1031,,,FALSE,TRUE,Alarm
+10032,D5664.8,L1032,,,FALSE,TRUE,Alarm
+10033,D5664.9,L1033,,,FALSE,TRUE,Alarm
+10034,D5664.10,L1034,,,FALSE,TRUE,Alarm
+10035,D5664.11,L1035,,,FALSE,TRUE,Alarm
+10036,D5664.12,L1036,,,FALSE,TRUE,Alarm
+10037,D5664.13,L1037,,,FALSE,TRUE,Alarm
+10038,D5664.14,L1038,,,FALSE,TRUE,Alarm
+10039,D5664.15,L1039,,,FALSE,TRUE,Alarm
+10040,D5665.0,L1040,,,FALSE,TRUE,Alarm
+10041,D5665.1,L1041,Robot4-PLC控制机器人暂停,Robot4-PLC control robot pause,FALSE,TRUE,Alarm
+10042,D5665.2,L1042,Robot4-PLC控制机器人停止,Robot4-PLC control robot stop,FALSE,TRUE,Alarm
+10043,D5665.3,L1043,Robot4-PLC控制机器人复位,Robot4-PLC control robot reset,FALSE,TRUE,Alarm
+10044,D5665.4,L1044,,,FALSE,TRUE,Alarm
+10045,D5665.5,L1045,,,FALSE,TRUE,Alarm
+10046,D5665.6,L1046,,,FALSE,TRUE,Alarm
+10047,D5665.7,L1047,,,FALSE,TRUE,Alarm
+10048,D5665.8,L1048,,,FALSE,TRUE,Alarm
+10049,D5665.9,L1049,,,FALSE,TRUE,Alarm
+10050,D5665.10,L1050,,,FALSE,TRUE,Alarm
+10051,D5665.11,L1051,,,FALSE,TRUE,Alarm
+10052,D5665.12,L1052,,,FALSE,TRUE,Alarm
+10053,D5665.13,L1053,,,FALSE,TRUE,Alarm
+10054,D5665.14,L1054,,,FALSE,TRUE,Alarm
+10055,D5665.15,L1055,,,FALSE,TRUE,Alarm
+10056,D5666.0,L1056,,,FALSE,TRUE,Alarm
+10057,D5666.1,L1057,Robot4-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot4-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+10058,D5666.2,L1058,,,FALSE,TRUE,Alarm
+10059,D5666.3,L1059,,,FALSE,TRUE,Alarm
+10060,D5666.4,L1060,,,FALSE,TRUE,Alarm
+10061,D5666.5,L1061,,,FALSE,TRUE,Alarm
+10062,D5666.6,L1062,,,FALSE,TRUE,Alarm
+10063,D5666.7,L1063,,,FALSE,TRUE,Alarm
+10064,D5666.8,L1064,,,FALSE,TRUE,Alarm
+10065,D5666.9,L1065,,,FALSE,TRUE,Alarm
+10066,D5666.10,L1066,,,FALSE,TRUE,Alarm
+10067,D5666.11,L1067,,,FALSE,TRUE,Alarm
+10068,D5666.12,L1068,,,FALSE,TRUE,Alarm
+10069,D5666.13,L1069,,,FALSE,TRUE,Alarm
+10070,D5666.14,L1070,,,FALSE,TRUE,Alarm
+10071,D5666.15,L1071,,,FALSE,TRUE,Alarm
+10072,D5667.0,L1072,Robot4-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot4-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+10073,D5667.1,L1073,Robot4-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot4-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+10074,D5667.2,L1074,Robot4-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot4-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+10075,D5667.3,L1075,,,FALSE,TRUE,Alarm
+10076,D5667.4,L1076,,,FALSE,TRUE,Alarm
+10077,D5667.5,L1077,,,FALSE,TRUE,Alarm
+10078,D5667.6,L1078,,,FALSE,TRUE,Alarm
+10079,D5667.7,L1079,,,FALSE,TRUE,Alarm
+10080,D5667.8,L1080,,,FALSE,TRUE,Alarm
+10081,D5667.9,L1081,,,FALSE,TRUE,Alarm
+10082,D5667.10,L1082,,,FALSE,TRUE,Alarm
+10083,D5667.11,L1083,,,FALSE,TRUE,Alarm
+10084,D5667.12,L1084,,,FALSE,TRUE,Alarm
+10085,D5667.13,L1085,,,FALSE,TRUE,Alarm
+10086,D5667.14,L1086,,,FALSE,TRUE,Alarm
+10087,D5667.15,L1087,,,FALSE,TRUE,Alarm
+10088,D5668.0,L1088,,,FALSE,TRUE,Alarm
+10089,D5668.1,L1089,Robot5-PLC控制机器人急停,Robot5-PLC control robot emergency stop,FALSE,TRUE,Alarm
+10090,D5668.2,L1090,Robot5-PLC通知信号不止一个 请检查PLC控制信号,Robot5-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+10091,D5668.3,L1091,Robot5-程式设置/等待寄存器位状态指令错误 请检查,Robot5-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+10092,D5668.4,L1092,,,FALSE,TRUE,Alarm
+10093,D5668.5,L1093,,,FALSE,TRUE,Alarm
+10094,D5668.6,L1094,,,FALSE,TRUE,Alarm
+10095,D5668.7,L1095,,,FALSE,TRUE,Alarm
+10096,D5668.8,L1096,,,FALSE,TRUE,Alarm
+10097,D5668.9,L1097,,,FALSE,TRUE,Alarm
+10098,D5668.10,L1098,Robot5-ModbusTcp通讯心跳检查失败,Robot5-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+10099,D5668.11,L1099,,,FALSE,TRUE,Alarm
+10100,D5668.12,L1100,,,FALSE,TRUE,Alarm
+10101,D5668.13,L1101,,,FALSE,TRUE,Alarm
+10102,D5668.14,L1102,,,FALSE,TRUE,Alarm
+10103,D5668.15,L1103,,,FALSE,TRUE,Alarm
+10104,D5669.0,L1104,Robot5-A1轴原点被重新设置 按复位解除警报,Robot5-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10105,D5669.1,L1105,Robot5-A2轴原点被重新设置 按复位解除警报,Robot5-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10106,D5669.2,L1106,Robot5-A3轴原点被重新设置 按复位解除警报,Robot5-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10107,D5669.3,L1107,Robot5-A4轴原点被重新设置 按复位解除警报,Robot5-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10108,D5669.4,L1108,Robot5-A5轴原点被重新设置 按复位解除警报,Robot5-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10109,D5669.5,L1109,Robot5-A6轴原点被重新设置 按复位解除警报,Robot5-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10110,D5669.6,L1110,Robot5-A7轴原点被重新设置 按复位解除警报,Robot5-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10111,D5669.7,L1111,Robot5-A8轴原点被重新设置 按复位解除警报,Robot5-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10112,D5669.8,L1112,Robot5-A9轴原点被重新设置 按复位解除警报,Robot5-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10113,D5669.9,L1113,,,FALSE,TRUE,Alarm
+10114,D5669.10,L1114,,,FALSE,TRUE,Alarm
+10115,D5669.11,L1115,,,FALSE,TRUE,Alarm
+10116,D5669.12,L1116,,,FALSE,TRUE,Alarm
+10117,D5669.13,L1117,,,FALSE,TRUE,Alarm
+10118,D5669.14,L1118,,,FALSE,TRUE,Alarm
+10119,D5669.15,L1119,,,FALSE,TRUE,Alarm
+10120,D5670.0,L1120,Robot5-A1轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10121,D5670.1,L1121,Robot5-A2轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10122,D5670.2,L1122,Robot5-A3轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10123,D5670.3,L1123,Robot5-A4轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10124,D5670.4,L1124,Robot5-A5轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10125,D5670.5,L1125,Robot5-A6轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10126,D5670.6,L1126,Robot5-A7轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10127,D5670.7,L1127,Robot5-A8轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10128,D5670.8,L1128,Robot5-A9轴原点编码器校准数值变化 按复位解除警报,Robot5-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10129,D5670.9,L1129,,,FALSE,TRUE,Alarm
+10130,D5670.10,L1130,,,FALSE,TRUE,Alarm
+10131,D5670.11,L1131,,,FALSE,TRUE,Alarm
+10132,D5670.12,L1132,,,FALSE,TRUE,Alarm
+10133,D5670.13,L1133,,,FALSE,TRUE,Alarm
+10134,D5670.14,L1134,,,FALSE,TRUE,Alarm
+10135,D5670.15,L1135,,,FALSE,TRUE,Alarm
+10136,D5671.0,L1136,Robot5-A1轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10137,D5671.1,L1137,Robot5-A2轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10138,D5671.2,L1138,Robot5-A3轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10139,D5671.3,L1139,Robot5-A4轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10140,D5671.4,L1140,Robot5-A5轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10141,D5671.5,L1141,Robot5-A6轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10142,D5671.6,L1142,Robot5-A7轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10143,D5671.7,L1143,Robot5-A8轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10144,D5671.8,L1144,Robot5-A9轴编码器多圈数值被清除 断电解除警报,Robot5-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10145,D5671.9,L1145,,,FALSE,TRUE,Alarm
+10146,D5671.10,L1146,,,FALSE,TRUE,Alarm
+10147,D5671.11,L1147,,,FALSE,TRUE,Alarm
+10148,D5671.12,L1148,,,FALSE,TRUE,Alarm
+10149,D5671.13,L1149,,,FALSE,TRUE,Alarm
+10150,D5671.14,L1150,,,FALSE,TRUE,Alarm
+10151,D5671.15,L1151,,,FALSE,TRUE,Alarm
+10152,D5672.0,L1152,Robot5-A1轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10153,D5672.1,L1153,Robot5-A2轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10154,D5672.2,L1154,Robot5-A3轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10155,D5672.3,L1155,Robot5-A4轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10156,D5672.4,L1156,Robot5-A5轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10157,D5672.5,L1157,Robot5-A6轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10158,D5672.6,L1158,Robot5-A7轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10159,D5672.7,L1159,Robot5-A8轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10160,D5672.8,L1160,Robot5-A9轴重启前多圈被复位 请再次设定校正点,Robot5-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10161,D5672.9,L1161,,,FALSE,TRUE,Alarm
+10162,D5672.10,L1162,,,FALSE,TRUE,Alarm
+10163,D5672.11,L1163,,,FALSE,TRUE,Alarm
+10164,D5672.12,L1164,,,FALSE,TRUE,Alarm
+10165,D5672.13,L1165,,,FALSE,TRUE,Alarm
+10166,D5672.14,L1166,,,FALSE,TRUE,Alarm
+10167,D5672.15,L1167,,,FALSE,TRUE,Alarm
+10168,D5673.0,L1168,,,FALSE,TRUE,Alarm
+10169,D5673.1,L1169,Robot5-料盒动作时组编号错误 请检查组号设置,Robot5-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+10170,D5673.2,L1170,Robot5-料盒动作完成标号设置错误 请检查标号设置,Robot5-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+10171,D5673.3,L1171,Robot5-料盒动作的取/放种类设置错误 请检查取放设置,Robot5-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+10172,D5673.4,L1172,Robot5-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot5-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+10173,D5673.5,L1173,Robot5-料盒参数读取错误,Robot5-Magazine parameter read error,FALSE,TRUE,Alarm
+10174,D5673.6,L1174,Robot5-料盒参数写入错误,Robot5-Magazine parameter write error,FALSE,TRUE,Alarm
+10175,D5673.7,L1175,Robot5-料盒动作时未初始化,Robot5-Magazine action: not initialized,FALSE,TRUE,Alarm
+10176,D5673.8,L1176,Robot5-料盒动作时层数设置错误,Robot5-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+10177,D5673.9,L1177,,,FALSE,TRUE,Alarm
+10178,D5673.10,L1178,,,FALSE,TRUE,Alarm
+10179,D5673.11,L1179,,,FALSE,TRUE,Alarm
+10180,D5673.12,L1180,,,FALSE,TRUE,Alarm
+10181,D5673.13,L1181,,,FALSE,TRUE,Alarm
+10182,D5673.14,L1182,,,FALSE,TRUE,Alarm
+10183,D5673.15,L1183,,,FALSE,TRUE,Alarm
+10184,D5674.0,L1184,,,FALSE,TRUE,Alarm
+10185,D5674.1,L1185,Robot5-上手臂取片信号检查失败 请确认后是否继续,Robot5-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10186,D5674.2,L1186,Robot5-上手臂放片信号检查失败 请确认后是否继续,Robot5-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10187,D5674.3,L1187,Robot5-下手臂取片信号检查失败 请确认后是否继续,Robot5-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10188,D5674.4,L1188,Robot5-下手臂放片信号检查失败 请确认后是否继续,Robot5-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10189,D5674.5,L1189,,,FALSE,TRUE,Alarm
+10190,D5674.6,L1190,,,FALSE,TRUE,Alarm
+10191,D5674.7,L1191,,,FALSE,TRUE,Alarm
+10192,D5674.8,L1192,,,FALSE,TRUE,Alarm
+10193,D5674.9,L1193,,,FALSE,TRUE,Alarm
+10194,D5674.10,L1194,,,FALSE,TRUE,Alarm
+10195,D5674.11,L1195,,,FALSE,TRUE,Alarm
+10196,D5674.12,L1196,,,FALSE,TRUE,Alarm
+10197,D5674.13,L1197,,,FALSE,TRUE,Alarm
+10198,D5674.14,L1198,,,FALSE,TRUE,Alarm
+10199,D5674.15,L1199,,,FALSE,TRUE,Alarm
+10200,D5675.0,L1200,,,FALSE,TRUE,Alarm
+10201,D5675.1,L1201,Robot5-PLC控制机器人暂停,Robot5-PLC control robot pause,FALSE,TRUE,Alarm
+10202,D5675.2,L1202,Robot5-PLC控制机器人停止,Robot5-PLC control robot stop,FALSE,TRUE,Alarm
+10203,D5675.3,L1203,Robot5-PLC控制机器人复位,Robot5-PLC control robot reset,FALSE,TRUE,Alarm
+10204,D5675.4,L1204,,,FALSE,TRUE,Alarm
+10205,D5675.5,L1205,,,FALSE,TRUE,Alarm
+10206,D5675.6,L1206,,,FALSE,TRUE,Alarm
+10207,D5675.7,L1207,,,FALSE,TRUE,Alarm
+10208,D5675.8,L1208,,,FALSE,TRUE,Alarm
+10209,D5675.9,L1209,,,FALSE,TRUE,Alarm
+10210,D5675.10,L1210,,,FALSE,TRUE,Alarm
+10211,D5675.11,L1211,,,FALSE,TRUE,Alarm
+10212,D5675.12,L1212,,,FALSE,TRUE,Alarm
+10213,D5675.13,L1213,,,FALSE,TRUE,Alarm
+10214,D5675.14,L1214,,,FALSE,TRUE,Alarm
+10215,D5675.15,L1215,,,FALSE,TRUE,Alarm
+10216,D5676.0,L1216,,,FALSE,TRUE,Alarm
+10217,D5676.1,L1217,Robot5-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot5-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+10218,D5676.2,L1218,,,FALSE,TRUE,Alarm
+10219,D5676.3,L1219,,,FALSE,TRUE,Alarm
+10220,D5676.4,L1220,,,FALSE,TRUE,Alarm
+10221,D5676.5,L1221,,,FALSE,TRUE,Alarm
+10222,D5676.6,L1222,,,FALSE,TRUE,Alarm
+10223,D5676.7,L1223,,,FALSE,TRUE,Alarm
+10224,D5676.8,L1224,,,FALSE,TRUE,Alarm
+10225,D5676.9,L1225,,,FALSE,TRUE,Alarm
+10226,D5676.10,L1226,,,FALSE,TRUE,Alarm
+10227,D5676.11,L1227,,,FALSE,TRUE,Alarm
+10228,D5676.12,L1228,,,FALSE,TRUE,Alarm
+10229,D5676.13,L1229,,,FALSE,TRUE,Alarm
+10230,D5676.14,L1230,,,FALSE,TRUE,Alarm
+10231,D5676.15,L1231,,,FALSE,TRUE,Alarm
+10232,D5677.0,L1232,Robot5-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot5-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+10233,D5677.1,L1233,Robot5-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot5-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+10234,D5677.2,L1234,Robot5-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot5-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+10235,D5677.3,L1235,,,FALSE,TRUE,Alarm
+10236,D5677.4,L1236,,,FALSE,TRUE,Alarm
+10237,D5677.5,L1237,,,FALSE,TRUE,Alarm
+10238,D5677.6,L1238,,,FALSE,TRUE,Alarm
+10239,D5677.7,L1239,,,FALSE,TRUE,Alarm
+10240,D5677.8,L1240,,,FALSE,TRUE,Alarm
+10241,D5677.9,L1241,,,FALSE,TRUE,Alarm
+10242,D5677.10,L1242,,,FALSE,TRUE,Alarm
+10243,D5677.11,L1243,,,FALSE,TRUE,Alarm
+10244,D5677.12,L1244,,,FALSE,TRUE,Alarm
+10245,D5677.13,L1245,,,FALSE,TRUE,Alarm
+10246,D5677.14,L1246,,,FALSE,TRUE,Alarm
+10247,D5677.15,L1247,,,FALSE,TRUE,Alarm
+10248,D5678.0,L1248,,,FALSE,TRUE,Alarm
+10249,D5678.1,L1249,Robot6-PLC控制机器人急停,Robot6-PLC control robot emergency stop,FALSE,TRUE,Alarm
+10250,D5678.2,L1250,Robot6-PLC通知信号不止一个 请检查PLC控制信号,Robot6-More than one PLC notification signal. Please check PLC control signals,FALSE,TRUE,Alarm
+10251,D5678.3,L1251,Robot6-程式设置/等待寄存器位状态指令错误 请检查,Robot6-Program setting / Waiting register bit status instruction error. Please check,FALSE,TRUE,Alarm
+10252,D5678.4,L1252,,,FALSE,TRUE,Alarm
+10253,D5678.5,L1253,,,FALSE,TRUE,Alarm
+10254,D5678.6,L1254,,,FALSE,TRUE,Alarm
+10255,D5678.7,L1255,,,FALSE,TRUE,Alarm
+10256,D5678.8,L1256,,,FALSE,TRUE,Alarm
+10257,D5678.9,L1257,,,FALSE,TRUE,Alarm
+10258,D5678.10,L1258,Robot6-ModbusTcp通讯心跳检查失败,Robot6-Modbus TCP heartbeat check failed,FALSE,TRUE,Alarm
+10259,D5678.11,L1259,,,FALSE,TRUE,Alarm
+10260,D5678.12,L1260,,,FALSE,TRUE,Alarm
+10261,D5678.13,L1261,,,FALSE,TRUE,Alarm
+10262,D5678.14,L1262,,,FALSE,TRUE,Alarm
+10263,D5678.15,L1263,,,FALSE,TRUE,Alarm
+10264,D5679.0,L1264,Robot6-A1轴原点被重新设置 按复位解除警报,Robot6-Axis A1 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10265,D5679.1,L1265,Robot6-A2轴原点被重新设置 按复位解除警报,Robot6-Axis A2 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10266,D5679.2,L1266,Robot6-A3轴原点被重新设置 按复位解除警报,Robot6-Axis A3 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10267,D5679.3,L1267,Robot6-A4轴原点被重新设置 按复位解除警报,Robot6-Axis A4 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10268,D5679.4,L1268,Robot6-A5轴原点被重新设置 按复位解除警报,Robot6-Axis A5 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10269,D5679.5,L1269,Robot6-A6轴原点被重新设置 按复位解除警报,Robot6-Axis A6 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10270,D5679.6,L1270,Robot6-A7轴原点被重新设置 按复位解除警报,Robot6-Axis A7 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10271,D5679.7,L1271,Robot6-A8轴原点被重新设置 按复位解除警报,Robot6-Axis A8 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10272,D5679.8,L1272,Robot6-A9轴原点被重新设置 按复位解除警报,Robot6-Axis A9 home position reset. Clear alarm by reset,FALSE,TRUE,Alarm
+10273,D5679.9,L1273,,,FALSE,TRUE,Alarm
+10274,D5679.10,L1274,,,FALSE,TRUE,Alarm
+10275,D5679.11,L1275,,,FALSE,TRUE,Alarm
+10276,D5679.12,L1276,,,FALSE,TRUE,Alarm
+10277,D5679.13,L1277,,,FALSE,TRUE,Alarm
+10278,D5679.14,L1278,,,FALSE,TRUE,Alarm
+10279,D5679.15,L1279,,,FALSE,TRUE,Alarm
+10280,D5680.0,L1280,Robot6-A1轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A1 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10281,D5680.1,L1281,Robot6-A2轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A2 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10282,D5680.2,L1282,Robot6-A3轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A3 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10283,D5680.3,L1283,Robot6-A4轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A4 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10284,D5680.4,L1284,Robot6-A5轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A5 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10285,D5680.5,L1285,Robot6-A6轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A6 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10286,D5680.6,L1286,Robot6-A7轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A7 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10287,D5680.7,L1287,Robot6-A8轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A8 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10288,D5680.8,L1288,Robot6-A9轴原点编码器校准数值变化 按复位解除警报,Robot6-Axis A9 home encoder calibration value changed. Clear alarm by reset,FALSE,TRUE,Alarm
+10289,D5680.9,L1289,,,FALSE,TRUE,Alarm
+10290,D5680.10,L1290,,,FALSE,TRUE,Alarm
+10291,D5680.11,L1291,,,FALSE,TRUE,Alarm
+10292,D5680.12,L1292,,,FALSE,TRUE,Alarm
+10293,D5680.13,L1293,,,FALSE,TRUE,Alarm
+10294,D5680.14,L1294,,,FALSE,TRUE,Alarm
+10295,D5680.15,L1295,,,FALSE,TRUE,Alarm
+10296,D5681.0,L1296,Robot6-A1轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A1 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10297,D5681.1,L1297,Robot6-A2轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A2 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10298,D5681.2,L1298,Robot6-A3轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A3 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10299,D5681.3,L1299,Robot6-A4轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A4 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10300,D5681.4,L1300,Robot6-A5轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A5 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10301,D5681.5,L1301,Robot6-A6轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A6 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10302,D5681.6,L1302,Robot6-A7轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A7 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10303,D5681.7,L1303,Robot6-A8轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A8 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10304,D5681.8,L1304,Robot6-A9轴编码器多圈数值被清除 断电解除警报,Robot6-Axis A9 encoder multi-turn value cleared. Power off to clear alarm,FALSE,TRUE,Alarm
+10305,D5681.9,L1305,,,FALSE,TRUE,Alarm
+10306,D5681.10,L1306,,,FALSE,TRUE,Alarm
+10307,D5681.11,L1307,,,FALSE,TRUE,Alarm
+10308,D5681.12,L1308,,,FALSE,TRUE,Alarm
+10309,D5681.13,L1309,,,FALSE,TRUE,Alarm
+10310,D5681.14,L1310,,,FALSE,TRUE,Alarm
+10311,D5681.15,L1311,,,FALSE,TRUE,Alarm
+10312,D5682.0,L1312,Robot6-A1轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A1 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10313,D5682.1,L1313,Robot6-A2轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A2 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10314,D5682.2,L1314,Robot6-A3轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A3 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10315,D5682.3,L1315,Robot6-A4轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A4 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10316,D5682.4,L1316,Robot6-A5轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A5 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10317,D5682.5,L1317,Robot6-A6轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A6 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10318,D5682.6,L1318,Robot6-A7轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A7 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10319,D5682.7,L1319,Robot6-A8轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A8 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10320,D5682.8,L1320,Robot6-A9轴重启前多圈被复位 请再次设定校正点,Robot6-Axis A9 multi-turn data reset before reboot. Re-set reference point,FALSE,TRUE,Alarm
+10321,D5682.9,L1321,,,FALSE,TRUE,Alarm
+10322,D5682.10,L1322,,,FALSE,TRUE,Alarm
+10323,D5682.11,L1323,,,FALSE,TRUE,Alarm
+10324,D5682.12,L1324,,,FALSE,TRUE,Alarm
+10325,D5682.13,L1325,,,FALSE,TRUE,Alarm
+10326,D5682.14,L1326,,,FALSE,TRUE,Alarm
+10327,D5682.15,L1327,,,FALSE,TRUE,Alarm
+10328,D5683.0,L1328,,,FALSE,TRUE,Alarm
+10329,D5683.1,L1329,Robot6-料盒动作时组编号错误 请检查组号设置,Robot6-Magazine action: group number error. Please check group setting,FALSE,TRUE,Alarm
+10330,D5683.2,L1330,Robot6-料盒动作完成标号设置错误 请检查标号设置,Robot6-Magazine action complete: label setting error. Please check label setting,FALSE,TRUE,Alarm
+10331,D5683.3,L1331,Robot6-料盒动作的取/放种类设置错误 请检查取放设置,Robot6-Magazine action: pick/place type setting error. Please check pick & place setup,FALSE,TRUE,Alarm
+10332,D5683.4,L1332,Robot6-料盒动作时使用的手臂设置错误 请检查当前使用手臂,Robot6-Magazine action: arm setting error. Please check currently selected arm,FALSE,TRUE,Alarm
+10333,D5683.5,L1333,Robot6-料盒参数读取错误,Robot6-Magazine parameter read error,FALSE,TRUE,Alarm
+10334,D5683.6,L1334,Robot6-料盒参数写入错误,Robot6-Magazine parameter write error,FALSE,TRUE,Alarm
+10335,D5683.7,L1335,Robot6-料盒动作时未初始化,Robot6-Magazine action: not initialized,FALSE,TRUE,Alarm
+10336,D5683.8,L1336,Robot6-料盒动作时层数设置错误,Robot6-Magazine action: layer number setting error,FALSE,TRUE,Alarm
+10337,D5683.9,L1337,,,FALSE,TRUE,Alarm
+10338,D5683.10,L1338,,,FALSE,TRUE,Alarm
+10339,D5683.11,L1339,,,FALSE,TRUE,Alarm
+10340,D5683.12,L1340,,,FALSE,TRUE,Alarm
+10341,D5683.13,L1341,,,FALSE,TRUE,Alarm
+10342,D5683.14,L1342,,,FALSE,TRUE,Alarm
+10343,D5683.15,L1343,,,FALSE,TRUE,Alarm
+10344,D5684.0,L1344,,,FALSE,TRUE,Alarm
+10345,D5684.1,L1345,Robot6-上手臂取片信号检查失败 请确认后是否继续,Robot6-Upper arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10346,D5684.2,L1346,Robot6-上手臂放片信号检查失败 请确认后是否继续,Robot6-Upper arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10347,D5684.3,L1347,Robot6-下手臂取片信号检查失败 请确认后是否继续,Robot6-Lower arm pick wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10348,D5684.4,L1348,Robot6-下手臂放片信号检查失败 请确认后是否继续,Robot6-Lower arm place wafer signal check failed. Confirm to continue?,FALSE,TRUE,Alarm
+10349,D5684.5,L1349,,,FALSE,TRUE,Alarm
+10350,D5684.6,L1350,,,FALSE,TRUE,Alarm
+10351,D5684.7,L1351,,,FALSE,TRUE,Alarm
+10352,D5684.8,L1352,,,FALSE,TRUE,Alarm
+10353,D5684.9,L1353,,,FALSE,TRUE,Alarm
+10354,D5684.10,L1354,,,FALSE,TRUE,Alarm
+10355,D5684.11,L1355,,,FALSE,TRUE,Alarm
+10356,D5684.12,L1356,,,FALSE,TRUE,Alarm
+10357,D5684.13,L1357,,,FALSE,TRUE,Alarm
+10358,D5684.14,L1358,,,FALSE,TRUE,Alarm
+10359,D5684.15,L1359,,,FALSE,TRUE,Alarm
+10360,D5685.0,L1360,,,FALSE,TRUE,Alarm
+10361,D5685.1,L1361,Robot6-PLC控制机器人暂停,Robot6-PLC control robot pause,FALSE,TRUE,Alarm
+10362,D5685.2,L1362,Robot6-PLC控制机器人停止,Robot6-PLC control robot stop,FALSE,TRUE,Alarm
+10363,D5685.3,L1363,Robot6-PLC控制机器人复位,Robot6-PLC control robot reset,FALSE,TRUE,Alarm
+10364,D5685.4,L1364,,,FALSE,TRUE,Alarm
+10365,D5685.5,L1365,,,FALSE,TRUE,Alarm
+10366,D5685.6,L1366,,,FALSE,TRUE,Alarm
+10367,D5685.7,L1367,,,FALSE,TRUE,Alarm
+10368,D5685.8,L1368,,,FALSE,TRUE,Alarm
+10369,D5685.9,L1369,,,FALSE,TRUE,Alarm
+10370,D5685.10,L1370,,,FALSE,TRUE,Alarm
+10371,D5685.11,L1371,,,FALSE,TRUE,Alarm
+10372,D5685.12,L1372,,,FALSE,TRUE,Alarm
+10373,D5685.13,L1373,,,FALSE,TRUE,Alarm
+10374,D5685.14,L1374,,,FALSE,TRUE,Alarm
+10375,D5685.15,L1375,,,FALSE,TRUE,Alarm
+10376,D5686.0,L1376,,,FALSE,TRUE,Alarm
+10377,D5686.1,L1377,Robot6-使用下手臂放料时手臂翻转状态不确定 请确认后是否继续,Robot6-Lower arm discharging: arm flip status undefined. Confirm to continue?,FALSE,TRUE,Alarm
+10378,D5686.2,L1378,,,FALSE,TRUE,Alarm
+10379,D5686.3,L1379,,,FALSE,TRUE,Alarm
+10380,D5686.4,L1380,,,FALSE,TRUE,Alarm
+10381,D5686.5,L1381,,,FALSE,TRUE,Alarm
+10382,D5686.6,L1382,,,FALSE,TRUE,Alarm
+10383,D5686.7,L1383,,,FALSE,TRUE,Alarm
+10384,D5686.8,L1384,,,FALSE,TRUE,Alarm
+10385,D5686.9,L1385,,,FALSE,TRUE,Alarm
+10386,D5686.10,L1386,,,FALSE,TRUE,Alarm
+10387,D5686.11,L1387,,,FALSE,TRUE,Alarm
+10388,D5686.12,L1388,,,FALSE,TRUE,Alarm
+10389,D5686.13,L1389,,,FALSE,TRUE,Alarm
+10390,D5686.14,L1390,,,FALSE,TRUE,Alarm
+10391,D5686.15,L1391,,,FALSE,TRUE,Alarm
+10392,D5687.0,L1392,Robot6-整机负压信号异常 禁止程序启动 请检查整机负压信号,Robot6-Chassis air pressure abnormal. Program start prohibited. Check chassis air pressure signal,FALSE,TRUE,Alarm
+10393,D5687.1,L1393,Robot6-风扇1运转信号异常 禁止程序启动 请检查风扇1运转信号,Robot6-Fan 1 running signal abnormal. Program start prohibited. Check Fan 1 running signal,FALSE,TRUE,Alarm
+10394,D5687.2,L1394,Robot6-风扇2运转信号异常 禁止程序启动 请检查风扇2运转信号,Robot6-Fan 2 running signal abnormal. Program start prohibited. Check Fan 2 running signal,FALSE,TRUE,Alarm
+10395,D5687.3,L1395,,,FALSE,TRUE,Alarm
+10396,D5687.4,L1396,,,FALSE,TRUE,Alarm
+10397,D5687.5,L1397,,,FALSE,TRUE,Alarm
+10398,D5687.6,L1398,,,FALSE,TRUE,Alarm
+10399,D5687.7,L1399,,,FALSE,TRUE,Alarm
+10400,D5687.8,L1400,,,FALSE,TRUE,Alarm
+10401,D5687.9,L1401,,,FALSE,TRUE,Alarm
+10402,D5687.10,L1402,,,FALSE,TRUE,Alarm
+10403,D5687.11,L1403,,,FALSE,TRUE,Alarm
+10404,D5687.12,L1404,,,FALSE,TRUE,Alarm
+10405,D5687.13,L1405,,,FALSE,TRUE,Alarm
+10406,D5687.14,L1406,,,FALSE,TRUE,Alarm
+10407,D5687.15,L1407,,,FALSE,TRUE,Alarm

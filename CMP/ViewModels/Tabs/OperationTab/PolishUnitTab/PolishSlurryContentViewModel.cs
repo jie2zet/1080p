@@ -104,13 +104,12 @@ public sealed class PolishSlurryContentViewModel : BindableBase
             throw new InvalidOperationException(string.Format(GetText("LiquidValueOutOfRange"), parameter.Name,
                 parameter.MinValue.ToString(parameter.Format, CultureInfo.CurrentCulture),
                 parameter.MaxValue.ToString(parameter.Format, CultureInfo.CurrentCulture)));
-        return Math.Round(value, parameter.DecimalPlaces, MidpointRounding.AwayFromZero);
+        return value;
     }
 
     private void WriteParameter(PolishSlurryParameterViewModel parameter, double value)
     {
         WriteDevices(KHLDevType.DEV_ZF, parameter.Handle, (uint)parameter.WordCount, ((float)value).Value());
-        parameter.InputValue = value.ToString(parameter.Format, CultureInfo.CurrentCulture);
     }
 
     private void WriteDevices(KHLDevType device, uint address, uint words, byte[] data)

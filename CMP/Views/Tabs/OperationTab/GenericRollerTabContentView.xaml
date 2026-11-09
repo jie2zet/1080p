@@ -179,10 +179,18 @@
                         </StackPanel>
                     </GroupBox.Header>
                     <Border Padding="10">
-                        <StackPanel extensions:StackPanelHelpers.Spacing="10">
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="6">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Width="80" />
+                                <TextBlock Text="Set " Width="95" TextAlignment="Left" />
+                                <TextBlock Text="Act " Width="95" TextAlignment="Left" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="Lower Roller" Width="80" VerticalAlignment="Center" />
-                                <Button Content="Press" Style="{StaticResource ButtonPrimary}" Width="50"
+                                <hc:NumericUpDown Width="70" Value="{Binding LowerRollerSetPressure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Minimum="0" Maximum="500" DecimalPlaces="2" Increment="0.01" />
+                                <TextBox Width="65" IsReadOnly="True" Text="{Binding LowerRollerActualPressure, Mode=OneWay, StringFormat={}{0:F1}}" />
+                                <Button Content="Set" Style="{StaticResource ButtonPrimary}" Width="50"
                                         Command="{Binding PressureCommand}"
                                         CommandParameter="LowerRollerPressure_Pressure" />
                                 <Button Content="Reset" Style="{StaticResource ButtonWarning}" Width="50"
@@ -192,9 +200,12 @@
                                         Command="{Binding PressureCommand}"
                                         CommandParameter="LowerRollerPressure_Calibration" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="Upper Roller" Width="80" VerticalAlignment="Center" />
-                                <Button Content="Press" Style="{StaticResource ButtonPrimary}" Width="50"
+                                <hc:NumericUpDown Width="70" Value="{Binding UpperRollerSetPressure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Minimum="0" Maximum="500" DecimalPlaces="2" Increment="0.01" />
+                                <TextBox Width="65" IsReadOnly="True" Text="{Binding UpperRollerActualPressure, Mode=OneWay, StringFormat={}{0:F1}}" />
+                                <Button Content="Set" Style="{StaticResource ButtonPrimary}" Width="50"
                                         Command="{Binding PressureCommand}"
                                         CommandParameter="UpperRollerPressure_Pressure" />
                                 <Button Content="Reset" Style="{StaticResource ButtonWarning}" Width="50"
@@ -203,18 +214,6 @@
                                 <Button Content="Cal" Style="{StaticResource ButtonInfo}" Width="50"
                                         Command="{Binding PressureCommand}"
                                         CommandParameter="UpperRollerPressure_Calibration" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                <TextBlock Text="Clamp" Width="80" VerticalAlignment="Center" />
-                                <Button Content="Press" Style="{StaticResource ButtonPrimary}" Width="50"
-                                        Command="{Binding PressureCommand}"
-                                        CommandParameter="ClampPressure_Pressure" />
-                                <Button Content="Reset" Style="{StaticResource ButtonWarning}" Width="50"
-                                        Command="{Binding PressureCommand}"
-                                        CommandParameter="ClampPressure_Reset" />
-                                <Button Content="Cal" Style="{StaticResource ButtonInfo}" Width="50"
-                                        Command="{Binding PressureCommand}"
-                                        CommandParameter="ClampPressure_Calibration" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -296,79 +295,42 @@
                           Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
                     <GroupBox.Header>
                         <StackPanel>
-                            <TextBlock Padding="5" Foreground="White" Text="WF Left Pillar Rotate Motor" />
-                        </StackPanel>
-                    </GroupBox.Header>
-                    <Border Padding="5">
-                        <StackPanel extensions:StackPanelHelpers.Spacing="5">
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                <TextBlock Text="{lex:Loc Servo}" Width="60" VerticalAlignment="Center" />
-                                <Button Content="{Binding WfLeftPillarRotateMotorServoText}" Style="{StaticResource ButtonPrimary}"
-                                    Command="{Binding ServoCommand}"
-                                    CommandParameter="WfLeftPillarRotateMotor" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
-                                <TextBlock Text="{lex:Loc SetVel}" Width="60" VerticalAlignment="Center" />
-                                <TextBox Width="100" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.SetVelocity}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
-                                <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
-                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
-                                <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
-                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActTorque}" />
-                            </StackPanel>
-                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
-                                        extensions:StackPanelHelpers.Spacing="50"
-                                        HorizontalAlignment="Center">
-                                <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
-                                        Command="{Binding RunCommand}"
-                                        CommandParameter="WfLeftPillarRotateMotor" />
-                                <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
-                                        Command="{Binding AbortCommand}"
-                                        CommandParameter="WfLeftPillarRotateMotor" />
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-                </GroupBox>
-
-                <GroupBox Background="Transparent" hc:TitleElement.Background="{StaticResource PrimaryBrush}"
-                          Padding="10 5 10 10" Style="{StaticResource GroupBoxTab.Small}">
-                    <GroupBox.Header>
-                        <StackPanel>
-                            <TextBlock Padding="5" Foreground="White" Text="WF Right Pillar Rotate Motor" />
+                            <TextBlock Padding="5" Foreground="White" Text="WF Pillar Rotate Motor" />
                         </StackPanel>
                     </GroupBox.Header>
                     <Border Padding="10">
-                        <StackPanel extensions:StackPanelHelpers.Spacing="10">
+                        <StackPanel extensions:StackPanelHelpers.Spacing="8">
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
                                 <TextBlock Text="{lex:Loc Servo}" Width="60" VerticalAlignment="Center" />
-                                <Button Content="{Binding WfRightPillarRotateMotorServoText}" Style="{StaticResource ButtonPrimary}"
+                                <Button Content="{Binding PillarRotateMotorServoText}" Style="{StaticResource ButtonPrimary}"
                                     Command="{Binding ServoCommand}"
-                                    CommandParameter="WfRightPillarRotateMotor" />
+                                    CommandParameter="WfPillarRotateMotor" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
-                                <TextBlock Text="{lex:Loc SetVel}" Width="60" VerticalAlignment="Center" />
-                                <TextBox Width="100" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.SetVelocity}" />
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
+                                <TextBlock Text="Set Vel" Width="60" VerticalAlignment="Center" />
+                                <TextBox Width="70" Text="{Binding PillarSetVelocity, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="8">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="60" VerticalAlignment="Center" />
-                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActVelocity}"/>
+                                <TextBlock Text="L" VerticalAlignment="Center" />
+                                <TextBlock Width="55" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActVelocity}" />
+                                <TextBlock Text="R" VerticalAlignment="Center" />
+                                <TextBlock Width="55" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActVelocity}" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="10">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="8">
                                 <TextBlock Text="{lex:Loc Torque}" Width="60" VerticalAlignment="Center" />
-                                <TextBlock Width="100" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActTorque}" />
+                                <TextBlock Text="L" VerticalAlignment="Center" />
+                                <TextBlock Width="55" Text="{Binding RollerViewPoco.WfLeftPillarRotateMotor.ActTorque}" />
+                                <TextBlock Text="R" VerticalAlignment="Center" />
+                                <TextBlock Width="55" Text="{Binding RollerViewPoco.WfRightPillarRotateMotor.ActTorque}" />
                             </StackPanel>
-                            <StackPanel Margin="0 0 0 0" Orientation="Horizontal"
-                                        extensions:StackPanelHelpers.Spacing="70"
-                                        HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="40" HorizontalAlignment="Center">
                                 <Button Content="{lex:Loc Run}" Style="{StaticResource ButtonPrimary}"
                                         Command="{Binding RunCommand}"
-                                        CommandParameter="WfRightPillarRotateMotor" />
+                                        CommandParameter="WfPillarRotateMotor" />
                                 <Button Content="{lex:Loc Stop}" Style="{StaticResource ButtonDanger}"
                                         Command="{Binding AbortCommand}"
-                                        CommandParameter="WfRightPillarRotateMotor" />
+                                        CommandParameter="WfPillarRotateMotor" />
                             </StackPanel>
                         </StackPanel>
                     </Border>

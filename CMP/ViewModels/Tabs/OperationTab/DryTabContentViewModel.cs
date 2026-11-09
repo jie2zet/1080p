@@ -572,6 +572,7 @@ public class DryTabContentViewModel : TabContentViewModelBase
         try
         {
             // 在执行命令前先设置参数
+            var commandName = obj;
             uint velocityHandle;
             byte[] velocityValue;
 
@@ -607,18 +608,34 @@ public class DryTabContentViewModel : TabContentViewModelBase
                         return;
                     }
                     break;
+
+                case "ArmSwing_Home":
+                case "ArmSwing_Center":
+                case "ArmSwing_Edge1":
+                case "ArmSwing_Edge2":
+                    if (!TryPrepareArmSwingFromEc(obj))
+                    {
+                        return;
+                    }
+
+                    obj = "ArmSwing_AnyPosition";
+                    break;
             }
 
             var (handle, value) = _dryCleanConfig.GetMotorCommand(obj);
+            if (commandName is "ChuckRotation_Run" or "ChuckRotation_Stop" or "ChuckRotation_Home")
+            {
+                handle = ChuckCommandWord;
+            }
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
             if (_err != 0)
             {
-                Growl.ErrorGlobal($"Motor Command {obj} Error: {_err}");
+                Growl.ErrorGlobal($"Motor Command {commandName} Error: {_err}");
             }
             else
             {
-                Growl.SuccessGlobal($"{_dryCleanConfig.DryType} Motor Command: {obj}");
+                Growl.SuccessGlobal($"{_dryCleanConfig.DryType} Motor Command: {commandName}");
             }
         }
         catch (ArgumentException ex)
@@ -1024,6 +1041,9 @@ public class DryTabContentViewModel : TabContentViewModelBase
     private const uint ChuckPositionAddressDryA = 0x5A10;
     private const uint ChuckPositionAddressDryB = 0x6C10;
 
+    /// <summary>Chuck 的 Run、Stop、Home 命令字，W50。</summary>
+    private const uint ChuckCommandWord = 0x50;
+
     /// <summary>
     /// 刷新HMI界面显示的实时数据
     /// </summary>
@@ -1047,6 +1067,86 @@ public class DryTabContentViewModel : TabContentViewModelBase
         
         RaisePropertyChanged(nameof(ChuckRotationMotorServoText));
         RaisePropertyChanged(nameof(ArmSwingMotorServoText));
+    }
+
+    private const uint ArmSwingEcSpeedAddress = 16020;
+    private const uint ArmSwingHomePositionAddress = 16030;
+    private const uint ArmSwingCenterPositionAddress = 16032;
+    private const uint ArmSwingEdge1PositionAddress = 16044;
+    private const uint ArmSwingEdge2PositionAddress = 16046;
+
+    /// <summary>
+    /// 把 EC_Running_General 里的手臂速度和对应坐标写入运动参数，再走任意位置命令。
+    /// </summary>
+    private bool TryPrepareArmSwingFromEc(string command)
+    {
+        var positionAddress = command switch
+        {
+            "ArmSwing_Home" => ArmSwingHomePositionAddress,
+            "ArmSwing_Center" => ArmSwingCenterPositionAddress,
+            "ArmSwing_Edge1" => ArmSwingEdge1PositionAddress,
+            "ArmSwing_Edge2" => ArmSwingEdge2PositionAddress,
+            _ => 0u
+        };
+
+        if (!TryReadZfFloat(positionAddress, out var position) ||
+            !float.IsFinite(position) ||
+            position < 0 ||
+            position > 180)
+        {
+            Growl.ErrorGlobal($"Arm Sweep EC position ZF{positionAddress} must be between 0 and 180 deg.");
+            return false;
+        }
+
+        if (!TryReadZfFloat(ArmSwingEcSpeedAddress, out var speed) ||
+            !float.IsFinite(speed) ||
+            speed <= 0 ||
+            speed > 999)
+        {
+            Growl.ErrorGlobal($"Arm Sweep EC speed ZF{ArmSwingEcSpeedAddress} must be greater than 0 and no more than 999 deg/s.");
+            return false;
+        }
+
+        var velocityHandle = _dryCleanConfig.Params.Motor.ArmSwing.VelocityHandle;
+        _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, velocityHandle, 2, speed.Value());
+        if (_err != 0)
+        {
+            Growl.ErrorGlobal($"Write ArmSwing Velocity Error: {_err}");
+            return false;
+        }
+
+        var positionHandle = _dryCleanConfig.Params.Motor.ArmSwing.PositionHandle;
+        _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, positionHandle, 2, position.Value());
+        if (_err != 0)
+        {
+            Growl.ErrorGlobal($"Write ArmSwing Position Error: {_err}");
+            return false;
+        }
+
+        DryClean.ArmSwingMotor.SetVelocity = speed;
+        DryClean.ArmSwingMotor.SetPosition = position;
+        return true;
+    }
+
+    private bool TryReadZfFloat(uint address, out float value)
+    {
+        value = 0;
+        if (kvLink.sock <= 0)
+        {
+            Growl.ErrorGlobal("PLC is not connected.");
+            return false;
+        }
+
+        var data = new byte[4];
+        var readError = KHL.KHLReadDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, address, 2, data);
+        if (readError != (int)KHLUserError.KHL_ERR_NONE)
+        {
+            Growl.ErrorGlobal($"Read ZF{address} Error: {readError}");
+            return false;
+        }
+
+        value = BitConverter.ToSingle(data, 0);
+        return true;
     }
 
     /// <summary>旋转电机当前位置按连续两个字解析成浮点数。</summary>

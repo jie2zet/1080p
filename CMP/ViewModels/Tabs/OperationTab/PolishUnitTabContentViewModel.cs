@@ -1575,6 +1575,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.Zone7.ActPress = snapshot.Zone7PressureAct;
         PolishUnit.Zone8.ActPress = snapshot.Zone8PressureAct;
         PolishUnit.Retain.ActPress = snapshot.RetainerRingPressureAct;
+        PolishUnit.ZoneCondition.ActPress = snapshot.ConditionDownForcePressureAct;
         PolishUnit.Slurry.Slurry1Act = snapshot.Slurry1OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry2Act = snapshot.Slurry2OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry3Act = snapshot.Slurry3OrDIWFlowrateAct;
@@ -2498,55 +2499,39 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
 
     private void UpCommandExecute(string obj)
     {
-        var plcHandle = 0u;
-        var plcValue = new byte[256];
-        switch (obj)
+        var command = obj switch
         {
-            case "PlatenBreakwater":
-                plcHandle = PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Up.Handle();
-                plcValue = PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Up.Value();
-                break;
-            case "ConditionHead":
-                plcHandle = PlcHandle.CmdPolish.Cylinder.ConditionHead.Up.Handle();
-                plcValue = PlcHandle.CmdPolish.Cylinder.ConditionHead.Up.Value();
-                break;
-        }
+            "PlatenBreakwater" => PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Up,
+            "ConditionHead" => PlcHandle.CmdPolish.Cylinder.ConditionHead.Up,
+            _ => throw new ArgumentException($"Unknown cylinder: {obj}", nameof(obj))
+        };
 
-        err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, plcHandle, 1, plcValue);
-        if (err == (int)KHLUserError.KHL_ERR_NONE)
-        {
-            Growl.SuccessGlobal($"Cylinder up command execute: {obj}");
-        }
-        else
-        {
-            Growl.ErrorGlobal($"Cylinder up command execute {obj} Error: {err}");
-        }
+        ExecuteCylinderCommand(obj, "up", command);
     }
 
     private void DownCommandExecute(string obj)
     {
-        var plcHandle = 0u;
-        var plcValue = new byte[256];
-        switch (obj)
+        var command = obj switch
         {
-            case "PlatenBreakwater":
-                plcHandle = PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Down.Handle();
-                plcValue = PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Down.Value();
-                break;
-            case "ConditionHead":
-                plcHandle = PlcHandle.CmdPolish.Cylinder.ConditionHead.Down.Handle();
-                plcValue = PlcHandle.CmdPolish.Cylinder.ConditionHead.Down.Value();
-                break;
-        }
+            "PlatenBreakwater" => PlcHandle.CmdPolish.Cylinder.PlatenBreakwater.Down,
+            "ConditionHead" => PlcHandle.CmdPolish.Cylinder.ConditionHead.Down,
+            _ => throw new ArgumentException($"Unknown cylinder: {obj}", nameof(obj))
+        };
 
-        err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, plcHandle, 1, plcValue);
+        ExecuteCylinderCommand(obj, "down", command);
+    }
+
+    private void ExecuteCylinderCommand(string cylinder, string action, int command)
+    {
+        var plcValue = ((ushort)command).Value();
+        err = KHL.KHLWriteDevicesAsWords(kvLink.sock,KHLDevType.DEV_W,  Handle.CmdPolish,1, plcValue);
         if (err == (int)KHLUserError.KHL_ERR_NONE)
         {
-            Growl.SuccessGlobal($"Cylinder down command execute: {obj}");
+            Growl.SuccessGlobal($"Cylinder {action} command execute: {cylinder}");
         }
         else
         {
-            Growl.ErrorGlobal($"Cylinder down command execute {obj} Error: {err}");
+            Growl.ErrorGlobal($"Cylinder {action} command execute {cylinder} Error: {err}");
         }
     }
 

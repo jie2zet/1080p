@@ -74,7 +74,6 @@ public abstract class LiquidChamberContentViewModel : BindableBase
             return false;
         }
 
-        value = Math.Round(value, parameter.DecimalPlaces, MidpointRounding.AwayFromZero);
         var result = WriteDevices(KHLDevType.DEV_ZF, parameter.Handle, (uint)parameter.WordCount,
             ((float)value).Value());
         if (result != (int)KHLUserError.KHL_ERR_NONE)
@@ -83,7 +82,6 @@ public abstract class LiquidChamberContentViewModel : BindableBase
             return false;
         }
 
-        parameter.InputValue = value.ToString(parameter.Format, CultureInfo.CurrentCulture);
         return true;
     }
 

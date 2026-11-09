@@ -115,8 +115,76 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     // Servo button text properties
     public string WfLeftPillarRotateMotorServoText => RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn ? Resources.Off : Resources.On;
     public string WfRightPillarRotateMotorServoText => RollerViewPoco.WfRightPillarRotateMotor.IsServoOn ? Resources.Off : Resources.On;
+    public string PillarRotateMotorServoText =>
+        RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn && RollerViewPoco.WfRightPillarRotateMotor.IsServoOn
+            ? Resources.Off
+            : Resources.On;
     public string UpperRollerRotateMotorServoText => RollerViewPoco.UpperRollerRotateMotor.IsServoOn ? Resources.Off : Resources.On;
     public string LowerRollerRotateMotorServoText => RollerViewPoco.LowerRollerRotateMotor.IsServoOn ? Resources.Off : Resources.On;
+
+    private float _pillarSetVelocity;
+    public float PillarSetVelocity
+    {
+        get => _pillarSetVelocity;
+        set
+        {
+            if (!SetProperty(ref _pillarSetVelocity, value))
+            {
+                return;
+            }
+
+            RollerViewPoco.WfLeftPillarRotateMotor.SetVelocity = value;
+            RollerViewPoco.WfRightPillarRotateMotor.SetVelocity = value;
+        }
+    }
+
+    private bool _syncingRollerPressure;
+    private bool _lowerPressureEdited;
+    private bool _upperPressureEdited;
+
+    private double _lowerRollerSetPressure;
+    public double LowerRollerSetPressure
+    {
+        get => _lowerRollerSetPressure;
+        set
+        {
+            if (!SetProperty(ref _lowerRollerSetPressure, value) || _syncingRollerPressure)
+            {
+                return;
+            }
+
+            _lowerPressureEdited = true;
+        }
+    }
+
+    private double _upperRollerSetPressure;
+    public double UpperRollerSetPressure
+    {
+        get => _upperRollerSetPressure;
+        set
+        {
+            if (!SetProperty(ref _upperRollerSetPressure, value) || _syncingRollerPressure)
+            {
+                return;
+            }
+
+            _upperPressureEdited = true;
+        }
+    }
+
+    private double _lowerRollerActualPressure;
+    public double LowerRollerActualPressure
+    {
+        get => _lowerRollerActualPressure;
+        private set => SetProperty(ref _lowerRollerActualPressure, value);
+    }
+
+    private double _upperRollerActualPressure;
+    public double UpperRollerActualPressure
+    {
+        get => _upperRollerActualPressure;
+        private set => SetProperty(ref _upperRollerActualPressure, value);
+    }
 
     /// <summary>
     /// 构造函数，通过注入 IRollerConfig 来支持不同的 Roll 类型
@@ -676,55 +744,59 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     {
         try
         {
-            var (handle, value) = _rollerConfig.GetMotorRunCommand(obj);
-            
-            uint velocityHandle;
-            byte[] velocityValue;
-            
-            switch (obj)
+            if (obj == "WfPillarRotateMotor")
             {
-                case "WfLeftPillarRotateMotor":
-                    velocityHandle = _rollerConfig.Params.Motor.WfLeftPillarRotate.Handle;
-                    velocityValue = RollerViewPoco.WfLeftPillarRotateMotor.SetVelocity.Value();
-                    break;
-                    
-                case "WfRightPillarRotateMotor":
-                    velocityHandle = _rollerConfig.Params.Motor.WfRightPillarRotate.Handle;
-                    velocityValue = RollerViewPoco.WfRightPillarRotateMotor.SetVelocity.Value();
-                    break;
-                    
-                case "UpperRollerRotateMotor":
-                    velocityHandle = _rollerConfig.Params.Motor.UpperRollerRotate.Handle;
-                    velocityValue = RollerViewPoco.UpperRollerRotateMotor.SetVelocity.Value();
-                    break;
-                    
-                case "LowerRollerRotateMotor":
-                    velocityHandle = _rollerConfig.Params.Motor.LowerRollerRotate.Handle;
-                    velocityValue = RollerViewPoco.LowerRollerRotateMotor.SetVelocity.Value();
-                    break;
-                    
-                default:
-                    throw new ArgumentException($"Unknown motor: {obj}");
-            }
-            
-            // 写入参数
-            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, velocityHandle, 2, velocityValue);
-            if (_err != 0)
-            {
-                Growl.ErrorGlobal($"Write Velocity Error: {_err}");
+                var pillarVelocity = PillarSetVelocity.Value();
+                if (!TryWriteMotorVelocity(_rollerConfig.Params.Motor.WfLeftPillarRotate.Handle, pillarVelocity) ||
+                    !TryWriteMotorVelocity(_rollerConfig.Params.Motor.WfRightPillarRotate.Handle, pillarVelocity) ||
+                    !TryWriteMotorWord("WfLeftPillarRotateMotor", true) ||
+                    !TryWriteMotorWord("WfRightPillarRotateMotor", true))
+                {
+                    return;
+                }
+
+                Growl.SuccessGlobal($"{_rollerConfig.RollType} RunCommand: WF Pillar");
                 return;
             }
-            
-            // 发送命令
-            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
-            if (_err != 0)
+
+            if (obj is "WfLeftPillarRotateMotor" or "WfRightPillarRotateMotor")
             {
-                Growl.ErrorGlobal($"RunCommand {obj} Error: {_err}");
+                var pillarVelocity = PillarSetVelocity.Value();
+                if (!TryWriteMotorVelocity(_rollerConfig.Params.Motor.WfLeftPillarRotate.Handle, pillarVelocity) ||
+                    !TryWriteMotorVelocity(_rollerConfig.Params.Motor.WfRightPillarRotate.Handle, pillarVelocity))
+                {
+                    return;
+                }
+            }
+            else if (obj == "UpperRollerRotateMotor")
+            {
+                if (!TryWriteMotorVelocity(
+                        _rollerConfig.Params.Motor.UpperRollerRotate.Handle,
+                        RollerViewPoco.UpperRollerRotateMotor.SetVelocity.Value()))
+                {
+                    return;
+                }
+            }
+            else if (obj == "LowerRollerRotateMotor")
+            {
+                if (!TryWriteMotorVelocity(
+                        _rollerConfig.Params.Motor.LowerRollerRotate.Handle,
+                        RollerViewPoco.LowerRollerRotateMotor.SetVelocity.Value()))
+                {
+                    return;
+                }
             }
             else
             {
-                Growl.SuccessGlobal($"{_rollerConfig.RollType} RunCommand: {obj}");
+                throw new ArgumentException($"Unknown motor: {obj}");
             }
+
+            if (!TryWriteMotorWord(obj, true))
+            {
+                return;
+            }
+
+            Growl.SuccessGlobal($"{_rollerConfig.RollType} RunCommand: {obj}");
         }
         catch (ArgumentException ex)
         {
@@ -736,17 +808,24 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     {
         try
         {
-            var (handle, value) = _rollerConfig.GetMotorStopCommand(obj);
+            if (obj == "WfPillarRotateMotor")
+            {
+                if (!TryWriteMotorWord("WfLeftPillarRotateMotor", false) ||
+                    !TryWriteMotorWord("WfRightPillarRotateMotor", false))
+                {
+                    return;
+                }
 
-            _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
-            if (_err != 0)
-            {
-                Growl.ErrorGlobal($"AbortCommand {obj} Error: {_err}");
+                Growl.SuccessGlobal($"{_rollerConfig.RollType} AbortCommand: WF Pillar");
+                return;
             }
-            else
+
+            if (!TryWriteMotorWord(obj, false))
             {
-                Growl.SuccessGlobal($"{_rollerConfig.RollType} AbortCommand: {obj}");
+                return;
             }
+
+            Growl.SuccessGlobal($"{_rollerConfig.RollType} AbortCommand: {obj}");
         }
         catch (ArgumentException ex)
         {
@@ -754,10 +833,54 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
+    private bool TryWriteMotorWord(string motor, bool run)
+    {
+        var (handle, value) = run
+            ? _rollerConfig.GetMotorRunCommand(motor)
+            : _rollerConfig.GetMotorStopCommand(motor);
+        _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
+        if (_err == 0)
+        {
+            return true;
+        }
+
+        Growl.ErrorGlobal($"{(run ? "RunCommand" : "AbortCommand")} {motor} Error: {_err}");
+        return false;
+    }
+
+    private bool TryWriteMotorVelocity(uint velocityHandle, byte[] velocityValue)
+    {
+        _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_ZF, velocityHandle, 2, velocityValue);
+        if (_err == 0)
+        {
+            return true;
+        }
+
+        Growl.ErrorGlobal($"Write Velocity Error: {_err}");
+        return false;
+    }
+
     private void ServoCommandExecute(string obj)
     {
         try
         {
+            if (obj == "WfPillarRotateMotor")
+            {
+                var turnOn = !(RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn &&
+                               RollerViewPoco.WfRightPillarRotateMotor.IsServoOn);
+                if (!TryWriteMotorServo("WfLeftPillarRotateMotor", turnOn) ||
+                    !TryWriteMotorServo("WfRightPillarRotateMotor", turnOn))
+                {
+                    return;
+                }
+
+                RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = turnOn;
+                RollerViewPoco.WfRightPillarRotateMotor.IsServoOn = turnOn;
+                RaisePropertyChanged(nameof(PillarRotateMotorServoText));
+                Growl.SuccessGlobal($"{_rollerConfig.RollType} ServoCommand: WF Pillar - Servo {(turnOn ? "ON" : "OFF")}");
+                return;
+            }
+
             bool currentServoState = obj switch
             {
                 "WfLeftPillarRotateMotor" => RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn,
@@ -768,17 +891,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             };
 
             bool newServoState = !currentServoState;
-            var (_, servoAddress, bitOffset) = _rollerConfig.GetServoCommand(obj, newServoState);
-            _err = KHL.KHLWriteDevicesAsBits(
-                kvLink.sock,
-                KHLDevType.DEV_W,
-                servoAddress.HexWAddress(),
-                bitOffset,
-                1,
-                newServoState.Value());
-            if (_err != 0)
+            if (!TryWriteMotorServo(obj, newServoState))
             {
-                Growl.ErrorGlobal($"ServoCommand {obj} Error: {_err}");
                 return;
             }
 
@@ -787,10 +901,12 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 case "WfLeftPillarRotateMotor":
                     RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = newServoState;
                     RaisePropertyChanged(nameof(WfLeftPillarRotateMotorServoText));
+                    RaisePropertyChanged(nameof(PillarRotateMotorServoText));
                     break;
                 case "WfRightPillarRotateMotor":
                     RollerViewPoco.WfRightPillarRotateMotor.IsServoOn = newServoState;
                     RaisePropertyChanged(nameof(WfRightPillarRotateMotorServoText));
+                    RaisePropertyChanged(nameof(PillarRotateMotorServoText));
                     break;
                 case "UpperRollerRotateMotor":
                     RollerViewPoco.UpperRollerRotateMotor.IsServoOn = newServoState;
@@ -811,10 +927,41 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         }
     }
 
+    private bool TryWriteMotorServo(string motor, bool servoOn)
+    {
+        var (_, servoAddress, bitOffset) = _rollerConfig.GetServoCommand(motor, servoOn);
+        _err = KHL.KHLWriteDevicesAsBits(
+            kvLink.sock,
+            KHLDevType.DEV_W,
+            servoAddress.HexWAddress(),
+            bitOffset,
+            1,
+            servoOn.Value());
+        if (_err == 0)
+        {
+            return true;
+        }
+
+        Growl.ErrorGlobal($"ServoCommand {motor} Error: {_err}");
+        return false;
+    }
+
     private void CylinderCommandExecute(string obj)
     {
         try
         {
+            if (obj.StartsWith("LowerRollerCylinder_", StringComparison.Ordinal) &&
+                !HasEcRollerPressure(_rollerConfig.Params.Pressure.LowerRollerPressure, "Lower Roller"))
+            {
+                return;
+            }
+
+            if (obj.StartsWith("UpperRollerCylinder_", StringComparison.Ordinal) &&
+                !HasEcRollerPressure(_rollerConfig.Params.Pressure.UpperRollerPressure, "Upper Roller"))
+            {
+                return;
+            }
+
             var (handle, value) = _rollerConfig.GetCylinderCommand(obj);
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
@@ -837,6 +984,24 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     {
         try
         {
+            if (obj == "LowerRollerPressure_Pressure" &&
+                !PrepareRollerMotionPressure(
+                    _rollerConfig.Params.Pressure.LowerRollerPressure,
+                    LowerRollerSetPressure,
+                    "Lower Roller"))
+            {
+                return;
+            }
+
+            if (obj == "UpperRollerPressure_Pressure" &&
+                !PrepareRollerMotionPressure(
+                    _rollerConfig.Params.Pressure.UpperRollerPressure,
+                    UpperRollerSetPressure,
+                    "Upper Roller"))
+            {
+                return;
+            }
+
             var (handle, value) = _rollerConfig.GetPressureCommand(obj);
 
             _err = KHL.KHLWriteDevicesAsWords(kvLink.sock, KHLDevType.DEV_W, handle, 1, value);
@@ -853,6 +1018,103 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         {
             Growl.ErrorGlobal($"Pressure Command Error: {ex.Message}");
         }
+    }
+
+    private static bool IsRollerPressureInRange(double pressure, RollerParams.PressureSetParam parameter) =>
+        double.IsFinite(pressure) && pressure >= parameter.MinValue && pressure <= parameter.MaxValue;
+
+    private bool HasEcRollerPressure(RollerParams.PressureSetParam parameter, string rollerName)
+    {
+        if (!TryReadRollerPressure(parameter, out var pressure) ||
+            !IsRollerPressureInRange(pressure, parameter) ||
+            pressure <= 0)
+        {
+            Growl.ErrorGlobal(
+                $"{rollerName} EC pressure must be greater than 0 and between {parameter.MinValue} and {parameter.MaxValue} kPa.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool PrepareRollerMotionPressure(
+        RollerParams.PressureSetParam parameter,
+        double pressure,
+        string rollerName)
+    {
+        if (!HasRollerPressureSetpoint(parameter, pressure, rollerName) ||
+            !TryWriteRollerPressure(parameter, pressure, rollerName))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool HasRollerPressureSetpoint(
+        RollerParams.PressureSetParam parameter,
+        double pressure,
+        string rollerName)
+    {
+        if (!IsRollerPressureInRange(pressure, parameter) || pressure <= 0)
+        {
+            Growl.ErrorGlobal(
+                $"{rollerName} pressure must be greater than 0 and between {parameter.MinValue} and {parameter.MaxValue} kPa.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool TryWriteRollerPressure(
+        RollerParams.PressureSetParam parameter,
+        double pressure,
+        string rollerName)
+    {
+        var writeError = KHL.KHLWriteDevicesAsWords(
+            kvLink.sock,
+            KHLDevType.DEV_ZF,
+            parameter.Handle,
+            2,
+            BitConverter.GetBytes((float)pressure));
+        if (writeError == (int)KHLUserError.KHL_ERR_NONE)
+        {
+            return true;
+        }
+
+        Growl.ErrorGlobal($"{rollerName} pressure write error: {writeError}");
+        return false;
+    }
+
+    private bool TryReadRollerPressure(RollerParams.PressureSetParam parameter, out double pressure)
+    {
+        var data = new byte[4];
+        var readError = KHL.KHLReadDevicesAsWords(
+            kvLink.sock,
+            KHLDevType.DEV_ZF,
+            parameter.Handle,
+            2,
+            data);
+        if (readError != (int)KHLUserError.KHL_ERR_NONE)
+        {
+            pressure = 0;
+            return false;
+        }
+
+        pressure = BitConverter.ToSingle(data, 0);
+        return float.IsFinite((float)pressure);
+    }
+
+    private void ApplyRollerPressureRead(double pressure, Action<double> assign, double current)
+    {
+        if (Math.Abs(current - pressure) < 0.05)
+        {
+            return;
+        }
+
+        _syncingRollerPressure = true;
+        assign(pressure);
+        _syncingRollerPressure = false;
     }
 
     private void LiquidCommandExecute(string obj)
@@ -1158,6 +1420,18 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
     /// </summary>
     private void RefreshHmi()
     {
+        if (!_lowerPressureEdited &&
+            TryReadRollerPressure(_rollerConfig.Params.Pressure.LowerRollerPressure, out var lowerSetPressure))
+        {
+            ApplyRollerPressureRead(lowerSetPressure, value => LowerRollerSetPressure = value, LowerRollerSetPressure);
+        }
+
+        if (!_upperPressureEdited &&
+            TryReadRollerPressure(_rollerConfig.Params.Pressure.UpperRollerPressure, out var upperSetPressure))
+        {
+            ApplyRollerPressureRead(upperSetPressure, value => UpperRollerSetPressure = value, UpperRollerSetPressure);
+        }
+
         if (rollerData == null || !rollerData.TryGetProcessDataSnapshot(out var snapshot))
         {
             return;
@@ -1172,6 +1446,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
             float UpperRollerTorque,
             float LowerRollerTorque,
             float DiwOpenTime,
+            float LowerRollerPressure,
+            float UpperRollerPressure,
             bool WfLeftPillarServoOn,
             bool WfRightPillarServoOn,
             bool UpperRollerServoOn,
@@ -1187,6 +1463,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._1UpperRollerRotationMotorTorqueAct,
                 snapshot._1LowerRollerRotationMotorTorqueAct,
                 snapshot._1DIWAllOpenTimeAct,
+                snapshot._1LowerRollerPressureAct,
+                snapshot._1UpperRollerPressureAct,
                 snapshot._1WFLeftPillarMotorServoOn,
                 snapshot._1WFRightPillarMotorServoOn,
                 snapshot._1UpperRollerMotorServoOn,
@@ -1201,6 +1479,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._2UpperRollerRotationMotorTorqueAct,
                 snapshot._2LowerRollerRotationMotorTorqueAct,
                 snapshot._2DIWAllOpenTimeAct,
+                snapshot._2LowerRollerPressureAct,
+                snapshot._2UpperRollerPressureAct,
                 snapshot._2WFLeftPillarMotorServoOn,
                 snapshot._2WFRightPillarMotorServoOn,
                 snapshot._2UpperRollerMotorServoOn,
@@ -1215,6 +1495,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
                 snapshot._3UpperRollerRotationMotorTorqueAct,
                 snapshot._3LowerRollerRotationMotorTorqueAct,
                 snapshot._3DIWAllOpenTimeAct,
+                snapshot._3LowerRollerPressureAct,
+                snapshot._3UpperRollerPressureAct,
                 snapshot._3WFLeftPillarMotorServoOn,
                 snapshot._3WFRightPillarMotorServoOn,
                 snapshot._3UpperRollerMotorServoOn,
@@ -1230,6 +1512,8 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
         RollerViewPoco.UpperRollerRotateMotor.ActTorque = stationData.UpperRollerTorque;
         RollerViewPoco.LowerRollerRotateMotor.ActTorque = stationData.LowerRollerTorque;
         RollerViewPoco.Flush.OpenDelayAct = stationData.DiwOpenTime;
+        LowerRollerActualPressure = stationData.LowerRollerPressure;
+        UpperRollerActualPressure = stationData.UpperRollerPressure;
 
         RollerViewPoco.WfLeftPillarRotateMotor.IsServoOn = stationData.WfLeftPillarServoOn;
         RollerViewPoco.WfRightPillarRotateMotor.IsServoOn = stationData.WfRightPillarServoOn;
@@ -1238,6 +1522,7 @@ public class GenericRollerTabContentViewModel : TabContentViewModelBase
 
         RaisePropertyChanged(nameof(WfLeftPillarRotateMotorServoText));
         RaisePropertyChanged(nameof(WfRightPillarRotateMotorServoText));
+        RaisePropertyChanged(nameof(PillarRotateMotorServoText));
         RaisePropertyChanged(nameof(UpperRollerRotateMotorServoText));
         RaisePropertyChanged(nameof(LowerRollerRotateMotorServoText));
     }

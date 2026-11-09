@@ -85,7 +85,9 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding DryClean.ChuckRotationMotor.SetVelocity}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding DryClean.ChuckRotationMotor.SetVelocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
@@ -130,7 +132,9 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding DryClean.ArmSwingMotor.SetVelocity}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding DryClean.ArmSwingMotor.SetVelocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
@@ -142,7 +146,9 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetPos}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding DryClean.ArmSwingMotor.SetPosition}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding DryClean.ArmSwingMotor.SetPosition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActPos}" Width="65" VerticalAlignment="Center" />

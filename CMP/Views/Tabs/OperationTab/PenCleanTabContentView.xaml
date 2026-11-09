@@ -87,7 +87,9 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding PenClean.ChuckRotationMotor.SetVelocity}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding PenClean.ChuckRotationMotor.SetVelocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
@@ -132,11 +134,15 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding PenClean.PenArmSweepMotor.SetVelocity}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding PenClean.PenArmSweepMotor.SetVelocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetPos}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding PenClean.PenArmSweepMotor.SetPosition}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding PenClean.PenArmSweepMotor.SetPosition, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />
@@ -193,7 +199,9 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc SetVel}" Width="65" VerticalAlignment="Center" />
-                                <TextBox Width="65" Text="{Binding PenClean.PenRotationMotor.SetVelocity}" />
+                                <hc:NumericUpDown Width="70" Height="22" Minimum="-100000" Maximum="100000"
+                                                  DecimalPlaces="2" Increment="0.01"
+                                                  Value="{Binding PenClean.PenRotationMotor.SetVelocity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" extensions:StackPanelHelpers.Spacing="5">
                                 <TextBlock Text="{lex:Loc ActVel}" Width="65" VerticalAlignment="Center" />

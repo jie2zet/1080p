@@ -20,8 +20,6 @@ namespace CMP.ViewModels.Tabs.OperationTab.PolishUnitTab;
 /// <summary>摆动电机2；由所属 Polish 页的监控循环读取，不创建额外定时器。</summary>
 public sealed class PolishSwingPositionsViewModel
 {
-    private const ushort PolishMotorCommandValue = 10;
-
     private readonly Func<int> _getSocket;
     private readonly Func<string> _getUnit;
     private readonly Func<int, KHLDevType, uint, uint, byte[], int> _readWords;
@@ -158,9 +156,9 @@ public sealed class PolishSwingPositionsViewModel
         });
     }
 
-    private void ExecuteCommand(string title, uint addressDm) =>
-        ExecuteOperation("MotorCommand", $"{title}/DM{addressDm}",
-            () => Write(KHLDevType.DEV_DM, addressDm, 1, BitConverter.GetBytes(PolishMotorCommandValue)));
+    private void ExecuteCommand(string title, uint command) =>
+        ExecuteOperation("MotorCommand", $"{title}/W50={command}",
+            () => Write(KHLDevType.DEV_W, Handle.CmdPolish, 1, BitConverter.GetBytes((ushort)command)));
 
     private void ExecuteServoCommand(PolishSwingPositionMotorViewModel motor)
     {
