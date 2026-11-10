@@ -1574,7 +1574,7 @@ public class PolishUnitTabContentViewModel : TabContentViewModelBase
         PolishUnit.Zone6.ActPress = snapshot.Zone6PressureAct;
         PolishUnit.Zone7.ActPress = snapshot.Zone7PressureAct;
         PolishUnit.Zone8.ActPress = snapshot.Zone8PressureAct;
-        PolishUnit.Retain.ActPress = snapshot.RetainerRingPressureAct;
+        PolishUnit.Retain.ActPress = snapshot.RetainerRingAirBagPressureAct;
         PolishUnit.ZoneCondition.ActPress = snapshot.ConditionDownForcePressureAct;
         PolishUnit.Slurry.Slurry1Act = snapshot.Slurry1OrDIWFlowrateAct;
         PolishUnit.Slurry.Slurry2Act = snapshot.Slurry2OrDIWFlowrateAct;
